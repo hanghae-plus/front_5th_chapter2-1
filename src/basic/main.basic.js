@@ -111,32 +111,33 @@ const calcCart = () => {
   let subTot = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
-    (() => {
-      let curItem;
-      for (let j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
-          break;
-        }
-      }
+    let curItem;
 
-      const q = parseInt(
-        cartItems[i].querySelector('span').textContent.split('x ')[1],
-      );
-      const itemTot = curItem.val * q;
-      let disc = 0;
-
-      itemCnt += q;
-      subTot += itemTot;
-      if (q >= 10) {
-        if (curItem.id === 'p1') disc = 0.1;
-        else if (curItem.id === 'p2') disc = 0.15;
-        else if (curItem.id === 'p3') disc = 0.2;
-        else if (curItem.id === 'p4') disc = 0.05;
-        else if (curItem.id === 'p5') disc = 0.25;
+    for (let j = 0; j < prodList.length; j++) {
+      if (prodList[j].id === cartItems[i].id) {
+        curItem = prodList[j];
+        break;
       }
-      totalAmt += itemTot * (1 - disc);
-    })();
+    }
+
+    const q = parseInt(
+      cartItems[i].querySelector('span').textContent.split('x ')[1],
+    );
+    const itemTot = curItem.val * q;
+    let disc = 0;
+
+    itemCnt += q;
+    subTot += itemTot;
+
+    if (q >= 10) {
+      if (curItem.id === 'p1') disc = 0.1;
+      else if (curItem.id === 'p2') disc = 0.15;
+      else if (curItem.id === 'p3') disc = 0.2;
+      else if (curItem.id === 'p4') disc = 0.05;
+      else if (curItem.id === 'p5') disc = 0.25;
+    }
+
+    totalAmt += itemTot * (1 - disc);
   }
 
   let discRate = 0;

@@ -41,37 +41,40 @@ let lastSelected,
 /// functions
 
 /**
- * 랜덤 할인 세팅 함수
+ * [Render] 장바구니 총액 랜더 함수
+ * 장바구니에 계산된 총액 기준 포인트 랜더링
  *
- * - 랜덤한 시간마다 번개 할인
- * - 랜덤한 시간마다 마지막에 선택하지 않은 상품 5% 추가 할인
- *   * TODO: 이미 담겨있는 상품이 할인되는 상황 예외처리
+ * - 장바구니 총액 계산 후 포인트 계산
+ * - TODO 사용하는 함수가 renderCalculateCart만 있음
+ *   - 로직상으로도 총액 계산 이후에만 동작하여 통합도 고려
+ *
+ * @see POINT_RATE - 구매 포인트 비율
+ */
+const renderBonusPoints = () => {
+  bonusPoints = Math.floor(totalCost * POINT_RATE);
+  let $loyaltyPoints = $("#loyalty-points");
+  if (!$loyaltyPoints) {
+    $loyaltyPoints = $("span", { id: "loyalty-points", className: "text-blue-500 ml-2" });
+    $cartTotal.appendChild($loyaltyPoints);
+  }
+  $loyaltyPoints.textContent = "(포인트: " + bonusPoints + ")";
+};
+
+/**
+ * [Render] 재고 부족 랜더 함수
+ * 장바구니 총액 계산 이후 재고 부족 상품 경고 랜더링
+ *
+ * - 장바구니 총액 계산 이후 재고 부족 표기
+ * - TODO 사용하는 함수가 renderCalculateCart만 있음
+ *   - 로직상으로도 총액 계산 이후에만 동작하여 통합도 고려
  *
  * @see PRODUCT_LIST - 상품 정보 배열
- * @fires renderSelectOptions
+ * @see STOCK_WARNING_LIMIT - 재고 부족 경오 기준
  */
-const setRandomDiscount = () => {
-  setTimeout(() => {
-    setInterval(() => {
-      const luckyItem = PRODUCT_LIST[Math.floor(Math.random() * PRODUCT_LIST.length)];
-      if (Math.random() < 0.3 && luckyItem.quantity > 0) {
-        luckyItem.cost = Math.round(luckyItem.cost * 0.8);
-        alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
-        renderSelectOptions();
-      }
-    }, 30_000);
-  }, Math.random() * 10_000);
-
-  setTimeout(() => {
-    setInterval(() => {
-      if (!lastSelected) return;
-      const suggest = PRODUCT_LIST.find((item) => item.id !== lastSelected && item.quantity > 0);
-      if (!suggest) return;
-      alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");
-      suggest.cost = Math.round(suggest.cost * 0.95);
-      renderSelectOptions();
-    }, 60_000);
-  }, Math.random() * 20_000);
+const renderStockInfo = () => {
+  $stockStatus.textContent = PRODUCT_LIST.filter((i) => i.quantity < STOCK_WARNING_LIMIT)
+    .map((item) => item.name + ": " + (item.quantity > 0 ? "재고 부족 (" + item.quantity + "개 남음)" : "품절"))
+    .join("\n");
 };
 
 /**
@@ -167,43 +170,6 @@ const renderCalculateCart = () => {
   }
   renderStockInfo();
   renderBonusPoints();
-};
-
-/**
- * [Render] 장바구니 총액 랜더 함수
- * 장바구니에 계산된 총액 기준 포인트 랜더링
- *
- * - 장바구니 총액 계산 후 포인트 계산
- * - TODO 사용하는 함수가 renderCalculateCart만 있음
- *   - 로직상으로도 총액 계산 이후에만 동작하여 통합도 고려
- *
- * @see POINT_RATE - 구매 포인트 비율
- */
-const renderBonusPoints = () => {
-  bonusPoints = Math.floor(totalCost * POINT_RATE);
-  let $loyaltyPoints = $("#loyalty-points");
-  if (!$loyaltyPoints) {
-    $loyaltyPoints = $("span", { id: "loyalty-points", className: "text-blue-500 ml-2" });
-    $cartTotal.appendChild($loyaltyPoints);
-  }
-  $loyaltyPoints.textContent = "(포인트: " + bonusPoints + ")";
-};
-
-/**
- * [Render] 재고 부족 랜더 함수
- * 장바구니 총액 계산 이후 재고 부족 상품 경고 랜더링
- *
- * - 장바구니 총액 계산 이후 재고 부족 표기
- * - TODO 사용하는 함수가 renderCalculateCart만 있음
- *   - 로직상으로도 총액 계산 이후에만 동작하여 통합도 고려
- *
- * @see PRODUCT_LIST - 상품 정보 배열
- * @see STOCK_WARNING_LIMIT - 재고 부족 경오 기준
- */
-const renderStockInfo = () => {
-  $stockStatus.textContent = PRODUCT_LIST.filter((i) => i.quantity < STOCK_WARNING_LIMIT)
-    .map((item) => item.name + ": " + (item.quantity > 0 ? "재고 부족 (" + item.quantity + "개 남음)" : "품절"))
-    .join("\n");
 };
 
 /**
@@ -311,6 +277,40 @@ const handleClickCartItems = (event) => {
   }
 
   renderCalculateCart();
+};
+
+/**
+ * 랜덤 할인 세팅 함수
+ *
+ * - 랜덤한 시간마다 번개 할인
+ * - 랜덤한 시간마다 마지막에 선택하지 않은 상품 5% 추가 할인
+ *   * TODO: 이미 담겨있는 상품이 할인되는 상황 예외처리
+ *
+ * @see PRODUCT_LIST - 상품 정보 배열
+ * @fires renderSelectOptions
+ */
+const setRandomDiscount = () => {
+  setTimeout(() => {
+    setInterval(() => {
+      const luckyItem = PRODUCT_LIST[Math.floor(Math.random() * PRODUCT_LIST.length)];
+      if (Math.random() < 0.3 && luckyItem.quantity > 0) {
+        luckyItem.cost = Math.round(luckyItem.cost * 0.8);
+        alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
+        renderSelectOptions();
+      }
+    }, 30_000);
+  }, Math.random() * 10_000);
+
+  setTimeout(() => {
+    setInterval(() => {
+      if (!lastSelected) return;
+      const suggest = PRODUCT_LIST.find((item) => item.id !== lastSelected && item.quantity > 0);
+      if (!suggest) return;
+      alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");
+      suggest.cost = Math.round(suggest.cost * 0.95);
+      renderSelectOptions();
+    }, 60_000);
+  }, Math.random() * 20_000);
 };
 
 /// main

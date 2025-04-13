@@ -17,10 +17,11 @@ export default defineConfig([
       prettier: prettierPlugin,
     },
     rules: {
-      ...js.configs.recommended.rules, // js 플러그인의 추천 룰 적용
-      'prettier/prettier': ['error', prettierConfig], // Prettier 포맷 검사
+      ...js.configs.recommended.rules,
+      'prettier/prettier': ['error', prettierConfig],
       'no-unused-vars': 'warn',
       'no-console': 'off',
+      //'no-var': 'error', // var 사용 금지
     },
   },
 ]);

@@ -32,6 +32,29 @@ const PRODUCT_LIST = [
   { id: "p5", name: "상품5", cost: 25_000, quantity: 10, discount: 0.25 },
 ];
 
+/** @const 이벤트 감지 요소 */
+const EVENT_FRAGMENT = Object.freeze({
+  QUANTITY_CHANGE: "quantity-change",
+  REMOVE_ITEM: "remove-item",
+});
+
+/** @const 스타일 맵 */
+const STYLES = Object.freeze({
+  CONTAINER: "bg-gray-100 p-8",
+  WRAPPER: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8",
+  TITLE: "text-2xl font-bold mb-4",
+  CART_ITEMS: "",
+  CART_TOTAL: "text-xl font-bold my-4",
+  PRODUCT_SELECT: "border rounded p-2 mr-2",
+  ADD_TO_CART: "bg-blue-500 text-white px-4 py-2 rounded",
+  STOCK_STATUS: "text-sm text-gray-500 mt-2",
+  NEW_ITEM: "flex justify-between items-center mb-2",
+  QUANTITY_CHANGE: [EVENT_FRAGMENT.QUANTITY_CHANGE, " bg-blue-500 text-white px-2 py-1 rounded mr-1"],
+  REMOVE_ITEM: [EVENT_FRAGMENT.REMOVE_ITEM, "bg-red-500 text-white px-2 py-1 rounded"],
+  TOTAL_TEXT: "text-green-500 ml-2",
+  LOYALTY_POINTS: "text-blue-500 ml-2",
+});
+
 /// global element
 let $productSelect, $addToCart, $cartItems, $cartTotal, $stockStatus;
 
@@ -57,7 +80,7 @@ const renderBonusPoints = () => {
   bonusPoints = Math.floor(totalCost * POINT_RATE);
   let $loyaltyPoints = $("#loyalty-points");
   if (!$loyaltyPoints) {
-    $loyaltyPoints = $("span", { id: "loyalty-points", className: "text-blue-500 ml-2" });
+    $loyaltyPoints = $("span", { id: "loyalty-points", className: STYLES.LOYALTY_POINTS });
     $cartTotal.appendChild($loyaltyPoints);
   }
   $loyaltyPoints.textContent = "(포인트: " + bonusPoints + ")";
@@ -167,9 +190,7 @@ const renderCalculateCart = () => {
   // 총액 및 할인 랜더링
   $cartTotal.textContent = "총액: " + Math.round(totalCost) + "원";
   if (discountRate > 0) {
-    const textContent = "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
-    const props = { className: "text-green-500 ml-2", textContent };
-    $cartTotal.appendChild($("span", props));
+    $cartTotal.appendChild($("span", { className: STYLES.TOTAL_TEXT, textContent: "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)" }));
   }
   renderStockInfo();
   renderBonusPoints();
@@ -209,14 +230,14 @@ const handleClickAddToCart = () => {
     $cartItems.appendChild(
       $(
         "div",
-        { id, className: "flex justify-between items-center mb-2" },
+        { id, className: STYLES.NEW_ITEM },
         $("span", { textContent: name + " - " + cost + "원 x 1" }),
         $(
           "div",
           {},
-          $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: -1 }, textContent: "-" }),
-          $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: 1 }, textContent: "+" }),
-          $("button", { className: "remove-item bg-red-500 text-white px-2 py-1 rounded", dataset: { productId: id }, textContent: "삭제" })
+          $("button", { className: STYLES.QUANTITY_CHANGE, dataset: { productId: id, change: -1 }, textContent: "-" }),
+          $("button", { className: STYLES.QUANTITY_CHANGE, dataset: { productId: id, change: 1 }, textContent: "+" }),
+          $("button", { className: STYLES.REMOVE_ITEM, dataset: { productId: id }, textContent: "삭제" })
         )
       )
     );
@@ -240,13 +261,15 @@ const handleClickAddToCart = () => {
  *
  * @param {MouseEvent} event
  * @returns {void}
+ *
+ * @see EVENT_FRAGMENT
  * @fires renderCalculateCart
  */
 const handleClickCartItems = (event) => {
   // 수량 변경, 상품 삭제 이벤트 처리
   const target = event.target;
-  const isQuantityChange = target.classList.contains("quantity-change");
-  const isRemoveItem = target.classList.contains("remove-item");
+  const isQuantityChange = target.classList.contains(EVENT_FRAGMENT.QUANTITY_CHANGE);
+  const isRemoveItem = target.classList.contains(EVENT_FRAGMENT.REMOVE_ITEM);
   if (!isQuantityChange && !isRemoveItem) return;
 
   const productId = target.dataset.productId;
@@ -337,10 +360,10 @@ const main = () => {
 
   // global element
   $cartItems = $("div", { id: "cart-items" });
-  $cartTotal = $("div", { id: "cart-total", className: "text-xl font-bold my-4" });
-  $productSelect = $("select", { id: "product-select", className: "border rounded p-2 mr-2" });
-  $addToCart = $("button", { id: "add-to-cart", className: "bg-blue-500 text-white px-4 py-2 rounded", textContent: "추가" });
-  $stockStatus = $("div", { id: "stock-status", className: "text-sm text-gray-500 mt-2" });
+  $cartTotal = $("div", { id: "cart-total", className: STYLES.CART_TOTAL });
+  $productSelect = $("select", { id: "product-select", className: STYLES.PRODUCT_SELECT });
+  $addToCart = $("button", { id: "add-to-cart", className: STYLES.ADD_TO_CART, textContent: "추가" });
+  $stockStatus = $("div", { id: "stock-status", className: STYLES.STOCK_STATUS });
 
   renderSelectOptions();
 
@@ -348,11 +371,11 @@ const main = () => {
   $("#app").appendChild(
     $(
       "div",
-      { className: "bg-gray-100 p-8" }, // container props
+      { className: STYLES.CONTAINER }, // container props
       $(
         "div",
-        { className: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8" }, // wrapper props
-        $("h1", { className: "text-2xl font-bold mb-4", textContent: "장바구니" }),
+        { className: STYLES.WRAPPER }, // wrapper props
+        $("h1", { className: STYLES.TITLE, textContent: "장바구니" }),
         $cartItems,
         $cartTotal,
         $productSelect,

@@ -8,7 +8,7 @@
  * @param {string} type
  * @param {Object} [props]
  * @param {string} [props.id]
- * @param {string} [props.className]
+ * @param {string | string[]} [props.className]
  * @param {string} [props.textContent]
  * @param {string} [props.value]
  * @param {boolean} [props.disabled]
@@ -41,6 +41,7 @@ export const $ = (type, props = {}, ...children) => {
       Object.entries(value).forEach(([dataKey, dataValue]) => (element.dataset[dataKey] = dataValue));
     } else {
       // id, className 및 기타 속성 처리
+      if (key === "className" && Array.isArray(value)) value = value.join(" ");
       element[key] = value;
     }
   });

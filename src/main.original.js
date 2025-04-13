@@ -7,8 +7,8 @@ const products = [
   { id: "p5", name: "상품5", price: 25000, units: 10 },
 ];
 
-var sel, addBtn, cartDisp, sum, stockInfo;
-var lastSel,
+let sel, addBtn, cartDisp, sum, stockInfo;
+let lastSel,
   bonusPts = 0,
   totalAmt = 0,
   itemCnt = 0;
@@ -26,10 +26,11 @@ function main() {
 
 function render() {
   // 요소를 탐색하는 역할
-  var root = document.getElementById("app");
-  let cont = document.createElement("div");
-  var wrap = document.createElement("div");
-  let hTxt = document.createElement("h1");
+  const root = document.getElementById("app");
+  const cont = document.createElement("div");
+  const wrap = document.createElement("div");
+  const hTxt = document.createElement("h1");
+
   cartDisp = document.createElement("div");
   sum = document.createElement("div");
   sel = document.createElement("select");
@@ -68,7 +69,7 @@ function render() {
 function triggerRandomSales() {
   setTimeout(function () {
     setInterval(function () {
-      var luckyItem = products[Math.floor(Math.random() * products.length)];
+      const luckyItem = products[Math.floor(Math.random() * products.length)];
       if (Math.random() < 0.3 && luckyItem.units > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
@@ -80,7 +81,7 @@ function triggerRandomSales() {
   setTimeout(function () {
     setInterval(function () {
       if (lastSel) {
-        var suggest = products.find(function (item) {
+        const suggest = products.find(function (item) {
           return item.id !== lastSel && item.units > 0;
         });
         if (suggest) {
@@ -98,14 +99,14 @@ function triggerRandomSales() {
 function addEventListener() {
   // 이벤트
   addBtn.addEventListener("click", function () {
-    var selItem = sel.value;
-    var itemToAdd = products.find(function (p) {
+    const selItem = sel.value;
+    const itemToAdd = products.find(function (p) {
       return p.id === selItem;
     });
     if (itemToAdd && itemToAdd.units > 0) {
-      var item = document.getElementById(itemToAdd.id);
+      const item = document.getElementById(itemToAdd.id);
       if (item) {
-        var newQty =
+        const newQty =
           parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
         if (newQty <= itemToAdd.units) {
           item.querySelector("span").textContent =
@@ -115,7 +116,7 @@ function addEventListener() {
           alert("재고가 부족합니다.");
         }
       } else {
-        var newItem = document.createElement("div");
+        const newItem = document.createElement("div");
         newItem.id = itemToAdd.id;
         newItem.className = "flex justify-between items-center mb-2";
         newItem.innerHTML =
@@ -142,19 +143,19 @@ function addEventListener() {
   });
 
   cartDisp.addEventListener("click", function (event) {
-    var tgt = event.target;
+    const tgt = event.target;
     if (
       tgt.classList.contains("quantity-change") ||
       tgt.classList.contains("remove-item")
     ) {
-      var prodId = tgt.dataset.productId;
-      var itemElem = document.getElementById(prodId);
-      var prod = products.find(function (p) {
+      const prodId = tgt.dataset.productId;
+      const itemElem = document.getElementById(prodId);
+      const prod = products.find(function (p) {
         return p.id === prodId;
       });
       if (tgt.classList.contains("quantity-change")) {
-        var qtyChange = parseInt(tgt.dataset.change);
-        var newQty =
+        const qtyChange = parseInt(tgt.dataset.change);
+        const newQty =
           parseInt(itemElem.querySelector("span").textContent.split("x ")[1]) +
           qtyChange;
         if (
@@ -177,7 +178,7 @@ function addEventListener() {
           alert("재고가 부족합니다.");
         }
       } else if (tgt.classList.contains("remove-item")) {
-        var remQty = parseInt(
+        const remQty = parseInt(
           itemElem.querySelector("span").textContent.split("x ")[1],
         );
         prod.units += remQty;
@@ -191,7 +192,7 @@ function addEventListener() {
 function updateSelOpts() {
   sel.innerHTML = "";
   products.forEach(function (item) {
-    var opt = document.createElement("option");
+    const opt = document.createElement("option");
     opt.value = item.id;
     opt.textContent = item.name + " - " + item.price + "원";
     if (item.units === 0) opt.disabled = true;
@@ -202,22 +203,22 @@ function updateSelOpts() {
 function calcCart() {
   totalAmt = 0;
   itemCnt = 0;
-  var cartItems = cartDisp.children;
-  var subTot = 0;
-  for (var i = 0; i < cartItems.length; i++) {
+  const cartItems = cartDisp.children;
+  let subTot = 0;
+  for (let i = 0; i < cartItems.length; i++) {
     (function () {
-      var curItem;
-      for (var j = 0; j < products.length; j++) {
+      let curItem;
+      for (let j = 0; j < products.length; j++) {
         if (products[j].id === cartItems[i].id) {
           curItem = products[j];
           break;
         }
       }
-      var units = parseInt(
+      const units = parseInt(
         cartItems[i].querySelector("span").textContent.split("x ")[1],
       );
-      var itemTot = curItem.price * units;
-      var disc = 0;
+      const itemTot = curItem.price * units;
+      let disc = 0;
       itemCnt += units;
       subTot += itemTot;
       if (units >= 10) {
@@ -232,8 +233,8 @@ function calcCart() {
   }
   let discRate = 0;
   if (itemCnt >= 30) {
-    var bulkDisc = totalAmt * 0.25;
-    var itemDisc = subTot - totalAmt;
+    const bulkDisc = totalAmt * 0.25;
+    const itemDisc = subTot - totalAmt;
     if (bulkDisc > itemDisc) {
       totalAmt = subTot * (1 - 0.25);
       discRate = 0.25;
@@ -249,7 +250,7 @@ function calcCart() {
   }
   sum.textContent = "총액: " + Math.round(totalAmt) + "원";
   if (discRate > 0) {
-    var span = document.createElement("span");
+    const span = document.createElement("span");
     span.className = "text-green-500 ml-2";
     span.textContent = "(" + (discRate * 100).toFixed(1) + "% 할인 적용)";
     sum.appendChild(span);
@@ -260,7 +261,7 @@ function calcCart() {
 
 function renderBonusPts() {
   bonusPts = Math.floor(totalAmt / 1000);
-  var ptsTag = document.getElementById("loyalty-points");
+  let ptsTag = document.getElementById("loyalty-points");
   if (!ptsTag) {
     ptsTag = document.createElement("span");
     ptsTag.id = "loyalty-points";
@@ -271,7 +272,7 @@ function renderBonusPts() {
 }
 
 function updateStockInfo() {
-  var infoMsg = "";
+  let infoMsg = "";
   products.forEach(function (item) {
     if (item.units < 5) {
       infoMsg +=

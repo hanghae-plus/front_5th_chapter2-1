@@ -10,6 +10,17 @@
  * @returns {HTMLElement} DOM 엘리먼트
  */
 export const $ = (tag, props = {}) => {
+  // querySelector
+  if (tag.startsWith("#") || tag.startsWith(".")) {
+    return document.querySelector(tag);
+  }
+
+  // fragment 생성
+  if (tag === "frag") {
+    return document.createDocumentFragment();
+  }
+
+  // 일반 element 생성
   const element = document.createElement(tag);
   Object.entries(props).map(([key, value]) => (element[key] = value));
   return element;

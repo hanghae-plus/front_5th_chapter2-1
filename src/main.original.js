@@ -1,4 +1,6 @@
 // TODO: 상수로 분리
+// 임시메모: price는 보통 제품이나 서비스 1단위당의 금액
+// 임시메모: amount는 전체 계산된 금액, price × 수량
 const products = [
   { id: "p1", name: "상품1", price: 10000, units: 50 },
   { id: "p2", name: "상품2", price: 20000, units: 30 },
@@ -10,7 +12,7 @@ const products = [
 let productSelector, addToCartButton, cartItemList, cartTotal, stockStatus;
 let lastSel,
   bonusPts = 0,
-  totalAmount = 0,
+  finalTotal = 0,
   totalItemsInCart = 0; // TODO: Cart를 뺄지 말지 고민
 
 main();
@@ -20,7 +22,7 @@ addEventListener();
 function main() {
   render();
   updateSelOpts();
-  calcCart();
+  calculateCart();
   triggerRandomSales();
 }
 
@@ -137,7 +139,7 @@ function addEventListener() {
         cartItemList.appendChild(newItem);
         itemToAdd.units--;
       }
-      calcCart();
+      calculateCart();
       lastSel = selItem;
     }
   });
@@ -184,7 +186,7 @@ function addEventListener() {
         prod.units += remQty;
         itemElem.remove();
       }
-      calcCart();
+      calculateCart();
     }
   });
 }
@@ -200,79 +202,86 @@ function updateSelOpts() {
   });
 }
 
-function calcCart() {
-  const cartItems = cartItemList.children;
-  let subTot = 0;
-
-  totalAmount = 0;
+function calculateCart() {
+  const cartItems = getCartItems();
+  let originalTotal = 0;
+  finalTotal = 0;
   totalItemsInCart = 0;
 
-  for (let i = 0; i < cartItems.length; i++) {
-    (function () {
-      let curItem;
-      for (let j = 0; j < products.length; j++) {
-        if (products[j].id === cartItems[i].id) {
-          curItem = products[j];
-          break;
-        }
-      }
-      const units = parseInt(
-        cartItems[i].querySelector("span").textContent.split("x ")[1],
-      );
-      const itemTot = curItem.price * units;
-      const discountRate = getDiscountRate(units, curItem.id);
-      totalItemsInCart += units;
-      subTot += itemTot;
+  cartItems.forEach(({ id, units }) => {
+    const product = products.find((p) => p.id === id);
+    const amount = product.price * units;
+    const discountRate = getItemDiscountRate(units, product.id);
 
-      totalAmount += itemTot * (1 - discountRate);
+    totalItemsInCart += units;
+    originalTotal += amount;
+    finalTotal += amount * (1 - discountRate);
+  });
 
-      function getDiscountRate(units, productId) {
-        if (units < 10) return 0;
-        else {
-          const discountRateMap = {
-            p1: 0.1,
-            p2: 0.15,
-            p3: 0.2,
-            p4: 0.05,
-            p5: 0.25,
-          };
-          return discountRateMap[productId] ?? 0;
-        }
-      }
-    })();
-  }
+  const discountRate = getDiscountRate({
+    originalTotal,
+    finalTotal,
+    totalItemsInCart,
+  });
 
-  let discountRate = 0;
-  if (totalItemsInCart >= 30) {
-    const bulkDisc = totalAmount * 0.25;
-    const itemDisc = subTot - totalAmount;
-    if (bulkDisc > itemDisc) {
-      totalAmount = subTot * (1 - 0.25);
-      discountRate = 0.25;
-    } else {
-      discountRate = (subTot - totalAmount) / subTot;
-    }
-  } else {
-    discountRate = (subTot - totalAmount) / subTot;
-  }
-  if (new Date().getDay() === 2) {
-    totalAmount *= 1 - 0.1;
-    discountRate = Math.max(discountRate, 0.1);
-  }
-
-  cartTotal.textContent = "총액: " + Math.round(totalAmount) + "원";
-  if (discountRate > 0) {
-    const span = document.createElement("span");
-    span.className = "text-green-500 ml-2";
-    span.textContent = "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
-    cartTotal.appendChild(span);
-  }
+  // TODO: 함수 시작 동사를 update로 할지 render로 할지 고민
+  updateCartTotal(finalTotal, discountRate);
   updateStockStatus();
   updateLoyaltyPoints();
 }
 
+function updateCartTotal(finalTotal, discountRate) {
+  cartTotal.textContent = `총액: ${Math.round(finalTotal)}원`;
+  if (discountRate > 0) {
+    const discountText = document.createElement("span");
+    discountText.className = "text-green-500 ml-2";
+    discountText.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
+    cartTotal.appendChild(discountText);
+  }
+}
+
+function getCartItems() {
+  const cartItems = Array.from(cartItemList.children);
+
+  return cartItems.map((el) => {
+    const id = el.id;
+    const units = parseInt(el.querySelector("span").textContent.split("x ")[1]);
+
+    return { id, units };
+  });
+}
+
+function getItemDiscountRate(units, productId) {
+  if (units < 10) return 0;
+  const discountRateMap = {
+    p1: 0.1,
+    p2: 0.15,
+    p3: 0.2,
+    p4: 0.05,
+    p5: 0.25,
+  };
+  return discountRateMap[productId] ?? 0;
+}
+
+function getDiscountRate({ originalTotal, finalTotal, totalItemsInCart }) {
+  let rate = (originalTotal - finalTotal) / originalTotal;
+
+  if (totalItemsInCart >= 30) {
+    const maxBulkDiscountAmount = originalTotal * 0.25;
+    if (maxBulkDiscountAmount > originalTotal - finalTotal) {
+      finalTotal = originalTotal * (1 - 0.25);
+      rate = 0.25;
+    }
+  }
+  if (new Date().getDay() === 2) {
+    finalTotal *= 0.9;
+    rate = Math.max(rate, 0.1);
+  }
+  return rate;
+}
+
 function updateLoyaltyPoints() {
-  bonusPts = Math.floor(totalAmount / 1000);
+  bonusPts = Math.floor(finalTotal / 1000);
   let points = document.getElementById("loyalty-points");
 
   if (!points) {

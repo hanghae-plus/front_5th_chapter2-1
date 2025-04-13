@@ -3,6 +3,7 @@ var lastSel,
   bonusPts = 0,
   totalAmt = 0,
   itemCnt = 0;
+
 function main() {
   prodList = [
     { id: 'p1', name: '상품1', val: 10000, q: 50 },
@@ -72,6 +73,7 @@ function main() {
     }, 60000);
   }, Math.random() * 20000);
 }
+
 function updateSelOpts() {
   sel.innerHTML = '';
   prodList.forEach(function (item) {
@@ -82,6 +84,7 @@ function updateSelOpts() {
     sel.appendChild(opt);
   });
 }
+
 function calcCart() {
   totalAmt = 0;
   itemCnt = 0;
@@ -151,6 +154,7 @@ const renderBonusPts = () => {
   }
   ptsTag.textContent = '(포인트: ' + bonusPts + ')';
 };
+
 function updateStockInfo() {
   var infoMsg = '';
   prodList.forEach(function (item) {
@@ -164,7 +168,9 @@ function updateStockInfo() {
   });
   stockInfo.textContent = infoMsg;
 }
+
 main();
+
 addBtn.addEventListener('click', function () {
   var selItem = sel.value;
   var itemToAdd = prodList.find(function (p) {
@@ -208,6 +214,7 @@ addBtn.addEventListener('click', function () {
     lastSel = selItem;
   }
 });
+
 cartDisp.addEventListener('click', function (event) {
   var tgt = event.target;
   if (

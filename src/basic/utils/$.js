@@ -1,5 +1,10 @@
 /**
- * 전체 코드 중 초기 세팅으로 주로 사용되는 값들만 주입받아 엘리먼트를 반환합니다.
+ * 지정된 태그 혹은 선택자에 따라 적절한 DOM 노드를 반환
+ *
+ * - `"#id"` 또는 `".class"`로 시작하면 `document.querySelector`를 사용해 DOM을 조회
+ * - `"frag"` 문자열을 전달하면 `DocumentFragment`를 반환
+ * - 그 외에는 일반 DOM 요소를 생성하며, 전달된 `props`를 속성으로 할당
+ *
  * @param {string} tag
  * @param {Object} [props]
  * @param {string} [props.id]
@@ -7,7 +12,13 @@
  * @param {string} [props.textContent]
  * @param {string} [props.value]
  * @param {boolean} [props.disabled]
- * @returns {HTMLElement} DOM 엘리먼트
+ * @returns {HTMLElement | DocumentFragment | null} DOM 엘리먼트
+ *
+ * @example
+ * const div = $("div", { className: "bg-gray-100 p-8" });
+ * const option = $("option", { value: "p1", textContent: "상품1", disabled: false });
+ * const frag = $("frag");
+ * const existingEl = $("#app"); // querySelector
  */
 export const $ = (tag, props = {}) => {
   // querySelector

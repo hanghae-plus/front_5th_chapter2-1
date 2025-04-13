@@ -206,16 +206,20 @@ const handleClickAddToCart = () => {
   } else {
     // 장바구니에 새 상품 추가
     const { id, name, cost } = itemToAdd;
-    const newItem = $("div", { id, className: "flex justify-between items-center mb-2" });
-    const span = $("span", { textContent: name + " - " + cost + "원 x 1" });
-    const div = $("div", {});
-    const minusButton = $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: -1 }, textContent: "-" });
-    const plusButton = $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: 1 }, textContent: "+" });
-    const removeButton = $("button", { className: "remove-item bg-red-500 text-white px-2 py-1 rounded", dataset: { productId: id }, textContent: "삭제" });
-
-    [minusButton, plusButton, removeButton].forEach((el) => div.appendChild(el));
-    newItem.appendChild(span);
-    newItem.appendChild(div);
+    const newItem = $("div", {
+      id,
+      className: "flex justify-between items-center mb-2",
+      children: [
+        $("span", { textContent: name + " - " + cost + "원 x 1" }),
+        $("div", {
+          children: [
+            $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: -1 }, textContent: "-" }),
+            $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: 1 }, textContent: "+" }),
+            $("button", { className: "remove-item bg-red-500 text-white px-2 py-1 rounded", dataset: { productId: id }, textContent: "삭제" }),
+          ],
+        }),
+      ],
+    });
     $cartItems.appendChild(newItem);
     itemToAdd.quantity -= 1;
   }
@@ -333,9 +337,6 @@ const main = () => {
   const $root = $("#app");
 
   // UI 앨리먼트 생성 및 속성 설정 커스텀 $ 함수 사용
-  const $container = $("div", { className: "bg-gray-100 p-8" });
-  const $wrapper = $("div", { className: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8" });
-  const $title = $("h1", { className: "text-2xl font-bold mb-4", textContent: "장바구니" });
   $cartItems = $("div", { id: "cart-items" });
   $cartTotal = $("div", { id: "cart-total", className: "text-xl font-bold my-4" });
   $productSelect = $("select", { id: "product-select", className: "border rounded p-2 mr-2" });
@@ -343,10 +344,28 @@ const main = () => {
   $stockStatus = $("div", { id: "stock-status", className: "text-sm text-gray-500 mt-2" });
 
   renderSelectOptions();
-
-  // 컴포넌트 조립
-  [$title, $cartItems, $cartTotal, $productSelect, $addToCart, $stockStatus].forEach((el) => $wrapper.appendChild(el));
-  $container.appendChild($wrapper);
+  const $container = $("div", {
+    // container
+    className: "bg-gray-100 p-8",
+    children: [
+      $("div", {
+        // wrapper
+        className: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8",
+        children: [
+          $("h1", {
+            //title
+            className: "text-2xl font-bold mb-4",
+            textContent: "장바구니",
+          }),
+          $cartItems,
+          $cartTotal,
+          $productSelect,
+          $addToCart,
+          $stockStatus,
+        ],
+      }),
+    ],
+  });
   $root.appendChild($container);
 
   // 초기 세팅 함수

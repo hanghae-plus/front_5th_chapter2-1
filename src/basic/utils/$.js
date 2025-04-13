@@ -13,6 +13,7 @@
  * @param {string} [props.value]
  * @param {boolean} [props.disabled]
  * @param {Object<string, string>} [props.dataset] data-* 오브젝트
+ * @param {HTMLElement[]} [props.children]
  * @returns {HTMLElement | DocumentFragment | null} DOM 엘리먼트
  *
  * @example
@@ -35,11 +36,17 @@ export const $ = (tag, props = {}) => {
   // 일반 element 생성
   const element = document.createElement(tag);
   Object.entries(props).forEach(([key, value]) => {
-    if (key === "dataset" && typeof value === "object") {
+    if (key === "children" && Array.isArray(value)) {
+      // element children 생성 시 추가
+      value.filter((c) => !!c && c instanceof Node).forEach((el) => element.appendChild(el));
+    } else if (key === "dataset" && typeof value === "object") {
+      // dataset 처리
       Object.entries(value).forEach(([dataKey, dataValue]) => (element.dataset[dataKey] = dataValue));
     } else {
+      // id, className 및 기타 속성 처리
       element[key] = value;
     }
   });
+
   return element;
 };

@@ -21,4 +21,7 @@ export default [
       "no-use-before-define": "error",
     },
   },
+  {
+    ignores: ["src/main.original.js"],
+  },
 ];

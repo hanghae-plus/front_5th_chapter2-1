@@ -4,7 +4,12 @@ import globals from "globals";
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 
 export default defineConfig([
-  { files: ["**/*.{js}"], plugins: { js }, extends: ["js/recommended"] },
-  { files: ["**/*.{js}"], languageOptions: { globals: globals.browser } },
-  eslintConfigPrettier,
+  { ignores: ["**/__test__/**", "**/*.test.js", "**/tests/**"] },
+  {
+    files: ["src/basic/**/*.js", "src/advanced/**/*.js"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.browser },
+    ...eslintConfigPrettier,
+  },
 ]);

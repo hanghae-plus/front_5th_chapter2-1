@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint:fix": "eslint ./src --fix",
-    "prettier:write": "prettier --write ./src",
+    "lint:fix": "eslint \"./src/{basic,advanced}/**/*.js\" --fix",
+    "prettier:write": "prettier --write \"./src/{basic,advanced}/**/*.js\" --ignore-path .prettierignore",
     "preview": "vite preview",
     "start:basic": "vite serve --open ./index.basic.html",
     "start:advanced": "vite serve --open ./index.advanced.html",

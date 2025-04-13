@@ -6,7 +6,7 @@ describe('basic test', () => {
     { type: 'origin', loadFile: () => import('../../main.original.js'), },
     { type: 'basic', loadFile: () => import('../main.basic.js'), },
   ])('$type 장바구니 시나리오 테스트', ({ loadFile }) => {
-    let sel, addBtn, cartDisp, sum, stockInfo;
+    let select, addBtn, cartDisp, sum, stockInfo;
 
     beforeAll(async () => {
       // DOM 초기화
@@ -14,7 +14,7 @@ describe('basic test', () => {
       await loadFile();
 
       // 전역 변수 참조
-      sel=document.getElementById('product-select');
+      select=document.getElementById('product-select');
       addBtn=document.getElementById('add-to-cart');
       cartDisp=document.getElementById('cart-items');
       sum=document.getElementById('cart-total');
@@ -31,29 +31,29 @@ describe('basic test', () => {
     });
 
     it('초기 상태: 상품 목록이 올바르게 그려졌는지 확인', () => {
-      expect(sel).toBeDefined();
-      expect(sel.tagName.toLowerCase()).toBe('select');
-      expect(sel.children.length).toBe(5);
+      expect(select).toBeDefined();
+      expect(select.tagName.toLowerCase()).toBe('select');
+      expect(select.children.length).toBe(5);
 
       // 첫 번째 상품 확인
-      expect(sel.children[0].value).toBe('p1');
-      expect(sel.children[0].textContent).toBe('상품1 - 10000원');
-      expect(sel.children[0].disabled).toBe(false);
+      expect(select.children[0].value).toBe('p1');
+      expect(select.children[0].textContent).toBe('상품1 - 10000원');
+      expect(select.children[0].disabled).toBe(false);
 
       // 마지막 상품 확인
-      expect(sel.children[4].value).toBe('p5');
-      expect(sel.children[4].textContent).toBe('상품5 - 25000원');
-      expect(sel.children[4].disabled).toBe(false);
+      expect(select.children[4].value).toBe('p5');
+      expect(select.children[4].textContent).toBe('상품5 - 25000원');
+      expect(select.children[4].disabled).toBe(false);
 
       // 재고 없는 상품 확인 (상품4)
-      expect(sel.children[3].value).toBe('p4');
-      expect(sel.children[3].textContent).toBe('상품4 - 15000원');
-      expect(sel.children[3].disabled).toBe(true);
+      expect(select.children[3].value).toBe('p4');
+      expect(select.children[3].textContent).toBe('상품4 - 15000원');
+      expect(select.children[3].disabled).toBe(true);
     });
 
     it('초기 상태: DOM 요소가 올바르게 생성되었는지 확인', () => {
       expect(document.querySelector('h1').textContent).toBe('장바구니');
-      expect(sel).toBeDefined();
+      expect(select).toBeDefined();
       expect(addBtn).toBeDefined();
       expect(cartDisp).toBeDefined();
       expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
@@ -61,7 +61,7 @@ describe('basic test', () => {
     });
 
     it('상품을 장바구니에 추가할 수 있는지 확인', () => {
-      sel.value='p1';
+      select.value='p1';
       addBtn.click();
       expect(cartDisp.children.length).toBe(1);
       expect(cartDisp.children[0].querySelector('span').textContent).toContain('상품1 - 10000원 x 1');
@@ -74,7 +74,7 @@ describe('basic test', () => {
     });
 
     it('장바구니에서 상품을 삭제할 수 있는지 확인', () => {
-      sel.value='p1';
+      select.value='p1';
       addBtn.click();
       const removeBtn=cartDisp.querySelector('.remove-item');
       removeBtn.click();
@@ -83,14 +83,14 @@ describe('basic test', () => {
     });
 
     it('총액이 올바르게 계산되는지 확인', () => {
-      sel.value='p1';
+      select.value='p1';
       addBtn.click();
       addBtn.click();
       expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
     });
 
     it('할인이 올바르게 적용되는지 확인', () => {
-      sel.value='p1';
+      select.value='p1';
       for (let i=0; i < 10; i++) {
         addBtn.click();
       }
@@ -98,7 +98,7 @@ describe('basic test', () => {
     });
 
     it('포인트가 올바르게 계산되는지 확인', () => {
-      sel.value='p2';
+      select.value='p2';
       addBtn.click();
       expect(document.getElementById('loyalty-points').textContent).toContain('(포인트: 128)');
     });
@@ -115,14 +115,14 @@ describe('basic test', () => {
       const mockDate=new Date('2024-10-15'); // 화요일
       vi.useFakeTimers()
       vi.setSystemTime(mockDate);
-      sel.value='p1';
+      select.value='p1';
       addBtn.click();
       expect(document.getElementById('cart-total').textContent).toContain('(10.0% 할인 적용)');
     });
 
     it('재고가 부족한 경우 추가되지 않는지 확인', () => {
       // p4 상품 선택 (재고 없음)
-      sel.value='p4';
+      select.value='p4';
       addBtn.click();
 
       // p4 상품이 장바구니에 없는지 확인
@@ -132,7 +132,7 @@ describe('basic test', () => {
     });
 
     it('재고가 부족한 경우 추가되지 않고 알림이 표시되는지 확인', () => {
-      sel.value='p5';
+      select.value='p5';
       addBtn.click();
 
       // p5 상품이 장바구니에 추가되었는지 확인

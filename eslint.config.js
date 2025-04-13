@@ -1,8 +1,12 @@
 import js from "@eslint/js";
+import eslintConfigPrettier from "eslint-config-prettier";
+import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
 import globals from "globals";
 
 export default [
   js.configs.recommended, // eslint 기본 recommended 설정
+  eslintPluginPrettier,
+  eslintConfigPrettier,
   {
     languageOptions: {
       ecmaVersion: "latest",
@@ -14,7 +18,10 @@ export default [
     },
     rules: {
       "no-var": "error",
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+      "no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
       "prefer-const": ["error", { destructuring: "all" }],
       "no-const-assign": "error",
       "no-redeclare": "error",

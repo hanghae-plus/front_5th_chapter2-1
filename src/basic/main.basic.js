@@ -1,4 +1,4 @@
-import createDiscountEvent from './discountEvent';
+import createDiscountEvent from './createDiscountEvent';
 
 let products, productSelectBox, addProductToCartButton, cartList, cartTotalPrice, stockStatus;
 let lastSel = null;

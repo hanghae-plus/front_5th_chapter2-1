@@ -1,21 +1,11 @@
-var productList,
-    selectProductEl,
-    addBtn,
-    cartDisplayEl,
-    totalAmountEl,
-    productStockEl;
+import { productList } from "./data/productData.js";
+
+var selectProductEl, addBtn, cartDisplayEl, totalAmountEl, productStockEl;
 var lastSel, // 추후 바꿔야 될 꺼 같음
     bonusPoints = 0,
     totalAmount = 0,
     productCount = 0;
 function main() {
-    productList = [
-        { id: "p1", name: "상품1", val: 10000, q: 50 },
-        { id: "p2", name: "상품2", val: 20000, q: 30 },
-        { id: "p3", name: "상품3", val: 30000, q: 20 },
-        { id: "p4", name: "상품4", val: 15000, q: 0 },
-        { id: "p5", name: "상품5", val: 25000, q: 10 },
-    ];
     var rootEl = document.getElementById("app");
     let containerEl = document.createElement("div");
     var wrapperEl = document.createElement("div");

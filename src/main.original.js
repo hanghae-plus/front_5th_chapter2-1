@@ -7,7 +7,7 @@ const products = [
   { id: "p5", name: "상품5", price: 25000, units: 10 },
 ];
 
-let productSelector, addToCartButton, cartItemList, cartTotal, productStatus;
+let productSelector, addToCartButton, cartItemList, cartTotal, stockStatus;
 let lastSel,
   bonusPts = 0,
   totalAmt = 0,
@@ -35,14 +35,14 @@ function render() {
   cartTotal = document.createElement("div");
   productSelector = document.createElement("select");
   addToCartButton = document.createElement("button");
-  productStatus = document.createElement("div");
+  stockStatus = document.createElement("div");
 
   // 스타일 적용
   cartItemList.id = "cart-items";
   cartTotal.id = "cart-total";
   productSelector.id = "product-select";
   addToCartButton.id = "add-to-cart";
-  productStatus.id = "stock-status";
+  stockStatus.id = "stock-status";
   cont.className = "bg-gray-100 p-8";
   wrap.className =
     "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
@@ -50,7 +50,7 @@ function render() {
   cartTotal.className = "text-xl font-bold my-4";
   productSelector.className = "border rounded p-2 mr-2";
   addToCartButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
-  productStatus.className = "text-sm text-gray-500 mt-2";
+  stockStatus.className = "text-sm text-gray-500 mt-2";
   hTxt.textContent = "장바구니";
   addToCartButton.textContent = "추가";
 
@@ -61,7 +61,7 @@ function render() {
   wrap.appendChild(cartTotal);
   wrap.appendChild(productSelector);
   wrap.appendChild(addToCartButton);
-  wrap.appendChild(productStatus);
+  wrap.appendChild(stockStatus);
   cont.appendChild(wrap);
   root.appendChild(cont);
 }
@@ -255,7 +255,7 @@ function calcCart() {
     span.textContent = "(" + (discRate * 100).toFixed(1) + "% 할인 적용)";
     cartTotal.appendChild(span);
   }
-  updateStockInfo();
+  updateStockStatus();
   renderBonusPts();
 }
 
@@ -271,16 +271,18 @@ function renderBonusPts() {
   ptsTag.textContent = "(포인트: " + bonusPts + ")";
 }
 
-function updateStockInfo() {
-  let infoMsg = "";
-  products.forEach(function (item) {
-    if (item.units < 5) {
-      infoMsg +=
-        item.name +
-        ": " +
-        (item.units > 0 ? "재고 부족 (" + item.units + "개 남음)" : "품절") +
-        "\n";
+function updateStockStatus() {
+  const limitUnits = 5;
+  let statusMessage = "";
+
+  const checkStockStatus = (item) => {
+    if (item.units < limitUnits) {
+      const stockMessage =
+        item.units > 0 ? `재고 부족 (${item.units}개 남음)` : "품절";
+      statusMessage += item.name + ": " + stockMessage + "\n";
     }
-  });
-  productStatus.textContent = infoMsg;
+  };
+
+  products.forEach(checkStockStatus);
+  stockStatus.textContent = statusMessage;
 }

@@ -18,6 +18,14 @@ addEventListener();
 
 // function
 function main() {
+  render();
+  updateSelOpts();
+  calcCart();
+  triggerRandomSales();
+}
+
+function render() {
+  // 요소를 탐색하는 역할
   var root = document.getElementById("app");
   let cont = document.createElement("div");
   var wrap = document.createElement("div");
@@ -28,6 +36,7 @@ function main() {
   addBtn = document.createElement("button");
   stockInfo = document.createElement("div");
 
+  // 스타일 적용
   cartDisp.id = "cart-items";
   sum.id = "cart-total";
   sel.id = "product-select";
@@ -44,7 +53,8 @@ function main() {
   hTxt.textContent = "장바구니";
   addBtn.textContent = "추가";
 
-  updateSelOpts();
+  // ------- 요소에 스타일 적용
+
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
   wrap.appendChild(sum);
@@ -53,8 +63,9 @@ function main() {
   wrap.appendChild(stockInfo);
   cont.appendChild(wrap);
   root.appendChild(cont);
-  calcCart();
+}
 
+function triggerRandomSales() {
   setTimeout(function () {
     setInterval(function () {
       var luckyItem = products[Math.floor(Math.random() * products.length)];

@@ -1,13 +1,12 @@
 import { MainPage } from "./pages/MainPage";
-import { cartService } from "./services/CartService";
+import { cartStore } from "./stores/cartStore";
 
 MainPage();
 
 const addBtn = document.getElementById("add-to-cart");
 addBtn.addEventListener("click", function () {
   const sel = document.getElementById("product-select");
-  let selItem = sel.value;
-  cartService.addToCart(selItem);
+  cartStore.dispatch({ type: "ADD_ITEM", payload: sel });
 });
 
 const cartDisp = document.getElementById("cart-items");
@@ -17,6 +16,6 @@ cartDisp.addEventListener("click", function (event) {
     tgt.classList.contains("quantity-change") ||
     tgt.classList.contains("remove-item")
   ) {
-    cartService.removeFromCart(tgt);
+    cartStore.dispatch({ type: "REMOVE_ITEM", payload: tgt });
   }
 });

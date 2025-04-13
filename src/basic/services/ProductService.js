@@ -1,6 +1,3 @@
-import { ProductSelectItem } from "../components/ProductSelectItem";
-import { StockInfo } from "../components/StockInfo";
-
 const PRODUCT_List = [
   { id: "p1", name: "상품1", val: 10000, q: 50 },
   { id: "p2", name: "상품2", val: 20000, q: 30 },
@@ -12,34 +9,6 @@ const PRODUCT_List = [
 export class ProductService {
   constructor() {
     this.productList = PRODUCT_List;
-  }
-
-  updateProductList() {
-    const productSelector = document.getElementById("product-select");
-    productSelector.innerHTML = "";
-
-    this.productList.forEach((item) => {
-      const selectItem = ProductSelectItem({
-        id: item.id,
-        name: item.name,
-        price: item.val,
-        quantity: item.q,
-      });
-      productSelector.appendChild(selectItem);
-    });
-  }
-
-  updateStockInfo() {
-    let infoMsg = "";
-    this.productList.forEach((item) => {
-      infoMsg += StockInfo({
-        name: item.name,
-        quantityLeft: item.q,
-      });
-    });
-
-    const stockInfo = document.getElementById("stock-status");
-    stockInfo.textContent = infoMsg;
   }
 }
 

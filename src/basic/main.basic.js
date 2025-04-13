@@ -32,10 +32,10 @@ const PRODUCT_LIST = [
   { id: "p5", name: "상품5", cost: 25_000, quantity: 10, discount: 0.25 },
 ];
 
-/// global state
-
+/// global element
 let $productSelect, $addToCart, $cartItems, $cartTotal, $stockStatus;
 
+/// global state
 let lastSelected,
   bonusPoints = 0,
   totalCost = 0,
@@ -206,21 +206,20 @@ const handleClickAddToCart = () => {
   } else {
     // 장바구니에 새 상품 추가
     const { id, name, cost } = itemToAdd;
-    const newItem = $("div", {
-      id,
-      className: "flex justify-between items-center mb-2",
-      children: [
+    $cartItems.appendChild(
+      $(
+        "div",
+        { id, className: "flex justify-between items-center mb-2" },
         $("span", { textContent: name + " - " + cost + "원 x 1" }),
-        $("div", {
-          children: [
-            $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: -1 }, textContent: "-" }),
-            $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: 1 }, textContent: "+" }),
-            $("button", { className: "remove-item bg-red-500 text-white px-2 py-1 rounded", dataset: { productId: id }, textContent: "삭제" }),
-          ],
-        }),
-      ],
-    });
-    $cartItems.appendChild(newItem);
+        $(
+          "div",
+          {},
+          $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: -1 }, textContent: "-" }),
+          $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: 1 }, textContent: "+" }),
+          $("button", { className: "remove-item bg-red-500 text-white px-2 py-1 rounded", dataset: { productId: id }, textContent: "삭제" })
+        )
+      )
+    );
     itemToAdd.quantity -= 1;
   }
   renderCalculateCart();
@@ -334,9 +333,9 @@ const setRandomDiscount = () => {
  * @fires setRandomDiscount
  */
 const main = () => {
-  const $root = $("#app");
-
   // UI 앨리먼트 생성 및 속성 설정 커스텀 $ 함수 사용
+
+  // global element
   $cartItems = $("div", { id: "cart-items" });
   $cartTotal = $("div", { id: "cart-total", className: "text-xl font-bold my-4" });
   $productSelect = $("select", { id: "product-select", className: "border rounded p-2 mr-2" });
@@ -344,29 +343,24 @@ const main = () => {
   $stockStatus = $("div", { id: "stock-status", className: "text-sm text-gray-500 mt-2" });
 
   renderSelectOptions();
-  const $container = $("div", {
-    // container
-    className: "bg-gray-100 p-8",
-    children: [
-      $("div", {
-        // wrapper
-        className: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8",
-        children: [
-          $("h1", {
-            //title
-            className: "text-2xl font-bold mb-4",
-            textContent: "장바구니",
-          }),
-          $cartItems,
-          $cartTotal,
-          $productSelect,
-          $addToCart,
-          $stockStatus,
-        ],
-      }),
-    ],
-  });
-  $root.appendChild($container);
+
+  // $app 컴포넌트 조립
+  $("#app").appendChild(
+    $(
+      "div",
+      { className: "bg-gray-100 p-8" }, // container props
+      $(
+        "div",
+        { className: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8" }, // wrapper props
+        $("h1", { className: "text-2xl font-bold mb-4", textContent: "장바구니" }),
+        $cartItems,
+        $cartTotal,
+        $productSelect,
+        $addToCart,
+        $stockStatus
+      )
+    )
+  );
 
   // 초기 세팅 함수
   renderCalculateCart();

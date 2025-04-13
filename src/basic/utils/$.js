@@ -5,7 +5,7 @@
  * - `"frag"` 문자열을 전달하면 `DocumentFragment`를 반환
  * - 그 외에는 일반 DOM 요소를 생성하며, 전달된 `props`를 속성으로 할당
  *
- * @param {string} tag
+ * @param {string} type
  * @param {Object} [props]
  * @param {string} [props.id]
  * @param {string} [props.className]
@@ -13,7 +13,7 @@
  * @param {string} [props.value]
  * @param {boolean} [props.disabled]
  * @param {Object<string, string>} [props.dataset] data-* 오브젝트
- * @param {HTMLElement[]} [props.children]
+ * @param {...(HTMLElement | Text | DocumentFragment)} children
  * @returns {HTMLElement | DocumentFragment | null} DOM 엘리먼트
  *
  * @example
@@ -22,24 +22,21 @@
  * const frag = $("frag");
  * const existingEl = $("#app"); // querySelector
  */
-export const $ = (tag, props = {}) => {
+export const $ = (type, props = {}, ...children) => {
   // querySelector
-  if (tag.startsWith("#") || tag.startsWith(".")) {
-    return document.querySelector(tag);
+  if (type.startsWith("#") || type.startsWith(".")) {
+    return document.querySelector(type);
   }
 
   // fragment 생성
-  if (tag === "frag") {
+  if (type === "frag") {
     return document.createDocumentFragment();
   }
 
   // 일반 element 생성
-  const element = document.createElement(tag);
-  Object.entries(props).forEach(([key, value]) => {
-    if (key === "children" && Array.isArray(value)) {
-      // element children 생성 시 추가
-      value.filter((c) => !!c && c instanceof Node).forEach((el) => element.appendChild(el));
-    } else if (key === "dataset" && typeof value === "object") {
+  const element = document.createElement(type);
+  Object.entries(props || {}).forEach(([key, value]) => {
+    if (key === "dataset" && typeof value === "object") {
       // dataset 처리
       Object.entries(value).forEach(([dataKey, dataValue]) => (element.dataset[dataKey] = dataValue));
     } else {
@@ -48,5 +45,9 @@ export const $ = (tag, props = {}) => {
     }
   });
 
+  // element children 생성 시 추가
+  if (children && Array.isArray(children)) {
+    children.filter((c) => !!c && c instanceof Node).forEach((el) => element.appendChild(el));
+  }
   return element;
 };

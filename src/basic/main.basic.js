@@ -4,6 +4,7 @@ let items,
   $cartItemsDiv,
   $cartTotalDiv,
   $stockStatusDiv;
+
 let lastSelectedItem,
   points = 0,
   totalAmount = 0,
@@ -17,20 +18,24 @@ function main() {
     { id: 'p4', name: '상품4', val: 15000, quantity: 0 },
     { id: 'p5', name: '상품5', val: 25000, quantity: 10 },
   ];
+
   const $root = document.getElementById('app');
   const $bgDiv = document.createElement('div');
   const $cartDiv = document.createElement('div');
   const $cartTitle = document.createElement('h1');
+
   $cartItemsDiv = document.createElement('div');
   $cartTotalDiv = document.createElement('div');
   $itemSelect = document.createElement('select');
   $addButton = document.createElement('button');
   $stockStatusDiv = document.createElement('div');
+
   $cartItemsDiv.id = 'cart-items';
   $cartTotalDiv.id = 'cart-total';
   $itemSelect.id = 'product-select';
   $addButton.id = 'add-to-cart';
   $stockStatusDiv.id = 'stock-status';
+
   $bgDiv.className = 'bg-gray-100 p-8';
   $cartDiv.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
@@ -59,9 +64,10 @@ function main() {
   setTimeout(function () {
     setInterval(function () {
       const bungaeSaleItem = items[Math.floor(Math.random() * items.length)];
+
       if (Math.random() < 0.3 && bungaeSaleItem.quantity > 0) {
         bungaeSaleItem.val = Math.round(bungaeSaleItem.val * 0.8);
-        alert('번개세일! ' + bungaeSaleItem.name + '이(가) 20% 할인 중입니다!');
+        alert(`번개세일! ${bungaeSaleItem.name}이(가) 20% 할인 중입니다!`);
         updateSelectOptions();
       }
     }, 30000);
@@ -74,9 +80,10 @@ function main() {
         const suggestItem = items.find(function (item) {
           return item.id !== lastSelectedItem && item.quantity > 0;
         });
+
         if (suggestItem) {
           alert(
-            suggestItem.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!',
+            `${suggestItem.name} 은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`,
           );
 
           // select에 제안된 상품 가격 5% 할인 적용
@@ -91,11 +98,15 @@ function main() {
 // 상품 목록을 업데이트
 function updateSelectOptions() {
   $itemSelect.innerHTML = '';
+
   items.forEach(function (item) {
     const $option = document.createElement('option');
     $option.value = item.id;
-    $option.textContent = item.name + ' - ' + item.val + '원';
-    if (item.quantity === 0) $option.disabled = true;
+    $option.textContent = `${item.name} - ${item.val}원`;
+
+    if (item.quantity === 0) {
+      $option.disabled = true;
+    }
     $itemSelect.appendChild($option);
   });
 }
@@ -104,9 +115,9 @@ function updateSelectOptions() {
 function calcCart() {
   totalAmount = 0;
   itemCount = 0;
-  const cartItems = $cartItemsDiv.children;
   let originalTotalAmount = 0;
 
+  const cartItems = $cartItemsDiv.children;
   for (var i = 0; i < cartItems.length; i++) {
     (function () {
       let curItem;
@@ -165,13 +176,13 @@ function calcCart() {
     finalDiscountRate = Math.max(finalDiscountRate, 0.1);
   }
 
-  $cartTotalDiv.textContent = '총액: ' + Math.round(totalAmount) + '원';
+  $cartTotalDiv.textContent = `총액: ${Math.round(totalAmount)}원`;
 
   if (finalDiscountRate > 0) {
     const $discountSpan = document.createElement('span');
+
     $discountSpan.className = 'text-green-500 ml-2';
-    $discountSpan.textContent =
-      '(' + (finalDiscountRate * 100).toFixed(1) + '% 할인 적용)';
+    $discountSpan.textContent = `(${(finalDiscountRate * 100).toFixed(1)}% 할인 적용)`;
     $cartTotalDiv.appendChild($discountSpan);
   }
 
@@ -188,9 +199,11 @@ const calcAndRenderPoints = () => {
     $pointSpan = document.createElement('span');
     $pointSpan.id = 'loyalty-points';
     $pointSpan.className = 'text-blue-500 ml-2';
+
     $cartTotalDiv.appendChild($pointSpan);
   }
-  $pointSpan.textContent = '(포인트: ' + points + ')';
+
+  $pointSpan.textContent = `(포인트: ${points})`;
 };
 
 // 재고 정보 업데이트
@@ -202,9 +215,7 @@ function updateStock() {
       infoMsg +=
         item.name +
         ': ' +
-        (item.quantity > 0
-          ? '재고 부족 (' + item.quantity + '개 남음)'
-          : '품절') +
+        (item.quantity > 0 ? `재고 부족 (${item.quantity}개 남음)` : '품절') +
         '\n';
     }
   });
@@ -232,11 +243,7 @@ $addButton.addEventListener('click', function () {
       // 재고가 충분한 경우 수량 증가
       if (updatedQuantity <= selectedItem.quantity) {
         $item.querySelector('span').textContent =
-          selectedItem.name +
-          ' - ' +
-          selectedItem.val +
-          '원 x ' +
-          updatedQuantity;
+          `${selectedItem.name} - ${selectedItem.val}원 x ${updatedQuantity}`;
         selectedItem.quantity--;
       } else {
         alert('재고가 부족합니다.');
@@ -248,21 +255,25 @@ $addButton.addEventListener('click', function () {
 
       // 상품을 장바구니에 추가
       $newItemsDiv.className = 'flex justify-between items-center mb-2';
-      $newItemsDiv.innerHTML =
-        '<span>' +
-        selectedItem.name +
-        ' - ' +
-        selectedItem.val +
-        '원 x 1</span><div>' +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-item-id="' +
-        selectedItem.id +
-        '" data-change="-1">-</button>' +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-item-id="' +
-        selectedItem.id +
-        '" data-change="1">+</button>' +
-        '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-item-id="' +
-        selectedItem.id +
-        '">삭제</button></div>';
+      $newItemsDiv.innerHTML = `
+        <span>${selectedItem.name} - ${selectedItem.val}원 x 1</span>
+        <div>
+          <button 
+            class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+            data-item-id="${selectedItem.id}"
+            data-change="-1"
+          >-</button>
+          <button 
+            class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+            data-item-id="${selectedItem.id}"
+            data-change="1"
+          >+</button>
+          <button 
+            class="remove-item bg-red-500 text-white px-2 py-1 rounded"
+            data-item-id="${selectedItem.id}"
+          >삭제</button>
+        </div>
+      `;
       $cartItemsDiv.appendChild($newItemsDiv);
       selectedItem.quantity--;
     }
@@ -288,9 +299,10 @@ $cartItemsDiv.addEventListener('click', function (event) {
 
     if (target.classList.contains('quantity-change')) {
       const quantityDiff = parseInt(target.dataset.change);
-      const updatedQuantity =
-        parseInt($item.querySelector('span').textContent.split('x ')[1]) +
-        quantityDiff;
+      const curQuantity = parseInt(
+        $item.querySelector('span').textContent.split('x ')[1],
+      );
+      const updatedQuantity = curQuantity + quantityDiff;
 
       if (
         updatedQuantity > 0 &&
@@ -313,6 +325,7 @@ $cartItemsDiv.addEventListener('click', function (event) {
       const removeQuantity = parseInt(
         $item.querySelector('span').textContent.split('x ')[1],
       );
+
       item.quantity += removeQuantity;
       $item.remove();
     }

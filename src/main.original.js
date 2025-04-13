@@ -10,7 +10,7 @@ const products = [
 let productSelector, addToCartButton, cartItemList, cartTotal, stockStatus;
 let lastSel,
   bonusPts = 0,
-  totalAmt = 0,
+  totalAmount = 0,
   itemCnt = 0;
 
 main();
@@ -201,7 +201,7 @@ function updateSelOpts() {
 }
 
 function calcCart() {
-  totalAmt = 0;
+  totalAmount = 0;
   itemCnt = 0;
   const cartItems = cartItemList.children;
   let subTot = 0;
@@ -228,27 +228,27 @@ function calcCart() {
         else if (curItem.id === "p4") disc = 0.05;
         else if (curItem.id === "p5") disc = 0.25;
       }
-      totalAmt += itemTot * (1 - disc);
+      totalAmount += itemTot * (1 - disc);
     })();
   }
   let discRate = 0;
   if (itemCnt >= 30) {
-    const bulkDisc = totalAmt * 0.25;
-    const itemDisc = subTot - totalAmt;
+    const bulkDisc = totalAmount * 0.25;
+    const itemDisc = subTot - totalAmount;
     if (bulkDisc > itemDisc) {
-      totalAmt = subTot * (1 - 0.25);
+      totalAmount = subTot * (1 - 0.25);
       discRate = 0.25;
     } else {
-      discRate = (subTot - totalAmt) / subTot;
+      discRate = (subTot - totalAmount) / subTot;
     }
   } else {
-    discRate = (subTot - totalAmt) / subTot;
+    discRate = (subTot - totalAmount) / subTot;
   }
   if (new Date().getDay() === 2) {
-    totalAmt *= 1 - 0.1;
+    totalAmount *= 1 - 0.1;
     discRate = Math.max(discRate, 0.1);
   }
-  cartTotal.textContent = "총액: " + Math.round(totalAmt) + "원";
+  cartTotal.textContent = "총액: " + Math.round(totalAmount) + "원";
   if (discRate > 0) {
     const span = document.createElement("span");
     span.className = "text-green-500 ml-2";
@@ -256,19 +256,20 @@ function calcCart() {
     cartTotal.appendChild(span);
   }
   updateStockStatus();
-  renderBonusPts();
+  updateLoyaltyPoints();
 }
 
-function renderBonusPts() {
-  bonusPts = Math.floor(totalAmt / 1000);
-  let ptsTag = document.getElementById("loyalty-points");
-  if (!ptsTag) {
-    ptsTag = document.createElement("span");
-    ptsTag.id = "loyalty-points";
-    ptsTag.className = "text-blue-500 ml-2";
-    cartTotal.appendChild(ptsTag);
+function updateLoyaltyPoints() {
+  bonusPts = Math.floor(totalAmount / 1000);
+  let points = document.getElementById("loyalty-points");
+
+  if (!points) {
+    points = document.createElement("span");
+    points.id = "loyalty-points";
+    points.className = "text-blue-500 ml-2";
+    cartTotal.appendChild(points);
   }
-  ptsTag.textContent = "(포인트: " + bonusPts + ")";
+  points.textContent = "(포인트: " + bonusPts + ")";
 }
 
 function updateStockStatus() {

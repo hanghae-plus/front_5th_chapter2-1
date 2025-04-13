@@ -21,6 +21,7 @@ function main() {
   sel = document.createElement('select');
   addBtn = document.createElement('button');
   stockInfo = document.createElement('div');
+
   cartDisp.id = 'cart-items';
   sum.id = 'cart-total';
   sel.id = 'product-select';
@@ -36,6 +37,7 @@ function main() {
   stockInfo.className = 'text-sm text-gray-500 mt-2';
   hTxt.textContent = '장바구니';
   addBtn.textContent = '추가';
+
   updateSelOpts();
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
@@ -45,7 +47,9 @@ function main() {
   wrap.appendChild(stockInfo);
   cont.appendChild(wrap);
   root.appendChild(cont);
+
   calcCart();
+
   setTimeout(function () {
     setInterval(function () {
       var luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
@@ -56,6 +60,7 @@ function main() {
       }
     }, 30000);
   }, Math.random() * 10000);
+
   setTimeout(function () {
     setInterval(function () {
       if (lastSel) {
@@ -88,8 +93,10 @@ function updateSelOpts() {
 function calcCart() {
   totalAmt = 0;
   itemCnt = 0;
+
   var cartItems = cartDisp.children;
   var subTot = 0;
+
   for (var i = 0; i < cartItems.length; i++) {
     (function () {
       var curItem;
@@ -143,6 +150,7 @@ function calcCart() {
   updateStockInfo();
   renderBonusPts();
 }
+
 const renderBonusPts = () => {
   bonusPts = Math.floor(totalAmt / 1000);
   var ptsTag = document.getElementById('loyalty-points');
@@ -176,6 +184,7 @@ addBtn.addEventListener('click', function () {
   var itemToAdd = prodList.find(function (p) {
     return p.id === selItem;
   });
+
   if (itemToAdd && itemToAdd.q > 0) {
     var item = document.getElementById(itemToAdd.id);
     if (item) {
@@ -217,6 +226,7 @@ addBtn.addEventListener('click', function () {
 
 cartDisp.addEventListener('click', function (event) {
   var tgt = event.target;
+
   if (
     tgt.classList.contains('quantity-change')
     || tgt.classList.contains('remove-item')
@@ -226,11 +236,13 @@ cartDisp.addEventListener('click', function (event) {
     var prod = prodList.find(function (p) {
       return p.id === prodId;
     });
+
     if (tgt.classList.contains('quantity-change')) {
       var qtyChange = parseInt(tgt.dataset.change);
       var newQty =
         parseInt(itemElem.querySelector('span').textContent.split('x ')[1])
         + qtyChange;
+
       if (
         newQty > 0
         && newQty
@@ -254,9 +266,11 @@ cartDisp.addEventListener('click', function (event) {
       var remQty = parseInt(
         itemElem.querySelector('span').textContent.split('x ')[1],
       );
+
       prod.q += remQty;
       itemElem.remove();
     }
+
     calcCart();
   }
 });

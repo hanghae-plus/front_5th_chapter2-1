@@ -12,10 +12,11 @@
  * @param {string} [props.textContent]
  * @param {string} [props.value]
  * @param {boolean} [props.disabled]
+ * @param {Object<string, string>} [props.dataset] data-* 오브젝트
  * @returns {HTMLElement | DocumentFragment | null} DOM 엘리먼트
  *
  * @example
- * const div = $("div", { className: "bg-gray-100 p-8" });
+ * const div = $("div", { className: "bg-gray-100 p-8", dataset: { productId: "p1" } });
  * const option = $("option", { value: "p1", textContent: "상품1", disabled: false });
  * const frag = $("frag");
  * const existingEl = $("#app"); // querySelector
@@ -33,6 +34,12 @@ export const $ = (tag, props = {}) => {
 
   // 일반 element 생성
   const element = document.createElement(tag);
-  Object.entries(props).map(([key, value]) => (element[key] = value));
+  Object.entries(props).forEach(([key, value]) => {
+    if (key === "dataset" && typeof value === "object") {
+      Object.entries(value).forEach(([dataKey, dataValue]) => (element.dataset[dataKey] = dataValue));
+    } else {
+      element[key] = value;
+    }
+  });
   return element;
 };

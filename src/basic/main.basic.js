@@ -20,6 +20,9 @@ const POINT_RATE = 1 / 1_000;
 /** @const 재고 부족 경고 기준 */
 const STOCK_WARNING_LIMIT = 5;
 
+/** @const 재고 부족 텍스트*/
+const STOCK_ALERT_TEXT = "재고가 부족합니다.";
+
 /** @const 상품 정보 배열 */
 const PRODUCT_LIST = [
   { id: "p1", name: "상품1", cost: 10_000, quantity: 50, discount: 0.1 },
@@ -198,26 +201,21 @@ const handleClickAddToCart = () => {
       currentItem.querySelector("span").textContent = itemToAdd.name + " - " + itemToAdd.cost + "원 x " + newQuantity;
       itemToAdd.quantity -= 1;
     } else {
-      alert("재고가 부족합니다.");
+      alert(STOCK_ALERT_TEXT);
     }
   } else {
     // 장바구니에 새 상품 추가
-    const newItem = $("div", { id: itemToAdd.id, className: "flex justify-between items-center mb-2" });
-    newItem.innerHTML =
-      "<span>" +
-      itemToAdd.name +
-      " - " +
-      itemToAdd.cost +
-      "원 x 1</span><div>" +
-      '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-      itemToAdd.id +
-      '" data-change="-1">-</button>' +
-      '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-      itemToAdd.id +
-      '" data-change="1">+</button>' +
-      '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
-      itemToAdd.id +
-      '">삭제</button></div>';
+    const { id, name, cost } = itemToAdd;
+    const newItem = $("div", { id, className: "flex justify-between items-center mb-2" });
+    const span = $("span", { textContent: name + " - " + cost + "원 x 1" });
+    const div = $("div", {});
+    const minusButton = $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: -1 }, textContent: "-" });
+    const plusButton = $("button", { className: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1", dataset: { productId: id, change: 1 }, textContent: "+" });
+    const removeButton = $("button", { className: "remove-item bg-red-500 text-white px-2 py-1 rounded", dataset: { productId: id }, textContent: "삭제" });
+
+    [minusButton, plusButton, removeButton].forEach((el) => div.appendChild(el));
+    newItem.appendChild(span);
+    newItem.appendChild(div);
     $cartItems.appendChild(newItem);
     itemToAdd.quantity -= 1;
   }
@@ -244,7 +242,9 @@ const handleClickAddToCart = () => {
 const handleClickCartItems = (event) => {
   // 수량 변경, 상품 삭제 이벤트 처리
   const target = event.target;
-  if (!target.classList.contains("quantity-change") && !target.classList.contains("remove-item")) return;
+  const isQuantityChange = target.classList.contains("quantity-change");
+  const isRemoveItem = target.classList.contains("remove-item");
+  if (!isQuantityChange && !isRemoveItem) return;
 
   const productId = target.dataset.productId;
   const $item = $("#" + productId);
@@ -255,7 +255,7 @@ const handleClickCartItems = (event) => {
   let [prefix, quantity] = $quantity.textContent.split("x ");
   quantity = parseInt(quantity);
 
-  if (target.classList.contains("quantity-change")) {
+  if (isQuantityChange) {
     // 상품 수량 변경
     const quantityChange = parseInt(target.dataset.change);
     const newQuantity = quantity + quantityChange;
@@ -267,9 +267,9 @@ const handleClickCartItems = (event) => {
       $item.remove();
       product.quantity -= quantityChange;
     } else {
-      alert("재고가 부족합니다.");
+      alert(STOCK_ALERT_TEXT);
     }
-  } else if (target.classList.contains("remove-item")) {
+  } else if (isRemoveItem) {
     // 상품 삭제
     const remainQuantity = quantity;
     product.quantity += remainQuantity;

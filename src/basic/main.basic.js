@@ -17,7 +17,7 @@ let bonusPts = 0;
 let totalAmt = 0;
 let itemCnt = 0;
 
-function main() {
+const main = () => {
   const mainRoot = document.getElementById('app');
   const mainContainer = document.createElement('div');
   const mainWrapper = document.createElement('div');
@@ -59,8 +59,8 @@ function main() {
 
   calcCart();
 
-  setTimeout(function () {
-    setInterval(function () {
+  setTimeout(() => {
+    setInterval(() => {
       const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
 
       if (Math.random() < 0.3 && luckyItem.q > 0) {
@@ -71,12 +71,12 @@ function main() {
     }, 30000);
   }, Math.random() * 10000);
 
-  setTimeout(function () {
-    setInterval(function () {
+  setTimeout(() => {
+    setInterval(() => {
       if (lastSel) {
-        const suggest = prodList.find(function (item) {
-          return item.id !== lastSel && item.q > 0;
-        });
+        const suggest = prodList.find(
+          (item) => item.id !== lastSel && item.q > 0,
+        );
 
         if (suggest) {
           alert(
@@ -88,11 +88,11 @@ function main() {
       }
     }, 60000);
   }, Math.random() * 20000);
-}
+};
 
-function updateSelOpts() {
+const updateSelOpts = () => {
   productSelect.innerHTML = '';
-  prodList.forEach(function (item) {
+  prodList.forEach((item) => {
     const opt = document.createElement('option');
 
     opt.value = item.id;
@@ -101,9 +101,9 @@ function updateSelOpts() {
 
     productSelect.appendChild(opt);
   });
-}
+};
 
-function calcCart() {
+const calcCart = () => {
   totalAmt = 0;
   itemCnt = 0;
 
@@ -111,7 +111,7 @@ function calcCart() {
   let subTot = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
-    (function () {
+    (() => {
       let curItem;
       for (let j = 0; j < prodList.length; j++) {
         if (prodList[j].id === cartItems[i].id) {
@@ -170,7 +170,7 @@ function calcCart() {
 
   updateStockInfo();
   renderBonusPts();
-}
+};
 
 const renderBonusPts = () => {
   let ptsTag = document.getElementById('loyalty-points');
@@ -186,10 +186,10 @@ const renderBonusPts = () => {
   ptsTag.textContent = '(포인트: ' + bonusPts + ')';
 };
 
-function updateStockInfo() {
+const updateStockInfo = () => {
   let infoMsg = '';
 
-  prodList.forEach(function (item) {
+  prodList.forEach((item) => {
     if (item.q < 5) {
       infoMsg +=
         item.name
@@ -200,19 +200,13 @@ function updateStockInfo() {
   });
 
   stockStatusContainer.textContent = infoMsg;
-}
+};
 
 main();
 
-addButton.addEventListener('click', function () {
+addButton.addEventListener('click', () => {
   const selItem = productSelect.value;
-  console.log(selItem);
-  const itemToAdd = prodList.find(function (p) {
-    return p.id === selItem;
-  });
-
-  console.log('click');
-  console.log(itemToAdd);
+  const itemToAdd = prodList.find((p) => p.id === selItem);
 
   if (itemToAdd && itemToAdd.q > 0) {
     const item = document.getElementById(itemToAdd.id);
@@ -256,7 +250,7 @@ addButton.addEventListener('click', function () {
   }
 });
 
-cartItemsContainer.addEventListener('click', function (event) {
+cartItemsContainer.addEventListener('click', (event) => {
   const tgt = event.target;
 
   if (
@@ -265,9 +259,7 @@ cartItemsContainer.addEventListener('click', function (event) {
   ) {
     const prodId = tgt.dataset.productId;
     const itemElem = document.getElementById(prodId);
-    const prod = prodList.find(function (p) {
-      return p.id === prodId;
-    });
+    const prod = prodList.find((p) => p.id === prodId);
 
     if (tgt.classList.contains('quantity-change')) {
       const qtyChange = parseInt(tgt.dataset.change);

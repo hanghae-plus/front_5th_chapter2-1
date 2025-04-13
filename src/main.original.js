@@ -246,7 +246,7 @@ function calcCart() {
   renderBonusPts();
 }
 
-const renderBonusPts = () => {
+function renderBonusPts() {
   bonusPts = Math.floor(totalAmt / 1000);
   var ptsTag = document.getElementById("loyalty-points");
   if (!ptsTag) {
@@ -256,7 +256,7 @@ const renderBonusPts = () => {
     sum.appendChild(ptsTag);
   }
   ptsTag.textContent = "(포인트: " + bonusPts + ")";
-};
+}
 
 function updateStockInfo() {
   var infoMsg = "";

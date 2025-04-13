@@ -1,25 +1,23 @@
-var itemBundle, itemSelectElement, addToCartBtn, cartElement, sumElement, stockStateElement;
+let itemSelectElement, addToCartBtn, cartElement, sumElement, stockStateElement;
 
-var recentSelectedItemId,
-  bonusPoint = 0, //보너스 포인트
-  totalPrice = 0, //총액
-  itemCount = 0;
+const items = [
+  { id: 'p1', name: '상품1', price: 10000, stock: 50 }, //val->price: 가격, q->stock:재고 수량(quantity) ->price로 변경
+  { id: 'p2', name: '상품2', price: 20000, stock: 30 },
+  { id: 'p3', name: '상품3', price: 30000, stock: 20 },
+  { id: 'p4', name: '상품4', price: 15000, stock: 0 },
+  { id: 'p5', name: '상품5', price: 25000, stock: 10 },
+];
 
-function main() {
-  //전역변수의 prodList로 각 상품을 객체배열로 정의합니다.
-  itemBundle = [
-    { id: 'p1', name: '상품1', price: 10000, stock: 50 }, //val->price: 가격, q->stock:재고 수량(quantity) ->price로 변경
-    { id: 'p2', name: '상품2', price: 20000, stock: 30 },
-    { id: 'p3', name: '상품3', price: 30000, stock: 20 },
-    { id: 'p4', name: '상품4', price: 15000, stock: 0 },
-    { id: 'p5', name: '상품5', price: 25000, stock: 10 },
-  ];
+let recentSelectedItemId,
+  totalPrice = 0; //총액
 
+const main = () => {
+  //NOTE: UI APDATE
   //지역변수를 createElement를 통해 요소로 만듭니다.
-  var root = document.getElementById('app');
-  let rootChild = document.createElement('div');
-  var elementWrapper = document.createElement('div'); //요소들을 둘러싸는 컨테이너, wrap
-  let header = document.createElement('h1');
+  const app = document.getElementById('app');
+  const root = document.createElement('div');
+  const elementWrapper = document.createElement('div'); //요소들을 둘러싸는 컨테이너, wrap
+  const header = document.createElement('h1');
 
   //전역변수를 createElement를 통해 요소로 만듭니다.
   addToCartBtn = document.createElement('button');
@@ -36,15 +34,15 @@ function main() {
   stockStateElement.id = 'stock-status';
 
   //지역변수의 className을 정의합니다.
-  rootChild.className = 'bg-gray-100 p-8';
+  root.className = 'bg-gray-100 p-8';
   elementWrapper.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
   header.className = 'text-2xl font-bold mb-4';
 
   //전역변수의 className을 정의합니다.
+  addToCartBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   sumElement.className = 'text-xl font-bold my-4';
   itemSelectElement.className = 'border rounded p-2 mr-2';
-  addToCartBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   stockStateElement.className = 'text-sm text-gray-500 mt-2';
 
   //htxt,addbtn에 텍스트를 추가합니다.
@@ -60,15 +58,17 @@ function main() {
   elementWrapper.appendChild(itemSelectElement);
   elementWrapper.appendChild(addToCartBtn);
   elementWrapper.appendChild(stockStateElement);
-  rootChild.appendChild(elementWrapper);
-  root.appendChild(rootChild);
+
+  root.appendChild(elementWrapper);
+  app.appendChild(root);
 
   calcCart();
 
+  //NOTE: ALERT
   //번개세일을 진행합니다.
   setTimeout(function () {
     setInterval(function () {
-      var luckyItem = itemBundle[Math.floor(Math.random() * itemBundle.length)];
+      let luckyItem = items[Math.floor(Math.random() * items.length)];
       if (Math.random() < 0.3 && luckyItem.stock > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
@@ -81,7 +81,7 @@ function main() {
   setTimeout(function () {
     setInterval(function () {
       if (recentSelectedItemId) {
-        var suggest = itemBundle.find(function (item) {
+        let suggest = items.find(function (item) {
           return item.id !== recentSelectedItemId && item.stock > 0;
         });
         if (suggest) {
@@ -92,15 +92,16 @@ function main() {
       }
     }, 60000);
   }, Math.random() * 20000);
-}
+};
 
+//NOTE: UI UPDATE
 /**Select인 sel 밑으로 각 상품을 Option으로 넣습니다*/
-function updateItemOption() {
+const updateItemOption = () => {
   itemSelectElement.innerHTML = '';
 
   //각각의 prodList에 대해 option태그를 생성하고 id와 text를 넣어줍니다.
-  itemBundle.forEach(function (item) {
-    var itemOptionElement = document.createElement('option');
+  items.forEach(function (item) {
+    let itemOptionElement = document.createElement('option');
     itemOptionElement.value = item.id;
     itemOptionElement.textContent = item.name + ' - ' + item.price + '원';
 
@@ -108,33 +109,33 @@ function updateItemOption() {
 
     itemSelectElement.appendChild(itemOptionElement);
   });
-}
+};
 
 /**장바구니를 계산합니다.*/
-function calcCart() {
+const calcCart = () => {
   totalPrice = 0;
-  itemCount = 0;
+  let itemCount = 0;
 
-  var cartItems = cartElement.children; //장바구니의 자식들을 cartItem으로 담습니다.
-  var subTotalPrice = 0;
+  let cartItems = cartElement.children; //장바구니의 자식들을 cartItem으로 담습니다.
+  let subTotalPrice = 0;
 
-  for (var i = 0; i < cartItems.length; i++) {
+  for (let i = 0; i < cartItems.length; i++) {
     //모든 장바구니를 순회
     (function () {
       //즉시 실행 함수
-      var currentItem; //현재 아이템입니다.
-      for (var j = 0; j < itemBundle.length; j++) {
+      let currentItem; //현재 아이템입니다.
+      for (let j = 0; j < items.length; j++) {
         //전체 아이템의 개수만큼 순회
-        if (itemBundle[j].id === cartItems[i].id) {
+        if (items[j].id === cartItems[i].id) {
           //전체 아이템와 장바구니의 아이디를 비교하여 같다면
-          currentItem = itemBundle[j]; //현재 아이템으로 등록
+          currentItem = items[j]; //현재 아이템으로 등록
           break;
         }
       }
       //q-> stock:장바구니에 담은 개수
-      var stock = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
-      var itemTotalPrice = currentItem.price * stock; //itemTot: 장바구니에 담은 개수만큼의 총 금액
-      var discount = 0;
+      let stock = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
+      let itemTotalPrice = currentItem.price * stock; //itemTot: 장바구니에 담은 개수만큼의 총 금액
+      let discount = 0;
 
       itemCount += stock; //itemCnt는 장바구니 개수
       subTotalPrice += itemTotalPrice; //subTot에 itemTot만큼 업데이트합니다. (장바구니에 담은 개수의 총액)
@@ -153,8 +154,8 @@ function calcCart() {
 
   let discount = 0;
   if (itemCount >= 30) {
-    var bulkDiscount = totalPrice * 0.25;
-    var itemDiscount = subTotalPrice - totalPrice;
+    let bulkDiscount = totalPrice * 0.25;
+    let itemDiscount = subTotalPrice - totalPrice;
 
     if (bulkDiscount > itemDiscount) {
       totalPrice = subTotalPrice * (1 - 0.25);
@@ -174,7 +175,7 @@ function calcCart() {
 
   if (discount > 0) {
     //할인이 있을 경우, 할인 적용
-    var span = document.createElement('span');
+    let span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
     span.textContent = '(' + (discount * 100).toFixed(1) + '% 할인 적용)';
     sumElement.appendChild(span);
@@ -182,15 +183,15 @@ function calcCart() {
 
   updateStockState();
   updateBonusPoint();
-}
+};
 
 /**각 아이템의 재고가 5개 미만인 경우 재고부족, 품절을 표시. */
-function updateStockState() {
-  var infoMsg = '';
+const updateStockState = () => {
+  let stockState = '';
 
-  itemBundle.forEach(function (item) {
+  items.forEach(function (item) {
     if (item.stock < 5) {
-      infoMsg +=
+      stockState +=
         item.name +
         ': ' +
         (item.stock > 0 ? '재고 부족 (' + item.stock + '개 남음)' : '품절') +
@@ -198,14 +199,14 @@ function updateStockState() {
     }
   });
 
-  stockStateElement.textContent = infoMsg;
-}
+  stockStateElement.textContent = stockState;
+};
 
 /**보너스포인터를 계산합니다.*/
 const updateBonusPoint = () => {
-  bonusPoint = Math.floor(totalPrice / 1000); //보너스포인트 계산
+  const bonusPoint = Math.floor(totalPrice / 1000); //보너스포인트 계산
 
-  var bonusPointElement = document.getElementById('loyalty-points'); //보너스포인트의 elem을 생성
+  let bonusPointElement = document.getElementById('loyalty-points'); //보너스포인트의 elem을 생성
 
   if (!bonusPointElement) {
     bonusPointElement = document.createElement('span');
@@ -223,29 +224,29 @@ main();
 //추가 버튼 클릭한 경우
 addToCartBtn.addEventListener('click', function () {
   //selItem: 선택된 아이템의 아이디, (ex.p1)
-  var selectedItemId = itemSelectElement.value; //select태그의 값
+  let selectedItemId = itemSelectElement.value; //select태그의 값
   //추가될 아이템(선택된 아이디)
-  var selecedItem = itemBundle.find(function (p) {
+  let selecedItem = items.find(function (p) {
     return p.id === selectedItemId;
   });
   console.log(selecedItem);
   if (selecedItem && selecedItem.stock > 0) {
-    var item = document.getElementById(selecedItem.id);
+    let item = document.getElementById(selecedItem.id);
 
     if (item) {
       //추가할 아이디가 있을 경우
-      var newQty = parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1; //장바구니에 추가한 개수
+      let cartCount = parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1; //장바구니에 추가한 개수
       //장바구니에 추가한 개수와 재고를 비교
-      if (newQty <= selecedItem.stock) {
+      if (cartCount <= selecedItem.stock) {
         item.querySelector('span').textContent =
-          selecedItem.name + ' - ' + selecedItem.price + '원 x ' + newQty;
+          selecedItem.name + ' - ' + selecedItem.price + '원 x ' + cartCount;
         selecedItem.stock--; //재고를 하나 내립니다.
       } else {
         alert('재고가 부족합니다.');
       }
     } //end of 1D if
     else {
-      var newItem = document.createElement('div');
+      let newItem = document.createElement('div');
       newItem.id = selecedItem.id;
       newItem.className = 'flex justify-between items-center mb-2';
       newItem.innerHTML =
@@ -275,24 +276,23 @@ addToCartBtn.addEventListener('click', function () {
 
 //장바구니 클릭
 cartElement.addEventListener('click', function (event) {
-  var selectedCartElement = event.target; //장바구니 elem의 클릭요소 (target의 준말같음)
+  let selectedCartElement = event.target; //장바구니 elem의 클릭요소 (target의 준말같음)
   if (
     selectedCartElement.classList.contains('quantity-change') ||
     selectedCartElement.classList.contains('remove-item')
   ) {
-    var selectedItemId = selectedCartElement.dataset.productId; //클릭한 장바구니 요소의 아이디
+    let selectedItemId = selectedCartElement.dataset.productId; //클릭한 장바구니 요소의 아이디
     console.log(selectedItemId);
-    var itemElem = document.getElementById(selectedItemId);
+    let itemElem = document.getElementById(selectedItemId);
 
-    var item = itemBundle.find(function (p) {
+    let item = items.find(function (p) {
       return p.id === selectedItemId;
     });
     console.log(item);
     //장바구니 추가되고 나오는 +와 - 버튼의 클래스명
     if (selectedCartElement.classList.contains('quantity-change')) {
-      var qtyChange = parseInt(selectedCartElement.dataset.change);
-      var newQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]) + qtyChange;
-      console.log(qtyChange, newQty);
+      let qtyChange = parseInt(selectedCartElement.dataset.change); //FIXME: 변수명 변경
+      let newQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]) + qtyChange; //FIXME: 변수명 변경
       if (
         newQty > 0 &&
         newQty <= item.stock + parseInt(itemElem.querySelector('span').textContent.split('x ')[1])
@@ -311,7 +311,7 @@ cartElement.addEventListener('click', function (event) {
       //remove-item: 장바구니 추가되고 나오는 삭제의 클래스 명
 
       //밑에는 그동안 담아둔 장바구니의 개수
-      var remQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]);
+      let remQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]);
       item.stock += remQty;
 
       itemElem.remove();

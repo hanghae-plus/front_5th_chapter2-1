@@ -16,6 +16,11 @@ import {
 } from "./components";
 
 import {
+    startFlashSaleTimer,
+    startProductSuggestionTimer,
+} from "./service/promotion.js";
+
+import {
     buildLayout,
     selectLayout,
     // updateSelectOptions,
@@ -59,43 +64,12 @@ function main() {
     app.appendChild(containerEl);
 
     calcCart();
-
-    setTimeout(function () {
-        setInterval(function () {
-            const flashSaleProduct =
-                productList[Math.floor(Math.random() * productList.length)];
-            console.log("flashSaleProduct: ", flashSaleProduct);
-            if (Math.random() < 0.3 && flashSaleProduct.q > 0) {
-                flashSaleProduct.val = Math.round(flashSaleProduct.val * 0.8);
-                alert(
-                    "번개세일! " +
-                        flashSaleProduct.name +
-                        "이(가) 20% 할인 중입니다!"
-                );
-                updateSelectOptions(productList, selectProductEl);
-            }
-        }, 30000);
-    }, Math.random() * 10000);
-
-    setTimeout(function () {
-        setInterval(function () {
-            console.log("lastSel: ", lastSel);
-
-            if (lastSel) {
-                const suggest = productList.find(function (item) {
-                    return item.id !== lastSel && item.q > 0;
-                });
-                if (suggest) {
-                    alert(
-                        suggest.name +
-                            "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!"
-                    );
-                    suggest.val = Math.round(suggest.val * 0.95);
-                    updateSelectOptions(productList, selectProductEl);
-                }
-            }
-        }, 60000);
-    }, Math.random() * 20000);
+    startFlashSaleTimer(productList, () =>
+        updateSelectOptions(productList, selectProductEl)
+    );
+    startProductSuggestionTimer(productList, lastSel, () =>
+        updateSelectOptions(productList, selectProductEl)
+    );
 }
 
 // 기존 함수 제거 후 이렇게 호출

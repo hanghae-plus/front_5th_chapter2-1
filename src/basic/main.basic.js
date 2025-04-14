@@ -106,7 +106,7 @@ const totalAmountContainer = document.createElement('div');
 const stockStatusContainer = document.createElement('div');
 
 let lastSelectedProductId;
-let bonusPts = 0;
+let bonusPoints = 0;
 let totalAmt = 0;
 let itemCnt = 0;
 
@@ -141,7 +141,7 @@ const main = () => {
   mainHeader.className = 'text-2xl font-bold mb-4';
   mainHeader.textContent = '장바구니';
 
-  updateSelOpts();
+  updateProductSelectOptions();
 
   mainWrapper.appendChild(mainHeader);
   mainWrapper.appendChild(cartItemsContainer);
@@ -162,7 +162,7 @@ const main = () => {
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.value = Math.round(luckyItem.value * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
-        updateSelOpts();
+        updateProductSelectOptions();
       }
     }, 30000);
   }, Math.random() * 10000);
@@ -179,23 +179,23 @@ const main = () => {
             suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!',
           );
           suggest.value = Math.round(suggest.value * 0.95);
-          updateSelOpts();
+          updateProductSelectOptions();
         }
       }
     }, 60000);
   }, Math.random() * 20000);
 };
 
-const updateSelOpts = () => {
+const updateProductSelectOptions = () => {
   productSelect.innerHTML = '';
   productList.forEach((item) => {
-    const opt = document.createElement('option');
+    const selectOption = document.createElement('option');
 
-    opt.value = item.id;
-    opt.textContent = item.name + ' - ' + item.value + '원';
-    if (item.quantity === 0) opt.disabled = true;
+    selectOption.value = item.id;
+    selectOption.textContent = item.name + ' - ' + item.value + '원';
+    if (item.quantity === 0) selectOption.disabled = true;
 
-    productSelect.appendChild(opt);
+    productSelect.appendChild(selectOption);
   });
 };
 
@@ -266,21 +266,21 @@ const calcCart = () => {
   }
 
   updateStockInfo();
-  renderBonusPts();
+  renderBonusPoints();
 };
 
-const renderBonusPts = () => {
-  let ptsTag = document.getElementById('loyalty-points');
+const renderBonusPoints = () => {
+  let bonusPointsTag = document.getElementById('loyalty-points');
 
-  if (!ptsTag) {
-    ptsTag = document.createElement('span');
-    ptsTag.id = 'loyalty-points';
-    ptsTag.className = 'text-blue-500 ml-2';
-    totalAmountContainer.appendChild(ptsTag);
+  if (!bonusPointsTag) {
+    bonusPointsTag = document.createElement('span');
+    bonusPointsTag.id = 'loyalty-points';
+    bonusPointsTag.className = 'text-blue-500 ml-2';
+    totalAmountContainer.appendChild(bonusPointsTag);
   }
 
-  bonusPts = Math.floor(totalAmt / 1000);
-  ptsTag.textContent = '(포인트: ' + bonusPts + ')';
+  bonusPoints = Math.floor(totalAmt / 1000);
+  bonusPointsTag.textContent = '(포인트: ' + bonusPoints + ')';
 };
 
 const updateStockInfo = () => {

@@ -1,4 +1,5 @@
 import { updateSelectOptions, updateStockInfo } from "./libs";
+import { renderBonusPoints } from "./libs/renderBonusPoints";
 
 /** @typedef {import("./types").Product} Product */
 
@@ -19,12 +20,19 @@ const $select = document.createElement("select");
 $select.id = "product-select";
 $select.className = "border rounded p-2 mr-2";
 
+// ====================== renderBonusPoints =========================
+
+const $sum = document.createElement("div");
+$sum.id = "cart-total";
+$sum.className = "text-xl font-bold my-4";
+let totalPrice = 0;
+
 // ===============================================
 
-var addBtn, cartDisp, sum, stockInfo;
+// ===============================================
+
+var addBtn, cartDisp, stockInfo;
 var lastSel,
-  bonusPts = 0,
-  totalAmt = 0,
   itemCnt = 0;
 
 function main() {
@@ -33,17 +41,14 @@ function main() {
   var wrap = document.createElement("div");
   let hTxt = document.createElement("h1");
   cartDisp = document.createElement("div");
-  sum = document.createElement("div");
   addBtn = document.createElement("button");
   stockInfo = document.createElement("div");
   cartDisp.id = "cart-items";
-  sum.id = "cart-total";
   addBtn.id = "add-to-cart";
   stockInfo.id = "stock-status";
   cont.className = "bg-gray-100 p-8";
   wrap.className = "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
   hTxt.className = "text-2xl font-bold mb-4";
-  sum.className = "text-xl font-bold my-4";
   addBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
   stockInfo.className = "text-sm text-gray-500 mt-2";
   hTxt.textContent = "장바구니";
@@ -51,7 +56,7 @@ function main() {
   updateSelectOptions($select, products);
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
-  wrap.appendChild(sum);
+  wrap.appendChild($sum);
   wrap.appendChild($select);
   wrap.appendChild(addBtn);
   wrap.appendChild(stockInfo);
@@ -85,7 +90,7 @@ function main() {
 }
 
 function calcCart() {
-  totalAmt = 0;
+  totalPrice = 0;
   itemCnt = 0;
   var cartItems = cartDisp.children;
   var subTot = 0;
@@ -110,47 +115,36 @@ function calcCart() {
         else if (curItem.id === "p4") disc = 0.05;
         else if (curItem.id === "p5") disc = 0.25;
       }
-      totalAmt += itemTot * (1 - disc);
+      totalPrice += itemTot * (1 - disc);
     })();
   }
   let discRate = 0;
   if (itemCnt >= 30) {
-    var bulkDisc = totalAmt * 0.25;
-    var itemDisc = subTot - totalAmt;
+    var bulkDisc = totalPrice * 0.25;
+    var itemDisc = subTot - totalPrice;
     if (bulkDisc > itemDisc) {
-      totalAmt = subTot * (1 - 0.25);
+      totalPrice = subTot * (1 - 0.25);
       discRate = 0.25;
     } else {
-      discRate = (subTot - totalAmt) / subTot;
+      discRate = (subTot - totalPrice) / subTot;
     }
   } else {
-    discRate = (subTot - totalAmt) / subTot;
+    discRate = (subTot - totalPrice) / subTot;
   }
   if (new Date().getDay() === 2) {
-    totalAmt *= 1 - 0.1;
+    totalPrice *= 1 - 0.1;
     discRate = Math.max(discRate, 0.1);
   }
-  sum.textContent = "총액: " + Math.round(totalAmt) + "원";
+  $sum.textContent = "총액: " + Math.round(totalPrice) + "원";
   if (discRate > 0) {
     var span = document.createElement("span");
     span.className = "text-green-500 ml-2";
     span.textContent = "(" + (discRate * 100).toFixed(1) + "% 할인 적용)";
-    sum.appendChild(span);
+    $sum.appendChild(span);
   }
   updateStockInfo(stockInfo, products);
-  renderBonusPts();
+  renderBonusPoints($sum, totalPrice);
 }
-const renderBonusPts = () => {
-  bonusPts = Math.floor(totalAmt / 1000);
-  var ptsTag = document.getElementById("loyalty-points");
-  if (!ptsTag) {
-    ptsTag = document.createElement("span");
-    ptsTag.id = "loyalty-points";
-    ptsTag.className = "text-blue-500 ml-2";
-    sum.appendChild(ptsTag);
-  }
-  ptsTag.textContent = "(포인트: " + bonusPts + ")";
-};
 
 main();
 addBtn.addEventListener("click", function () {

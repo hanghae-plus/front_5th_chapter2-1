@@ -1,6 +1,8 @@
 import { CONSTNANTS } from './constants';
 import { textUtils } from './utils/textUtils';
 import { updateStockInfoText } from './components/stock/updateStockInfoText';
+import { getPoints } from './components/points/getPoints';
+import { renderPoints } from './components/points/renderPoints';
 
 let items,
   $itemSelect,
@@ -10,7 +12,6 @@ let items,
   $stockStatusDiv;
 
 let lastSelectedItem,
-  points = 0,
   totalAmount = 0,
   itemCount = 0;
 
@@ -205,24 +206,10 @@ function calcCart() {
 
   const updateText = updateStockInfoText(items);
   $stockStatusDiv.textContent = updateText;
-  calcAndRenderPoints();
+
+  const points = getPoints(totalAmount);
+  renderPoints(points);
 }
-
-// 보너스 포인트 계산 및 표시
-const calcAndRenderPoints = () => {
-  points = Math.floor(totalAmount / CONSTNANTS.POINT_RATE);
-  let $pointSpan = document.getElementById('loyalty-points');
-
-  if (!$pointSpan) {
-    $pointSpan = document.createElement('span');
-    $pointSpan.id = 'loyalty-points';
-    $pointSpan.className = 'text-blue-500 ml-2';
-
-    $cartTotalDiv.appendChild($pointSpan);
-  }
-
-  $pointSpan.textContent = textUtils.getPointText(points);
-};
 
 main();
 

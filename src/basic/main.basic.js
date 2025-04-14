@@ -243,12 +243,12 @@ const makeNewItemHTML = (itemToAdd) => {
 };
 
 // 장바구니에 이미 있는 상품 추가
-const addExistingItem = (item, itemToAdd) => {
+const addExistingItem = (existingItem, itemToAdd) => {
   var itemEa =
-    parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
+    parseInt(existingItem.querySelector("span").textContent.split("x ")[1]) + 1;
 
   if (itemEa <= itemToAdd.stock) {
-    item.querySelector("span").textContent =
+    existingItem.querySelector("span").textContent =
       itemToAdd.name + " - " + itemToAdd.price + "원 x " + itemEa;
     itemToAdd.stock--;
   } else {
@@ -277,10 +277,10 @@ addProdBtn.addEventListener("click", function () {
     return item.id === selectedItem;
   });
   if (itemToAdd?.stock > 0) {
-    var item = document.getElementById(itemToAdd.id); // 장바구니에 있는지 확인
+    var existingItem = document.getElementById(itemToAdd.id); // 장바구니에 있는지 확인
 
-    if (item) {
-      addExistingItem(item, itemToAdd);
+    if (existingItem) {
+      addExistingItem(existingItem, itemToAdd);
     } else {
       addNewItem(itemToAdd);
     }

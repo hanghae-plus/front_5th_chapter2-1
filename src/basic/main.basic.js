@@ -9,6 +9,8 @@ import {
     createAddBtn,
     createProductStock,
 } from "./utils/createElement.js";
+import { renderBonusPoints } from "./components/bonusPoints.js";
+import { updateStockInfo } from "./components/updateStock.js";
 
 import {
     buildLayout,
@@ -30,6 +32,7 @@ let lastSel, // 추후 바꿔야 될 꺼 같음
     bonusPoints = 0,
     totalAmount = 0,
     productCount = 0;
+
 function main() {
     const app = document.getElementById("app");
     // const layout = buildLayout();
@@ -50,7 +53,9 @@ function main() {
     );
     containerEl.appendChild(wrapperEl);
     app.appendChild(containerEl);
+
     calcCart();
+
     setTimeout(function () {
         setInterval(function () {
             const flashSaleProduct =
@@ -67,6 +72,7 @@ function main() {
             }
         }, 30000);
     }, Math.random() * 10000);
+
     setTimeout(function () {
         setInterval(function () {
             console.log("lastSel: ", lastSel);
@@ -93,6 +99,8 @@ function main() {
 //     updateSelectOptions(selectLayout, productList);
 // }
 function updateSelectOptions() {
+    console.log("updateSelectOPtions");
+
     selectProductEl.innerHTML = "";
     productList.forEach(function (item) {
         const option = document.createElement("option");
@@ -192,44 +200,10 @@ function calcCart() {
             "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
         totalAmountEl.appendChild(discountRateSpan);
     }
-    updateStockInfo();
-    renderBonusPoints();
+    updateStockInfo(productList, productStockEl);
+    renderBonusPoints(totalAmount, totalAmountEl);
 }
 
-// ptsd 올꺼 같네..
-// 포인트 관련해서 렌더하는 함수인거 같음.
-const renderBonusPoints = () => {
-    bonusPoints = Math.floor(totalAmount / 1000);
-    console.log("bonusPoints: ", bonusPoints);
-
-    let pointsSpan = document.getElementById("loyalty-points");
-    console.log("pointsSpan: ", pointsSpan);
-
-    if (!pointsSpan) {
-        console.log("들어오니2?");
-
-        pointsSpan = document.createElement("span");
-        pointsSpan.id = "loyalty-points";
-        pointsSpan.className = "text-blue-500 ml-2";
-        totalAmountEl.appendChild(pointsSpan);
-    }
-    pointsSpan.textContent = "(포인트: " + bonusPoints + ")";
-};
-// 먼가.. 업데이트를 하는데.. 재고품 정보 ?
-// ex) 상품4: 품절
-function updateStockInfo() {
-    let stockMessage = "";
-    productList.forEach(function (item) {
-        if (item.q < 5) {
-            stockMessage +=
-                item.name +
-                ": " +
-                (item.q > 0 ? "재고 부족 (" + item.q + "개 남음)" : "품절") +
-                "\n";
-        }
-    });
-    productStockEl.textContent = stockMessage;
-}
 main();
 // 추가 버튼 클릭
 addBtn.addEventListener("click", function () {

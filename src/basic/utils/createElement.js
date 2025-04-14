@@ -52,3 +52,9 @@ export function createProductStock() {
         class: "text-sm text-gray-500 mt-2",
     });
 }
+export function createBonusPoints() {
+    return createElement("span", {
+        id: "loyalty-points",
+        class: "text-blue-500 ml-2",
+    });
+}

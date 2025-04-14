@@ -6,6 +6,14 @@ const productList = [
   { id: 'p5', name: '상품5', value: 25000, quantity: 10 },
 ];
 
+const discountTable = {
+  p1: 0.1,
+  p2: 0.15,
+  p3: 0.2,
+  p4: 0.05,
+  p5: 0.25,
+};
+
 const handleCartItemsContainerClick = (event) => {
   const cartItemsContainer = event.target;
 
@@ -54,7 +62,7 @@ const handleCartItemsContainerClick = (event) => {
       cartItemElement.remove();
     }
 
-    calcCart();
+    calculateCart();
   }
 };
 
@@ -94,7 +102,7 @@ const handleAddButtonClick = () => {
       cartItemsContainer.appendChild(newItem);
       itemToAdd.quantity--;
     }
-    calcCart();
+    calculateCart();
     lastSelectedProductId = selectedProductId;
   }
 };
@@ -152,7 +160,7 @@ const main = () => {
   mainContainer.appendChild(mainWrapper);
   mainRoot.appendChild(mainContainer);
 
-  calcCart();
+  calculateCart();
 
   setTimeout(() => {
     setInterval(() => {
@@ -199,43 +207,7 @@ const updateProductSelectOptions = () => {
   productSelect.replaceChildren(newSelectOptions);
 };
 
-const calcCart = () => {
-  totalAmount = 0;
-  itemCount = 0;
-
-  const cartItems = cartItemsContainer.children;
-  let subTotal = 0;
-
-  for (let i = 0; i < cartItems.length; i++) {
-    let currentItem;
-
-    for (let j = 0; j < productList.length; j++) {
-      if (productList[j].id === cartItems[i].id) {
-        currentItem = productList[j];
-        break;
-      }
-    }
-
-    const quantity = parseInt(
-      cartItems[i].querySelector('span').textContent.split('x ')[1],
-    );
-    const itemTotal = currentItem.value * quantity;
-    let discount = 0;
-
-    itemCount += quantity;
-    subTotal += itemTotal;
-
-    if (quantity >= 10) {
-      if (currentItem.id === 'p1') discount = 0.1;
-      else if (currentItem.id === 'p2') discount = 0.15;
-      else if (currentItem.id === 'p3') discount = 0.2;
-      else if (currentItem.id === 'p4') discount = 0.05;
-      else if (currentItem.id === 'p5') discount = 0.25;
-    }
-
-    totalAmount += itemTotal * (1 - discount);
-  }
-
+const getDiscountRate = (subTotal) => {
   let discountRate = 0;
 
   if (itemCount >= 30) {
@@ -251,12 +223,41 @@ const calcCart = () => {
   } else {
     discountRate = (subTotal - totalAmount) / subTotal;
   }
+
   if (new Date().getDay() === 2) {
     totalAmount *= 1 - 0.1;
     discountRate = Math.max(discountRate, 0.1);
   }
 
+  return discountRate;
+};
+
+const calculateCart = () => {
+  totalAmount = 0;
+  itemCount = 0;
+  let subTotal = 0;
+
+  const cartItems = [...cartItemsContainer.children];
+
+  cartItems.forEach((item) => {
+    const currentItem = productList.find((product) => product.id === item.id);
+    if (!currentItem) return;
+
+    const quantity = parseInt(
+      item.querySelector('span').textContent.split('x ')[1],
+    );
+
+    const itemTotal = currentItem.value * quantity;
+    const discount = quantity >= 10 ? (discountTable[currentItem.id] ?? 0) : 0;
+
+    itemCount += quantity;
+    subTotal += itemTotal;
+    totalAmount += itemTotal * (1 - discount);
+  });
+
   totalAmountContainer.textContent = '총액: ' + Math.round(totalAmount) + '원';
+
+  const discountRate = getDiscountRate(subTotal);
 
   if (discountRate > 0) {
     const span = document.createElement('span');

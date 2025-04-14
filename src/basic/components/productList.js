@@ -1,3 +1,4 @@
+import calculatePrice from '../calculatePrice.js';
 import { PRODUCTS } from '../productList.constant.js';
 
 export default function productList() {
@@ -48,6 +49,7 @@ function handleChangeQuantity(event) {
       product.quantity += currentQuantity;
       itemElement.remove();
     }
-    document.dispatchEvent(new CustomEvent('cartUpdated'));
+    // document.dispatchEvent(new CustomEvent('cartUpdated'));
+    calculatePrice();
   }
 }

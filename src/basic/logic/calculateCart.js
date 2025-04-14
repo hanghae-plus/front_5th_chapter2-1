@@ -7,10 +7,15 @@ import {
 } from "@/basic/config/constants";
 
 /**
+ * 장바구니에 포함된 상품의 총액 및 할인율을 계산
+ * - 장바구니에 포함된 상품의 수량, 소계, 개별 대량 구매 할인율을 계산
+ * - 총 상품 갯수에 의한 할인율 계산
+ *   - 개별 할인 총액보다, 총 갯수 할인이 클 경우만 적용
+ * - 매월 2일 총액에서 추가할인 계산
  *
  * @param {*} products
  * @param {*} cartItems
- * @returns
+ * @returns {Object<{ totalCost: number, discountRate: 할인율}>}
  *
  * @see BULK_DISCOUNT_LIMIT - 개별 할인 적용 수량 기준
  * @see TOTAL_BULK_DISCOUNT_LIMIT - 전체 할인 적용 수량 기준

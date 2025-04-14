@@ -1,17 +1,12 @@
 // lib
-import { $, STYLES } from "./lib";
-
-// constant
-import { EVENT_FRAGMENT } from "./config/fragments";
-import { STOCK_ALERT_TEXT } from "./config/messages";
-
-// logic
-
-// components
-import { CartItem } from "@/basic/components";
+import { $, STYLES } from "@/basic/lib";
 
 // render
 import { renderCartTotal, renderProductOptions } from "@/basic/render";
+
+// handlers
+import { handleAddToCart } from "@/basic/handlers/handleAddToCart";
+import { handleCartItems } from "@/basic/handlers/handleCartItems";
 
 // data
 const products = [
@@ -22,113 +17,8 @@ const products = [
   { id: "p5", name: "상품5", cost: 25_000, quantity: 10, discount: 0.25 },
 ];
 
-/// global element
-let $addToCart, $cartItems;
-
 /// global state
 let lastSelected;
-
-/**
- * [Handler] 장바구니에 추가 핸들러
- * 추가 버튼을 클릭하면 장바구니에 아이템이 추가되어 재랜더링
- *
- * - 추가 버튼을 상품이 추가
- *   - 이미 있는 상품이라면 수량 증가
- *   - 새로운 아이템이라면 엘리먼트 추가
- * - 현재 재고가 없으면 추가되지 않음
- *
- * @returns {void}
- * @fires renderCalculateCart
- */
-const handleClickAddToCart = () => {
-  const $productSelect = $("#product-select");
-  if (!$productSelect) return;
-  const selectedItemId = $productSelect.value;
-  const itemToAdd = products.find((p) => p.id === selectedItemId);
-
-  if (!itemToAdd || itemToAdd.quantity <= 0) return;
-
-  const currentItem = $("#" + itemToAdd.id);
-  if (currentItem) {
-    // 이미 있는 상품
-    const newQuantity =
-      parseInt(currentItem.querySelector("span").textContent.split("x ")[1]) +
-      1;
-    if (newQuantity <= itemToAdd.quantity) {
-      currentItem.querySelector("span").textContent =
-        itemToAdd.name + " - " + itemToAdd.cost + "원 x " + newQuantity;
-      itemToAdd.quantity -= 1;
-    } else {
-      alert(STOCK_ALERT_TEXT);
-    }
-  } else {
-    // 장바구니에 새 상품 추가
-    $cartItems.appendChild(CartItem({ ...itemToAdd }));
-    itemToAdd.quantity -= 1;
-  }
-  renderCartTotal(products);
-  lastSelected = selectedItemId;
-};
-
-/**
- * [Handler] 수량 변경, 삭제 핸들러
- * 장바구니 내의 아이템의 수량을 조정하거나, 삭제
- *
- * - 장바구니 아이템의 버튼을 클릭
- * - 수량 변경 클릭 시
- *   - 증가 버튼은 수량 1개 증가
- *     - 재고가 없을 시 증가되지 않음
- *   - 감소 버튼은 수량 1개 감소
- *     - 변경된 수량이 0개이면 상품 제거
- * - 제거 버튼 클릭 시 제거
- *
- * @param {MouseEvent} event
- * @returns {void}
- *
- * @see EVENT_FRAGMENT
- * @fires renderCalculateCart
- */
-const handleClickCartItems = (event) => {
-  // 수량 변경, 상품 삭제 이벤트 처리
-  const target = event.target;
-  const isQuantityChange = target.classList.contains(
-    EVENT_FRAGMENT.QUANTITY_CHANGE,
-  );
-  const isRemoveItem = target.classList.contains(EVENT_FRAGMENT.REMOVE_ITEM);
-  if (!isQuantityChange && !isRemoveItem) return;
-
-  const productId = target.dataset.productId;
-  const $item = $("#" + productId);
-  const product = products.find((p) => p.id === productId);
-
-  // 기존 수량 확인
-  const $quantity = $item.querySelector("span");
-  let [prefix, quantity] = $quantity.textContent.split("x ");
-  quantity = parseInt(quantity);
-
-  if (isQuantityChange) {
-    // 상품 수량 변경
-    const quantityChange = parseInt(target.dataset.change);
-    const newQuantity = quantity + quantityChange;
-
-    if (newQuantity > 0 && newQuantity <= product.quantity + quantity) {
-      $quantity.textContent = prefix + "x " + newQuantity;
-      product.quantity -= quantityChange;
-    } else if (newQuantity <= 0) {
-      $item.remove();
-      product.quantity -= quantityChange;
-    } else {
-      alert(STOCK_ALERT_TEXT);
-    }
-  } else if (isRemoveItem) {
-    // 상품 삭제
-    const remainQuantity = quantity;
-    product.quantity += remainQuantity;
-    $item.remove();
-  }
-
-  renderCartTotal(products);
-};
 
 /**
  * 랜덤 할인 세팅 함수
@@ -166,6 +56,23 @@ const setRandomDiscount = () => {
   }, Math.random() * 20_000);
 };
 
+const setListener = () => {
+  const $addToCart = $("#add-to-cart");
+  const $cartItems = $("#cart-items");
+
+  const handleClickAddToCart = () => {
+    lastSelected = handleAddToCart(products) || lastSelected;
+    renderCartTotal(products);
+  };
+  const handleClickCartItems = (e) => {
+    handleCartItems(e.target, products);
+    renderCartTotal(products);
+  };
+
+  $addToCart.addEventListener("click", handleClickAddToCart);
+  $cartItems.addEventListener("click", handleClickCartItems);
+};
+
 /// main
 
 /**
@@ -185,14 +92,6 @@ const setRandomDiscount = () => {
 const main = () => {
   // UI 앨리먼트 생성 및 속성 설정 커스텀 $ 함수 사용
 
-  // global element
-  $cartItems = $("div", { id: "cart-items" });
-  $addToCart = $("button", {
-    id: "add-to-cart",
-    className: STYLES.ADD_TO_CART,
-    textContent: "추가",
-  });
-
   // $app 컴포넌트 조립
   $("#app").appendChild(
     $(
@@ -202,13 +101,17 @@ const main = () => {
         "div",
         { className: STYLES.WRAPPER }, // wrapper props
         $("h1", { className: STYLES.TITLE, textContent: "장바구니" }),
-        $cartItems,
+        $("div", { id: "cart-items" }),
         $("div", { id: "cart-total", className: STYLES.CART_TOTAL }),
         $("select", {
           id: "product-select",
           className: STYLES.PRODUCT_SELECT,
         }),
-        $addToCart,
+        $("button", {
+          id: "add-to-cart",
+          className: STYLES.ADD_TO_CART,
+          textContent: "추가",
+        }),
         $("div", { id: "stock-status", className: STYLES.STOCK_STATUS }),
       ),
     ),
@@ -218,8 +121,7 @@ const main = () => {
   renderProductOptions(products);
   renderCartTotal(products);
   setRandomDiscount();
+  setListener();
 };
 
 main();
-$addToCart.addEventListener("click", handleClickAddToCart);
-$cartItems.addEventListener("click", handleClickCartItems);

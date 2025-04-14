@@ -9,14 +9,16 @@ import {
 import { updateProductSelectOptions } from './updateProductSelectOptions';
 import { calculateCart } from '../logic';
 
-export const initMain = () => {
+const initAllDOM = () => {
   ProductSelectDOM.init();
   TotalAmountContainerDOM.init();
   StockStatusContainerDOM.init();
   CartItemsContainerDOM.init();
   AddButtonDOM.init();
   LayoutDOM.init();
+};
 
+const buildMainLayout = () => {
   const productSelect = ProductSelectDOM.get();
   const totalAmountContainer = TotalAmountContainerDOM.get();
   const stockStatusContainer = StockStatusContainerDOM.get();
@@ -25,15 +27,26 @@ export const initMain = () => {
   const { mainAppRoot, mainContainer, mainWrapper, mainHeader } =
     LayoutDOM.get();
 
-  mainWrapper.appendChild(mainHeader);
-  mainWrapper.appendChild(cartItemsContainer);
-  mainWrapper.appendChild(totalAmountContainer);
-  mainWrapper.appendChild(productSelect);
-  mainWrapper.appendChild(addButton);
-  mainWrapper.appendChild(stockStatusContainer);
+  mainWrapper.append(
+    mainHeader,
+    cartItemsContainer,
+    totalAmountContainer,
+    productSelect,
+    addButton,
+    stockStatusContainer,
+  );
+
   mainContainer.appendChild(mainWrapper);
   mainAppRoot.appendChild(mainContainer);
+};
 
+const initializeState = () => {
   updateProductSelectOptions();
   calculateCart();
+};
+
+export const initMain = () => {
+  initAllDOM();
+  buildMainLayout();
+  initializeState();
 };

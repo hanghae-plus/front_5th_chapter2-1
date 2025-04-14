@@ -1,48 +1,59 @@
 import { productList } from "./data/productData.js";
+import {
+    createContainer,
+    createWrapper,
+    createCartTitle,
+    createCartDisplay,
+    createTotalAmount,
+    createSelectProduct,
+    createAddBtn,
+    createProductStock,
+} from "./utils/createElement.js";
 
-var selectProductEl, addBtn, cartDisplayEl, totalAmountEl, productStockEl;
-var lastSel, // 추후 바꿔야 될 꺼 같음
+import {
+    buildLayout,
+    selectLayout,
+    // updateSelectOptions,
+    cartDisplayLayout,
+} from "./layout/layoutManager.js";
+
+const cartDisplayEl = createCartDisplay();
+// console.log("타입은: ", typeof cartDisplayEl);
+// console.log("타입은2: ", typeof selectLayout);
+
+const totalAmountEl = createTotalAmount();
+const selectProductEl = createSelectProduct();
+const addBtn = createAddBtn();
+const productStockEl = createProductStock();
+
+let lastSel, // 추후 바꿔야 될 꺼 같음
     bonusPoints = 0,
     totalAmount = 0,
     productCount = 0;
 function main() {
-    var rootEl = document.getElementById("app");
-    let containerEl = document.createElement("div");
-    var wrapperEl = document.createElement("div");
-    let titleEl = document.createElement("h1");
-    cartDisplayEl = document.createElement("div"); // 상품들은 담는 div
-    totalAmountEl = document.createElement("div");
-    selectProductEl = document.createElement("select");
-    addBtn = document.createElement("button");
-    productStockEl = document.createElement("div");
-    cartDisplayEl.id = "cart-items";
-    totalAmountEl.id = "cart-total";
-    selectProductEl.id = "product-select";
-    addBtn.id = "add-to-cart";
-    productStockEl.id = "stock-status";
-    containerEl.className = "bg-gray-100 p-8";
-    wrapperEl.className =
-        "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
-    titleEl.className = "text-2xl font-bold mb-4";
-    totalAmountEl.className = "text-xl font-bold my-4";
-    selectProductEl.className = "border rounded p-2 mr-2";
-    addBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
-    productStockEl.className = "text-sm text-gray-500 mt-2";
-    titleEl.textContent = "장바구니";
-    addBtn.textContent = "추가";
+    const app = document.getElementById("app");
+    // const layout = buildLayout();
+    // app.appendChild(layout);
+    const containerEl = createContainer();
+    const wrapperEl = createWrapper();
+    const cartTitleEl = createCartTitle();
     updateSelectOptions();
-    wrapperEl.appendChild(titleEl);
-    wrapperEl.appendChild(cartDisplayEl);
-    wrapperEl.appendChild(totalAmountEl);
-    wrapperEl.appendChild(selectProductEl);
-    wrapperEl.appendChild(addBtn);
-    wrapperEl.appendChild(productStockEl);
+    // 이벤트 핸들러 등에서 호출
+    // refreshProductOptions();
+    wrapperEl.append(
+        cartTitleEl,
+        cartDisplayEl,
+        totalAmountEl,
+        selectProductEl,
+        addBtn,
+        productStockEl
+    );
     containerEl.appendChild(wrapperEl);
-    rootEl.appendChild(containerEl);
+    app.appendChild(containerEl);
     calcCart();
     setTimeout(function () {
         setInterval(function () {
-            var flashSaleProduct =
+            const flashSaleProduct =
                 productList[Math.floor(Math.random() * productList.length)];
             console.log("flashSaleProduct: ", flashSaleProduct);
             if (Math.random() < 0.3 && flashSaleProduct.q > 0) {
@@ -61,7 +72,7 @@ function main() {
             console.log("lastSel: ", lastSel);
 
             if (lastSel) {
-                var suggest = productList.find(function (item) {
+                const suggest = productList.find(function (item) {
                     return item.id !== lastSel && item.q > 0;
                 });
                 if (suggest) {
@@ -76,10 +87,15 @@ function main() {
         }, 60000);
     }, Math.random() * 20000);
 }
+
+// 기존 함수 제거 후 이렇게 호출
+// function refreshProductOptions() {
+//     updateSelectOptions(selectLayout, productList);
+// }
 function updateSelectOptions() {
     selectProductEl.innerHTML = "";
     productList.forEach(function (item) {
-        var option = document.createElement("option");
+        const option = document.createElement("option");
         option.value = item.id;
         option.textContent = item.name + " - " + item.val + "원";
         if (item.q === 0) option.disabled = true;
@@ -98,7 +114,7 @@ function calcCart() {
     var subTotalBeforeDiscount = 0;
     for (var i = 0; i < cartItems.length; i++) {
         (function () {
-            var currentCartItem;
+            let currentCartItem;
             for (var j = 0; j < productList.length; j++) {
                 if (productList[j].id === cartItems[i].id) {
                     currentCartItem = productList[j];
@@ -109,7 +125,7 @@ function calcCart() {
             console.log("cartItem.span: ", cartItems[i].querySelector("span"));
 
             // q는 주문수량
-            var orderCount = parseInt(
+            const orderCount = parseInt(
                 cartItems[i].querySelector("span").textContent.split("x ")[1]
             );
             var itemPriceTotal = currentCartItem.val * orderCount; // 상품가격 * 개수
@@ -140,8 +156,8 @@ function calcCart() {
 
     // 대량 구매 시 할인이 가능한 조건
     if (productCount >= 30) {
-        var bulkDisc = totalAmount * 0.25;
-        var itemDisc = subTotalBeforeDiscount - totalAmount;
+        const bulkDisc = totalAmount * 0.25;
+        const itemDisc = subTotalBeforeDiscount - totalAmount;
         // 대량할인이 개별할인보다 큰 경우 25할인으로 갈아끼움
         if (bulkDisc > itemDisc) {
             totalAmount = subTotalBeforeDiscount * (1 - 0.25);
@@ -165,11 +181,12 @@ function calcCart() {
         // 기존에 5% 할인만 있었음 → 화요일이라 10%로 업그레이드
         discountRate = Math.max(discountRate, 0.1); // 할인 중 큰 값을 유지
     }
+
     totalAmountEl.textContent = "총액: " + Math.round(totalAmount) + "원";
     console.log("discountRate(할인율): ", discountRate);
 
     if (discountRate > 0) {
-        var discountRateSpan = document.createElement("span");
+        const discountRateSpan = document.createElement("span");
         discountRateSpan.className = "text-green-500 ml-2";
         discountRateSpan.textContent =
             "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
@@ -185,7 +202,7 @@ const renderBonusPoints = () => {
     bonusPoints = Math.floor(totalAmount / 1000);
     console.log("bonusPoints: ", bonusPoints);
 
-    var pointsSpan = document.getElementById("loyalty-points");
+    let pointsSpan = document.getElementById("loyalty-points");
     console.log("pointsSpan: ", pointsSpan);
 
     if (!pointsSpan) {
@@ -201,7 +218,7 @@ const renderBonusPoints = () => {
 // 먼가.. 업데이트를 하는데.. 재고품 정보 ?
 // ex) 상품4: 품절
 function updateStockInfo() {
-    var stockMessage = "";
+    let stockMessage = "";
     productList.forEach(function (item) {
         if (item.q < 5) {
             stockMessage +=

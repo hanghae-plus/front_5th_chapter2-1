@@ -3,7 +3,7 @@ import { SelectedProductStore } from '../store/stores';
 import { calculateCart } from '../main.basic';
 import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
 
-export const handleAddButtonClick = (stockStatusContainer) => {
+export const handleAddButtonClick = () => {
   const cartItemsContainer = CartItemsContainerDOM.get();
 
   const productSelect = ProductSelectDOM.get();
@@ -43,7 +43,7 @@ export const handleAddButtonClick = (stockStatusContainer) => {
       itemToAdd.quantity--;
     }
 
-    calculateCart(stockStatusContainer);
+    calculateCart();
 
     SelectedProductStore.set('selectedProduct', selectedProductId);
   }

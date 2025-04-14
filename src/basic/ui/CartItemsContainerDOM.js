@@ -3,12 +3,12 @@ import { handleCartItemsContainerClick } from '../handlers/handleCartItemsContai
 export const CartItemsContainerDOM = {
   _element: null,
 
-  init({ stockStatusContainer }) {
+  init() {
     this._element = document.createElement('div');
     this._element.id = 'cart-items';
 
     this._element.addEventListener('click', (event) =>
-      handleCartItemsContainerClick(event, stockStatusContainer),
+      handleCartItemsContainerClick(event),
     );
   },
 

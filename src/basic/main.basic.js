@@ -5,6 +5,7 @@ import {
   CartItemsContainerDOM,
   LayoutDOM,
   ProductSelectDOM,
+  StockStatusContainerDOM,
   TotalAmountContainerDOM,
 } from './ui';
 
@@ -19,28 +20,22 @@ const discountTable = {
 const main = () => {
   ProductSelectDOM.init();
   TotalAmountContainerDOM.init();
+  StockStatusContainerDOM.init();
 
   const productSelect = ProductSelectDOM.get();
   const totalAmountContainer = TotalAmountContainerDOM.get();
-  const stockStatusContainer = document.createElement('div');
-
-  stockStatusContainer.id = 'stock-status';
-  stockStatusContainer.className = 'text-sm text-gray-500 mt-2';
+  const stockStatusContainer = StockStatusContainerDOM.get();
 
   LayoutDOM.init();
 
   const { mainAppRoot, mainContainer, mainWrapper, mainHeader } =
     LayoutDOM.get();
 
-  CartItemsContainerDOM.init({
-    stockStatusContainer,
-  });
+  CartItemsContainerDOM.init();
 
   const cartItemsContainer = CartItemsContainerDOM.get();
 
-  AddButtonDOM.init({
-    stockStatusContainer,
-  });
+  AddButtonDOM.init();
 
   const addButton = AddButtonDOM.get();
 
@@ -55,7 +50,7 @@ const main = () => {
   mainContainer.appendChild(mainWrapper);
   mainAppRoot.appendChild(mainContainer);
 
-  calculateCart(stockStatusContainer);
+  calculateCart();
 
   setTimeout(() => {
     setInterval(() => {
@@ -131,7 +126,7 @@ const getDiscountRate = (subTotal) => {
   return discountRate;
 };
 
-export const calculateCart = (stockStatusContainer) => {
+export const calculateCart = () => {
   const cartItemsContainer = CartItemsContainerDOM.get();
   const totalAmountContainer = TotalAmountContainerDOM.get();
 
@@ -181,7 +176,7 @@ export const calculateCart = (stockStatusContainer) => {
     totalAmountContainer.appendChild(span);
   }
 
-  updateStockStatus(stockStatusContainer);
+  updateStockStatus();
   renderBonusPoints();
 };
 
@@ -202,7 +197,9 @@ const renderBonusPoints = () => {
   bonusPointsTag.textContent = `(포인트: ${bonusPoints})`;
 };
 
-const updateStockStatus = (stockStatusContainer) => {
+const updateStockStatus = () => {
+  const stockStatusContainer = StockStatusContainerDOM.get();
+
   const infoMessage = PRODUCT_LIST.reduce((acc, item) => {
     if (item.quantity < 5) {
       const status =

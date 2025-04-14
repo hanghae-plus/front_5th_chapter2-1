@@ -1,7 +1,7 @@
 import { PRODUCT_LIST } from '../consts/productList';
 import { calculateCart } from '../main.basic';
 
-export const handleCartItemsContainerClick = (event, stockStatusContainer) => {
+export const handleCartItemsContainerClick = (event) => {
   const clickedCartItemsContainer = event.target;
 
   if (
@@ -47,6 +47,6 @@ export const handleCartItemsContainerClick = (event, stockStatusContainer) => {
       cartItemElement.remove();
     }
 
-    calculateCart(stockStatusContainer);
+    calculateCart();
   }
 };

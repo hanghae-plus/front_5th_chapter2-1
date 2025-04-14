@@ -9,8 +9,11 @@ import {
     createAddBtn,
     createProductStock,
 } from "./utils/createElement.js";
-import { renderBonusPoints } from "./components/bonusPoints.js";
-import { updateStockInfo } from "./components/updateStock.js";
+import {
+    renderBonusPoints,
+    updateStockInfo,
+    updateSelectOptions,
+} from "./components";
 
 import {
     buildLayout,
@@ -40,7 +43,8 @@ function main() {
     const containerEl = createContainer();
     const wrapperEl = createWrapper();
     const cartTitleEl = createCartTitle();
-    updateSelectOptions();
+    // updateSelectOptions();
+    updateSelectOptions(productList, selectProductEl);
     // 이벤트 핸들러 등에서 호출
     // refreshProductOptions();
     wrapperEl.append(
@@ -68,7 +72,7 @@ function main() {
                         flashSaleProduct.name +
                         "이(가) 20% 할인 중입니다!"
                 );
-                updateSelectOptions();
+                updateSelectOptions(productList, selectProductEl);
             }
         }, 30000);
     }, Math.random() * 10000);
@@ -87,7 +91,7 @@ function main() {
                             "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!"
                     );
                     suggest.val = Math.round(suggest.val * 0.95);
-                    updateSelectOptions();
+                    updateSelectOptions(productList, selectProductEl);
                 }
             }
         }, 60000);
@@ -98,18 +102,18 @@ function main() {
 // function refreshProductOptions() {
 //     updateSelectOptions(selectLayout, productList);
 // }
-function updateSelectOptions() {
-    console.log("updateSelectOPtions");
+// function updateSelectOptions() {
+//     console.log("updateSelectOPtions");
 
-    selectProductEl.innerHTML = "";
-    productList.forEach(function (item) {
-        const option = document.createElement("option");
-        option.value = item.id;
-        option.textContent = item.name + " - " + item.val + "원";
-        if (item.q === 0) option.disabled = true;
-        selectProductEl.appendChild(option);
-    });
-}
+//     selectProductEl.innerHTML = "";
+//     productList.forEach(function (item) {
+//         const option = document.createElement("option");
+//         option.value = item.id;
+//         option.textContent = item.name + " - " + item.val + "원";
+//         if (item.q === 0) option.disabled = true;
+//         selectProductEl.appendChild(option);
+//     });
+// }
 function calcCart() {
     console.log("calcCart()");
 

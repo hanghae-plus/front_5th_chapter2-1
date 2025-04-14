@@ -142,6 +142,19 @@ const handleAddItem = (cartItems) => {
   return { noDiscTotalPrice, totalPrice, totalEa };
 };
 
+// 총액 표시
+const showSumText = (totalPrice, totalDiscRate) => {
+  sum.textContent = "총액: " + Math.round(totalPrice) + "원";
+  if (totalDiscRate > 0) {
+    var span = document.createElement("span");
+    span.className = "text-green-500 ml-2";
+    span.textContent = "(" + (totalDiscRate * 100).toFixed(1) + "% 할인 적용)";
+    sum.appendChild(span);
+  }
+
+  return { totalPrice };
+};
+
 // 장바구니 계산
 const calcCart = () => {
   var cartItems = cartDisp.children;
@@ -154,9 +167,8 @@ const calcCart = () => {
   var itemDisc = noDiscTotalPrice - totalPrice; // (이미 적용된) 할인 가격
   // 전체 30개 이상 구매 시 할인율 계산
   if (totalEa >= 30) {
-    const BULK_DISCOUNT_RATE = 0.25; // 대량 구매 시 할인율
-    var bulkDisc = totalPrice * BULK_DISCOUNT_RATE; // 대량 구매 시 할인 가격
-    console.log(itemDisc);
+    const BULK_DISCOUNT_RATE = 0.25;
+    var bulkDisc = totalPrice * BULK_DISCOUNT_RATE;
 
     if (bulkDisc > itemDisc) {
       totalPrice = noDiscTotalPrice * (1 - BULK_DISCOUNT_RATE);
@@ -167,7 +179,6 @@ const calcCart = () => {
   } else {
     totalDiscRate = itemDisc / noDiscTotalPrice;
   }
-  // console.log(totalDiscRate);
 
   // 화요일 할인율 계산
   if (new Date().getDay() === 2) {
@@ -176,15 +187,7 @@ const calcCart = () => {
     totalDiscRate = Math.max(totalDiscRate, TUESDAY_DISCOUNT_RATE);
   }
 
-  // 총액 표시
-  sum.textContent = "총액: " + Math.round(totalPrice) + "원";
-  if (totalDiscRate > 0) {
-    var span = document.createElement("span");
-    span.className = "text-green-500 ml-2";
-    span.textContent = "(" + (totalDiscRate * 100).toFixed(1) + "% 할인 적용)";
-    sum.appendChild(span);
-  }
-
+  showSumText(totalPrice, totalDiscRate);
   updateStockInfo();
   calcPoints(totalPrice);
 };

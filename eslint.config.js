@@ -6,11 +6,8 @@ export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs}"],
     ignores: ["node_modules", "dist", "README.md", "package.json", "pnpm-lock.yaml", ".github/"],
-    plugins: { js },
+    plugins: { prettier: eslintPluginPrettier },
     extends: ["js/recommended"],
-    plugins: {
-      prettier: eslintPluginPrettier,
-    },
     rules: {
       "prettier/prettier": "error",
       "no-unused-vars": "warn",

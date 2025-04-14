@@ -267,6 +267,43 @@ const addNewItem = (itemToAdd) => {
   itemToAdd.stock--;
 };
 
+// 장바구니 아이템 수량 변경
+const updateItemEa = (target, itemElem) => {
+  var itemId = target.dataset.productId;
+  var eaToChange = parseInt(target.dataset.change);
+  var itemSpan = itemElem.querySelector("span");
+  var itemText = itemSpan.textContent;
+  var currentEa = parseInt(itemText.split("x ")[1]);
+  var newEa = currentEa + eaToChange;
+  var itemToChange = products.find(function (item) {
+    return item.id === itemId;
+  });
+
+  if (newEa > 0 && newEa <= itemToChange.stock + currentEa) {
+    itemSpan.textContent = itemText.split("x ")[0] + "x " + newEa;
+    itemToChange.stock -= eaToChange;
+  } else if (newEa <= 0) {
+    itemElem.remove();
+    itemToChange.stock -= eaToChange;
+  } else {
+    alert("재고가 부족합니다.");
+  }
+};
+
+// 장바구니 아이템 삭제
+const removeItemEa = (target, itemElem) => {
+  var itemId = target.dataset.productId;
+  var itemSpan = itemElem.querySelector("span");
+  var itemText = itemSpan.textContent;
+  var eaToRemove = parseInt(itemText.split("x ")[1]);
+  var itemToChange = products.find(function (item) {
+    return item.id === itemId;
+  });
+
+  itemToChange.stock += eaToRemove;
+  itemElem.remove();
+};
+
 // 페이지 로드 시 초기화
 main();
 
@@ -298,32 +335,11 @@ cartDiv.addEventListener("click", function (event) {
   if (isTargetQuantityChange || isTargetRemoveItem) {
     var itemId = target.dataset.productId;
     var itemElem = document.getElementById(itemId);
-    var itemSpan = itemElem.querySelector("span");
-    var itemText = itemSpan.textContent;
-
-    var itemToChange = products.find(function (item) {
-      return item.id === itemId;
-    });
 
     if (isTargetQuantityChange) {
-      var eaToChange = parseInt(target.dataset.change);
-      var currentEa = parseInt(itemText.split("x ")[1]);
-      var newEa = currentEa + eaToChange;
-
-      if (newEa > 0 && newEa <= itemToChange.stock + currentEa) {
-        itemSpan.textContent = itemText.split("x ")[0] + "x " + newEa;
-        itemToChange.stock -= eaToChange;
-      } else if (newEa <= 0) {
-        itemElem.remove();
-        itemToChange.stock -= eaToChange;
-      } else {
-        alert("재고가 부족합니다.");
-      }
+      updateItemEa(target, itemElem);
     } else if (isTargetRemoveItem) {
-      var eaToRemove = parseInt(itemText.split("x ")[1]);
-
-      itemToChange.stock += eaToRemove;
-      itemElem.remove();
+      removeItemEa(target, itemElem);
     }
     calcCart();
   }

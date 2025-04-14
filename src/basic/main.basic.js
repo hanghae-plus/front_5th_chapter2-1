@@ -267,31 +267,37 @@ const calculateCart = (
   totalAmountContainer,
   stockStatusContainer,
 ) => {
-  let newItemCount = 0;
-  let newTotalAmount = 0;
-  let newSubTotal = 0;
-
   const cartItems = [...cartItemsContainer.children];
 
-  cartItems.forEach((item) => {
-    const currentItem = productList.find((product) => product.id === item.id);
-    if (!currentItem) return;
+  const { itemCount, subTotal, totalAmount } = cartItems.reduce(
+    (acc, item) => {
+      const currentItem = productList.find((product) => product.id === item.id);
+      if (!currentItem) return acc;
 
-    const quantity = parseInt(
-      item.querySelector('span').textContent.split('x ')[1],
-    );
+      const quantity = parseInt(
+        item.querySelector('span').textContent.split('x ')[1],
+      );
 
-    const itemTotal = currentItem.value * quantity;
-    const discount = quantity >= 10 ? (discountTable[currentItem.id] ?? 0) : 0;
+      const itemTotal = currentItem.value * quantity;
+      const discount =
+        quantity >= 10 ? (discountTable[currentItem.id] ?? 0) : 0;
 
-    newItemCount += quantity;
-    newSubTotal += itemTotal;
-    newTotalAmount += itemTotal * (1 - discount);
-  });
+      acc.itemCount += quantity;
+      acc.subTotal += itemTotal;
+      acc.totalAmount += itemTotal * (1 - discount);
 
-  CartStore.set('itemCount', newItemCount);
-  CartStore.set('totalAmount', newTotalAmount);
-  CartStore.set('subTotal', newSubTotal);
+      return acc;
+    },
+    {
+      itemCount: 0,
+      subTotal: 0,
+      totalAmount: 0,
+    },
+  );
+
+  CartStore.set('itemCount', itemCount);
+  CartStore.set('subTotal', subTotal);
+  CartStore.set('totalAmount', totalAmount);
 
   totalAmountContainer.textContent =
     '총액: ' + Math.round(CartStore.get('totalAmount')) + '원';

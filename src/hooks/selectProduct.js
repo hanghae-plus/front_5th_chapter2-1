@@ -1,6 +1,8 @@
-import { products } from "../store/store";
+import { store } from '../store/store.js';
 
 export function showSelectList () {
+  const products = store.products;
+  
   const selectElement = document.getElementById('product-select');
 
   selectElement.innerHTML = '';

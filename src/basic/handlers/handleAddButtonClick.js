@@ -5,8 +5,8 @@ import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
 
 export const handleAddButtonClick = () => {
   const cartItemsContainer = CartItemsContainerDOM.get();
-
   const productSelect = ProductSelectDOM.get();
+
   const selectedProductId = productSelect.value;
   const itemToAdd = PRODUCT_LIST.find(
     (product) => product.id === selectedProductId,
@@ -17,11 +17,12 @@ export const handleAddButtonClick = () => {
 
     if (item) {
       const newQuantity =
-        parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
+        parseInt(item.querySelector('span').dataset.quantity) + 1;
 
       if (newQuantity <= itemToAdd.quantity) {
+        item.querySelector('span').dataset.quantity = newQuantity;
         item.querySelector('span').textContent =
-          itemToAdd.name + ' - ' + itemToAdd.value + '원 x ' + newQuantity;
+          `${itemToAdd.name} - ${itemToAdd.value}원 x ${newQuantity}`;
         itemToAdd.quantity--;
       } else {
         alert('재고가 부족합니다.');
@@ -32,7 +33,7 @@ export const handleAddButtonClick = () => {
       newItem.id = itemToAdd.id;
       newItem.className = 'flex justify-between items-center mb-2';
       newItem.innerHTML = `
-        <span>${itemToAdd.name} - ${itemToAdd.value}원 x 1</span>
+        <span data-value="${itemToAdd.value}" data-quantity="1">${itemToAdd.name} - ${itemToAdd.value}원 x 1</span>
         <div>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="-1">-</button>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="1">+</button>

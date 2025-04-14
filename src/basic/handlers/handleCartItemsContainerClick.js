@@ -15,22 +15,18 @@ export const handleCartItemsContainerClick = (event) => {
     if (clickedCartItemsContainer.classList.contains('quantity-change')) {
       const quantityChange = parseInt(clickedCartItemsContainer.dataset.change);
       const newQuantity =
-        parseInt(
-          cartItemElement.querySelector('span').textContent.split('x ')[1],
-        ) + quantityChange;
+        parseInt(cartItemElement.querySelector('span').dataset.quantity)
+        + quantityChange;
 
       if (
         newQuantity > 0
         && newQuantity
           <= product.quantity
-            + parseInt(
-              cartItemElement.querySelector('span').textContent.split('x ')[1],
-            )
+            + parseInt(cartItemElement.querySelector('span').dataset.quantity)
       ) {
+        cartItemElement.querySelector('span').dataset.quantity = newQuantity;
         cartItemElement.querySelector('span').textContent =
-          cartItemElement.querySelector('span').textContent.split('x ')[0]
-          + 'x '
-          + newQuantity;
+          `${product.name} - ${product.value}원 x ${newQuantity}`;
         product.quantity -= quantityChange;
       } else if (newQuantity <= 0) {
         cartItemElement.remove();
@@ -40,7 +36,7 @@ export const handleCartItemsContainerClick = (event) => {
       }
     } else if (clickedCartItemsContainer.classList.contains('remove-item')) {
       const remQuantity = parseInt(
-        cartItemElement.querySelector('span').textContent.split('x ')[1],
+        cartItemElement.querySelector('span').dataset.quantity,
       );
 
       product.quantity += remQuantity;

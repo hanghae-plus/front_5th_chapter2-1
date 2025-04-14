@@ -17,10 +17,7 @@ export const calculateCart = () => {
       );
       if (!currentItem) return acc;
 
-      const quantity = parseInt(
-        item.querySelector('span').textContent.split('x ')[1],
-      );
-
+      const quantity = parseInt(item.querySelector('span').dataset.quantity);
       const itemTotal = currentItem.value * quantity;
       const discount =
         quantity >= 10 ? (DISCOUNT_TABLE[currentItem.id] ?? 0) : 0;

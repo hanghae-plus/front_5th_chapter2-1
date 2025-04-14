@@ -57,35 +57,35 @@ function main() {
   root.appendChild(cont);
 
   updateSelectOptions();
-
   calcCart();
-  startRandomlyInMs(10_000)(function () {
-    setInterval(function () {
-      const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
-      if (Math.random() < 0.3 && luckyItem.quantity > 0) {
-        luckyItem.price = Math.round(luckyItem.price * 0.8);
-        alert(`번개세일! ${luckyItem.name}이(가) 20% 할인 중입니다!`);
-        updateSelectOptions();
-      }
-    }, 30_000);
-  });
 
-  startRandomlyInMs(20_000)(function () {
-    setInterval(function () {
-      if (lastSelectedId) {
-        const suggestionItem = prodList.find(function (item) {
-          return item.id !== lastSelectedId && item.quantity > 0;
-        });
-        if (suggestionItem) {
-          const alertText = `${suggestionItem.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`;
-          alert(alertText);
-          suggestionItem.price = Math.round(suggestionItem.price * 0.95);
-          updateSelectOptions();
-        }
-      }
-    }, 60000);
-  });
+  startRandomlyInMs(10_000)(() => setInterval(startLuckyDraw, 30_000));
+  startRandomlyInMs(20_000)(() => setInterval(startSuggestion, 60_000));
 }
+
+const startLuckyDraw = () => {
+  const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
+  if (Math.random() < 0.3 && luckyItem.quantity > 0) {
+    luckyItem.price = Math.round(luckyItem.price * 0.8);
+    alert(`번개세일! ${luckyItem.name}이(가) 20% 할인 중입니다!`);
+    updateSelectOptions();
+  }
+};
+
+const startSuggestion = () => {
+  if (lastSelectedId) {
+    const suggestionItem = prodList.find(
+      (product) => product.id !== lastSelectedId && product.quantity > 0,
+    );
+
+    if (!suggestionItem) return;
+
+    const alertText = `${suggestionItem.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`;
+    alert(alertText);
+    suggestionItem.price = Math.round(suggestionItem.price * 0.95);
+    updateSelectOptions();
+  }
+};
 
 const startRandomlyInMs = (ms) => (callback) => {
   const startsAt = Math.random(0) * ms;

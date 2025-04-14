@@ -197,14 +197,14 @@ const calcPoints = (totalPrice) => {
   let points = 0;
   points = Math.floor(totalPrice / 1000);
 
-  var ptsTag = document.getElementById("loyalty-points");
-  if (!ptsTag) {
-    ptsTag = document.createElement("span");
-    ptsTag.id = "loyalty-points";
-    ptsTag.className = "text-blue-500 ml-2";
-    sum.appendChild(ptsTag);
+  var pointsElem = document.getElementById("points-value");
+  if (!pointsElem) {
+    pointsElem = document.createElement("span");
+    pointsElem.id = "points-value";
+    pointsElem.className = "text-blue-500 ml-2";
+    sum.appendChild(pointsElem);
   }
-  ptsTag.textContent = "(포인트: " + points + ")";
+  pointsElem.textContent = "(포인트: " + points + ")";
 };
 
 // 재고 정보 업데이트

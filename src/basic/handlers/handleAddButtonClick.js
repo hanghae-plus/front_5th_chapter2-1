@@ -43,11 +43,13 @@ export const handleAddButtonClick = (
       cartItemsContainer.appendChild(newItem);
       itemToAdd.quantity--;
     }
+
     calculateCart(
       cartItemsContainer,
       totalAmountContainer,
       stockStatusContainer,
     );
+
     SelectedProductStore.set('selectedProduct', selectedProductId);
   }
 };

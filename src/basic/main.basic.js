@@ -1,16 +1,26 @@
-var prodList, sel, addBtn, cartDisp, sum, stockInfo;
+import { updateStockInfo } from "./libs";
+
+/** @typedef {import("./types").Product} Product */
+
+// ===============================================
+
+/** @type {Product[]} */
+const products = [
+  { id: "p1", name: "상품1", price: 10000, stock: 50 },
+  { id: "p2", name: "상품2", price: 20000, stock: 30 },
+  { id: "p3", name: "상품3", price: 30000, stock: 20 },
+  { id: "p4", name: "상품4", price: 15000, stock: 0 },
+  { id: "p5", name: "상품5", price: 25000, stock: 10 },
+];
+// ===============================================
+
+var sel, addBtn, cartDisp, sum, stockInfo;
 var lastSel,
   bonusPts = 0,
   totalAmt = 0,
   itemCnt = 0;
+
 function main() {
-  prodList = [
-    { id: "p1", name: "상품1", val: 10000, q: 50 },
-    { id: "p2", name: "상품2", val: 20000, q: 30 },
-    { id: "p3", name: "상품3", val: 30000, q: 20 },
-    { id: "p4", name: "상품4", val: 15000, q: 0 },
-    { id: "p5", name: "상품5", val: 25000, q: 10 },
-  ];
   var root = document.getElementById("app");
   let cont = document.createElement("div");
   var wrap = document.createElement("div");
@@ -46,7 +56,7 @@ function main() {
   calcCart();
   setTimeout(function () {
     setInterval(function () {
-      var luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
+      var luckyItem = products[Math.floor(Math.random() * products.length)];
       if (Math.random() < 0.3 && luckyItem.q > 0) {
         luckyItem.val = Math.round(luckyItem.val * 0.8);
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
@@ -57,7 +67,7 @@ function main() {
   setTimeout(function () {
     setInterval(function () {
       if (lastSel) {
-        var suggest = prodList.find(function (item) {
+        var suggest = products.find(function (item) {
           return item.id !== lastSel && item.q > 0;
         });
         if (suggest) {
@@ -71,7 +81,7 @@ function main() {
 }
 function updateSelOpts() {
   sel.innerHTML = "";
-  prodList.forEach(function (item) {
+  products.forEach(function (item) {
     var opt = document.createElement("option");
     opt.value = item.id;
     opt.textContent = item.name + " - " + item.val + "원";
@@ -87,9 +97,9 @@ function calcCart() {
   for (var i = 0; i < cartItems.length; i++) {
     (function () {
       var curItem;
-      for (var j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
+      for (var j = 0; j < products.length; j++) {
+        if (products[j].id === cartItems[i].id) {
+          curItem = products[j];
           break;
         }
       }
@@ -132,7 +142,7 @@ function calcCart() {
     span.textContent = "(" + (discRate * 100).toFixed(1) + "% 할인 적용)";
     sum.appendChild(span);
   }
-  updateStockInfo();
+  updateStockInfo(stockInfo, products);
   renderBonusPts();
 }
 const renderBonusPts = () => {
@@ -146,19 +156,11 @@ const renderBonusPts = () => {
   }
   ptsTag.textContent = "(포인트: " + bonusPts + ")";
 };
-function updateStockInfo() {
-  var infoMsg = "";
-  prodList.forEach(function (item) {
-    if (item.q < 5) {
-      infoMsg += item.name + ": " + (item.q > 0 ? "재고 부족 (" + item.q + "개 남음)" : "품절") + "\n";
-    }
-  });
-  stockInfo.textContent = infoMsg;
-}
+
 main();
 addBtn.addEventListener("click", function () {
   var selItem = sel.value;
-  var itemToAdd = prodList.find(function (p) {
+  var itemToAdd = products.find(function (p) {
     return p.id === selItem;
   });
   if (itemToAdd && itemToAdd.q > 0) {
@@ -202,7 +204,7 @@ cartDisp.addEventListener("click", function (event) {
   if (tgt.classList.contains("quantity-change") || tgt.classList.contains("remove-item")) {
     var prodId = tgt.dataset.productId;
     var itemElem = document.getElementById(prodId);
-    var prod = prodList.find(function (p) {
+    var prod = products.find(function (p) {
       return p.id === prodId;
     });
     if (tgt.classList.contains("quantity-change")) {

@@ -1,7 +1,6 @@
 import { textUtils } from '../../utils/textUtils';
 
 export function renderPoints(points) {
-  console.log('renderPoints', points);
   let $pointSpan = document.getElementById('loyalty-points');
 
   if (!$pointSpan) {

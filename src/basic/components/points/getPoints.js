@@ -1,5 +1,5 @@
-import { CONSTNANTS } from '../../constants';
+import { CONSTANTS } from '../../constants';
 
 export const getPoints = (totalAmount) => {
-  return Math.floor(totalAmount / CONSTNANTS.POINT_RATE);
+  return Math.floor(totalAmount / CONSTANTS.POINT_RATE);
 };

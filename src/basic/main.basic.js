@@ -1,4 +1,4 @@
-import { CONSTNANTS } from './constants';
+import { CONSTANTS } from './constants';
 import { textUtils } from './utils/textUtils';
 import { calcUtils } from './utils/calcUtils';
 import { updateStockInfoText } from './components/stockStatus/updateStockInfoText';
@@ -55,13 +55,13 @@ function main() {
 
       if (Math.random() < 0.3 && bungaeSaleItem.quantity > 0) {
         bungaeSaleItem.price = Math.round(
-          bungaeSaleItem.price * CONSTNANTS.BUNGAE_SALE_DISCOUNT_RATE,
+          bungaeSaleItem.price * CONSTANTS.BUNGAE_SALE_DISCOUNT_RATE,
         );
         alert(textUtils.getBungaeSaleMessage(bungaeSaleItem.name));
         updateSelectOptions(items);
       }
-    }, CONSTNANTS.BUNGAE_SALE_INTERVAL);
-  }, Math.random() * CONSTNANTS.BUNGAE_SALE_DELAY);
+    }, CONSTANTS.BUNGAE_SALE_INTERVAL);
+  }, Math.random() * CONSTANTS.BUNGAE_SALE_DELAY);
 
   // 마지막으로 담은 상품 O, 다른 상품의 재고가 남아있으면 구매 제안 timeout alert
   setTimeout(function () {
@@ -76,13 +76,13 @@ function main() {
 
           // select에 제안된 상품 가격 5% 할인 적용
           suggestItem.price = Math.round(
-            suggestItem.price * CONSTNANTS.SUGGEST_ITEM_DISCOUNT_RATE,
+            suggestItem.price * CONSTANTS.SUGGEST_ITEM_DISCOUNT_RATE,
           );
           updateSelectOptions(items);
         }
       }
-    }, CONSTNANTS.SUGGEST_SALE_INTERVAL);
-  }, Math.random() * CONSTNANTS.SUGGEST_SALE_DELAY);
+    }, CONSTANTS.SUGGEST_SALE_INTERVAL);
+  }, Math.random() * CONSTANTS.SUGGEST_SALE_DELAY);
 } // end of main()
 
 // 장바구니 계산
@@ -115,7 +115,7 @@ function calcCart() {
 
       // 10개 이상 구매시 할인율 적용
       if (
-        quantity >= CONSTNANTS.QUANTITY_DISCOUNT_LIMIT &&
+        quantity >= CONSTANTS.QUANTITY_DISCOUNT_LIMIT &&
         calcUtils.getIdDiscountRate(curItem.id)
       ) {
         itemDiscountRate = calcUtils.getIdDiscountRate(curItem.id);
@@ -180,7 +180,7 @@ $addButton.addEventListener('click', function () {
 
         selectedItem.quantity--;
       } else {
-        alert(CONSTNANTS.OUT_OF_STOCK_MESSAGE);
+        alert(CONSTANTS.OUT_OF_STOCK_MESSAGE);
       }
     } else {
       // 장바구니에 없는 상품인 경우
@@ -256,7 +256,7 @@ $cart.addEventListener('click', function (event) {
         $item.remove();
         item.quantity -= quantityDiff;
       } else {
-        alert(CONSTNANTS.OUT_OF_STOCK_MESSAGE);
+        alert(CONSTANTS.OUT_OF_STOCK_MESSAGE);
       }
     } else if (target.classList.contains('remove-item')) {
       const removeQuantity = parseInt(

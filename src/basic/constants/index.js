@@ -24,7 +24,7 @@ const SUGGEST_SALE_DELAY = 20000; // 추천 상품 알림 초기 지연 시간 (
 
 const OUT_OF_STOCK_MESSAGE = '재고가 부족합니다.';
 
-export const CONSTNANTS = {
+export const CONSTANTS = {
   BUNGAE_SALE_DISCOUNT_RATE,
   SUGGEST_ITEM_DISCOUNT_RATE,
   BULK_DISCOUNT_RATE,

@@ -35,6 +35,9 @@ export const calculateCart = () => {
     },
   );
 
+  console.log('calculateCart');
+  console.log(itemCount, subTotal, totalAmount);
+
   CartStore.set('itemCount', itemCount);
   CartStore.set('subTotal', subTotal);
   CartStore.set('totalAmount', totalAmount);

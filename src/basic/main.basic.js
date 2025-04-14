@@ -1,9 +1,9 @@
 import { initMain } from './render';
-import { 랜덤세일추가 } from './logic';
+import { RandomSale } from './logic';
 
 const main = () => {
   initMain();
-  랜덤세일추가();
+  RandomSale();
 };
 
 main();

@@ -19,7 +19,7 @@ export const getDiscountRate = (subTotal) => {
   }
 
   if (new Date().getDay() === 2) {
-    CartStore.set('totalAmount', CartStore.get('totalAmount') * 1 - 0.1);
+    CartStore.set('totalAmount', CartStore.get('totalAmount') * 0.9);
     discountRate = Math.max(discountRate, 0.1);
   }
 

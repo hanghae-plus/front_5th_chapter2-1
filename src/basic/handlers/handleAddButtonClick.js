@@ -12,27 +12,28 @@ export const handleAddButtonClick = () => {
     (product) => product.id === selectedProductId,
   );
 
-  if (itemToAdd && itemToAdd.quantity > 0) {
-    const item = document.getElementById(itemToAdd.id);
+  if (!itemToAdd || itemToAdd.quantity <= 0) return;
 
-    if (item) {
-      const newQuantity =
-        parseInt(item.querySelector('span').dataset.quantity) + 1;
+  const item = document.getElementById(itemToAdd.id);
 
-      if (newQuantity <= itemToAdd.quantity) {
-        item.querySelector('span').dataset.quantity = newQuantity;
-        item.querySelector('span').textContent =
-          `${itemToAdd.name} - ${itemToAdd.value}원 x ${newQuantity}`;
-        itemToAdd.quantity--;
-      } else {
-        alert('재고가 부족합니다.');
-      }
+  if (item) {
+    const newQuantity =
+      parseInt(item.querySelector('span').dataset.quantity) + 1;
+
+    if (newQuantity <= itemToAdd.quantity) {
+      item.querySelector('span').dataset.quantity = newQuantity;
+      item.querySelector('span').textContent =
+        `${itemToAdd.name} - ${itemToAdd.value}원 x ${newQuantity}`;
+      itemToAdd.quantity--;
     } else {
-      const newItem = document.createElement('div');
+      alert('재고가 부족합니다.');
+    }
+  } else {
+    const newItem = document.createElement('div');
 
-      newItem.id = itemToAdd.id;
-      newItem.className = 'flex justify-between items-center mb-2';
-      newItem.innerHTML = `
+    newItem.id = itemToAdd.id;
+    newItem.className = 'flex justify-between items-center mb-2';
+    newItem.innerHTML = `
         <span data-value="${itemToAdd.value}" data-quantity="1">${itemToAdd.name} - ${itemToAdd.value}원 x 1</span>
         <div>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="-1">-</button>
@@ -40,12 +41,11 @@ export const handleAddButtonClick = () => {
         <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${itemToAdd.id}">삭제</button>
         </div>
       `;
-      cartItemsContainer.appendChild(newItem);
-      itemToAdd.quantity--;
-    }
-
-    calculateCart();
-
-    SelectedProductStore.set('selectedProduct', selectedProductId);
+    cartItemsContainer.appendChild(newItem);
+    itemToAdd.quantity--;
   }
+
+  calculateCart();
+
+  SelectedProductStore.set('selectedProduct', selectedProductId);
 };

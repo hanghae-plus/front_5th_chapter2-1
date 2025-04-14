@@ -1,6 +1,6 @@
-import { renderNewItem } from "../components/render";
+import { renderNewCartItem } from "../components/render";
+import { PRODUCT_LIST } from "../lib/configs/products";
 import { calculateCartTotal } from "../lib/utils/cartUtils";
-import { productService } from "../services/ProductService";
 
 const actions = {
   ADD_ITEM: "ADD_ITEM",
@@ -10,9 +10,10 @@ const actions = {
 export function cartReducer(state, action) {
   switch (action.type) {
     case actions.ADD_ITEM: {
-      let itemToAdd = productService.productList.find((p) => {
+      let itemToAdd = PRODUCT_LIST.find((p) => {
         return p.id === action.payload.value;
       });
+
       if (itemToAdd && itemToAdd.q > 0) {
         let item = document.getElementById(itemToAdd.id);
         if (item) {
@@ -26,7 +27,7 @@ export function cartReducer(state, action) {
             return { ...state, error: "재고가 부족합니다." };
           }
         } else {
-          renderNewItem(itemToAdd);
+          renderNewCartItem(itemToAdd);
         }
       }
 
@@ -44,7 +45,7 @@ export function cartReducer(state, action) {
       let selectedId = selectedItem.dataset.productId;
       let itemElem = document.getElementById(selectedId);
 
-      let prod = productService.productList.find(function (p) {
+      let prod = PRODUCT_LIST.find(function (p) {
         return p.id === selectedId;
       });
       if (selectedItem.classList.contains("quantity-change")) {

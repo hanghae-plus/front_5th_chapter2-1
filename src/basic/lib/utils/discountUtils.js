@@ -1,39 +1,36 @@
+import { DISCOUNT_RATES } from "../configs/discounts";
+
 export function isTuesday() {
   return new Date().getDay() === 2;
 }
 
-function createDiscountSummary(discountedPrice, discountRate) {
+const createDiscountSummary = (discountedPrice, discountRate) => {
   return {
     discountedPrice,
     discountRate,
   };
-}
+};
 
 export function calculateDiscountForTuesday(totalPrice) {
-  const discountRate = 0.1;
-  const discountedPrice = totalPrice * (1 - discountRate);
+  const discountedPrice = totalPrice * (1 - DISCOUNT_RATES.TUESDAY);
 
-  return createDiscountSummary(discountedPrice, discountRate);
+  return createDiscountSummary(discountedPrice, DISCOUNT_RATES.TUESDAY);
 }
 
-export function calculateRegularDiscount(totalAmt, subTotal) {
-  const discountRate = (subTotal - totalAmt) / subTotal;
+export function calculateRegularDiscount(totalPrice, originalTotalPrice) {
+  const discountRate = (originalTotalPrice - totalPrice) / originalTotalPrice;
 
-  return createDiscountSummary(totalAmt, discountRate);
+  return createDiscountSummary(totalPrice, discountRate);
 }
 
-export function calculateBulkDiscount(discountedTotal, originalSubtotal) {
-  let discRate = 0;
+export function calculateBulkDiscount(totalPrice, originalTotalPrice) {
+  const bulkDiscountAmount = totalPrice * DISCOUNT_RATES.BULK;
+  const individualDiscountAmount = originalTotalPrice - totalPrice;
 
-  const bulkDiscountAmount = discountedTotal * 0.25;
-  const individualDiscountAmount = originalSubtotal - discountedTotal;
+  totalPrice =
+    bulkDiscountAmount > individualDiscountAmount
+      ? originalTotalPrice * (1 - DISCOUNT_RATES.BULK)
+      : originalTotalPrice - individualDiscountAmount;
 
-  if (bulkDiscountAmount > individualDiscountAmount) {
-    discountedTotal = originalSubtotal * (1 - 0.25);
-    discRate = 0.25;
-  } else {
-    discRate = (originalSubtotal - discountedTotal) / originalSubtotal;
-  }
-
-  return createDiscountSummary(discountedTotal, discRate);
+  return createDiscountSummary(totalPrice, DISCOUNT_RATES.BULK);
 }

@@ -7,7 +7,6 @@ const initialCartState = {
   totalPrice: 0,
   totalQuantity: 0,
   originalTotalPrice: 0,
-  bonusPoints: 0,
 };
 
 export const cartStore = createStore(cartReducer, initialCartState);

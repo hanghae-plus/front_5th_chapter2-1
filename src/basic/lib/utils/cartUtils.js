@@ -1,13 +1,11 @@
-import { discountService } from "../../services/DiscountService";
-import { productService } from "../../services/ProductService";
+import { PRODUCT_LIST } from "../configs/products";
+import { bonusPointService } from "../services/BonusPointService";
+import { discountService } from "../services/DiscountService";
 
 export function calculateCartTotal() {
-  const prodList = productService.productList;
-
   let totalQuantity = 0;
   let originalTotalPrice = 0;
   let totalPrice = 0;
-  let bonusPoints = 0;
 
   const cartDisp = document.getElementById("cart-items");
   const cartItems = cartDisp.children;
@@ -17,15 +15,14 @@ export function calculateCartTotal() {
       totalQuantity,
       originalTotalPrice,
       totalPrice,
-      bonusPoints,
     };
   }
 
   for (let i = 0; i < cartItems.length; i++) {
     let curItem;
-    for (let j = 0; j < prodList.length; j++) {
-      if (prodList[j].id === cartItems[i].id) {
-        curItem = prodList[j];
+    for (let j = 0; j < PRODUCT_LIST.length; j++) {
+      if (PRODUCT_LIST[j].id === cartItems[i].id) {
+        curItem = PRODUCT_LIST[j];
         break;
       }
     }
@@ -52,12 +49,11 @@ export function calculateCartTotal() {
     originalTotalPrice,
   );
 
-  bonusPoints = Math.floor(totalPrice / 1000);
+  bonusPointService.applyBonusPoints(totalPrice);
 
   return {
     totalQuantity,
     originalTotalPrice,
     totalPrice,
-    bonusPoints,
   };
 }

@@ -1,10 +1,13 @@
 import {
   renderBonusPts,
+  renderDiscountRate,
   renderProductList,
   renderStockInfo,
   renderTotalPrice,
 } from "../components/render";
-import { productService } from "../services/ProductService";
+import { PRODUCT_LIST } from "../lib/configs/products";
+import { bonusPointService } from "../lib/services/BonusPointService";
+import { discountService } from "../lib/services/DiscountService";
 import { cartStore } from "../stores/cartStore";
 import { Template } from "./MainPage.template";
 
@@ -19,17 +22,16 @@ export function MainPage() {
 
     renderProductList();
     renderTotalPrice(state.totalPrice);
-    renderBonusPts(state.bonusPoints);
+    renderDiscountRate(discountService.discountRate);
+    renderBonusPts(bonusPointService.bonusPoints);
     renderStockInfo();
   });
 
   renderProductList();
-  renderTotalPrice(cartStore.getState().totalPrice);
-  renderBonusPts(cartStore.getState().bonusPoints);
 
   setTimeout(function () {
     setInterval(function () {
-      const prodList = productService.productList;
+      const prodList = PRODUCT_LIST;
       let luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
       if (Math.random() < 0.3 && luckyItem.q > 0) {
         luckyItem.val = Math.round(luckyItem.val * 0.8);
@@ -42,7 +44,7 @@ export function MainPage() {
   setTimeout(function () {
     setInterval(function () {
       if (cartStore.getState().lastSelected) {
-        const prodList = productService.productList;
+        const prodList = PRODUCT_LIST;
         let suggest = prodList.find(function (item) {
           return item.id !== cartStore.getState().lastSelected && item.q > 0;
         });

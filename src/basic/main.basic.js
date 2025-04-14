@@ -1,4 +1,5 @@
 import { updateSelectOptions, calculateCart } from "./libs";
+import { cartDisplayClickEvent } from "./events";
 
 /** @typedef {import("./types").Product} Product */
 
@@ -131,32 +132,5 @@ addBtn.addEventListener("click", function () {
     lastSel = selItem;
   }
 });
-$cartDisplay.addEventListener("click", function (event) {
-  var tgt = event.target;
-  if (tgt.classList.contains("quantity-change") || tgt.classList.contains("remove-item")) {
-    var prodId = tgt.dataset.productId;
-    var itemElem = document.getElementById(prodId);
-    var prod = products.find(function (p) {
-      return p.id === prodId;
-    });
-    if (tgt.classList.contains("quantity-change")) {
-      var qtyChange = parseInt(tgt.dataset.change);
-      var newQty = parseInt(itemElem.querySelector("span").textContent.split("x ")[1]) + qtyChange;
-      if (newQty > 0 && newQty <= prod.stock + parseInt(itemElem.querySelector("span").textContent.split("x ")[1])) {
-        itemElem.querySelector("span").textContent =
-          itemElem.querySelector("span").textContent.split("x ")[0] + "x " + newQty;
-        prod.stock -= qtyChange;
-      } else if (newQty <= 0) {
-        itemElem.remove();
-        prod.stock -= qtyChange;
-      } else {
-        alert("재고가 부족합니다.");
-      }
-    } else if (tgt.classList.contains("remove-item")) {
-      var remQty = parseInt(itemElem.querySelector("span").textContent.split("x ")[1]);
-      prod.stock += remQty;
-      itemElem.remove();
-    }
-    calculateCart($cartDisplay, $sum, stockInfo, products);
-  }
-});
+
+cartDisplayClickEvent($cartDisplay, $sum, stockInfo, products);

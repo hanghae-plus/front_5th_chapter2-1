@@ -187,16 +187,17 @@ const main = () => {
 };
 
 const updateProductSelectOptions = () => {
+  const newSelectOptions = productList.reduce((newOptions, item) => {
+    const option = document.createElement('option');
+    option.value = item.id;
+    option.textContent = `${item.name} - ${item.value}원`;
+    if (item.quantity === 0) option.disabled = true;
+    newOptions.appendChild(option);
+    return newOptions;
+  }, document.createDocumentFragment());
+
   productSelect.innerHTML = '';
-  productList.forEach((item) => {
-    const selectOption = document.createElement('option');
-
-    selectOption.value = item.id;
-    selectOption.textContent = item.name + ' - ' + item.value + '원';
-    if (item.quantity === 0) selectOption.disabled = true;
-
-    productSelect.appendChild(selectOption);
-  });
+  productSelect.appendChild(newSelectOptions);
 };
 
 const calcCart = () => {

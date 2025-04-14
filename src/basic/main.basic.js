@@ -3,6 +3,7 @@ import { textUtils } from './utils/textUtils';
 import { updateStockInfoText } from './components/stock/updateStockInfoText';
 import { getPoints } from './components/points/getPoints';
 import { renderPoints } from './components/points/renderPoints';
+import { updateSelectOptions } from './components/itemSelect/updateSelectOptions';
 
 let items,
   $itemSelect,
@@ -69,7 +70,7 @@ function main() {
 
   appendDOM();
 
-  updateSelectOptions();
+  updateSelectOptions(items);
   calcCart();
 
   // 번개세일 timeout alert
@@ -82,7 +83,7 @@ function main() {
           bungaeSaleItem.price * CONSTNANTS.BUNGAE_SALE_DISCOUNT_RATE,
         );
         alert(textUtils.getBungaeSaleMessage(bungaeSaleItem.name));
-        updateSelectOptions();
+        updateSelectOptions(items);
       }
     }, CONSTNANTS.BUNGAE_SALE_INTERVAL);
   }, Math.random() * CONSTNANTS.BUNGAE_SALE_DELAY);
@@ -102,28 +103,12 @@ function main() {
           suggestItem.price = Math.round(
             suggestItem.price * CONSTNANTS.SUGGEST_ITEM_DISCOUNT_RATE,
           );
-          updateSelectOptions();
+          updateSelectOptions(items);
         }
       }
     }, CONSTNANTS.SUGGEST_SALE_INTERVAL);
   }, Math.random() * CONSTNANTS.SUGGEST_SALE_DELAY);
 } // end of main()
-
-// 상품 목록을 업데이트
-function updateSelectOptions() {
-  $itemSelect.innerHTML = '';
-
-  items.forEach(function (item) {
-    const $option = document.createElement('option');
-    $option.value = item.id;
-    $option.textContent = textUtils.getSelectOptionText(item.name, item.price);
-
-    if (item.quantity === 0) {
-      $option.disabled = true;
-    }
-    $itemSelect.appendChild($option);
-  });
-}
 
 // 장바구니 계산
 function calcCart() {

@@ -1,3 +1,5 @@
+import { CartStore } from './store/CartStore';
+
 const productList = [
   { id: 'p1', name: '상품1', value: 10000, quantity: 50 },
   { id: 'p2', name: '상품2', value: 20000, quantity: 30 },
@@ -124,10 +126,6 @@ const handleAddButtonClick = (
   }
 };
 
-let bonusPoints = 0;
-let totalAmount = 0;
-let itemCount = 0;
-
 const main = () => {
   const productSelect = document.createElement('select');
   const addButton = document.createElement('button');
@@ -241,6 +239,7 @@ const updateProductSelectOptions = (productSelect) => {
 };
 
 const getDiscountRate = (subTotal) => {
+  const { itemCount, totalAmount } = CartStore.get();
   let discountRate = 0;
 
   if (itemCount >= 30) {
@@ -248,7 +247,7 @@ const getDiscountRate = (subTotal) => {
     const itemDiscount = subTotal - totalAmount;
 
     if (bulkDiscount > itemDiscount) {
-      totalAmount = subTotal * (1 - 0.25);
+      CartStore.set('totalAmount', subTotal * (1 - 0.25));
       discountRate = 0.25;
     } else {
       discountRate = (subTotal - totalAmount) / subTotal;
@@ -258,7 +257,7 @@ const getDiscountRate = (subTotal) => {
   }
 
   if (new Date().getDay() === 2) {
-    totalAmount *= 1 - 0.1;
+    CartStore.set('totalAmount', CartStore.get('totalAmount') * 1 - 0.1);
     discountRate = Math.max(discountRate, 0.1);
   }
 
@@ -270,9 +269,9 @@ const calculateCart = (
   totalAmountContainer,
   stockStatusContainer,
 ) => {
-  totalAmount = 0;
-  itemCount = 0;
-  let subTotal = 0;
+  let newItemCount = 0;
+  let newTotalAmount = 0;
+  let newSubTotal = 0;
 
   const cartItems = [...cartItemsContainer.children];
 
@@ -287,14 +286,19 @@ const calculateCart = (
     const itemTotal = currentItem.value * quantity;
     const discount = quantity >= 10 ? (discountTable[currentItem.id] ?? 0) : 0;
 
-    itemCount += quantity;
-    subTotal += itemTotal;
-    totalAmount += itemTotal * (1 - discount);
+    newItemCount += quantity;
+    newSubTotal += itemTotal;
+    newTotalAmount += itemTotal * (1 - discount);
   });
 
-  totalAmountContainer.textContent = '총액: ' + Math.round(totalAmount) + '원';
+  CartStore.set('itemCount', newItemCount);
+  CartStore.set('totalAmount', newTotalAmount);
+  CartStore.set('subTotal', newSubTotal);
 
-  const discountRate = getDiscountRate(subTotal);
+  totalAmountContainer.textContent =
+    '총액: ' + Math.round(CartStore.get('totalAmount')) + '원';
+
+  const discountRate = getDiscountRate(CartStore.get('subTotal'));
 
   if (discountRate > 0) {
     const span = document.createElement('span');
@@ -308,7 +312,7 @@ const calculateCart = (
 };
 
 const renderBonusPoints = (totalAmountContainer) => {
-  const bonusPoints = Math.floor(totalAmount / 1000);
+  const bonusPoints = Math.floor(CartStore.get('totalAmount') / 1000);
 
   const bonusPointsTag =
     document.getElementById('loyalty-points')

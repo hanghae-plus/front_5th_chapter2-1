@@ -14,10 +14,12 @@ const prodList = [
 ];
 
 function main() {
-  var root = document.getElementById('app');
-  let cont = document.createElement('div');
-  var wrap = document.createElement('div');
-  let hTxt = document.createElement('h1');
+  const root = document.getElementById('app');
+  
+  const cont = document.createElement('div');
+  const wrap = document.createElement('div');
+  const hTxt = document.createElement('h1');
+
   cartDisp = document.createElement('div');
   sum = document.createElement('div');
   sel = document.createElement('select');
@@ -50,7 +52,7 @@ function main() {
   calcCart();
   setTimeout(function () {
     setInterval(function () {
-      var luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
+      const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
@@ -61,14 +63,14 @@ function main() {
   setTimeout(function () {
     setInterval(function () {
       if (lastSel) {
-        var suggest = prodList.find(function (item) {
+        const suggestionItem = prodList.find(function (item) {
           return item.id !== lastSel && item.quantity > 0;
         });
-        if (suggest) {
+        if (suggestionItem) {
           alert(
-            suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!',
+            suggestionItem.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!',
           );
-          suggest.price = Math.round(suggest.price * 0.95);
+          suggestionItem.price = Math.round(suggestionItem.price * 0.95);
           updateSelOpts();
         }
       }
@@ -165,7 +167,9 @@ function updateStockInfo() {
       infoMsg +=
         item.name +
         ': ' +
-        (item.quantity > 0 ? '재고 부족 (' + item.quantity + '개 남음)' : '품절') +
+        (item.quantity > 0
+          ? '재고 부족 (' + item.quantity + '개 남음)'
+          : '품절') +
         '\n';
     }
   });

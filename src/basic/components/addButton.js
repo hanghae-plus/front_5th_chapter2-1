@@ -1,6 +1,5 @@
-import calculatePrice from '../calculatePrice.js';
 import { PRODUCTS } from '../productList.constant.js';
-import cartItem from './cartItem.js';
+import product from './product.js';
 import { setLastSelectState } from '../utils/lastSelectState.js';
 
 export default function addButton() {
@@ -22,6 +21,7 @@ function handleAddItem() {
     if (item) {
       const newQty =
         parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
+
       if (newQty <= newItem.quantity) {
         item.querySelector('span').textContent =
           `${newItem.name} - ${newItem.price}원 x ${newQty}`;
@@ -31,10 +31,10 @@ function handleAddItem() {
       }
     } else {
       const cartItems = document.getElementById('cart-items');
-      cartItems.appendChild(cartItem(newItem));
+      cartItems.appendChild(product(newItem));
       newItem.quantity--;
     }
-    calculatePrice();
+    document.dispatchEvent(new CustomEvent('cartUpdated'));
     setLastSelectState(selectedItem);
   }
 }

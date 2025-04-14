@@ -1,5 +1,6 @@
 import { CONSTNANTS } from './constants';
 import { textUtils } from './utils/textUtils';
+import { updateStockInfoText } from './components/stock/updateStockInfoText';
 
 let items,
   $itemSelect,
@@ -202,7 +203,8 @@ function calcCart() {
     $cartTotalDiv.appendChild($discountSpan);
   }
 
-  updateStock();
+  const updateText = updateStockInfoText(items);
+  $stockStatusDiv.textContent = updateText;
   calcAndRenderPoints();
 }
 
@@ -221,18 +223,6 @@ const calcAndRenderPoints = () => {
 
   $pointSpan.textContent = textUtils.getPointText(points);
 };
-
-// 재고 정보 업데이트
-function updateStock() {
-  let infoMsg = '';
-
-  items.forEach(function (item) {
-    if (item.quantity < CONSTNANTS.STOCK_WARNING_LIMIT) {
-      infoMsg += textUtils.getStockWarningText(item.name, item.quantity);
-    }
-  });
-  $stockStatusDiv.textContent = infoMsg;
-}
 
 main();
 

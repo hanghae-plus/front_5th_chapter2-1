@@ -4,6 +4,7 @@ import { calcCartItems } from '../cart/calcCartItems';
 import { getPoints } from '../points/getPoints';
 import { renderPoints } from '../points/renderPoints';
 import { updateStockInfoText } from '../stockStatus/updateStockInfoText';
+import { renderDiscountedAmount } from './renderDiscountedAmount';
 
 export function renderCalcCart(items) {
   const { totalAmount, itemCount, originalTotalAmount } = calcCartItems(items);
@@ -16,13 +17,8 @@ export function renderCalcCart(items) {
   $cartTotal.textContent = textUtils.getTotalAmountText(roundedAmount);
 
   if (finalDiscountRate > 0) {
-    const $discountSpan = document.createElement('span');
-
-    $discountSpan.className = 'text-green-500 ml-2';
-    const discountedRate = (finalDiscountRate * 100).toFixed(1);
-    $discountSpan.textContent = textUtils.getDiscountText(discountedRate);
-    const $cartTotal = document.getElementById('cart-total');
-    $cartTotal.appendChild($discountSpan);
+    const discountedAmount = renderDiscountedAmount(finalDiscountRate);
+    $cartTotal.appendChild(discountedAmount);
   }
 
   const updateText = updateStockInfoText(items);

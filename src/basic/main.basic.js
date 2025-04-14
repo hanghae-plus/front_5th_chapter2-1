@@ -242,6 +242,31 @@ const makeNewItemHTML = (itemToAdd) => {
   );
 };
 
+// 장바구니에 이미 있는 상품 추가
+const addExistingItem = (item, itemToAdd) => {
+  var itemEa =
+    parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
+
+  if (itemEa <= itemToAdd.stock) {
+    item.querySelector("span").textContent =
+      itemToAdd.name + " - " + itemToAdd.price + "원 x " + itemEa;
+    itemToAdd.stock--;
+  } else {
+    alert("재고가 부족합니다.");
+  }
+};
+
+// 장바구니에 새 상품 추가
+const addNewItem = (itemToAdd) => {
+  var newItem = document.createElement("div");
+  newItem.id = itemToAdd.id;
+  newItem.className = "flex justify-between items-center mb-2";
+  newItem.innerHTML = makeNewItemHTML(itemToAdd);
+
+  cartDiv.appendChild(newItem);
+  itemToAdd.stock--;
+};
+
 // 페이지 로드 시 초기화
 main();
 
@@ -251,32 +276,13 @@ addProdBtn.addEventListener("click", function () {
   var itemToAdd = products.find(function (item) {
     return item.id === selectedItem;
   });
-  if (itemToAdd && itemToAdd.stock > 0) {
-    // 재고가 있는 경우
+  if (itemToAdd?.stock > 0) {
     var item = document.getElementById(itemToAdd.id); // 장바구니에 있는지 확인
 
     if (item) {
-      // 이미 장바구니에 있는 경우
-      var itemEa =
-        parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
-
-      if (itemEa <= itemToAdd.stock) {
-        // 재고가 충분한 경우
-        item.querySelector("span").textContent =
-          itemToAdd.name + " - " + itemToAdd.price + "원 x " + itemEa;
-        itemToAdd.stock--;
-      } else {
-        alert("재고가 부족합니다.");
-      }
+      addExistingItem(item, itemToAdd);
     } else {
-      // 장바구니에 없는 경우
-      var newItem = document.createElement("div");
-      newItem.id = itemToAdd.id;
-      newItem.className = "flex justify-between items-center mb-2";
-      newItem.innerHTML = makeNewItemHTML(itemToAdd);
-
-      cartDiv.appendChild(newItem);
-      itemToAdd.stock--;
+      addNewItem(itemToAdd);
     }
     calcCart();
     lastSelectedProduct = selectedItem;

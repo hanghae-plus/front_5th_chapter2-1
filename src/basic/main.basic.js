@@ -1,4 +1,4 @@
-var sel, addBtn, cartDisp, sum, stockInfo;
+var addBtn, cartDisp, sum, stockInfo;
 var lastSel,
   bonusPts = 0,
   totalAmt = 0,
@@ -19,12 +19,12 @@ function main() {
   let hTxt = document.createElement('h1');
   cartDisp = document.createElement('div');
   sum = document.createElement('div');
-  sel = document.createElement('select');
+  const productSelect = document.createElement('select');
   addBtn = document.createElement('button');
   stockInfo = document.createElement('div');
   cartDisp.id = 'cart-items';
   sum.id = 'cart-total';
-  sel.id = 'product-select';
+  productSelect.id = 'product-select';
   addBtn.id = 'add-to-cart';
   stockInfo.id = 'stock-status';
   cont.className = 'bg-gray-100 p-8';
@@ -32,7 +32,7 @@ function main() {
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
   hTxt.className = 'text-2xl font-bold mb-4';
   sum.className = 'text-xl font-bold my-4';
-  sel.className = 'border rounded p-2 mr-2';
+  productSelect.className = 'border rounded p-2 mr-2';
   addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   stockInfo.className = 'text-sm text-gray-500 mt-2';
   hTxt.textContent = '장바구니';
@@ -41,7 +41,7 @@ function main() {
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
   wrap.appendChild(sum);
-  wrap.appendChild(sel);
+  wrap.appendChild(productSelect);
   wrap.appendChild(addBtn);
   wrap.appendChild(stockInfo);
   cont.appendChild(wrap);
@@ -75,13 +75,14 @@ function main() {
   }, Math.random() * 20000);
 }
 function updateSelOpts() {
-  sel.innerHTML = '';
+  const productSelect = document.getElementById('product-select');
+  productSelect.innerHTML = '';
   prodList.forEach(function (item) {
     var opt = document.createElement('option');
     opt.value = item.id;
     opt.textContent = item.name + ' - ' + item.price + '원';
     if (item.quantity === 0) opt.disabled = true;
-    sel.appendChild(opt);
+    productSelect.appendChild(opt);
   });
 }
 function calcCart() {
@@ -168,7 +169,8 @@ function updateStockInfo() {
 }
 main();
 addBtn.addEventListener('click', function () {
-  var selItem = sel.value;
+  const productSelect = document.getElementById('product-select');
+  var selItem = productSelect.value;
   var itemToAdd = prodList.find(function (p) {
     return p.id === selItem;
   });

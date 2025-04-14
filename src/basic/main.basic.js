@@ -74,6 +74,49 @@ let lastSelectedItem,
   totalAmount = 0,
   itemCount = 0;
 
+function appendDOM() {
+  const $cartDiv = document.createElement('div');
+  $cartDiv.className =
+    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
+
+  const $cartTitle = document.createElement('h1');
+  $cartTitle.className = 'text-2xl font-bold mb-4';
+  $cartTitle.textContent = '장바구니';
+  $cartDiv.appendChild($cartTitle);
+
+  $cartItemsDiv = document.createElement('div');
+  $cartItemsDiv.id = 'cart-items';
+  $cartDiv.appendChild($cartItemsDiv);
+
+  $cartTotalDiv = document.createElement('div');
+  $cartTotalDiv.id = 'cart-total';
+  $cartTotalDiv.className = 'text-xl font-bold my-4';
+  $cartDiv.appendChild($cartTotalDiv);
+
+  $itemSelect = document.createElement('select');
+  $itemSelect.id = 'product-select';
+  $itemSelect.className = 'border rounded p-2 mr-2';
+  $cartDiv.appendChild($itemSelect);
+
+  $addButton = document.createElement('button');
+  $addButton.id = 'add-to-cart';
+  $addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
+  $addButton.textContent = '추가';
+  $cartDiv.appendChild($addButton);
+
+  $stockStatusDiv = document.createElement('div');
+  $stockStatusDiv.id = 'stock-status';
+  $stockStatusDiv.className = 'text-sm text-gray-500 mt-2';
+  $cartDiv.appendChild($stockStatusDiv);
+
+  const $bgDiv = document.createElement('div');
+  $bgDiv.className = 'bg-gray-100 p-8';
+  $bgDiv.appendChild($cartDiv);
+
+  const $root = document.getElementById('app');
+  $root.appendChild($bgDiv);
+}
+
 function main() {
   items = [
     { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
@@ -83,45 +126,9 @@ function main() {
     { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
   ];
 
-  const $root = document.getElementById('app');
-  const $bgDiv = document.createElement('div');
-  const $cartDiv = document.createElement('div');
-  const $cartTitle = document.createElement('h1');
-
-  $cartItemsDiv = document.createElement('div');
-  $cartTotalDiv = document.createElement('div');
-  $itemSelect = document.createElement('select');
-  $addButton = document.createElement('button');
-  $stockStatusDiv = document.createElement('div');
-
-  $cartItemsDiv.id = 'cart-items';
-  $cartTotalDiv.id = 'cart-total';
-  $itemSelect.id = 'product-select';
-  $addButton.id = 'add-to-cart';
-  $stockStatusDiv.id = 'stock-status';
-
-  $bgDiv.className = 'bg-gray-100 p-8';
-  $cartDiv.className =
-    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-  $cartTitle.className = 'text-2xl font-bold mb-4';
-  $cartTotalDiv.className = 'text-xl font-bold my-4';
-  $itemSelect.className = 'border rounded p-2 mr-2';
-  $addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  $stockStatusDiv.className = 'text-sm text-gray-500 mt-2';
-  $cartTitle.textContent = '장바구니';
-  $addButton.textContent = '추가';
+  appendDOM();
 
   updateSelectOptions();
-
-  $cartDiv.appendChild($cartTitle);
-  $cartDiv.appendChild($cartItemsDiv);
-  $cartDiv.appendChild($cartTotalDiv);
-  $cartDiv.appendChild($itemSelect);
-  $cartDiv.appendChild($addButton);
-  $cartDiv.appendChild($stockStatusDiv);
-  $bgDiv.appendChild($cartDiv);
-  $root.appendChild($bgDiv);
-
   calcCart();
 
   // 번개세일 timeout alert

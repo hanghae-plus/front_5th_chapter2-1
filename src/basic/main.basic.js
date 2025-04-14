@@ -1,51 +1,63 @@
-var prodList, sel, addBtn, cartDisp, sum, stockInfo;
-var lastSel,
-  bonusPts = 0,
-  totalAmt = 0,
-  itemCnt = 0;
+const prodList = [
+  { id: 'p1', name: '상품1', val: 10000, q: 50 },
+  { id: 'p2', name: '상품2', val: 20000, q: 30 },
+  { id: 'p3', name: '상품3', val: 30000, q: 20 },
+  { id: 'p4', name: '상품4', val: 15000, q: 0 },
+  { id: 'p5', name: '상품5', val: 25000, q: 10 },
+];
 
-function main() {
-  prodList = [
-    { id: 'p1', name: '상품1', val: 10000, q: 50 },
-    { id: 'p2', name: '상품2', val: 20000, q: 30 },
-    { id: 'p3', name: '상품3', val: 30000, q: 20 },
-    { id: 'p4', name: '상품4', val: 15000, q: 0 },
-    { id: 'p5', name: '상품5', val: 25000, q: 10 },
-  ];
-  var root = document.getElementById('app');
-  let cont = document.createElement('div');
-  var wrap = document.createElement('div');
-  let hTxt = document.createElement('h1');
-  cartDisp = document.createElement('div');
-  sum = document.createElement('div');
-  sel = document.createElement('select');
-  addBtn = document.createElement('button');
-  stockInfo = document.createElement('div');
-  cartDisp.id = 'cart-items';
-  sum.id = 'cart-total';
+function render() {
+  const sel = document.createElement('select');
   sel.id = 'product-select';
+  sel.className = 'border rounded p-2 mr-2';
+
+  const addBtn = document.createElement('button');
   addBtn.id = 'add-to-cart';
+  addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
+  addBtn.textContent = '추가';
+  addBtn.addEventListener('click', handleAddItem);
+
+  const stockInfo = document.createElement('div');
   stockInfo.id = 'stock-status';
-  cont.className = 'bg-gray-100 p-8';
+  stockInfo.className = 'text-sm text-gray-500 mt-2';
+
+  const hTxt = document.createElement('h1');
+  hTxt.className = 'text-2xl font-bold mb-4';
+  hTxt.textContent = '장바구니';
+
+  const wrap = document.createElement('div');
   wrap.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-  hTxt.className = 'text-2xl font-bold mb-4';
-  sum.className = 'text-xl font-bold my-4';
-  sel.className = 'border rounded p-2 mr-2';
-  addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  stockInfo.className = 'text-sm text-gray-500 mt-2';
-  hTxt.textContent = '장바구니';
-  addBtn.textContent = '추가';
-  updateSelOpts();
   wrap.appendChild(hTxt);
-  wrap.appendChild(cartDisp);
-  wrap.appendChild(sum);
   wrap.appendChild(sel);
   wrap.appendChild(addBtn);
   wrap.appendChild(stockInfo);
+
+  const sum = document.createElement('div');
+  sum.id = 'cart-total';
+  sum.className = 'text-xl font-bold my-4';
+  wrap.appendChild(sum);
+
+  const cartDisp = document.createElement('div');
+  cartDisp.id = 'cart-items';
+  cartDisp.addEventListener('click', handleChangeQuantity);
+  wrap.appendChild(cartDisp);
+
+  const cont = document.createElement('div');
+  cont.className = 'bg-gray-100 p-8';
   cont.appendChild(wrap);
+
+  const root = document.getElementById('app');
   root.appendChild(cont);
+}
+
+function main() {
+  render();
+
+  updateSelOpts();
+
   calcCart();
+
   setTimeout(function () {
     setInterval(function () {
       var luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
@@ -58,6 +70,7 @@ function main() {
   }, Math.random() * 10000);
   setTimeout(function () {
     setInterval(function () {
+      let lastSel;
       if (lastSel) {
         var suggest = prodList.find(function (item) {
           return item.id !== lastSel && item.q > 0;
@@ -75,6 +88,7 @@ function main() {
 }
 
 function updateSelOpts() {
+  const sel = document.getElementById('product-select');
   sel.innerHTML = '';
   prodList.forEach(function (item) {
     var opt = document.createElement('option');
@@ -86,24 +100,26 @@ function updateSelOpts() {
 }
 
 function calcCart() {
-  totalAmt = 0;
-  itemCnt = 0;
-  var cartItems = cartDisp.children;
-  var subTot = 0;
-  for (var i = 0; i < cartItems.length; i++) {
+  const cartDisp = document.getElementById('cart-items');
+  let totalAmt = 0;
+  let itemCnt = 0;
+  let cartItems = cartDisp.children;
+  let subTot = 0;
+
+  for (let i = 0; i < cartItems.length; i++) {
     (function () {
-      var curItem;
-      for (var j = 0; j < prodList.length; j++) {
+      let curItem;
+      for (let j = 0; j < prodList.length; j++) {
         if (prodList[j].id === cartItems[i].id) {
           curItem = prodList[j];
           break;
         }
       }
-      var q = parseInt(
+      let q = parseInt(
         cartItems[i].querySelector('span').textContent.split('x ')[1]
       );
-      var itemTot = curItem.val * q;
-      var disc = 0;
+      const itemTot = curItem.val * q;
+      let disc = 0;
       itemCnt += q;
       subTot += itemTot;
       if (q >= 10) {
@@ -118,8 +134,8 @@ function calcCart() {
   }
   let discRate = 0;
   if (itemCnt >= 30) {
-    var bulkDisc = totalAmt * 0.25;
-    var itemDisc = subTot - totalAmt;
+    const bulkDisc = totalAmt * 0.25;
+    const itemDisc = subTot - totalAmt;
     if (bulkDisc > itemDisc) {
       totalAmt = subTot * (1 - 0.25);
       discRate = 0.25;
@@ -133,9 +149,11 @@ function calcCart() {
     totalAmt *= 1 - 0.1;
     discRate = Math.max(discRate, 0.1);
   }
+
+  const sum = document.getElementById('cart-total');
   sum.textContent = '총액: ' + Math.round(totalAmt) + '원';
   if (discRate > 0) {
-    var span = document.createElement('span');
+    let span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
     span.textContent = '(' + (discRate * 100).toFixed(1) + '% 할인 적용)';
     sum.appendChild(span);
@@ -145,8 +163,11 @@ function calcCart() {
 }
 
 const renderBonusPts = () => {
-  bonusPts = Math.floor(totalAmt / 1000);
-  var ptsTag = document.getElementById('loyalty-points');
+  const totalAmt = 0;
+  const bonusPts = Math.floor(totalAmt / 1000);
+  // const itemCnt = 0;
+  let ptsTag = document.getElementById('loyalty-points');
+  const sum = document.getElementById('cart-total');
   if (!ptsTag) {
     ptsTag = document.createElement('span');
     ptsTag.id = 'loyalty-points';
@@ -157,7 +178,7 @@ const renderBonusPts = () => {
 };
 
 function updateStockInfo() {
-  var infoMsg = '';
+  let infoMsg = '';
   prodList.forEach(function (item) {
     if (item.q < 5) {
       infoMsg +=
@@ -167,18 +188,21 @@ function updateStockInfo() {
         '\n';
     }
   });
+  const stockInfo = document.getElementById('stock-status');
   stockInfo.textContent = infoMsg;
 }
 
-addBtn.addEventListener('click', function () {
-  var selItem = sel.value;
-  var itemToAdd = prodList.find(function (p) {
+function handleAddItem() {
+  // let lastSel;
+  const sel = document.getElementById('product-select');
+  const selItem = sel.value;
+  const itemToAdd = prodList.find(function (p) {
     return p.id === selItem;
   });
   if (itemToAdd && itemToAdd.q > 0) {
-    var item = document.getElementById(itemToAdd.id);
+    const item = document.getElementById(itemToAdd.id);
     if (item) {
-      var newQty =
+      const newQty =
         parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
       if (newQty <= itemToAdd.q) {
         item.querySelector('span').textContent =
@@ -188,7 +212,7 @@ addBtn.addEventListener('click', function () {
         alert('재고가 부족합니다.');
       }
     } else {
-      var newItem = document.createElement('div');
+      const newItem = document.createElement('div');
       newItem.id = itemToAdd.id;
       newItem.className = 'flex justify-between items-center mb-2';
       newItem.innerHTML =
@@ -206,15 +230,16 @@ addBtn.addEventListener('click', function () {
         '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
         itemToAdd.id +
         '">삭제</button></div>';
+      const cartDisp = document.getElementById('cart-items');
       cartDisp.appendChild(newItem);
       itemToAdd.q--;
     }
     calcCart();
-    lastSel = selItem;
+    // lastSel = selItem;
   }
-});
+}
 
-cartDisp.addEventListener('click', function (event) {
+function handleChangeQuantity(event) {
   var tgt = event.target;
   if (
     tgt.classList.contains('quantity-change') ||
@@ -256,6 +281,6 @@ cartDisp.addEventListener('click', function (event) {
     }
     calcCart();
   }
-});
+}
 
 main();

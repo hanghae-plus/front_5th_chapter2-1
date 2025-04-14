@@ -78,6 +78,7 @@ const handleAddButtonClick = (
   cartItemsContainer,
   totalAmountContainer,
   stockStatusContainer,
+  lastSelectedProductId,
 ) => {
   const selectedProductId = productSelect.value;
   const itemToAdd = productList.find(
@@ -123,7 +124,6 @@ const handleAddButtonClick = (
   }
 };
 
-let lastSelectedProductId;
 let bonusPoints = 0;
 let totalAmount = 0;
 let itemCount = 0;
@@ -140,6 +140,8 @@ const main = () => {
   const mainWrapper = document.createElement('div');
   const mainHeader = document.createElement('h1');
 
+  let lastSelectedProductId;
+
   productSelect.id = 'product-select';
   productSelect.className = 'border rounded p-2 mr-2';
 
@@ -152,6 +154,7 @@ const main = () => {
       cartItemsContainer,
       totalAmountContainer,
       stockStatusContainer,
+      lastSelectedProductId,
     ),
   );
 

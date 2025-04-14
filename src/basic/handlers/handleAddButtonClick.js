@@ -1,13 +1,11 @@
 import { PRODUCT_LIST } from '../consts/productList';
 import { SelectedProductStore } from '../store/stores';
 import { calculateCart } from '../main.basic';
-import { ProductSelectDOM } from '../ui';
+import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
 
-export const handleAddButtonClick = (
-  cartItemsContainer,
-  totalAmountContainer,
-  stockStatusContainer,
-) => {
+export const handleAddButtonClick = (stockStatusContainer) => {
+  const cartItemsContainer = CartItemsContainerDOM.get();
+
   const productSelect = ProductSelectDOM.get();
   const selectedProductId = productSelect.value;
   const itemToAdd = PRODUCT_LIST.find(
@@ -45,11 +43,7 @@ export const handleAddButtonClick = (
       itemToAdd.quantity--;
     }
 
-    calculateCart(
-      cartItemsContainer,
-      totalAmountContainer,
-      stockStatusContainer,
-    );
+    calculateCart(stockStatusContainer);
 
     SelectedProductStore.set('selectedProduct', selectedProductId);
   }

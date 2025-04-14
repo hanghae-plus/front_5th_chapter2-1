@@ -5,6 +5,7 @@ import {
   CartItemsContainerDOM,
   LayoutDOM,
   ProductSelectDOM,
+  TotalAmountContainerDOM,
 } from './ui';
 
 const discountTable = {
@@ -17,12 +18,11 @@ const discountTable = {
 
 const main = () => {
   ProductSelectDOM.init();
+  TotalAmountContainerDOM.init();
 
   const productSelect = ProductSelectDOM.get();
-  const totalAmountContainer = document.createElement('div');
+  const totalAmountContainer = TotalAmountContainerDOM.get();
   const stockStatusContainer = document.createElement('div');
-  totalAmountContainer.id = 'cart-total';
-  totalAmountContainer.className = 'text-xl font-bold my-4';
 
   stockStatusContainer.id = 'stock-status';
   stockStatusContainer.className = 'text-sm text-gray-500 mt-2';
@@ -33,15 +33,12 @@ const main = () => {
     LayoutDOM.get();
 
   CartItemsContainerDOM.init({
-    totalAmountContainer,
     stockStatusContainer,
   });
 
   const cartItemsContainer = CartItemsContainerDOM.get();
 
   AddButtonDOM.init({
-    cartItemsContainer,
-    totalAmountContainer,
     stockStatusContainer,
   });
 
@@ -58,7 +55,7 @@ const main = () => {
   mainContainer.appendChild(mainWrapper);
   mainAppRoot.appendChild(mainContainer);
 
-  calculateCart(cartItemsContainer, totalAmountContainer, stockStatusContainer);
+  calculateCart(stockStatusContainer);
 
   setTimeout(() => {
     setInterval(() => {
@@ -134,11 +131,10 @@ const getDiscountRate = (subTotal) => {
   return discountRate;
 };
 
-export const calculateCart = (
-  cartItemsContainer,
-  totalAmountContainer,
-  stockStatusContainer,
-) => {
+export const calculateCart = (stockStatusContainer) => {
+  const cartItemsContainer = CartItemsContainerDOM.get();
+  const totalAmountContainer = TotalAmountContainerDOM.get();
+
   const cartItems = [...cartItemsContainer.children];
 
   const { itemCount, subTotal, totalAmount } = cartItems.reduce(
@@ -186,10 +182,11 @@ export const calculateCart = (
   }
 
   updateStockStatus(stockStatusContainer);
-  renderBonusPoints(totalAmountContainer);
+  renderBonusPoints();
 };
 
-const renderBonusPoints = (totalAmountContainer) => {
+const renderBonusPoints = () => {
+  const totalAmountContainer = TotalAmountContainerDOM.get();
   const bonusPoints = Math.floor(CartStore.get('totalAmount') / 1000);
 
   const bonusPointsTag =

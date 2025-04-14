@@ -1,12 +1,7 @@
 import { PRODUCT_LIST } from '../consts/productList';
 import { calculateCart } from '../main.basic';
 
-export const handleCartItemsContainerClick = (
-  event,
-  cartItemsContainer,
-  totalAmountContainer,
-  stockStatusContainer,
-) => {
+export const handleCartItemsContainerClick = (event, stockStatusContainer) => {
   const clickedCartItemsContainer = event.target;
 
   if (
@@ -52,10 +47,6 @@ export const handleCartItemsContainerClick = (
       cartItemElement.remove();
     }
 
-    calculateCart(
-      cartItemsContainer,
-      totalAmountContainer,
-      stockStatusContainer,
-    );
+    calculateCart(stockStatusContainer);
   }
 };

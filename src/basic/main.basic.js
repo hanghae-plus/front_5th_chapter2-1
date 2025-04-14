@@ -196,8 +196,7 @@ const updateProductSelectOptions = () => {
     return newOptions;
   }, document.createDocumentFragment());
 
-  productSelect.innerHTML = '';
-  productSelect.appendChild(newSelectOptions);
+  productSelect.replaceChildren(newSelectOptions);
 };
 
 const calcCart = () => {

@@ -284,11 +284,11 @@ const renderBonusPoints = () => {
 };
 
 const updateStockInfo = () => {
-  let infoMsg = '';
+  let infoMessage = '';
 
   productList.forEach((item) => {
     if (item.quantity < 5) {
-      infoMsg +=
+      infoMessage +=
         item.name
         + ': '
         + (item.quantity > 0 ?
@@ -298,7 +298,7 @@ const updateStockInfo = () => {
     }
   });
 
-  stockStatusContainer.textContent = infoMsg;
+  stockStatusContainer.textContent = infoMessage;
 };
 
 main();

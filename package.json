@@ -12,7 +12,8 @@
     "test": "vitest",
     "test:basic": "vitest basic.test.js",
     "test:advanced": "vitest advanced.test.js",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
@@ -27,5 +28,8 @@
     "prettier": "^3.5.3",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "assert": "^2.1.0"
   }
 }

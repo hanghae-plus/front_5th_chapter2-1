@@ -1,7 +1,7 @@
 {
-  "semi": true,
-  "singleQuote": true,
-  "tabWidth": 2,
-  "trailingComma": "es5",
-  "printWidth": 100
+  "semi": true, // 세미콜론
+  "singleQuote": true, // 작은따옴표, 큰따옴표
+  "tabWidth": 2, // tab 수
+  "trailingComma": "es5", // 객체와 배열의 마지막 항목 뒤에 콤마 추가여부
+  "printWidth": 100 // 한줄에 허용하는 글자수
 }

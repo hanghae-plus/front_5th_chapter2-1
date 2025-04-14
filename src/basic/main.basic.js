@@ -1,6 +1,11 @@
 import { CartStore, SelectedProductStore } from './store/stores';
 import { PRODUCT_LIST } from './consts/productList';
-import { AddButtonDOM, CartItemsContainerDOM, LayoutDOM } from './ui';
+import {
+  AddButtonDOM,
+  CartItemsContainerDOM,
+  LayoutDOM,
+  ProductSelectDOM,
+} from './ui';
 
 const discountTable = {
   p1: 0.1,
@@ -11,13 +16,11 @@ const discountTable = {
 };
 
 const main = () => {
-  const productSelect = document.createElement('select');
+  ProductSelectDOM.init();
+
+  const productSelect = ProductSelectDOM.get();
   const totalAmountContainer = document.createElement('div');
   const stockStatusContainer = document.createElement('div');
-
-  productSelect.id = 'product-select';
-  productSelect.className = 'border rounded p-2 mr-2';
-
   totalAmountContainer.id = 'cart-total';
   totalAmountContainer.className = 'text-xl font-bold my-4';
 
@@ -37,7 +40,6 @@ const main = () => {
   const cartItemsContainer = CartItemsContainerDOM.get();
 
   AddButtonDOM.init({
-    productSelect,
     cartItemsContainer,
     totalAmountContainer,
     stockStatusContainer,
@@ -66,7 +68,7 @@ const main = () => {
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.value = Math.round(luckyItem.value * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
-        updateProductSelectOptions(productSelect);
+        updateProductSelectOptions();
       }
     }, 30000);
   }, Math.random() * 10000);
@@ -85,14 +87,15 @@ const main = () => {
             suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!',
           );
           suggest.value = Math.round(suggest.value * 0.95);
-          updateProductSelectOptions(productSelect);
+          updateProductSelectOptions();
         }
       }
     }, 60000);
   }, Math.random() * 20000);
 };
 
-const updateProductSelectOptions = (productSelect) => {
+const updateProductSelectOptions = () => {
+  const productSelect = ProductSelectDOM.get();
   const newSelectOptions = PRODUCT_LIST.reduce((newOptions, item) => {
     const option = document.createElement('option');
     option.value = item.id;

@@ -1,13 +1,14 @@
 import { PRODUCT_LIST } from '../consts/productList';
 import { SelectedProductStore } from '../store/stores';
 import { calculateCart } from '../main.basic';
+import { ProductSelectDOM } from '../ui';
 
 export const handleAddButtonClick = (
-  productSelect,
   cartItemsContainer,
   totalAmountContainer,
   stockStatusContainer,
 ) => {
+  const productSelect = ProductSelectDOM.get();
   const selectedProductId = productSelect.value;
   const itemToAdd = PRODUCT_LIST.find(
     (product) => product.id === selectedProductId,

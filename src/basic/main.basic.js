@@ -59,20 +59,24 @@ const main = () => {
 
   // 장바구니 계산
   calcCart();
+};
 
-  // 할인 이벤트 설정
+// 랜덤 할인 이벤트 설정
+const updateRandomDiscount = () => {
   setTimeout(function () {
     setInterval(function () {
       var luckyItem = products[Math.floor(Math.random() * products.length)];
       if (Math.random() < 0.3 && luckyItem.stock > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
-        // alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
+        alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
         updateSelectOptions();
       }
     }, 30000);
   }, Math.random() * 10000);
+};
 
-  // 추천 상품 이벤트 설정
+// 추천 상품 이벤트 설정
+const updateRecommendation = () => {
   setTimeout(function () {
     setInterval(function () {
       if (lastSelectedProduct) {
@@ -80,9 +84,9 @@ const main = () => {
           return item.id !== lastSelectedProduct && item.stock > 0;
         });
         if (suggestProd) {
-          // alert(
-          //   suggestProd.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!",
-          // );
+          alert(
+            suggestProd.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!",
+          );
           suggestProd.price = Math.round(suggestProd.price * 0.95);
           updateSelectOptions();
         }

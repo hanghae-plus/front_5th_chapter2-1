@@ -26,7 +26,7 @@ export function renderNewCartItem(item) {
   const newItem = CartItem({
     id: item.id,
     name: item.name,
-    price: item.val,
+    price: item.price,
     quantity: 1,
   });
   $cartItems.appendChild(newItem);
@@ -53,7 +53,7 @@ export function renderStockInfo() {
   PRODUCT_LIST.forEach((item) => {
     infoMsg += StockInfo({
       name: item.name,
-      quantityLeft: item.q,
+      quantityLeft: item.stock,
     });
   });
 
@@ -69,8 +69,8 @@ export function renderProductList() {
     const selectItem = ProductSelectItem({
       id: item.id,
       name: item.name,
-      price: item.val,
-      quantity: item.q,
+      price: item.price,
+      quantity: item.stock,
     });
     $productSelect.appendChild(selectItem);
   });

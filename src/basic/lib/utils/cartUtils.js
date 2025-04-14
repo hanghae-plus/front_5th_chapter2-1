@@ -29,7 +29,7 @@ export function calculateCartTotal() {
     let q = parseInt(
       cartItems[i].querySelector("span").textContent.split("x ")[1],
     );
-    let itemTot = curItem.val * q;
+    let itemTot = curItem.price * q;
     let disc = 0;
     totalQuantity += q;
     originalTotalPrice += itemTot;

@@ -14,21 +14,23 @@ export function cartReducer(state, action) {
         return p.id === action.payload.value;
       });
 
-      if (itemToAdd && itemToAdd.q > 0) {
-        let item = document.getElementById(itemToAdd.id);
-        if (item) {
+      if (itemToAdd && itemToAdd.stock > 0) {
+        let itemInCart = document.getElementById(itemToAdd.id);
+        if (itemInCart) {
           let newQty =
-            parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
-          if (newQty <= itemToAdd.q) {
-            item.querySelector("span").textContent =
-              itemToAdd.name + " - " + itemToAdd.val + "원 x " + newQty;
-            itemToAdd.q--;
+            parseInt(
+              itemInCart.querySelector("span").textContent.split("x ")[1],
+            ) + 1;
+          if (newQty <= itemToAdd.stock) {
+            itemInCart.querySelector("span").textContent =
+              `${itemToAdd.name} - ${itemToAdd.price}원 x ${newQty}`;
+            itemToAdd.stock--;
           } else {
             return { ...state, error: "재고가 부족합니다." };
           }
         } else {
           renderNewCartItem(itemToAdd);
-          itemToAdd.q--;
+          itemToAdd.stock--;
         }
       }
 
@@ -57,7 +59,7 @@ export function cartReducer(state, action) {
         if (
           newQty > 0 &&
           newQty <=
-            prod.q +
+            prod.stock +
               parseInt(
                 itemElem.querySelector("span").textContent.split("x ")[1],
               )
@@ -66,10 +68,10 @@ export function cartReducer(state, action) {
             itemElem.querySelector("span").textContent.split("x ")[0] +
             "x " +
             newQty;
-          prod.q -= qtyChange;
+          prod.stock -= qtyChange;
         } else if (newQty <= 0) {
           itemElem.remove();
-          prod.q -= qtyChange;
+          prod.stock -= qtyChange;
         } else {
           return { ...state, error: "재고가 부족합니다." };
         }
@@ -77,7 +79,7 @@ export function cartReducer(state, action) {
         let remQty = parseInt(
           itemElem.querySelector("span").textContent.split("x ")[1],
         );
-        prod.q += remQty;
+        prod.stock += remQty;
         itemElem.remove();
       }
 

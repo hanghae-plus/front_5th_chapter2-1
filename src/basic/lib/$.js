@@ -13,7 +13,7 @@
  * @param {string} [props.value]
  * @param {boolean} [props.disabled]
  * @param {Object<string, string>} [props.dataset] data-* 오브젝트
- * @param {...(HTMLElement | Text | DocumentFragment)} children
+ * @param {...(HTMLElement | Text | DocumentFragment | string)} children
  * @returns {HTMLElement | DocumentFragment | null} DOM 엘리먼트
  *
  * @example
@@ -28,13 +28,12 @@ export const $ = (type, props = {}, ...children) => {
     return document.querySelector(type);
   }
 
-  // fragment 생성
-  if (type === "frag") {
-    return document.createDocumentFragment();
-  }
+  // fragment, 일반 element 생성 및 props 설정
+  const element =
+    type === "frag"
+      ? document.createDocumentFragment()
+      : document.createElement(type);
 
-  // 일반 element 생성
-  const element = document.createElement(type);
   Object.entries(props || {}).forEach(([key, value]) => {
     if (key === "dataset" && typeof value === "object") {
       // dataset 처리
@@ -50,9 +49,14 @@ export const $ = (type, props = {}, ...children) => {
 
   // element children 생성 시 추가
   if (children && Array.isArray(children)) {
-    children
-      .filter((el) => !!el && el instanceof Node)
-      .forEach((el) => element.appendChild(el));
+    children.forEach((el) => {
+      if (!el) return;
+      if (typeof el === "string") {
+        element.appendChild(document.createTextNode(el));
+      } else if (el instanceof Node) {
+        element.appendChild(el);
+      }
+    });
   }
   return element;
 };

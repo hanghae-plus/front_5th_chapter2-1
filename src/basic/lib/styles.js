@@ -1,4 +1,4 @@
-import { EVENT_FRAGMENT } from "./config/fragments";
+import { EVENT_FRAGMENT } from "../config/fragments";
 /** @const 스타일 맵 */
 export const STYLES = Object.freeze({
   CONTAINER: "bg-gray-100 p-8",

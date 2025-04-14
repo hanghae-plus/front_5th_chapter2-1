@@ -1,16 +1,18 @@
-import {
-  BULK_DISCOUNT_LIMIT,
-  MONTHLY_SPECIAL_DAY,
-  MONTHLY_SPECIAL_DISCOUNT_RATE,
-  POINT_RATE,
-  STOCK_WARNING_LIMIT,
-  TOTAL_BULK_DISCOUNT_LIMIT,
-  TOTAL_BULK_DISCOUNT_RATE,
-} from "./config/constants";
+// lib
+import { $, STYLES } from "./lib";
+
+// constant
 import { EVENT_FRAGMENT } from "./config/fragments";
 import { STOCK_ALERT_TEXT } from "./config/messages";
-import { $ } from "./lib/$";
-import { STYLES } from "./styles";
+
+// logic
+
+// components
+import { CartItem } from "@/basic/components";
+
+// render
+import { renderCartTotal, renderProductOptions } from "@/basic/render";
+
 // data
 const products = [
   { id: "p1", name: "상품1", cost: 10_000, quantity: 50, discount: 0.1 },
@@ -21,170 +23,10 @@ const products = [
 ];
 
 /// global element
-let $productSelect, $addToCart, $cartItems, $cartTotal, $stockStatus;
+let $addToCart, $cartItems;
 
 /// global state
-let lastSelected,
-  bonusPoints = 0,
-  totalCost = 0,
-  itemCount = 0;
-
-/// functions
-
-/**
- * [Render] 장바구니 총액 랜더 함수
- * 장바구니에 계산된 총액 기준 포인트 랜더링
- *
- * - 장바구니 총액 계산 후 포인트 계산
- * - TODO 사용하는 함수가 renderCalculateCart만 있음
- *   - 로직상으로도 총액 계산 이후에만 동작하여 통합도 고려
- *
- * @see POINT_RATE - 구매 포인트 비율
- */
-const renderBonusPoints = () => {
-  bonusPoints = Math.floor(totalCost * POINT_RATE);
-  let $loyaltyPoints = $("#loyalty-points");
-  if (!$loyaltyPoints) {
-    $loyaltyPoints = $("span", {
-      id: "loyalty-points",
-      className: STYLES.LOYALTY_POINTS,
-    });
-    $cartTotal.appendChild($loyaltyPoints);
-  }
-  $loyaltyPoints.textContent = "(포인트: " + bonusPoints + ")";
-};
-
-/**
- * [Render] 재고 부족 랜더 함수
- * 장바구니 총액 계산 이후 재고 부족 상품 경고 랜더링
- *
- * - 장바구니 총액 계산 이후 재고 부족 표기
- * - TODO 사용하는 함수가 renderCalculateCart만 있음
- *   - 로직상으로도 총액 계산 이후에만 동작하여 통합도 고려
- *
- * @see products - 상품 정보 배열
- * @see STOCK_WARNING_LIMIT - 재고 부족 경오 기준
- */
-const renderStockInfo = () => {
-  $stockStatus.textContent = products
-    .filter((i) => i.quantity < STOCK_WARNING_LIMIT)
-    .map(
-      (item) =>
-        item.name +
-        ": " +
-        (item.quantity > 0
-          ? "재고 부족 (" + item.quantity + "개 남음)"
-          : "품절"),
-    )
-    .join("\n");
-};
-
-/**
- * [Render] 상품 선택(select) 요소의 옵션 목록을 **PRODUCT_LIST**에 따라 랜더링
- * 할인 상품이 생겼을 때 갱신 후 랜더링
- *
- * - 기존 옵션을 모두 제거
- * - 상품 리스트를 기반으로 option 요소들을 생성
- * - DocumentFragment에 담아 한 번에 select 요소에 추가
- *
- * disabled 속성은 품절 여부(quantity === 0)에 따라 설정
- *
- * @see products - 상품 데이터 배열
- */
-const renderSelectOptions = () => {
-  $productSelect.innerHTML = "";
-
-  const frag = $("frag");
-  products.forEach((item) => {
-    const props = {
-      textContent: `${item.name} - ${item.cost}원`,
-      value: item.id,
-      disabled: item.quantity === 0,
-    };
-    frag.appendChild($("option", props));
-  });
-
-  $productSelect.appendChild(frag);
-};
-
-/**
- * [Render] 총액 및 할인율 랜더 함수
- * 장바구니에 포함된 상품의 총액 및 할인율을 계산하여 랜더링
- *
- * - 장바구니에 포함된 상품의 수량, 소계, 개별 대량 구매 할인율을 계산
- * - 총 상품 갯수에 의한 할인율 계산
- *   - 개별 할인 총액보다, 총 갯수 할인이 클 경우만 적용
- * - 매월 2일 총액에서 추가할인 계산
- *
- * @see products - 상품 정보 배열
- * @see BULK_DISCOUNT_LIMIT - 개별 할인 적용 수량 기준
- * @see TOTAL_BULK_DISCOUNT_LIMIT - 전체 할인 적용 수량 기준
- * @see TOTAL_BULK_DISCOUNT_RATE - 전체 할인 적용 할인율
- * @see MONTHLY_SPECIAL_DAY - 특별 추가 할인 날짜 기준
- * @see MONTHLY_SPECIAL_DISCOUNT_RATE - 특별 추가 할인 날짜 기준 할인율
- *
- * @fires renderStockInfo
- * @fires renderBonusPoints
- */
-const renderCalculateCart = () => {
-  totalCost = 0;
-  itemCount = 0;
-
-  const cartItems = $cartItems.children;
-  let subTotal = 0;
-  for (let i = 0; i < cartItems.length; i++) {
-    // 장바구니 상품만 확인하여 전체 수량 및 소계, 할인된 총계 계산
-    const currentItem = products.find((item) => item.id === cartItems[i].id);
-    if (!currentItem) continue;
-
-    const quantity = parseInt(
-      cartItems[i].querySelector("span").textContent.split("x ")[1],
-    );
-    const itemTotal = currentItem.cost * quantity;
-    const discount =
-      quantity >= BULK_DISCOUNT_LIMIT && !!currentItem.discount
-        ? currentItem.discount
-        : 0;
-
-    itemCount += quantity;
-    subTotal += itemTotal;
-    totalCost += itemTotal * (1 - discount);
-  }
-
-  // 전체 수량 기준 할인율 계산
-  let discountRate = 0;
-  if (itemCount >= TOTAL_BULK_DISCOUNT_LIMIT) {
-    const bulkDiscount = totalCost * TOTAL_BULK_DISCOUNT_RATE;
-    const itemDiscount = subTotal - totalCost;
-    if (bulkDiscount > itemDiscount) {
-      totalCost = subTotal * (1 - TOTAL_BULK_DISCOUNT_RATE);
-      discountRate = TOTAL_BULK_DISCOUNT_RATE;
-    } else {
-      discountRate = (subTotal - totalCost) / subTotal;
-    }
-  } else {
-    discountRate = (subTotal - totalCost) / subTotal;
-  }
-
-  // 매월 2일 특별 할인?
-  if (new Date().getDay() === MONTHLY_SPECIAL_DAY) {
-    totalCost *= 1 - MONTHLY_SPECIAL_DISCOUNT_RATE;
-    discountRate = Math.max(discountRate, MONTHLY_SPECIAL_DISCOUNT_RATE);
-  }
-
-  // 총액 및 할인 랜더링
-  $cartTotal.textContent = "총액: " + Math.round(totalCost) + "원";
-  if (discountRate > 0) {
-    $cartTotal.appendChild(
-      $("span", {
-        className: STYLES.TOTAL_TEXT,
-        textContent: "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)",
-      }),
-    );
-  }
-  renderStockInfo();
-  renderBonusPoints();
-};
+let lastSelected;
 
 /**
  * [Handler] 장바구니에 추가 핸들러
@@ -199,6 +41,8 @@ const renderCalculateCart = () => {
  * @fires renderCalculateCart
  */
 const handleClickAddToCart = () => {
+  const $productSelect = $("#product-select");
+  if (!$productSelect) return;
   const selectedItemId = $productSelect.value;
   const itemToAdd = products.find((p) => p.id === selectedItemId);
 
@@ -219,36 +63,10 @@ const handleClickAddToCart = () => {
     }
   } else {
     // 장바구니에 새 상품 추가
-    const { id, name, cost } = itemToAdd;
-    $cartItems.appendChild(
-      $(
-        "div",
-        { id, className: STYLES.NEW_ITEM },
-        $("span", { textContent: name + " - " + cost + "원 x 1" }),
-        $(
-          "div",
-          {},
-          $("button", {
-            className: STYLES.QUANTITY_CHANGE,
-            dataset: { productId: id, change: -1 },
-            textContent: "-",
-          }),
-          $("button", {
-            className: STYLES.QUANTITY_CHANGE,
-            dataset: { productId: id, change: 1 },
-            textContent: "+",
-          }),
-          $("button", {
-            className: STYLES.REMOVE_ITEM,
-            dataset: { productId: id },
-            textContent: "삭제",
-          }),
-        ),
-      ),
-    );
+    $cartItems.appendChild(CartItem({ ...itemToAdd }));
     itemToAdd.quantity -= 1;
   }
-  renderCalculateCart();
+  renderCartTotal(products);
   lastSelected = selectedItemId;
 };
 
@@ -309,7 +127,7 @@ const handleClickCartItems = (event) => {
     $item.remove();
   }
 
-  renderCalculateCart();
+  renderCartTotal(products);
 };
 
 /**
@@ -329,7 +147,7 @@ const setRandomDiscount = () => {
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.cost = Math.round(luckyItem.cost * 0.8);
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
-        renderSelectOptions();
+        renderProductOptions(products);
       }
     }, 30_000);
   }, Math.random() * 10_000);
@@ -343,7 +161,7 @@ const setRandomDiscount = () => {
       if (!suggest) return;
       alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");
       suggest.cost = Math.round(suggest.cost * 0.95);
-      renderSelectOptions();
+      renderProductOptions(products);
     }, 60_000);
   }, Math.random() * 20_000);
 };
@@ -360,8 +178,8 @@ const setRandomDiscount = () => {
  * - 장바구니 초기값 세팅
  * - 스케쥴링 함수 호출
  *
- * @fires renderSelectOptions
- * @fires renderCalculateCart
+ * @fires renderProductOptions
+ * @fires renderCartTotal
  * @fires setRandomDiscount
  */
 const main = () => {
@@ -369,22 +187,11 @@ const main = () => {
 
   // global element
   $cartItems = $("div", { id: "cart-items" });
-  $cartTotal = $("div", { id: "cart-total", className: STYLES.CART_TOTAL });
-  $productSelect = $("select", {
-    id: "product-select",
-    className: STYLES.PRODUCT_SELECT,
-  });
   $addToCart = $("button", {
     id: "add-to-cart",
     className: STYLES.ADD_TO_CART,
     textContent: "추가",
   });
-  $stockStatus = $("div", {
-    id: "stock-status",
-    className: STYLES.STOCK_STATUS,
-  });
-
-  renderSelectOptions();
 
   // $app 컴포넌트 조립
   $("#app").appendChild(
@@ -396,16 +203,20 @@ const main = () => {
         { className: STYLES.WRAPPER }, // wrapper props
         $("h1", { className: STYLES.TITLE, textContent: "장바구니" }),
         $cartItems,
-        $cartTotal,
-        $productSelect,
+        $("div", { id: "cart-total", className: STYLES.CART_TOTAL }),
+        $("select", {
+          id: "product-select",
+          className: STYLES.PRODUCT_SELECT,
+        }),
         $addToCart,
-        $stockStatus,
+        $("div", { id: "stock-status", className: STYLES.STOCK_STATUS }),
       ),
     ),
   );
 
   // 초기 세팅 함수
-  renderCalculateCart();
+  renderProductOptions(products);
+  renderCartTotal(products);
   setRandomDiscount();
 };
 

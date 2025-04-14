@@ -13,14 +13,13 @@
     "test:basic": "vitest basic.test.js",
     "test:advanced": "vitest advanced.test.js",
     "test:ui": "vitest --ui",
-    "lint": "eslint ."
+    "lint": "eslint . --ext .js"
   },
   "devDependencies": {
-    "@eslint/js": "^9.24.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
     "@vitest/ui": "^3.1.1",
-    "eslint": "^9.24.0",
+    "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "globals": "^16.0.0",

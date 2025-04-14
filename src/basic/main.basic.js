@@ -270,17 +270,19 @@ const calcCart = () => {
 };
 
 const renderBonusPoints = () => {
-  let bonusPointsTag = document.getElementById('loyalty-points');
+  const bonusPoints = Math.floor(totalAmount / 1000);
 
-  if (!bonusPointsTag) {
-    bonusPointsTag = document.createElement('span');
-    bonusPointsTag.id = 'loyalty-points';
-    bonusPointsTag.className = 'text-blue-500 ml-2';
-    totalAmountContainer.appendChild(bonusPointsTag);
-  }
+  const bonusPointsTag =
+    document.getElementById('loyalty-points')
+    ?? (() => {
+      const el = document.createElement('span');
+      el.id = 'loyalty-points';
+      el.className = 'text-blue-500 ml-2';
+      totalAmountContainer.appendChild(el);
+      return el;
+    })();
 
-  bonusPoints = Math.floor(totalAmount / 1000);
-  bonusPointsTag.textContent = '(포인트: ' + bonusPoints + ')';
+  bonusPointsTag.textContent = `(포인트: ${bonusPoints})`;
 };
 
 const updateStockStatus = () => {

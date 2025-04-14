@@ -13,20 +13,22 @@ const handleCartItemsContainerClick = (event) => {
     cartItemsContainer.classList.contains('quantity-change')
     || cartItemsContainer.classList.contains('remove-item')
   ) {
+    console.log(cartItemsContainer.dataset);
     const cartItemId = cartItemsContainer.dataset.productId;
     const cartItemElement = document.getElementById(cartItemId);
+    console.log(cartItemElement);
     const product = productList.find((p) => p.id === cartItemId);
 
     if (cartItemsContainer.classList.contains('quantity-change')) {
-      const qtyChange = parseInt(cartItemsContainer.dataset.change);
-      const newQty =
+      const quantityChange = parseInt(cartItemsContainer.dataset.change);
+      const newQuantity =
         parseInt(
           cartItemElement.querySelector('span').textContent.split('x ')[1],
-        ) + qtyChange;
+        ) + quantityChange;
 
       if (
-        newQty > 0
-        && newQty
+        newQuantity > 0
+        && newQuantity
           <= product.quantity
             + parseInt(
               cartItemElement.querySelector('span').textContent.split('x ')[1],
@@ -35,20 +37,20 @@ const handleCartItemsContainerClick = (event) => {
         cartItemElement.querySelector('span').textContent =
           cartItemElement.querySelector('span').textContent.split('x ')[0]
           + 'x '
-          + newQty;
-        product.quantity -= qtyChange;
-      } else if (newQty <= 0) {
+          + newQuantity;
+        product.quantity -= quantityChange;
+      } else if (newQuantity <= 0) {
         cartItemElement.remove();
-        product.quantity -= qtyChange;
+        product.quantity -= quantityChange;
       } else {
         alert('재고가 부족합니다.');
       }
     } else if (cartItemsContainer.classList.contains('remove-item')) {
-      const remQty = parseInt(
+      const remQuantity = parseInt(
         cartItemElement.querySelector('span').textContent.split('x ')[1],
       );
 
-      product.quantity += remQty;
+      product.quantity += remQuantity;
       cartItemElement.remove();
     }
 
@@ -212,52 +214,52 @@ const calcCart = () => {
       }
     }
 
-    const q = parseInt(
+    const quantity = parseInt(
       cartItems[i].querySelector('span').textContent.split('x ')[1],
     );
-    const itemTot = curItem.value * q;
-    let disc = 0;
+    const itemTot = curItem.value * quantity;
+    let discount = 0;
 
-    itemCnt += q;
+    itemCnt += quantity;
     subTot += itemTot;
 
-    if (q >= 10) {
-      if (curItem.id === 'p1') disc = 0.1;
-      else if (curItem.id === 'p2') disc = 0.15;
-      else if (curItem.id === 'p3') disc = 0.2;
-      else if (curItem.id === 'p4') disc = 0.05;
-      else if (curItem.id === 'p5') disc = 0.25;
+    if (quantity >= 10) {
+      if (curItem.id === 'p1') discount = 0.1;
+      else if (curItem.id === 'p2') discount = 0.15;
+      else if (curItem.id === 'p3') discount = 0.2;
+      else if (curItem.id === 'p4') discount = 0.05;
+      else if (curItem.id === 'p5') discount = 0.25;
     }
 
-    totalAmt += itemTot * (1 - disc);
+    totalAmt += itemTot * (1 - discount);
   }
 
-  let discRate = 0;
+  let discountRate = 0;
 
   if (itemCnt >= 30) {
-    const bulkDisc = totalAmt * 0.25;
-    const itemDisc = subTot - totalAmt;
+    const bulkDiscount = totalAmt * 0.25;
+    const itemDiscount = subTot - totalAmt;
 
-    if (bulkDisc > itemDisc) {
+    if (bulkDiscount > itemDiscount) {
       totalAmt = subTot * (1 - 0.25);
-      discRate = 0.25;
+      discountRate = 0.25;
     } else {
-      discRate = (subTot - totalAmt) / subTot;
+      discountRate = (subTot - totalAmt) / subTot;
     }
   } else {
-    discRate = (subTot - totalAmt) / subTot;
+    discountRate = (subTot - totalAmt) / subTot;
   }
   if (new Date().getDay() === 2) {
     totalAmt *= 1 - 0.1;
-    discRate = Math.max(discRate, 0.1);
+    discountRate = Math.max(discountRate, 0.1);
   }
 
   totalAmountContainer.textContent = '총액: ' + Math.round(totalAmt) + '원';
 
-  if (discRate > 0) {
+  if (discountRate > 0) {
     const span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
-    span.textContent = '(' + (discRate * 100).toFixed(1) + '% 할인 적용)';
+    span.textContent = '(' + (discountRate * 100).toFixed(1) + '% 할인 적용)';
     totalAmountContainer.appendChild(span);
   }
 

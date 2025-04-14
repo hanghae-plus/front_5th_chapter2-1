@@ -14,7 +14,11 @@ const discountTable = {
   p5: 0.25,
 };
 
-const handleCartItemsContainerClick = (event, cartItemsContainer) => {
+const handleCartItemsContainerClick = (
+  event,
+  cartItemsContainer,
+  totalAmountContainer,
+) => {
   const clickedCartItemsContainer = event.target;
 
   if (
@@ -60,11 +64,15 @@ const handleCartItemsContainerClick = (event, cartItemsContainer) => {
       cartItemElement.remove();
     }
 
-    calculateCart(cartItemsContainer);
+    calculateCart(cartItemsContainer, totalAmountContainer);
   }
 };
 
-const handleAddButtonClick = (productSelect, cartItemsContainer) => {
+const handleAddButtonClick = (
+  productSelect,
+  cartItemsContainer,
+  totalAmountContainer,
+) => {
   const selectedProductId = productSelect.value;
   const itemToAdd = productList.find(
     (product) => product.id === selectedProductId,
@@ -100,12 +108,11 @@ const handleAddButtonClick = (productSelect, cartItemsContainer) => {
       cartItemsContainer.appendChild(newItem);
       itemToAdd.quantity--;
     }
-    calculateCart(cartItemsContainer);
+    calculateCart(cartItemsContainer, totalAmountContainer);
     lastSelectedProductId = selectedProductId;
   }
 };
 
-const totalAmountContainer = document.createElement('div');
 const stockStatusContainer = document.createElement('div');
 
 let lastSelectedProductId;
@@ -117,6 +124,7 @@ const main = () => {
   const productSelect = document.createElement('select');
   const addButton = document.createElement('button');
   const cartItemsContainer = document.createElement('div');
+  const totalAmountContainer = document.createElement('div');
 
   const mainRoot = document.getElementById('app');
   const mainContainer = document.createElement('div');
@@ -130,12 +138,20 @@ const main = () => {
   addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   addButton.textContent = '추가';
   addButton.addEventListener('click', () =>
-    handleAddButtonClick(productSelect, cartItemsContainer),
+    handleAddButtonClick(
+      productSelect,
+      cartItemsContainer,
+      totalAmountContainer,
+    ),
   );
 
   cartItemsContainer.id = 'cart-items';
   cartItemsContainer.addEventListener('click', (event) =>
-    handleCartItemsContainerClick(event, cartItemsContainer),
+    handleCartItemsContainerClick(
+      event,
+      cartItemsContainer,
+      totalAmountContainer,
+    ),
   );
 
   totalAmountContainer.id = 'cart-total';
@@ -163,7 +179,7 @@ const main = () => {
   mainContainer.appendChild(mainWrapper);
   mainRoot.appendChild(mainContainer);
 
-  calculateCart(cartItemsContainer);
+  calculateCart(cartItemsContainer, totalAmountContainer);
 
   setTimeout(() => {
     setInterval(() => {
@@ -235,7 +251,7 @@ const getDiscountRate = (subTotal) => {
   return discountRate;
 };
 
-const calculateCart = (cartItemsContainer) => {
+const calculateCart = (cartItemsContainer, totalAmountContainer) => {
   totalAmount = 0;
   itemCount = 0;
   let subTotal = 0;
@@ -270,10 +286,10 @@ const calculateCart = (cartItemsContainer) => {
   }
 
   updateStockStatus();
-  renderBonusPoints();
+  renderBonusPoints(totalAmountContainer);
 };
 
-const renderBonusPoints = () => {
+const renderBonusPoints = (totalAmountContainer) => {
   const bonusPoints = Math.floor(totalAmount / 1000);
 
   const bonusPointsTag =

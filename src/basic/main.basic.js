@@ -31,7 +31,7 @@ function main() {
   stockInfo.className='text-sm text-gray-500 mt-2';
   hTxt.textContent='지유의 장바구니';
   addBtn.textContent='추가';
-  updateSelOpts();
+  updateSelOpts();// 상품리스트 select에 보여주기
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
   wrap.appendChild(sum);
@@ -64,6 +64,7 @@ function main() {
     }, 60000);
   }, Math.random() * 20000);
 };
+// 상품리스트 select에 보여주기
 function updateSelOpts() {
   sel.innerHTML='';
   prodList.forEach(function (item) {

@@ -1,6 +1,6 @@
 import { PRODUCT_LIST } from '../consts/productList';
 import { SelectedProductStore } from '../store/stores';
-import { calculateCart } from '../main.basic';
+import { calculateCart } from '../logic';
 import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
 
 export const handleAddButtonClick = () => {

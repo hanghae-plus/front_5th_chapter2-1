@@ -1,5 +1,5 @@
 import { PRODUCT_LIST } from '../consts/productList';
-import { calculateCart } from '../main.basic';
+import { calculateCart } from '../logic';
 
 export const handleCartItemsContainerClick = (event) => {
   const clickedCartItemsContainer = event.target;

@@ -14,6 +14,7 @@ import CartAddButton from './components/CartAddButton';
 import ItemSelect from './components/itemSelect/ItemSelect';
 import CartTotal from './components/cartTotal/CartTotal';
 import StockStatus from './components/stockStatus/StockStatus';
+import { calcCartItems } from './components/cart/calcCartItems';
 
 let items, lastSelectedItem;
 
@@ -87,43 +88,7 @@ function main() {
 
 // 장바구니 계산
 function calcCart() {
-  let totalAmount = 0;
-  let itemCount = 0;
-  let originalTotalAmount = 0;
-
-  const $cart = document.getElementById('cart-items');
-  const cartItems = $cart.children;
-  for (var i = 0; i < cartItems.length; i++) {
-    (function () {
-      let curItem;
-
-      for (let j = 0; j < items.length; j++) {
-        if (items[j].id === cartItems[i].id) {
-          curItem = items[j];
-          break;
-        }
-      }
-
-      const quantity = parseInt(
-        cartItems[i].querySelector('span').textContent.split('x ')[1],
-      ); // 수량
-      const itemTotalPrice = curItem.price * quantity;
-      let itemDiscountRate = 0;
-
-      itemCount += quantity;
-      originalTotalAmount += itemTotalPrice;
-
-      // 10개 이상 구매시 할인율 적용
-      if (
-        quantity >= CONSTANTS.QUANTITY_DISCOUNT_LIMIT &&
-        calcUtils.getIdDiscountRate(curItem.id)
-      ) {
-        itemDiscountRate = calcUtils.getIdDiscountRate(curItem.id);
-      }
-
-      totalAmount += itemTotalPrice * (1 - itemDiscountRate);
-    })();
-  }
+  const { totalAmount, itemCount, originalTotalAmount } = calcCartItems(items);
 
   const { finalDiscountRate, discountedTotalAmount } =
     calcUtils.calcFinalDiscount(totalAmount, originalTotalAmount, itemCount);

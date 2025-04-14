@@ -1,5 +1,5 @@
-var prodList, sel, addBtn, cartDisp, sum, stockInfo;
-var lastSel, bonusPts=0, totalAmt=0, itemCnt=0;
+let prodList, sel, addBtn, cartDisp, sum, stockInfo;
+let lastSel, bonusPts=0, totalAmt=0, itemCnt=0;
 function main() {
   prodList=[
     {id: 'p1', name: '상품1', val: 10000, q: 50 },
@@ -29,7 +29,7 @@ function main() {
   sel.className='border rounded p-2 mr-2';
   addBtn.className='bg-blue-500 text-white px-4 py-2 rounded';
   stockInfo.className='text-sm text-gray-500 mt-2';
-  hTxt.textContent='장바구니';
+  hTxt.textContent='지유의 장바구니';
   addBtn.textContent='추가';
   updateSelOpts();
   wrap.appendChild(hTxt);

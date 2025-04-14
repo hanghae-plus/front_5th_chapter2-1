@@ -14,21 +14,19 @@ const discountTable = {
   p5: 0.25,
 };
 
-const handleCartItemsContainerClick = (event) => {
-  const cartItemsContainer = event.target;
+const handleCartItemsContainerClick = (event, cartItemsContainer) => {
+  const clickedCartItemsContainer = event.target;
 
   if (
-    cartItemsContainer.classList.contains('quantity-change')
-    || cartItemsContainer.classList.contains('remove-item')
+    clickedCartItemsContainer.classList.contains('quantity-change')
+    || clickedCartItemsContainer.classList.contains('remove-item')
   ) {
-    console.log(cartItemsContainer.dataset);
-    const cartItemId = cartItemsContainer.dataset.productId;
+    const cartItemId = clickedCartItemsContainer.dataset.productId;
     const cartItemElement = document.getElementById(cartItemId);
-    console.log(cartItemElement);
     const product = productList.find((p) => p.id === cartItemId);
 
-    if (cartItemsContainer.classList.contains('quantity-change')) {
-      const quantityChange = parseInt(cartItemsContainer.dataset.change);
+    if (clickedCartItemsContainer.classList.contains('quantity-change')) {
+      const quantityChange = parseInt(clickedCartItemsContainer.dataset.change);
       const newQuantity =
         parseInt(
           cartItemElement.querySelector('span').textContent.split('x ')[1],
@@ -53,7 +51,7 @@ const handleCartItemsContainerClick = (event) => {
       } else {
         alert('재고가 부족합니다.');
       }
-    } else if (cartItemsContainer.classList.contains('remove-item')) {
+    } else if (clickedCartItemsContainer.classList.contains('remove-item')) {
       const remQuantity = parseInt(
         cartItemElement.querySelector('span').textContent.split('x ')[1],
       );
@@ -62,11 +60,11 @@ const handleCartItemsContainerClick = (event) => {
       cartItemElement.remove();
     }
 
-    calculateCart();
+    calculateCart(cartItemsContainer);
   }
 };
 
-const handleAddButtonClick = (productSelect) => {
+const handleAddButtonClick = (productSelect, cartItemsContainer) => {
   const selectedProductId = productSelect.value;
   const itemToAdd = productList.find(
     (product) => product.id === selectedProductId,
@@ -102,13 +100,11 @@ const handleAddButtonClick = (productSelect) => {
       cartItemsContainer.appendChild(newItem);
       itemToAdd.quantity--;
     }
-    calculateCart();
+    calculateCart(cartItemsContainer);
     lastSelectedProductId = selectedProductId;
   }
 };
 
-const addButton = document.createElement('button');
-const cartItemsContainer = document.createElement('div');
 const totalAmountContainer = document.createElement('div');
 const stockStatusContainer = document.createElement('div');
 
@@ -119,6 +115,8 @@ let itemCount = 0;
 
 const main = () => {
   const productSelect = document.createElement('select');
+  const addButton = document.createElement('button');
+  const cartItemsContainer = document.createElement('div');
 
   const mainRoot = document.getElementById('app');
   const mainContainer = document.createElement('div');
@@ -132,11 +130,13 @@ const main = () => {
   addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   addButton.textContent = '추가';
   addButton.addEventListener('click', () =>
-    handleAddButtonClick(productSelect),
+    handleAddButtonClick(productSelect, cartItemsContainer),
   );
 
   cartItemsContainer.id = 'cart-items';
-  cartItemsContainer.addEventListener('click', handleCartItemsContainerClick);
+  cartItemsContainer.addEventListener('click', (event) =>
+    handleCartItemsContainerClick(event, cartItemsContainer),
+  );
 
   totalAmountContainer.id = 'cart-total';
   totalAmountContainer.className = 'text-xl font-bold my-4';
@@ -163,7 +163,7 @@ const main = () => {
   mainContainer.appendChild(mainWrapper);
   mainRoot.appendChild(mainContainer);
 
-  calculateCart();
+  calculateCart(cartItemsContainer);
 
   setTimeout(() => {
     setInterval(() => {
@@ -235,7 +235,7 @@ const getDiscountRate = (subTotal) => {
   return discountRate;
 };
 
-const calculateCart = () => {
+const calculateCart = (cartItemsContainer) => {
   totalAmount = 0;
   itemCount = 0;
   let subTotal = 0;

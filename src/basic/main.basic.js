@@ -1,4 +1,4 @@
-import { updateStockInfo } from "./libs";
+import { updateSelectOptions, updateStockInfo } from "./libs";
 
 /** @typedef {import("./types").Product} Product */
 
@@ -12,9 +12,16 @@ const products = [
   { id: "p4", name: "상품4", price: 15000, stock: 0 },
   { id: "p5", name: "상품5", price: 25000, stock: 10 },
 ];
+
 // ===============================================
 
-var sel, addBtn, cartDisp, sum, stockInfo;
+const $select = document.createElement("select");
+$select.id = "product-select";
+$select.className = "border rounded p-2 mr-2";
+
+// ===============================================
+
+var addBtn, cartDisp, sum, stockInfo;
 var lastSel,
   bonusPts = 0,
   totalAmt = 0,
@@ -27,28 +34,25 @@ function main() {
   let hTxt = document.createElement("h1");
   cartDisp = document.createElement("div");
   sum = document.createElement("div");
-  sel = document.createElement("select");
   addBtn = document.createElement("button");
   stockInfo = document.createElement("div");
   cartDisp.id = "cart-items";
   sum.id = "cart-total";
-  sel.id = "product-select";
   addBtn.id = "add-to-cart";
   stockInfo.id = "stock-status";
   cont.className = "bg-gray-100 p-8";
   wrap.className = "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
   hTxt.className = "text-2xl font-bold mb-4";
   sum.className = "text-xl font-bold my-4";
-  sel.className = "border rounded p-2 mr-2";
   addBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
   stockInfo.className = "text-sm text-gray-500 mt-2";
   hTxt.textContent = "장바구니";
   addBtn.textContent = "추가";
-  updateSelOpts();
+  updateSelectOptions($select, products);
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
   wrap.appendChild(sum);
-  wrap.appendChild(sel);
+  wrap.appendChild($select);
   wrap.appendChild(addBtn);
   wrap.appendChild(stockInfo);
   cont.appendChild(wrap);
@@ -60,7 +64,7 @@ function main() {
       if (Math.random() < 0.3 && luckyItem.stock > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
-        updateSelOpts();
+        updateSelectOptions($select, products);
       }
     }, 30000);
   }, Math.random() * 10000);
@@ -73,22 +77,13 @@ function main() {
         if (suggest) {
           alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");
           suggest.price = Math.round(suggest.price * 0.95);
-          updateSelOpts();
+          updateSelectOptions($select, products);
         }
       }
     }, 60000);
   }, Math.random() * 20000);
 }
-function updateSelOpts() {
-  sel.innerHTML = "";
-  products.forEach(function (item) {
-    var opt = document.createElement("option");
-    opt.value = item.id;
-    opt.textContent = item.name + " - " + item.price + "원";
-    if (item.stock === 0) opt.disabled = true;
-    sel.appendChild(opt);
-  });
-}
+
 function calcCart() {
   totalAmt = 0;
   itemCnt = 0;
@@ -159,7 +154,7 @@ const renderBonusPts = () => {
 
 main();
 addBtn.addEventListener("click", function () {
-  var selItem = sel.value;
+  var selItem = $select.value;
   var itemToAdd = products.find(function (p) {
     return p.id === selItem;
   });

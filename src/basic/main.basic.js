@@ -1,5 +1,6 @@
 import { CONSTNANTS } from './constants';
 import { textUtils } from './utils/textUtils';
+import { calcUtils } from './utils/calcUtils';
 import { updateStockInfoText } from './components/stockStatus/updateStockInfoText';
 import { getPoints } from './components/points/getPoints';
 import { renderPoints } from './components/points/renderPoints';
@@ -8,16 +9,13 @@ import { updateSelectOptions } from './components/itemSelect/updateSelectOptions
 import Container from './components/Container';
 import ContentWrapper from './components/ContentWrapper';
 import Header from './components/Header';
-import Cart from './components/Cart';
+import Cart from './components/cart/Cart';
 import CartAddButton from './components/CartAddButton';
 import ItemSelect from './components/itemSelect/ItemSelect';
 import CartTotal from './components/cartTotal/CartTotal';
 import StockStatus from './components/stockStatus/StockStatus';
 
-let items,
-  lastSelectedItem,
-  totalAmount = 0,
-  itemCount = 0;
+let items, lastSelectedItem;
 
 function appendDOM() {
   const $contentWrapper = ContentWrapper();
@@ -89,8 +87,8 @@ function main() {
 
 // 장바구니 계산
 function calcCart() {
-  totalAmount = 0;
-  itemCount = 0;
+  let totalAmount = 0;
+  let itemCount = 0;
   let originalTotalAmount = 0;
 
   const $cart = document.getElementById('cart-items');
@@ -118,44 +116,19 @@ function calcCart() {
       // 10개 이상 구매시 할인율 적용
       if (
         quantity >= CONSTNANTS.QUANTITY_DISCOUNT_LIMIT &&
-        CONSTNANTS.ID_DISCOUNT_RATES[curItem.id]
+        calcUtils.getIdDiscountRate(curItem.id)
       ) {
-        itemDiscountRate = CONSTNANTS.ID_DISCOUNT_RATES[curItem.id];
+        itemDiscountRate = calcUtils.getIdDiscountRate(curItem.id);
       }
 
       totalAmount += itemTotalPrice * (1 - itemDiscountRate);
     })();
   }
 
-  let finalDiscountRate = 0; // 할인율
+  const { finalDiscountRate, discountedTotalAmount } =
+    calcUtils.calcFinalDiscount(totalAmount, originalTotalAmount, itemCount);
 
-  // 30개 이상 구매 시 25% 할인 적용
-  if (itemCount >= CONSTNANTS.BULK_DISCOUNT_LIMIT) {
-    const bulkDiscount = totalAmount * CONSTNANTS.BULK_DISCOUNT_RATE;
-    const itemDiscount = originalTotalAmount - totalAmount;
-
-    if (bulkDiscount > itemDiscount) {
-      totalAmount = originalTotalAmount * (1 - CONSTNANTS.BULK_DISCOUNT_RATE);
-      finalDiscountRate = CONSTNANTS.BULK_DISCOUNT_RATE;
-    } else {
-      finalDiscountRate =
-        (originalTotalAmount - totalAmount) / originalTotalAmount;
-    }
-  } else {
-    finalDiscountRate =
-      (originalTotalAmount - totalAmount) / originalTotalAmount;
-  }
-
-  // 특정 요일 할인 적용
-  if (new Date().getDay() === CONSTNANTS.WEEKLY_DISCOUNT_DAY) {
-    totalAmount *= 1 - CONSTNANTS.WEEKLY_DISCOUNT_RATE;
-    finalDiscountRate = Math.max(
-      finalDiscountRate,
-      CONSTNANTS.WEEKLY_DISCOUNT_RATE,
-    );
-  }
-
-  const roundedAmount = Math.round(totalAmount);
+  const roundedAmount = Math.round(discountedTotalAmount);
   const $cartTotal = document.getElementById('cart-total');
   $cartTotal.textContent = textUtils.getTotalAmountText(roundedAmount);
 

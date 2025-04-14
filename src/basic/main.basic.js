@@ -1,12 +1,6 @@
 import { CartStore, SelectedProductStore } from './store/stores';
-
-const productList = [
-  { id: 'p1', name: '상품1', value: 10000, quantity: 50 },
-  { id: 'p2', name: '상품2', value: 20000, quantity: 30 },
-  { id: 'p3', name: '상품3', value: 30000, quantity: 20 },
-  { id: 'p4', name: '상품4', value: 15000, quantity: 0 },
-  { id: 'p5', name: '상품5', value: 25000, quantity: 10 },
-];
+import { handleAddButtonClick } from './handlers/handleAddButtonClick';
+import { PRODUCT_LIST } from './consts/productList';
 
 const discountTable = {
   p1: 0.1,
@@ -30,7 +24,7 @@ const handleCartItemsContainerClick = (
   ) {
     const cartItemId = clickedCartItemsContainer.dataset.productId;
     const cartItemElement = document.getElementById(cartItemId);
-    const product = productList.find((p) => p.id === cartItemId);
+    const product = PRODUCT_LIST.find((p) => p.id === cartItemId);
 
     if (clickedCartItemsContainer.classList.contains('quantity-change')) {
       const quantityChange = parseInt(clickedCartItemsContainer.dataset.change);
@@ -72,56 +66,6 @@ const handleCartItemsContainerClick = (
       totalAmountContainer,
       stockStatusContainer,
     );
-  }
-};
-
-const handleAddButtonClick = (
-  productSelect,
-  cartItemsContainer,
-  totalAmountContainer,
-  stockStatusContainer,
-) => {
-  const selectedProductId = productSelect.value;
-  const itemToAdd = productList.find(
-    (product) => product.id === selectedProductId,
-  );
-
-  if (itemToAdd && itemToAdd.quantity > 0) {
-    const item = document.getElementById(itemToAdd.id);
-
-    if (item) {
-      const newQuantity =
-        parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
-
-      if (newQuantity <= itemToAdd.quantity) {
-        item.querySelector('span').textContent =
-          itemToAdd.name + ' - ' + itemToAdd.value + '원 x ' + newQuantity;
-        itemToAdd.quantity--;
-      } else {
-        alert('재고가 부족합니다.');
-      }
-    } else {
-      const newItem = document.createElement('div');
-
-      newItem.id = itemToAdd.id;
-      newItem.className = 'flex justify-between items-center mb-2';
-      newItem.innerHTML = `
-        <span>${itemToAdd.name} - ${itemToAdd.value}원 x 1</span>
-        <div>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="-1">-</button>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="1">+</button>
-        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${itemToAdd.id}">삭제</button>
-        </div>
-      `;
-      cartItemsContainer.appendChild(newItem);
-      itemToAdd.quantity--;
-    }
-    calculateCart(
-      cartItemsContainer,
-      totalAmountContainer,
-      stockStatusContainer,
-    );
-    SelectedProductStore.set('selectedProduct', selectedProductId);
   }
 };
 
@@ -192,7 +136,7 @@ const main = () => {
   setTimeout(() => {
     setInterval(() => {
       const luckyItem =
-        productList[Math.floor(Math.random() * productList.length)];
+        PRODUCT_LIST[Math.floor(Math.random() * PRODUCT_LIST.length)];
 
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.value = Math.round(luckyItem.value * 0.8);
@@ -207,7 +151,7 @@ const main = () => {
       const lastSelectedProductId = SelectedProductStore.get('selectedProduct');
 
       if (lastSelectedProductId) {
-        const suggest = productList.find(
+        const suggest = PRODUCT_LIST.find(
           (item) => item.id !== lastSelectedProductId && item.quantity > 0,
         );
 
@@ -224,7 +168,7 @@ const main = () => {
 };
 
 const updateProductSelectOptions = (productSelect) => {
-  const newSelectOptions = productList.reduce((newOptions, item) => {
+  const newSelectOptions = PRODUCT_LIST.reduce((newOptions, item) => {
     const option = document.createElement('option');
     option.value = item.id;
     option.textContent = `${item.name} - ${item.value}원`;
@@ -262,7 +206,7 @@ const getDiscountRate = (subTotal) => {
   return discountRate;
 };
 
-const calculateCart = (
+export const calculateCart = (
   cartItemsContainer,
   totalAmountContainer,
   stockStatusContainer,
@@ -271,7 +215,9 @@ const calculateCart = (
 
   const { itemCount, subTotal, totalAmount } = cartItems.reduce(
     (acc, item) => {
-      const currentItem = productList.find((product) => product.id === item.id);
+      const currentItem = PRODUCT_LIST.find(
+        (product) => product.id === item.id,
+      );
       if (!currentItem) return acc;
 
       const quantity = parseInt(
@@ -332,7 +278,7 @@ const renderBonusPoints = (totalAmountContainer) => {
 };
 
 const updateStockStatus = (stockStatusContainer) => {
-  const infoMessage = productList.reduce((acc, item) => {
+  const infoMessage = PRODUCT_LIST.reduce((acc, item) => {
     if (item.quantity < 5) {
       const status =
         item.quantity > 0 ? `재고 부족 (${item.quantity}개 남음)` : '품절';

@@ -1,10 +1,17 @@
 class BonusPointService {
   constructor() {
+    if (BonusPointService.instance) return BonusPointService.instance;
+    BonusPointService.instance = this;
+
     this.bonusPoints = 0;
   }
 
-  applyBonusPoints(totalPrice) {
-    this.bonusPoints = Math.floor(totalPrice / 1000);
+  resetBonusPoints() {
+    this.bonusPoints = 0;
+  }
+
+  getBonusPointsFromTotalAmount(amount) {
+    this.bonusPoints = Math.floor(amount / 1000);
   }
 }
 

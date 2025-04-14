@@ -21,13 +21,15 @@ export function MainPage() {
     }
 
     renderProductList();
-    renderTotalPrice(state.totalPrice);
+    renderTotalPrice(state.totalAmount);
     renderDiscountRate(discountService.discountRate);
     renderBonusPts(bonusPointService.bonusPoints);
     renderStockInfo();
   });
 
   renderProductList();
+  renderTotalPrice(cartStore.getState().totalAmount);
+  renderBonusPts(bonusPointService.bonusPoints);
 
   setTimeout(function () {
     setInterval(function () {

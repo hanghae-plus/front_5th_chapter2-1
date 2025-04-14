@@ -4,9 +4,9 @@ import { createStore } from "./createStore";
 const initialCartState = {
   items: [],
   lastSelected: 0,
-  totalPrice: 0,
+  totalAmount: 0,
   totalQuantity: 0,
-  originalTotalPrice: 0,
+  totalAmountBeforeDiscount: 0,
 };
 
 export const cartStore = createStore(cartReducer, initialCartState);

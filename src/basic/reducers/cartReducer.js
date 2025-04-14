@@ -42,6 +42,7 @@ export function cartReducer(state, action) {
         ...calculateCartTotal(),
       };
     }
+
     case actions.REMOVE_ITEM: {
       const selectedItem = action.payload;
 

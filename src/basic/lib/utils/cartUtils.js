@@ -4,17 +4,18 @@ import { discountService } from "../services/DiscountService";
 
 export function calculateCartTotal() {
   let totalQuantity = 0;
-  let originalTotalPrice = 0;
-  let totalPrice = 0;
+  let totalAmountBeforeDiscount = 0;
+  let totalAmount = 0;
 
   const cartDisp = document.getElementById("cart-items");
   const cartItems = cartDisp.children;
 
   if (cartItems.length === 0) {
+    bonusPointService.resetBonusPoints();
     return {
       totalQuantity,
-      originalTotalPrice,
-      totalPrice,
+      totalAmountBeforeDiscount,
+      totalAmount,
     };
   }
 
@@ -32,7 +33,7 @@ export function calculateCartTotal() {
     let itemTot = curItem.price * q;
     let disc = 0;
     totalQuantity += q;
-    originalTotalPrice += itemTot;
+    totalAmountBeforeDiscount += itemTot;
     if (q >= 10) {
       if (curItem.id === "p1") disc = 0.1;
       else if (curItem.id === "p2") disc = 0.15;
@@ -40,20 +41,20 @@ export function calculateCartTotal() {
       else if (curItem.id === "p4") disc = 0.05;
       else if (curItem.id === "p5") disc = 0.25;
     }
-    totalPrice += itemTot * (1 - disc);
+    totalAmount += itemTot * (1 - disc);
   }
 
-  totalPrice = discountService.applyDiscount(
+  totalAmount = discountService.applyDiscount(
     totalQuantity,
-    totalPrice,
-    originalTotalPrice,
+    totalAmount,
+    totalAmountBeforeDiscount,
   );
 
-  bonusPointService.applyBonusPoints(totalPrice);
+  bonusPointService.getBonusPointsFromTotalAmount(totalAmount);
 
   return {
     totalQuantity,
-    originalTotalPrice,
-    totalPrice,
+    totalAmountBeforeDiscount,
+    totalAmount,
   };
 }

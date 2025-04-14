@@ -1,6 +1,6 @@
 import { CartStore, SelectedProductStore } from './store/stores';
 import { PRODUCT_LIST } from './consts/productList';
-import { AddButtonDOM, CartItemsContainerDOM } from './ui';
+import { AddButtonDOM, CartItemsContainerDOM, LayoutDOM } from './ui';
 
 const discountTable = {
   p1: 0.1,
@@ -15,11 +15,6 @@ const main = () => {
   const totalAmountContainer = document.createElement('div');
   const stockStatusContainer = document.createElement('div');
 
-  const mainRoot = document.getElementById('app');
-  const mainContainer = document.createElement('div');
-  const mainWrapper = document.createElement('div');
-  const mainHeader = document.createElement('h1');
-
   productSelect.id = 'product-select';
   productSelect.className = 'border rounded p-2 mr-2';
 
@@ -29,13 +24,10 @@ const main = () => {
   stockStatusContainer.id = 'stock-status';
   stockStatusContainer.className = 'text-sm text-gray-500 mt-2';
 
-  mainContainer.className = 'bg-gray-100 p-8';
+  LayoutDOM.init();
 
-  mainWrapper.className =
-    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-
-  mainHeader.className = 'text-2xl font-bold mb-4';
-  mainHeader.textContent = '장바구니';
+  const { mainAppRoot, mainContainer, mainWrapper, mainHeader } =
+    LayoutDOM.get();
 
   CartItemsContainerDOM.init({
     totalAmountContainer,
@@ -62,7 +54,7 @@ const main = () => {
   mainWrapper.appendChild(addButton);
   mainWrapper.appendChild(stockStatusContainer);
   mainContainer.appendChild(mainWrapper);
-  mainRoot.appendChild(mainContainer);
+  mainAppRoot.appendChild(mainContainer);
 
   calculateCart(cartItemsContainer, totalAmountContainer, stockStatusContainer);
 

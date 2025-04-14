@@ -1,4 +1,4 @@
-var products, select, addProdBtn, cartDiv, sum, stockInfo;
+var products, select, addItemBtn, cartDiv, sum, stockInfo;
 var lastSelectedProduct,
   totalPrice = 0,
   totalEa = 0;
@@ -20,14 +20,14 @@ const main = () => {
   cartDiv = document.createElement("div");
   sum = document.createElement("div");
   select = document.createElement("select");
-  addProdBtn = document.createElement("button");
+  addItemBtn = document.createElement("button");
   stockInfo = document.createElement("div");
 
   // IDs 설정
   cartDiv.id = "cart-items";
   sum.id = "cart-total";
   select.id = "product-select";
-  addProdBtn.id = "add-to-cart";
+  addItemBtn.id = "add-to-cart";
   stockInfo.id = "stock-status";
 
   // className 설정
@@ -37,12 +37,12 @@ const main = () => {
   titleText.className = "text-2xl font-bold mb-4";
   sum.className = "text-xl font-bold my-4";
   select.className = "border rounded p-2 mr-2";
-  addProdBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
+  addItemBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
   stockInfo.className = "text-sm text-gray-500 mt-2";
 
   // 텍스트 설정
   titleText.textContent = "장바구니";
-  addProdBtn.textContent = "추가";
+  addItemBtn.textContent = "추가";
 
   // 이벤트 리스너 설정
   updateSelectOptions();
@@ -52,7 +52,7 @@ const main = () => {
   wrapper.appendChild(cartDiv);
   wrapper.appendChild(sum);
   wrapper.appendChild(select);
-  wrapper.appendChild(addProdBtn);
+  wrapper.appendChild(addItemBtn);
   wrapper.appendChild(stockInfo);
   container.appendChild(wrapper);
   root.appendChild(container);
@@ -271,7 +271,7 @@ const addNewItem = (itemToAdd) => {
 main();
 
 // 상품 추가 버튼 클릭 이벤트
-addProdBtn.addEventListener("click", function () {
+addItemBtn.addEventListener("click", function () {
   var selectedItem = select.value;
   var itemToAdd = products.find(function (item) {
     return item.id === selectedItem;
@@ -292,31 +292,26 @@ addProdBtn.addEventListener("click", function () {
 // 장바구니 아이템 클릭 이벤트
 cartDiv.addEventListener("click", function (event) {
   var target = event.target;
-  if (
-    target.classList.contains("quantity-change") ||
-    target.classList.contains("remove-item")
-  ) {
+  const isTargetQuantityChange = target.classList.contains("quantity-change");
+  const isTargetRemoveItem = target.classList.contains("remove-item");
+
+  if (isTargetQuantityChange || isTargetRemoveItem) {
     var itemId = target.dataset.productId;
     var itemElem = document.getElementById(itemId);
+    var itemSpan = itemElem.querySelector("span");
+    var itemText = itemSpan.textContent;
+
     var itemToChange = products.find(function (item) {
       return item.id === itemId;
     });
-    if (target.classList.contains("quantity-change")) {
-      var eaToChange = parseInt(target.dataset.change);
 
-      var newEa =
-        parseInt(itemElem.querySelector("span").textContent.split("x ")[1]) +
-        eaToChange;
-      if (
-        newEa > 0 &&
-        newEa <=
-          itemToChange.stock +
-            parseInt(itemElem.querySelector("span").textContent.split("x ")[1])
-      ) {
-        itemElem.querySelector("span").textContent =
-          itemElem.querySelector("span").textContent.split("x ")[0] +
-          "x " +
-          newEa;
+    if (isTargetQuantityChange) {
+      var eaToChange = parseInt(target.dataset.change);
+      var currentEa = parseInt(itemText.split("x ")[1]);
+      var newEa = currentEa + eaToChange;
+
+      if (newEa > 0 && newEa <= itemToChange.stock + currentEa) {
+        itemSpan.textContent = itemText.split("x ")[0] + "x " + newEa;
         itemToChange.stock -= eaToChange;
       } else if (newEa <= 0) {
         itemElem.remove();
@@ -324,10 +319,8 @@ cartDiv.addEventListener("click", function (event) {
       } else {
         alert("재고가 부족합니다.");
       }
-    } else if (target.classList.contains("remove-item")) {
-      var eaToRemove = parseInt(
-        itemElem.querySelector("span").textContent.split("x ")[1],
-      );
+    } else if (isTargetRemoveItem) {
+      var eaToRemove = parseInt(itemText.split("x ")[1]);
 
       itemToChange.stock += eaToRemove;
       itemElem.remove();

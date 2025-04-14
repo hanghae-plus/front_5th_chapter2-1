@@ -1,10 +1,7 @@
 import { CONSTANTS } from './constants';
 import { textUtils } from './utils/textUtils';
-import { calcUtils } from './utils/calcUtils';
-import { updateStockInfoText } from './components/stockStatus/updateStockInfoText';
-import { getPoints } from './components/points/getPoints';
-import { renderPoints } from './components/points/renderPoints';
 import { updateSelectOptions } from './components/itemSelect/updateSelectOptions';
+import { renderCalcCart } from './components/cartTotal/renderCalcCart';
 
 import Container from './components/Container';
 import ContentWrapper from './components/ContentWrapper';
@@ -14,7 +11,6 @@ import CartAddButton from './components/CartAddButton';
 import ItemSelect from './components/itemSelect/ItemSelect';
 import CartTotal from './components/cartTotal/CartTotal';
 import StockStatus from './components/stockStatus/StockStatus';
-import { calcCartItems } from './components/cart/calcCartItems';
 
 let items, lastSelectedItem;
 
@@ -47,7 +43,7 @@ function main() {
   appendDOM();
 
   updateSelectOptions(items);
-  calcCart();
+  renderCalcCart(items);
 
   // 번개세일 timeout alert
   setTimeout(function () {
@@ -85,35 +81,6 @@ function main() {
     }, CONSTANTS.SUGGEST_SALE_INTERVAL);
   }, Math.random() * CONSTANTS.SUGGEST_SALE_DELAY);
 } // end of main()
-
-// 장바구니 계산
-function calcCart() {
-  const { totalAmount, itemCount, originalTotalAmount } = calcCartItems(items);
-
-  const { finalDiscountRate, discountedTotalAmount } =
-    calcUtils.calcFinalDiscount(totalAmount, originalTotalAmount, itemCount);
-
-  const roundedAmount = Math.round(discountedTotalAmount);
-  const $cartTotal = document.getElementById('cart-total');
-  $cartTotal.textContent = textUtils.getTotalAmountText(roundedAmount);
-
-  if (finalDiscountRate > 0) {
-    const $discountSpan = document.createElement('span');
-
-    $discountSpan.className = 'text-green-500 ml-2';
-    const discountedRate = (finalDiscountRate * 100).toFixed(1);
-    $discountSpan.textContent = textUtils.getDiscountText(discountedRate);
-    const $cartTotal = document.getElementById('cart-total');
-    $cartTotal.appendChild($discountSpan);
-  }
-
-  const updateText = updateStockInfoText(items);
-  const $stockStatus = document.getElementById('stock-status');
-  $stockStatus.textContent = updateText;
-
-  const points = getPoints(totalAmount);
-  renderPoints(points);
-}
 
 main();
 
@@ -179,7 +146,7 @@ $addButton.addEventListener('click', function () {
       selectedItem.quantity--;
     }
 
-    calcCart();
+    renderCalcCart(items);
     lastSelectedItem = selectItemId;
   }
 });
@@ -232,6 +199,6 @@ $cart.addEventListener('click', function (event) {
       $item.remove();
     }
 
-    calcCart();
+    renderCalcCart(items);
   }
 });

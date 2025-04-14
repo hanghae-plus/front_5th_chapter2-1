@@ -38,7 +38,9 @@ export const $ = (type, props = {}, ...children) => {
   Object.entries(props || {}).forEach(([key, value]) => {
     if (key === "dataset" && typeof value === "object") {
       // dataset 처리
-      Object.entries(value).forEach(([dataKey, dataValue]) => (element.dataset[dataKey] = dataValue));
+      Object.entries(value).forEach(
+        ([dataKey, dataValue]) => (element.dataset[dataKey] = dataValue),
+      );
     } else {
       // id, className 및 기타 속성 처리
       if (key === "className" && Array.isArray(value)) value = value.join(" ");
@@ -48,7 +50,9 @@ export const $ = (type, props = {}, ...children) => {
 
   // element children 생성 시 추가
   if (children && Array.isArray(children)) {
-    children.filter((c) => !!c && c instanceof Node).forEach((el) => element.appendChild(el));
+    children
+      .filter((el) => !!el && el instanceof Node)
+      .forEach((el) => element.appendChild(el));
   }
   return element;
 };

@@ -28,6 +28,7 @@ export function cartReducer(state, action) {
           }
         } else {
           renderNewCartItem(itemToAdd);
+          itemToAdd.q--;
         }
       }
 

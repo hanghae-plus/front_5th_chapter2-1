@@ -30,8 +30,6 @@ export function renderNewCartItem(item) {
     quantity: 1,
   });
   $cartItems.appendChild(newItem);
-
-  item.q--;
 }
 
 export function renderBonusPts(bonusPoints) {

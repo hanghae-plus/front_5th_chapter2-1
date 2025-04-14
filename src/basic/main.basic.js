@@ -66,7 +66,7 @@ const handleCartItemsContainerClick = (event) => {
   }
 };
 
-const handleAddButtonClick = () => {
+const handleAddButtonClick = (productSelect) => {
   const selectedProductId = productSelect.value;
   const itemToAdd = productList.find(
     (product) => product.id === selectedProductId,
@@ -107,7 +107,6 @@ const handleAddButtonClick = () => {
   }
 };
 
-const productSelect = document.createElement('select');
 const addButton = document.createElement('button');
 const cartItemsContainer = document.createElement('div');
 const totalAmountContainer = document.createElement('div');
@@ -119,6 +118,8 @@ let totalAmount = 0;
 let itemCount = 0;
 
 const main = () => {
+  const productSelect = document.createElement('select');
+
   const mainRoot = document.getElementById('app');
   const mainContainer = document.createElement('div');
   const mainWrapper = document.createElement('div');
@@ -130,7 +131,9 @@ const main = () => {
   addButton.id = 'add-to-cart';
   addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   addButton.textContent = '추가';
-  addButton.addEventListener('click', handleAddButtonClick);
+  addButton.addEventListener('click', () =>
+    handleAddButtonClick(productSelect),
+  );
 
   cartItemsContainer.id = 'cart-items';
   cartItemsContainer.addEventListener('click', handleCartItemsContainerClick);
@@ -149,7 +152,7 @@ const main = () => {
   mainHeader.className = 'text-2xl font-bold mb-4';
   mainHeader.textContent = '장바구니';
 
-  updateProductSelectOptions();
+  updateProductSelectOptions(productSelect);
 
   mainWrapper.appendChild(mainHeader);
   mainWrapper.appendChild(cartItemsContainer);
@@ -170,7 +173,7 @@ const main = () => {
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.value = Math.round(luckyItem.value * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
-        updateProductSelectOptions();
+        updateProductSelectOptions(productSelect);
       }
     }, 30000);
   }, Math.random() * 10000);
@@ -187,14 +190,14 @@ const main = () => {
             suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!',
           );
           suggest.value = Math.round(suggest.value * 0.95);
-          updateProductSelectOptions();
+          updateProductSelectOptions(productSelect);
         }
       }
     }, 60000);
   }, Math.random() * 20000);
 };
 
-const updateProductSelectOptions = () => {
+const updateProductSelectOptions = (productSelect) => {
   const newSelectOptions = productList.reduce((newOptions, item) => {
     const option = document.createElement('option');
     option.value = item.id;

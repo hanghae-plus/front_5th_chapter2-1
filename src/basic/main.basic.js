@@ -1,4 +1,4 @@
-import { CartStore } from './store/CartStore';
+import { CartStore, SelectedProductStore } from './store/stores';
 
 const productList = [
   { id: 'p1', name: '상품1', value: 10000, quantity: 50 },
@@ -80,7 +80,6 @@ const handleAddButtonClick = (
   cartItemsContainer,
   totalAmountContainer,
   stockStatusContainer,
-  lastSelectedProductId,
 ) => {
   const selectedProductId = productSelect.value;
   const itemToAdd = productList.find(
@@ -122,7 +121,7 @@ const handleAddButtonClick = (
       totalAmountContainer,
       stockStatusContainer,
     );
-    lastSelectedProductId = selectedProductId;
+    SelectedProductStore.set('selectedProduct', selectedProductId);
   }
 };
 
@@ -138,8 +137,6 @@ const main = () => {
   const mainWrapper = document.createElement('div');
   const mainHeader = document.createElement('h1');
 
-  let lastSelectedProductId;
-
   productSelect.id = 'product-select';
   productSelect.className = 'border rounded p-2 mr-2';
 
@@ -152,7 +149,6 @@ const main = () => {
       cartItemsContainer,
       totalAmountContainer,
       stockStatusContainer,
-      lastSelectedProductId,
     ),
   );
 
@@ -208,6 +204,8 @@ const main = () => {
 
   setTimeout(() => {
     setInterval(() => {
+      const lastSelectedProductId = SelectedProductStore.get('selectedProduct');
+
       if (lastSelectedProductId) {
         const suggest = productList.find(
           (item) => item.id !== lastSelectedProductId && item.quantity > 0,

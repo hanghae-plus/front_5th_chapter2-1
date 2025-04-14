@@ -1,5 +1,3 @@
-var sel, addBtn, cartDisp, sum, stockInfo;
-
 var lastSel,
   bonusPts = 0,
   totalAmt = 0,
@@ -17,38 +15,50 @@ function main() {
   const root = document.getElementById('app');
   
   const cont = document.createElement('div');
-  const wrap = document.createElement('div');
-  const hTxt = document.createElement('h1');
-
-  cartDisp = document.createElement('div');
-  sum = document.createElement('div');
-  sel = document.createElement('select');
-  addBtn = document.createElement('button');
-  stockInfo = document.createElement('div');
-  cartDisp.id = 'cart-items';
-  sum.id = 'cart-total';
-  sel.id = 'product-select';
-  addBtn.id = 'add-to-cart';
-  stockInfo.id = 'stock-status';
   cont.className = 'bg-gray-100 p-8';
+
+  const wrap = document.createElement('div');
   wrap.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
+
+  const hTxt = document.createElement('h1');
   hTxt.className = 'text-2xl font-bold mb-4';
-  sum.className = 'text-xl font-bold my-4';
-  sel.className = 'border rounded p-2 mr-2';
-  addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  stockInfo.className = 'text-sm text-gray-500 mt-2';
   hTxt.textContent = '장바구니';
+
+  const cartDisp = document.createElement('div');
+  cartDisp.id = 'cart-items';
+
+  const sum = document.createElement('div');
+  sum.id = 'cart-total';
+  sum.className = 'text-xl font-bold my-4';
+
+  const sel = document.createElement('select');
+  sel.id = 'product-select';
+  sel.className = 'border rounded p-2 mr-2';
+
+  const addBtn = document.createElement('button');
+  addBtn.id = 'add-to-cart';
+  addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   addBtn.textContent = '추가';
-  updateSelOpts();
+
+  const stockInfo = document.createElement('div');
+  stockInfo.id = 'stock-status';
+  stockInfo.className = 'text-sm text-gray-500 mt-2';
+  
+  
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
   wrap.appendChild(sum);
   wrap.appendChild(sel);
   wrap.appendChild(addBtn);
   wrap.appendChild(stockInfo);
+  
   cont.appendChild(wrap);
+  
   root.appendChild(cont);
+  
+  updateSelOpts();
+
   calcCart();
   setTimeout(function () {
     setInterval(function () {
@@ -79,6 +89,7 @@ function main() {
 }
 
 function updateSelOpts() {
+  const sel = document.getElementById('product-select');
   sel.innerHTML = '';
   prodList.forEach(function (item) {
     var opt = document.createElement('option');
@@ -90,6 +101,8 @@ function updateSelOpts() {
 }
 
 function calcCart() {
+  const cartDisp = document.getElementById('cart-items');
+  const sum = document.getElementById('cart-total');
   totalAmt = 0;
   itemCnt = 0;
   var cartItems = cartDisp.children;
@@ -149,6 +162,7 @@ function calcCart() {
 }
 
 const renderBonusPts = () => {
+  const sum = document.getElementById('cart-total');
   bonusPts = Math.floor(totalAmt / 1000);
   var ptsTag = document.getElementById('loyalty-points');
   if (!ptsTag) {
@@ -161,6 +175,7 @@ const renderBonusPts = () => {
 };
 
 function updateStockInfo() {
+  const stockInfo = document.getElementById('stock-status');
   var infoMsg = '';
   prodList.forEach(function (item) {
     if (item.quantity < 5) {
@@ -178,7 +193,11 @@ function updateStockInfo() {
 
 main();
 
+
+const addBtn = document.getElementById('add-to-cart');
 addBtn.addEventListener('click', function () {
+  const sel = document.getElementById('product-select');
+  const cartDisp = document.getElementById('cart-items');
   var selItem = sel.value;
   var itemToAdd = prodList.find(function (p) {
     return p.id === selItem;
@@ -222,6 +241,8 @@ addBtn.addEventListener('click', function () {
   }
 });
 
+
+const cartDisp = document.getElementById('cart-items');
 cartDisp.addEventListener('click', function (event) {
   var tgt = event.target;
   if (

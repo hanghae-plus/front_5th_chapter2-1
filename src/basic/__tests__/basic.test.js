@@ -96,6 +96,12 @@ describe("basic test", () => {
     });
 
     it("총액이 올바르게 계산되는지 확인", () => {
+      // 화요일 할인이 적용되면 다른 요일 할인과 달라져서 테스트 실패
+      // 테스트 통과하도록 날짜 고정
+      const mockDate = new Date("2024-10-16"); // 수요일
+      vi.useFakeTimers();
+      vi.setSystemTime(mockDate);
+
       select.value = "p1";
       addBtn.click();
       addBtn.click();
@@ -111,6 +117,12 @@ describe("basic test", () => {
     });
 
     it("포인트가 올바르게 계산되는지 확인", () => {
+      // 화요일 할인이 적용되면 다른 요일 할인과 달라져서 테스트 실패
+      // 테스트 통과하도록 날짜 고정
+      const mockDate = new Date("2024-10-16"); // 수요일
+      vi.useFakeTimers();
+      vi.setSystemTime(mockDate);
+
       select.value = "p2";
       addBtn.click();
       expect(document.getElementById("points-value").textContent).toContain(
@@ -130,6 +142,7 @@ describe("basic test", () => {
       const mockDate = new Date("2024-10-15"); // 화요일
       vi.useFakeTimers();
       vi.setSystemTime(mockDate);
+
       select.value = "p1";
       addBtn.click();
       expect(document.getElementById("cart-total").textContent).toContain(

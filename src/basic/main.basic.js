@@ -3,8 +3,8 @@ import createDiscountEvent from './createDiscountEvent';
 let products, productSelectBox, addProductToCartButton, cartList, cartTotalPrice, stockStatus;
 let lastSel = null;
 let bonusPts = 0;
-let totalAmt = 0;
-let itemCnt = 0;
+let totalPrice = 0;
+let totalProductCount = 0;
 
 const DISCOUNT_EVENT_TYPE = {
   FLASH: 'flash',
@@ -83,66 +83,64 @@ const updateSelectBoxOptions = () => {
 };
 
 const calcCart = () => {
-  totalAmt = 0;
-  itemCnt = 0;
+  totalPrice = 0;
+  totalProductCount = 0;
 
   const cartItems = cartList.children;
-  let subTot = 0;
+  let totalPriceBeforeDiscount = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
-    (() => {
-      let curItem;
+    let currentProduct;
 
-      for (let j = 0; j < products.length; j++) {
-        if (products[j].id === cartItems[i].id) {
-          curItem = products[j];
-          break;
-        }
+    for (let j = 0; j < products.length; j++) {
+      if (products[j].id === cartItems[i].id) {
+        currentProduct = products[j];
+        break;
       }
+    }
 
-      const { id, price } = curItem;
-      const quantity = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
-      const itemTot = price * quantity;
+    const { id, price } = currentProduct;
+    const quantity = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
+    const productTotalPrice = price * quantity;
 
-      let disc = 0;
+    let disc = 0;
 
-      itemCnt += quantity;
-      subTot += itemTot;
+    totalProductCount += quantity;
+    totalPriceBeforeDiscount += productTotalPrice;
 
-      if (quantity >= 10) {
-        if (id === 'p1') disc = 0.1;
-        else if (id === 'p2') disc = 0.15;
-        else if (id === 'p3') disc = 0.2;
-        else if (id === 'p4') disc = 0.05;
-        else if (id === 'p5') disc = 0.25;
-      }
+    if (quantity >= 10) {
+      if (id === 'p1') disc = 0.1;
+      else if (id === 'p2') disc = 0.15;
+      else if (id === 'p3') disc = 0.2;
+      else if (id === 'p4') disc = 0.05;
+      else if (id === 'p5') disc = 0.25;
+    }
 
-      totalAmt += itemTot * (1 - disc);
-    })();
+    totalPrice += productTotalPrice * (1 - disc);
   }
 
   let discRate = 0;
 
-  if (itemCnt >= 30) {
-    const bulkDisc = totalAmt * 0.25;
-    const itemDisc = subTot - totalAmt;
+  if (totalProductCount >= 30) {
+    const bulkDisc = totalPrice * 0.25;
+    const itemDisc = totalPriceBeforeDiscount - totalPrice;
 
     if (bulkDisc > itemDisc) {
-      totalAmt = subTot * (1 - 0.25);
+      totalPrice = totalPriceBeforeDiscount * (1 - 0.25);
       discRate = 0.25;
     } else {
-      discRate = (subTot - totalAmt) / subTot;
+      discRate = (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
     }
   } else {
-    discRate = (subTot - totalAmt) / subTot;
+    discRate = (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
   }
 
   if (new Date().getDay() === 2) {
-    totalAmt *= 1 - 0.1;
+    totalPrice *= 1 - 0.1;
     discRate = Math.max(discRate, 0.1);
   }
 
-  cartTotalPrice.textContent = `총액: ${Math.round(totalAmt)}원`;
+  cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
 
   if (discRate > 0) {
     const span = document.createElement('span');
@@ -157,7 +155,7 @@ const calcCart = () => {
 };
 
 const renderBonusPts = () => {
-  bonusPts = Math.floor(totalAmt / 1000);
+  bonusPts = Math.floor(totalPrice / 1000);
 
   let ptsTag = document.getElementById('loyalty-points');
 
@@ -238,7 +236,8 @@ cartList.addEventListener('click', (event) => {
 
       if (
         newQty > 0 &&
-        newQty <= prod.quantity + parseInt(itemElem.querySelector('span').textContent.split('x ')[1])
+        newQty <=
+          prod.quantity + parseInt(itemElem.querySelector('span').textContent.split('x ')[1])
       ) {
         itemElem.querySelector('span').textContent =
           `${itemElem.querySelector('span').textContent.split('x ')[0]}x ${newQty}`;

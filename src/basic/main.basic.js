@@ -1,62 +1,39 @@
 import { CONSTNANTS } from './constants';
 import { textUtils } from './utils/textUtils';
-import { updateStockInfoText } from './components/stock/updateStockInfoText';
+import { updateStockInfoText } from './components/stockStatus/updateStockInfoText';
 import { getPoints } from './components/points/getPoints';
 import { renderPoints } from './components/points/renderPoints';
 import { updateSelectOptions } from './components/itemSelect/updateSelectOptions';
 
-let items,
-  $itemSelect,
-  $addButton,
-  $cartItemsDiv,
-  $cartTotalDiv,
-  $stockStatusDiv;
+import Container from './components/Container';
+import ContentWrapper from './components/ContentWrapper';
+import Header from './components/Header';
+import Cart from './components/Cart';
+import CartAddButton from './components/CartAddButton';
+import ItemSelect from './components/itemSelect/ItemSelect';
+import CartTotal from './components/cartTotal/CartTotal';
+import StockStatus from './components/stockStatus/StockStatus';
 
-let lastSelectedItem,
+let items,
+  lastSelectedItem,
   totalAmount = 0,
   itemCount = 0;
 
 function appendDOM() {
-  const $cartDiv = document.createElement('div');
-  $cartDiv.className =
-    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
+  const $contentWrapper = ContentWrapper();
 
-  const $cartTitle = document.createElement('h1');
-  $cartTitle.className = 'text-2xl font-bold mb-4';
-  $cartTitle.textContent = '장바구니';
-  $cartDiv.appendChild($cartTitle);
+  $contentWrapper.appendChild(Header({ title: '장바구니' }));
+  $contentWrapper.appendChild(Cart());
+  $contentWrapper.appendChild(CartTotal());
+  $contentWrapper.appendChild(ItemSelect());
+  $contentWrapper.appendChild(CartAddButton());
+  $contentWrapper.appendChild(StockStatus());
 
-  $cartItemsDiv = document.createElement('div');
-  $cartItemsDiv.id = 'cart-items';
-  $cartDiv.appendChild($cartItemsDiv);
-
-  $cartTotalDiv = document.createElement('div');
-  $cartTotalDiv.id = 'cart-total';
-  $cartTotalDiv.className = 'text-xl font-bold my-4';
-  $cartDiv.appendChild($cartTotalDiv);
-
-  $itemSelect = document.createElement('select');
-  $itemSelect.id = 'product-select';
-  $itemSelect.className = 'border rounded p-2 mr-2';
-  $cartDiv.appendChild($itemSelect);
-
-  $addButton = document.createElement('button');
-  $addButton.id = 'add-to-cart';
-  $addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  $addButton.textContent = '추가';
-  $cartDiv.appendChild($addButton);
-
-  $stockStatusDiv = document.createElement('div');
-  $stockStatusDiv.id = 'stock-status';
-  $stockStatusDiv.className = 'text-sm text-gray-500 mt-2';
-  $cartDiv.appendChild($stockStatusDiv);
-
-  const $bgDiv = document.createElement('div');
-  $bgDiv.className = 'bg-gray-100 p-8';
-  $bgDiv.appendChild($cartDiv);
+  const $containerDiv = Container();
+  $containerDiv.appendChild($contentWrapper);
 
   const $root = document.getElementById('app');
-  $root.appendChild($bgDiv);
+  $root.appendChild($containerDiv);
 }
 
 function main() {
@@ -116,7 +93,8 @@ function calcCart() {
   itemCount = 0;
   let originalTotalAmount = 0;
 
-  const cartItems = $cartItemsDiv.children;
+  const $cart = document.getElementById('cart-items');
+  const cartItems = $cart.children;
   for (var i = 0; i < cartItems.length; i++) {
     (function () {
       let curItem;
@@ -178,7 +156,8 @@ function calcCart() {
   }
 
   const roundedAmount = Math.round(totalAmount);
-  $cartTotalDiv.textContent = textUtils.getTotalAmountText(roundedAmount);
+  const $cartTotal = document.getElementById('cart-total');
+  $cartTotal.textContent = textUtils.getTotalAmountText(roundedAmount);
 
   if (finalDiscountRate > 0) {
     const $discountSpan = document.createElement('span');
@@ -186,11 +165,13 @@ function calcCart() {
     $discountSpan.className = 'text-green-500 ml-2';
     const discountedRate = (finalDiscountRate * 100).toFixed(1);
     $discountSpan.textContent = textUtils.getDiscountText(discountedRate);
-    $cartTotalDiv.appendChild($discountSpan);
+    const $cartTotal = document.getElementById('cart-total');
+    $cartTotal.appendChild($discountSpan);
   }
 
   const updateText = updateStockInfoText(items);
-  $stockStatusDiv.textContent = updateText;
+  const $stockStatus = document.getElementById('stock-status');
+  $stockStatus.textContent = updateText;
 
   const points = getPoints(totalAmount);
   renderPoints(points);
@@ -198,8 +179,10 @@ function calcCart() {
 
 main();
 
+const $addButton = document.getElementById('add-to-cart');
 // 상품 추가 버튼 클릭 이벤트 리스너
 $addButton.addEventListener('click', function () {
+  const $itemSelect = document.getElementById('product-select');
   const selectItemId = $itemSelect.value;
   const selectedItem = items.find(function (item) {
     return item.id === selectItemId;
@@ -252,7 +235,9 @@ $addButton.addEventListener('click', function () {
           >삭제</button>
         </div>
       `;
-      $cartItemsDiv.appendChild($newItemsDiv);
+
+      const $cart = document.getElementById('cart-items');
+      $cart.appendChild($newItemsDiv);
       selectedItem.quantity--;
     }
 
@@ -261,8 +246,9 @@ $addButton.addEventListener('click', function () {
   }
 });
 
+const $cart = document.getElementById('cart-items');
 // 장바구니에서 상품 수량을 변경하거나 삭제하는 이벤트 리스너
-$cartItemsDiv.addEventListener('click', function (event) {
+$cart.addEventListener('click', function (event) {
   const target = event.target;
 
   if (

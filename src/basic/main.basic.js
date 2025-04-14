@@ -59,19 +59,21 @@ const handleCartItemsContainerClick = (event) => {
 };
 
 const handleAddButtonClick = () => {
-  const selItem = productSelect.value;
-  const itemToAdd = productList.find((p) => p.id === selItem);
+  const selectedProductId = productSelect.value;
+  const itemToAdd = productList.find(
+    (product) => product.id === selectedProductId,
+  );
 
   if (itemToAdd && itemToAdd.quantity > 0) {
     const item = document.getElementById(itemToAdd.id);
 
     if (item) {
-      const newQty =
+      const newQuantity =
         parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
 
-      if (newQty <= itemToAdd.quantity) {
+      if (newQuantity <= itemToAdd.quantity) {
         item.querySelector('span').textContent =
-          itemToAdd.name + ' - ' + itemToAdd.value + '원 x ' + newQty;
+          itemToAdd.name + ' - ' + itemToAdd.value + '원 x ' + newQuantity;
         itemToAdd.quantity--;
       } else {
         alert('재고가 부족합니다.');
@@ -93,7 +95,7 @@ const handleAddButtonClick = () => {
       itemToAdd.quantity--;
     }
     calcCart();
-    lastSel = selItem;
+    lastSelectedProductId = selectedProductId;
   }
 };
 
@@ -103,7 +105,7 @@ const cartItemsContainer = document.createElement('div');
 const totalAmountContainer = document.createElement('div');
 const stockStatusContainer = document.createElement('div');
 
-let lastSel;
+let lastSelectedProductId;
 let bonusPts = 0;
 let totalAmt = 0;
 let itemCnt = 0;
@@ -167,9 +169,9 @@ const main = () => {
 
   setTimeout(() => {
     setInterval(() => {
-      if (lastSel) {
+      if (lastSelectedProductId) {
         const suggest = productList.find(
-          (item) => item.id !== lastSel && item.quantity > 0,
+          (item) => item.id !== lastSelectedProductId && item.quantity > 0,
         );
 
         if (suggest) {

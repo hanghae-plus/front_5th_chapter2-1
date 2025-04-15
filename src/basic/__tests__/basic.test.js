@@ -6,6 +6,7 @@ describe('basic test', () => {
     { type: 'basic', loadFile: () => import('../main.basic.js') },
   ])('$type 장바구니 시나리오 테스트', ({ loadFile }) => {
     let sel, addBtn, cartDisp, sum, stockInfo;
+
     const today = new Date().getDay();
 
     beforeAll(async () => {
@@ -106,7 +107,6 @@ describe('basic test', () => {
     it('포인트가 올바르게 계산되는지 확인', () => {
       sel.value = 'p2';
       addBtn.click();
-      //(포인트: 115)
       const expectedText = today === 2 ? '(포인트: 115)' : '(포인트: 128)';
       expect(document.getElementById('loyalty-points').textContent).toContain(expectedText);
     });

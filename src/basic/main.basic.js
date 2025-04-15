@@ -20,6 +20,15 @@ const prodList = [
 ];
 
 function main() {
+  initLayout();
+  updateSelectOptions();
+  calcCart();
+
+  startRandomlyInMs(10_000)(() => setInterval(startLuckyDraw, 30_000));
+  startRandomlyInMs(20_000)(() => setInterval(startSuggestion, 60_000));
+}
+
+const initLayout = () => {
   const root = document.getElementById('app');
 
   const cont = document.createElement('div');
@@ -63,13 +72,7 @@ function main() {
   cont.appendChild(wrap);
 
   root.appendChild(cont);
-
-  updateSelectOptions();
-  calcCart();
-
-  startRandomlyInMs(10_000)(() => setInterval(startLuckyDraw, 30_000));
-  startRandomlyInMs(20_000)(() => setInterval(startSuggestion, 60_000));
-}
+};
 
 const startLuckyDraw = () => {
   const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];

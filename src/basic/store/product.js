@@ -5,11 +5,11 @@ const productStore = (function () {
     return [...productList];
   }
 
-  function addProduct(product) {
+  function addProductItem(product) {
     productList.push(product);
   }
 
-  function updateProduct(productId, updateFn) {
+  function updateProductItem(productId, updateFn) {
     const index = productList.findIndex((product) => product.id === productId);
 
     if (index !== -1) {
@@ -20,8 +20,8 @@ const productStore = (function () {
 
   return {
     getProductList,
-    addProduct,
-    updateProduct,
+    addProductItem,
+    updateProductItem,
   };
 })();
 

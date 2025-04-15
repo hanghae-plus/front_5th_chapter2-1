@@ -45,7 +45,7 @@ function main() {
     { id: "p3", name: "상품3", val: 30000, q: 20 },
     { id: "p4", name: "상품4", val: 15000, q: 0 },
     { id: "p5", name: "상품5", val: 25000, q: 10 },
-  ].forEach(productStore.addProduct);
+  ].forEach(productStore.addProductItem);
 
   updateSelOpts();
 
@@ -67,7 +67,7 @@ function main() {
         productList[Math.floor(Math.random() * productList.length)];
 
       if (Math.random() < 0.3 && luckyItem.q > 0) {
-        productStore.updateProduct(luckyItem.id, (product) => ({
+        productStore.updateProductItem(luckyItem.id, (product) => ({
           ...product,
           val: Math.round(luckyItem.val * 0.8),
         }));
@@ -88,7 +88,7 @@ function main() {
           alert(
             suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!",
           );
-          productStore.updateProduct(suggest.id, (product) => ({
+          productStore.updateProductItem(suggest.id, (product) => ({
             ...product,
             val: Math.round(suggest.val * 0.95),
           }));

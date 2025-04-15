@@ -4,3 +4,4 @@ export * from './flashSale';
 export * from './additionalDiscount';
 export * from './randomSale';
 export * from './calculateCartTotal';
+export * from './quantityManagement';

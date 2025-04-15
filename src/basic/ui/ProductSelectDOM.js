@@ -6,6 +6,7 @@ export const ProductSelectDOM = {
     this._productSelect.id = 'product-select';
     this._productSelect.className = 'border rounded p-2 mr-2';
   },
+
   get() {
     return this._productSelect;
   },

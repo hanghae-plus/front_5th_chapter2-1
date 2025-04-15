@@ -3,7 +3,13 @@ import { calculateCart } from '../logic';
 import { SelectedProductStore } from '../store';
 import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
 import { cartItemElement } from '../render';
-import { formatPrice } from '../utils';
+import {
+  formatPrice,
+  getCartItemElement,
+  getQuantityFromElement,
+  updateQuantityText,
+  alertOutOfStock,
+} from '../utils';
 
 const getCartItemElement = (cartItemId) => document.getElementById(cartItemId);
 

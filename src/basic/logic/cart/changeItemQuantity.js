@@ -4,7 +4,7 @@ import {
   alertOutOfStock,
 } from '../../utils';
 
-const updateItemQuantity = (element, product, newQuantity, change) => {
+const updateCartItemQuantity = (element, product, newQuantity, change) => {
   updateQuantityText(element, product, newQuantity);
   product.quantity -= change;
 };
@@ -30,11 +30,5 @@ export const changeItemQuantity = (target, product, element) => {
     return;
   }
 
-  updateItemQuantity(element, product, newQuantity, change);
-};
-
-export const removeCartItem = (product, element) => {
-  const quantity = getQuantityFromElement(element);
-  product.quantity += quantity;
-  element.remove();
+  updateCartItemQuantity(element, product, newQuantity, change);
 };

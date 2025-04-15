@@ -6,7 +6,7 @@ import {
   AddButtonDOM,
   LayoutDOM,
 } from '../ui';
-import { updateProductSelectOptions } from './updateProductSelectOptions';
+import { renderProductSelect } from './renderProductSelect';
 import { calculateCart } from '../logic';
 
 const initAllDOM = () => {
@@ -41,7 +41,7 @@ const buildMainLayout = () => {
 };
 
 const initializeState = () => {
-  updateProductSelectOptions();
+  renderProductSelect();
   calculateCart();
 };
 

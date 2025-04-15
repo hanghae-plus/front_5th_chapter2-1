@@ -16,7 +16,7 @@ const createOptionElement = (item) => {
   });
 };
 
-export const updateProductSelectOptions = () => {
+export const renderProductSelect = () => {
   const productSelect = ProductSelectDOM.get();
 
   const fragment = document.createDocumentFragment();

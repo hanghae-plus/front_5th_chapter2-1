@@ -1,5 +1,5 @@
 import { FLASH_SALE, PRODUCT_LIST } from '../../consts';
-import { updateProductSelectOptions } from '../../render';
+import { renderProductSelect } from '../../render';
 
 const getRandomProduct = () =>
   PRODUCT_LIST[Math.floor(Math.random() * PRODUCT_LIST.length)];
@@ -22,5 +22,5 @@ export const flashSale = () => {
 
   applyFlashSaleDiscount(luckyItem);
   notifyFlashSale(luckyItem);
-  updateProductSelectOptions();
+  renderProductSelect();
 };

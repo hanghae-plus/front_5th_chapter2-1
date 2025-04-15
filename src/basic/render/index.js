@@ -1,4 +1,4 @@
-export * from './updateProductSelectOptions';
+export * from './renderProductSelect';
 export * from './updateStockStatus';
 export * from './renderBonusPoints';
 export * from './initMain';

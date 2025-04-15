@@ -5,12 +5,18 @@ const store = {
   itemCnt: 0,
 };
 
+// 할인율
+const DISCOUNT_RATE = {
+  tuesday: 0.1,
+  bulk: 0.25,
+};
+
 const prodList = [
-  { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
-  { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
-  { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
-  { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
-  { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
+  { id: 'p1', name: '상품1', price: 10000, quantity: 50, discountRate: 0.1 },
+  { id: 'p2', name: '상품2', price: 20000, quantity: 30, discountRate: 0.15 },
+  { id: 'p3', name: '상품3', price: 30000, quantity: 20, discountRate: 0.2 },
+  { id: 'p4', name: '상품4', price: 15000, quantity: 0, discountRate: 0.05 },
+  { id: 'p5', name: '상품5', price: 25000, quantity: 10, discountRate: 0.25 },
 ];
 
 function main() {
@@ -122,60 +128,56 @@ function calcCart() {
   const sum = document.getElementById('cart-total');
   store.totalAmt = 0;
   store.itemCnt = 0;
-  var cartItems = cartDisp.children;
-  var subTot = 0;
-  for (var i = 0; i < cartItems.length; i++) {
-    (function () {
-      var curItem;
-      for (var j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
-          break;
-        }
-      }
-      var q = parseInt(
-        cartItems[i].querySelector('span').textContent.split('x ')[1],
-      );
-      var itemTot = curItem.price * q;
-      var disc = 0;
-      store.itemCnt += q;
-      subTot += itemTot;
-      if (q >= 10) {
-        if (curItem.id === 'p1') disc = 0.1;
-        else if (curItem.id === 'p2') disc = 0.15;
-        else if (curItem.id === 'p3') disc = 0.2;
-        else if (curItem.id === 'p4') disc = 0.05;
-        else if (curItem.id === 'p5') disc = 0.25;
-      }
-      store.totalAmt += itemTot * (1 - disc);
-    })();
+  const cartItems = cartDisp.children;
+  let totalAmountWithoutDiscount = 0;
+
+  // 장바구니 아이템 순회
+  for (let i = 0; i < cartItems.length; i++) {
+    // 장바구니 아이템의 id로 상품 목록에서 해당 상품 찾기
+    const curItem = prodList.find((product) => product.id === cartItems[i].id);
+
+    // 장바구니 아이템 수량
+    const quantity = parseInt(
+      cartItems[i].querySelector('span').textContent.split('x ')[1],
+    );
+
+    // 장바구니 아이템의 총 금액
+    const itemTotalPrice = curItem.price * quantity;
+
+    // 장바구니 아이템의 할인율
+    const itemDiscountRate = quantity >= 10 ? curItem.discountRate : 0;
+    store.itemCnt += quantity;
+    store.totalAmt += itemTotalPrice * (1 - itemDiscountRate);
+
+    totalAmountWithoutDiscount += itemTotalPrice;
   }
+
   let discRate = 0;
-  if (store.itemCnt >= 30) {
-    var bulkDisc = store.totalAmt * 0.25;
-    var itemDisc = subTot - store.totalAmt;
-    if (bulkDisc > itemDisc) {
-      store.totalAmt = subTot * (1 - 0.25);
-      discRate = 0.25;
-    } else {
-      discRate = (subTot - store.totalAmt) / subTot;
-    }
+
+  // 30개 이상 구매시 할인
+  const bulkDiscountedAmount = store.totalAmt * DISCOUNT_RATE.bulk;
+  const itemDiscountedAmount = totalAmountWithoutDiscount - store.totalAmt;
+
+  if (store.itemCnt >= 30 && bulkDiscountedAmount > itemDiscountedAmount) {
+    store.totalAmt = totalAmountWithoutDiscount * (1 - DISCOUNT_RATE.bulk);
+    discRate = DISCOUNT_RATE.bulk;
   } else {
-    discRate = (subTot - store.totalAmt) / subTot;
+    discRate = itemDiscountedAmount / totalAmountWithoutDiscount;
   }
 
   // 화요일 할인
   if (new Date().getDay() === 2) {
-    store.totalAmt *= 1 - 0.1;
-    discRate = Math.max(discRate, 0.1);
+    store.totalAmt *= 1 - DISCOUNT_RATE.tuesday;
+    discRate = Math.max(discRate, DISCOUNT_RATE.tuesday);
   }
   sum.textContent = `총액: ${Math.round(store.totalAmt)}원`;
   if (discRate > 0) {
-    var span = document.createElement('span');
+    const span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
-    span.textContent = '(' + (discRate * 100).toFixed(1) + '% 할인 적용)';
+    span.textContent = `(${(discRate * 100).toFixed(1)}% 할인 적용)`;
     sum.appendChild(span);
   }
+
   updateStockInfo();
   renderBonusPts();
 }

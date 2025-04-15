@@ -1,0 +1,27 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "prettier" // ESLint와 Prettier 충돌 방지 (항상 마지막에 위치)
+  ],
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "rules": {
+    "prettier/prettier": "error", // Prettier 규칙 위반 시 오류 표시
+    "no-console": ["warn", { "allow": ["warn", "error"] }], // console.log 사용 경고
+    "no-unused-vars": "warn", // 미사용 변수 경고
+    "no-debugger": "warn" // debugger 사용 경고
+  },
+  "overrides": [
+    {
+      "files": ["*.test.js", "*.test.ts", "*.spec.js", "*.spec.ts"],
+      "rules": {
+        "no-console": "off" // 테스트 파일에서는 console 허용
+      }
+    }
+  ]
+}

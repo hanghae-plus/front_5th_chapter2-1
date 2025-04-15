@@ -82,28 +82,28 @@ const calculateCartTotal = (cartList, products) => {
   totalPrice = tuesdayDiscount.price;
   totalCartDiscountRate = tuesdayDiscount.discountRate;
 
-  const bonusPts = Math.floor(totalPrice / 1000);
+  const bonusPoints = Math.floor(totalPrice / 1000);
 
   return {
     totalPrice,
     discountRate: totalCartDiscountRate,
-    bonusPts,
+    bonusPoints,
   };
 };
 
-const updateStockInfo = (products, stockStatus) => {
-  let infoMsg = '';
+const renderStockStatusMessage = (products, stockStatus) => {
+  let stockStatusMessage = '';
 
   products.forEach(({ name, quantity }) => {
     if (quantity < 5) {
-      infoMsg += `${name}: ${quantity > 0 ? `재고 부족 (${quantity}개 남음)` : '품절'}\n`;
+      stockStatusMessage += `${name}: ${quantity > 0 ? `재고 부족 (${quantity}개 남음)` : '품절'}\n`;
     }
   });
 
-  stockStatus.textContent = infoMsg;
+  stockStatus.textContent = stockStatusMessage;
 };
 
-const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPts) => {
+const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPoints) => {
   cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
 
   if (discountRate > 0) {
@@ -113,22 +113,22 @@ const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPts) => 
     cartTotalPrice.appendChild(discountBadge);
   }
 
-  let ptsTag = document.getElementById('loyalty-points');
-  if (!ptsTag) {
-    ptsTag = document.createElement('span');
-    ptsTag.id = 'loyalty-points';
-    ptsTag.className = 'text-blue-500 ml-2';
-    cartTotalPrice.appendChild(ptsTag);
+  let rewardPoints = document.getElementById('loyalty-points');
+  if (!rewardPoints) {
+    rewardPoints = document.createElement('span');
+    rewardPoints.id = 'loyalty-points';
+    rewardPoints.className = 'text-blue-500 ml-2';
+    cartTotalPrice.appendChild(rewardPoints);
   }
 
-  ptsTag.textContent = `(포인트: ${bonusPts})`;
+  rewardPoints.textContent = `(포인트: ${bonusPoints})`;
 };
 
 const updateCartTotal = (cartList, products, cartTotalPrice, stockStatus) => {
-  const { totalPrice, discountRate, bonusPts } = calculateCartTotal(cartList, products);
+  const { totalPrice, discountRate, bonusPoints } = calculateCartTotal(cartList, products);
 
-  renderCartTotal(cartTotalPrice, totalPrice, discountRate, bonusPts);
-  updateStockInfo(products, stockStatus);
+  renderCartTotal(cartTotalPrice, totalPrice, discountRate, bonusPoints);
+  renderStockStatusMessage(products, stockStatus);
 };
 
 export default updateCartTotal;

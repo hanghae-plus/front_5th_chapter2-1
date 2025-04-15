@@ -19,6 +19,7 @@ const handleCart = () => {
     let selectedId = $selectedCart.dataset.productId;
     let $selectedItem = document.getElementById(selectedId);
     let selectedItem = getSelecteItem(selectedId);
+
     //장바구니 수량 변화인 경우
     if (isQuantityChange($selectedCart)) {
       updateQuanity($selectedCart, $selectedItem, selectedItem);

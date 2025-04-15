@@ -46,7 +46,7 @@ const createCartItem = (selectedItem, $cart) => {
 	  `;
 
   $cart.appendChild(newItem);
-  selectedItem.stock--; // 재고 감소
+  selectedItem.stock--;
 };
 
 const updateRecentSelectedId = (selectedItemId) => {

@@ -5,13 +5,12 @@ import ITEMS from '../constants/items';
 const updateSelectOptions = () => {
   $itemSelect.innerHTML = '';
 
-  //각각의 prodList에 대해 option태그를 생성하고 id와 text를 넣어줍니다.
   ITEMS.forEach((item) => {
     let $selectOption = document.createElement('option');
     $selectOption.value = item.id;
     $selectOption.textContent = item.name + ' - ' + item.price + '원';
 
-    if (item.stock === 0) $selectOption.disabled = true; //q는 재고를 의미합니다.
+    if (item.stock === 0) $selectOption.disabled = true;
 
     $itemSelect.appendChild($selectOption);
   });

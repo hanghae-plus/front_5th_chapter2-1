@@ -1,4 +1,4 @@
-const prodList = [];
+import productStore from "./store/product.js";
 
 let lastSel;
 let bonusPts = 0;
@@ -39,15 +39,13 @@ stockInfo.id = "stock-status";
 stockInfo.className = "text-sm text-gray-500 mt-2";
 
 function main() {
-  prodList.push(
-    ...[
-      { id: "p1", name: "상품1", val: 10000, q: 50 },
-      { id: "p2", name: "상품2", val: 20000, q: 30 },
-      { id: "p3", name: "상품3", val: 30000, q: 20 },
-      { id: "p4", name: "상품4", val: 15000, q: 0 },
-      { id: "p5", name: "상품5", val: 25000, q: 10 },
-    ],
-  );
+  [
+    { id: "p1", name: "상품1", val: 10000, q: 50 },
+    { id: "p2", name: "상품2", val: 20000, q: 30 },
+    { id: "p3", name: "상품3", val: 30000, q: 20 },
+    { id: "p4", name: "상품4", val: 15000, q: 0 },
+    { id: "p5", name: "상품5", val: 25000, q: 10 },
+  ].forEach(productStore.addProduct);
 
   updateSelOpts();
 
@@ -64,9 +62,15 @@ function main() {
 
   setTimeout(function () {
     setInterval(function () {
-      let luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
+      const productList = productStore.getProductList();
+      const luckyItem =
+        productList[Math.floor(Math.random() * productList.length)];
+
       if (Math.random() < 0.3 && luckyItem.q > 0) {
-        luckyItem.val = Math.round(luckyItem.val * 0.8);
+        productStore.updateProduct(luckyItem.id, (product) => ({
+          ...product,
+          val: Math.round(luckyItem.val * 0.8),
+        }));
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
         updateSelOpts();
       }
@@ -76,14 +80,18 @@ function main() {
   setTimeout(function () {
     setInterval(function () {
       if (lastSel) {
-        let suggest = prodList.find(function (item) {
+        const productList = productStore.getProductList();
+        const suggest = productList.find(function (item) {
           return item.id !== lastSel && item.q > 0;
         });
         if (suggest) {
           alert(
             suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!",
           );
-          suggest.val = Math.round(suggest.val * 0.95);
+          productStore.updateProduct(suggest.id, (product) => ({
+            ...product,
+            val: Math.round(suggest.val * 0.95),
+          }));
           updateSelOpts();
         }
       }
@@ -93,7 +101,8 @@ function main() {
 
 function updateSelOpts() {
   sel.innerHTML = "";
-  prodList.forEach(function (item) {
+  const productList = productStore.getProductList();
+  productList.forEach(function (item) {
     const opt = document.createElement("option");
     opt.value = item.id;
     opt.textContent = item.name + " - " + item.val + "원";
@@ -109,12 +118,13 @@ function calcCart() {
   const cartItems = cartDisp.children;
   let subTot = 0;
 
+  const productList = productStore.getProductList();
   for (let i = 0; i < cartItems.length; i++) {
     (function () {
       let curItem;
-      for (let j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
+      for (let j = 0; j < productList.length; j++) {
+        if (productList[j].id === cartItems[i].id) {
+          curItem = productList[j];
           break;
         }
       }
@@ -177,7 +187,8 @@ const renderBonusPts = () => {
 
 function updateStockInfo() {
   let infoMsg = "";
-  prodList.forEach(function (item) {
+  const productList = productStore.getProductList();
+  productList.forEach(function (item) {
     if (item.q < 5) {
       infoMsg +=
         item.name +
@@ -193,7 +204,8 @@ main();
 
 addBtn.addEventListener("click", function () {
   const selItem = sel.value;
-  const itemToAdd = prodList.find(function (p) {
+  const productList = productStore.getProductList();
+  const itemToAdd = productList.find(function (p) {
     return p.id === selItem;
   });
 
@@ -246,7 +258,8 @@ cartDisp.addEventListener("click", function (event) {
   ) {
     const prodId = tgt.dataset.productId;
     const itemElem = document.getElementById(prodId);
-    const prod = prodList.find(function (p) {
+    const productList = productStore.getProductList();
+    const prod = productList.find(function (p) {
       return p.id === prodId;
     });
 

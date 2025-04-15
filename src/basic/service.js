@@ -22,7 +22,7 @@ export const getCarts = () => {
 };
 
 export const updateQuantitiyCarts = ({ id, action }) => {
-  const carts = getCarts();
+  let carts = getCarts();
 
   const product = carts.find((item) => item.id === id);
   if (!product) return;

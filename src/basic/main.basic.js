@@ -1,4 +1,4 @@
-import { DISCOUNT_RATE, prodList } from './constants';
+import { DISCOUNT_RATE, LUCK_THRESHOLD, prodList } from './constants';
 import { createElement, startRandomlyInMs } from './utils';
 
 const store = {
@@ -9,10 +9,14 @@ const store = {
 };
 
 function main() {
+  // DOM 레이아웃 생성
   initLayout();
+  // DB의 product list를 기반으로 select, option 초기화
   updateSelectOptions();
+  // 장바구니 초기화
   calcCart();
 
+  // 럭키드로우 및 제안 기능을 주기적으로 실행
   startRandomlyInMs(10_000)(() => setInterval(startLuckyDraw, 30_000));
   startRandomlyInMs(20_000)(() => setInterval(startSuggestion, 60_000));
 }
@@ -67,10 +71,18 @@ const initLayout = () => {
 };
 
 const startLuckyDraw = () => {
-  const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
-  if (Math.random() < 0.3 && luckyItem.quantity > 0) {
-    luckyItem.price = Math.round(luckyItem.price * 0.8);
+  const randomIndex = Math.floor(Math.random() * prodList.length);
+  const luckyItem = prodList[randomIndex];
+
+  const isLucky = Math.random() < LUCK_THRESHOLD;
+  const hasStock = luckyItem.quantity > 0;
+
+  // 당첨됐고 재고가 있는 경우
+  if (isLucky && hasStock) {
     alert(`번개세일! ${luckyItem.name}이(가) 20% 할인 중입니다!`);
+    // 해당 상품의 가격 할인, DB에 적용
+    luckyItem.price = Math.round(luckyItem.price * (1 - DISCOUNT_RATE.lucky));
+    // select, option 업데이트
     updateSelectOptions();
   }
 };

@@ -1,4 +1,4 @@
-import { PRODUCT_LIST, DISCOUNT_TABLE } from '../consts';
+import { PRODUCT_LIST, PRODUCT_DISCOUNT_RATES } from '../consts';
 
 export const calculateCartTotals = (cartItemElements) => {
   return cartItemElements.reduce(
@@ -11,7 +11,8 @@ export const calculateCartTotals = (cartItemElements) => {
         10,
       );
       const itemTotal = product.value * quantity;
-      const discount = quantity >= 10 ? (DISCOUNT_TABLE[product.id] ?? 0) : 0;
+      const discount =
+        quantity >= 10 ? (PRODUCT_DISCOUNT_RATES[product.id] ?? 0) : 0;
 
       acc.itemCount += quantity;
       acc.subTotal += itemTotal;

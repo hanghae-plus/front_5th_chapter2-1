@@ -1,27 +1,30 @@
 import { CartStore } from '../store';
+import { BULK_PURCHASE, TUESDAY_DISCOUNT } from '../consts';
 
 const getBulkDiscountRate = (itemCount, totalAmount, subTotal) => {
-  if (itemCount < 30) return (subTotal - totalAmount) / subTotal;
+  if (itemCount < BULK_PURCHASE.THRESHOLD)
+    return (subTotal - totalAmount) / subTotal;
 
   const bulkDiscount = totalAmount * 0.25;
   const itemDiscount = subTotal - totalAmount;
 
   if (bulkDiscount > itemDiscount) {
-    CartStore.set('totalAmount', subTotal * (1 - 0.25));
-    return 0.25;
+    CartStore.set('totalAmount', subTotal * (1 - BULK_PURCHASE.DISCOUNT_RATE));
+    return BULK_PURCHASE.DISCOUNT_RATE;
   }
 
   return itemDiscount / subTotal;
 };
 
 const applyTuesdayDiscount = (currentRate) => {
-  const isTuesday = new Date().getDay() === 2;
+  const isTuesday = new Date().getDay() === TUESDAY_DISCOUNT.DAY;
   if (!isTuesday) return currentRate;
 
-  const discounted = CartStore.get('totalAmount') * 0.9;
+  const discounted =
+    CartStore.get('totalAmount') * (1 - TUESDAY_DISCOUNT.DISCOUNT_RATE);
   CartStore.set('totalAmount', discounted);
 
-  return Math.max(currentRate, 0.1);
+  return Math.max(currentRate, TUESDAY_DISCOUNT.DISCOUNT_RATE);
 };
 
 export const getDiscountRate = (subTotal) => {

@@ -7,7 +7,7 @@ const DISCOUNT_RATIO = {
   THUNDER: 0.8,
   ADDITIONAL: 0.95
 }
-const isTuesDay = new Date().getDay() === 3 ? true : false
+const isTuesDay = new Date().getDay() === 2 ? true : false
 
 const prodList = [
   { id: "p1", name: "상품1", price: 10000, quantity: 50 },

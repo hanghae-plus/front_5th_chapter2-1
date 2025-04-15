@@ -1,6 +1,7 @@
 import js from "@eslint/js";
 import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginPrettier from "eslint-plugin-prettier/recommended";
+import react from "eslint-plugin-react";
 import globals from "globals";
 
 export default [
@@ -16,7 +17,11 @@ export default [
         ...globals.node,
       },
     },
+    plugins: {
+      react,
+    },
     rules: {
+      ...react.configs.recommended.rules,
       "no-var": "error",
       "no-unused-vars": [
         "warn",

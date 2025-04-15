@@ -1,5 +1,5 @@
 import { updateSelectOptions, calculateCart } from "./libs";
-import { addButtonClickEvent, cartDisplayClickEvent } from "./events";
+import events from "./events";
 import { createElement } from "./libs/utils/createElement";
 import store from "./libs/store";
 
@@ -62,6 +62,10 @@ function main() {
   updateSelectOptions($select, store.states.products);
   calculateCart($cartDisplay, $sum, $stockInfo, store.states.products);
 
+  // 이벤트 바인딩
+  $cartDisplay.addEventListener("click", events.cartDisplay.click);
+  $addCartButton.addEventListener("click", events.cartButton.click);
+
   // TODO: 번개세일 이벤트 추가
   // setTimeout(function () {
   //   setInterval(function () {
@@ -91,6 +95,3 @@ function main() {
 }
 
 main();
-
-cartDisplayClickEvent();
-addButtonClickEvent();

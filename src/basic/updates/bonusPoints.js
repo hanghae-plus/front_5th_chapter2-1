@@ -9,7 +9,7 @@ export const updateBonusPoints = () => {
   if (!loyaltyPointTag) {
     loyaltyPointTag = createElement('span', {
       className: 'text-blue-500 ml-2',
-      textContent: `(포인트: ${store.bonusPts})`,
+      id: 'loyalty-points',
     });
     totalLabel.appendChild(loyaltyPointTag);
   }

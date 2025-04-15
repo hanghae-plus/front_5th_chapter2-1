@@ -41,6 +41,6 @@ export function startProductSuggestionTimer(
                     updateCallback();
                 }
             }
-        }, 6000);
-    }, Math.random() * 200);
+        }, 60000);
+    }, Math.random() * 2000);
 }

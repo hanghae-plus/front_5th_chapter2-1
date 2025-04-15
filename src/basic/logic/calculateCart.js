@@ -1,9 +1,9 @@
 import {
   BULK_DISCOUNT_LIMIT,
-  MONTHLY_SPECIAL_DAY,
-  MONTHLY_SPECIAL_DISCOUNT_RATE,
   TOTAL_BULK_DISCOUNT_LIMIT,
   TOTAL_BULK_DISCOUNT_RATE,
+  WEEKLY_SPECIAL_DAY,
+  WEEKLY_SPECIAL_DISCOUNT_RATE,
 } from "@/basic/config/constants";
 
 /**
@@ -20,8 +20,8 @@ import {
  * @see BULK_DISCOUNT_LIMIT - 개별 할인 적용 수량 기준
  * @see TOTAL_BULK_DISCOUNT_LIMIT - 전체 할인 적용 수량 기준
  * @see TOTAL_BULK_DISCOUNT_RATE - 전체 할인 적용 할인율
- * @see MONTHLY_SPECIAL_DAY - 특별 추가 할인 날짜 기준
- * @see MONTHLY_SPECIAL_DISCOUNT_RATE - 특별 추가 할인 날짜 기준 할인율
+ * @see WEEKLY_SPECIAL_DAY - 특별 추가 할인 날짜 기준
+ * @see WEEKLY_SPECIAL_DISCOUNT_RATE - 특별 추가 할인 날짜 기준 할인율
  */
 export const calculateCart = (products, cartItems) => {
   let totalCost = 0;
@@ -63,9 +63,9 @@ export const calculateCart = (products, cartItems) => {
   }
 
   // 매월 2일 특별 할인?
-  if (new Date().getDay() === MONTHLY_SPECIAL_DAY) {
-    totalCost *= 1 - MONTHLY_SPECIAL_DISCOUNT_RATE;
-    discountRate = Math.max(discountRate, MONTHLY_SPECIAL_DISCOUNT_RATE);
+  if (new Date().getDay() === WEEKLY_SPECIAL_DAY) {
+    totalCost *= 1 - WEEKLY_SPECIAL_DISCOUNT_RATE;
+    discountRate = Math.max(discountRate, WEEKLY_SPECIAL_DISCOUNT_RATE);
   }
   return { totalCost, discountRate };
 };

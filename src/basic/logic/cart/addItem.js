@@ -3,8 +3,8 @@ import {
   getQuantityFromElement,
   updateQuantityText,
   alertOutOfStock,
-} from '../utils';
-import { cartItemElement } from '../render';
+} from '../../utils';
+import { cartItemElement } from '../../render';
 
 export const addItemToCart = (itemToAdd, cartItemsContainer) => {
   if (!itemToAdd || itemToAdd.quantity <= 0) return;

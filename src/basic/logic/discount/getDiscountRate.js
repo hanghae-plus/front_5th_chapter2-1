@@ -1,5 +1,5 @@
-import { CartStore } from '../store';
-import { BULK_PURCHASE, TUESDAY_DISCOUNT } from '../consts';
+import { CartStore } from '../../store';
+import { BULK_PURCHASE, TUESDAY_DISCOUNT } from '../../consts';
 
 const getBulkDiscountRate = (itemCount, totalAmount, subTotal) => {
   if (itemCount < BULK_PURCHASE.THRESHOLD)

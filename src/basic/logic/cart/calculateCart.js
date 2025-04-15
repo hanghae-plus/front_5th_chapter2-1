@@ -1,12 +1,12 @@
-import { CartStore } from '../store';
-import { CartItemsContainerDOM } from '../ui';
-import { getDiscountRate } from './getDiscountRate';
+import { CartStore } from '../../store';
+import { CartItemsContainerDOM } from '../../ui';
+import { getDiscountRate } from '../discount';
 import { calculateCartTotals } from './calculateCartTotal';
 import {
   updateStockStatus,
   renderBonusPoints,
   renderCartTotal,
-} from '../render';
+} from '../../render';
 
 export const calculateCart = () => {
   const cartItems = [...CartItemsContainerDOM.get().children];

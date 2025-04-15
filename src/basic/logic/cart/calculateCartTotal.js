@@ -1,4 +1,4 @@
-import { PRODUCT_LIST, PRODUCT_DISCOUNT_RATES } from '../consts';
+import { PRODUCT_LIST, PRODUCT_DISCOUNT_RATES } from '../../consts';
 
 export const calculateCartTotals = (cartItemElements) => {
   return cartItemElements.reduce(

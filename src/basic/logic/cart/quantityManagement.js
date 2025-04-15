@@ -2,7 +2,7 @@ import {
   getQuantityFromElement,
   updateQuantityText,
   alertOutOfStock,
-} from '../utils';
+} from '../../utils';
 
 const updateItemQuantity = (element, product, newQuantity, change) => {
   updateQuantityText(element, product, newQuantity);

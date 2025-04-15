@@ -1,6 +1,6 @@
-import { ADDITIONAL_DISCOUNT, PRODUCT_LIST } from '../consts';
-import { SelectedProductStore } from '../store';
-import { updateProductSelectOptions } from '../render';
+import { ADDITIONAL_DISCOUNT, PRODUCT_LIST } from '../../consts';
+import { SelectedProductStore } from '../../store';
+import { updateProductSelectOptions } from '../../render';
 
 const getSuggestedProduct = (lastId) =>
   PRODUCT_LIST.find((item) => item.id !== lastId && item.quantity > 0);

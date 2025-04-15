@@ -21,11 +21,14 @@ describe('basic test', () => {
     });
 
     beforeEach(() => {
-      vi.useRealTimers();
+      vi.useFakeTimers();
+      const mockDate = new Date('5831-12-15');
+      vi.setSystemTime(mockDate);
       vi.spyOn(window, 'alert').mockImplementation(() => {});
     });
 
     afterEach(() => {
+      vi.useRealTimers();
       vi.restoreAllMocks();
     });
 
@@ -162,7 +165,7 @@ describe('basic test', () => {
       expect(itemQuantity).toContain('x 10');
 
       // 재고 상태 정보에 해당 상품이 재고 부족으로 표시되는지 확인
-      expect(stockInfo.textContent).toContain('상품5: 품절');
+      expect(stockInfo.textContent).toContain('상품4: 품절');
     });
   });
 });

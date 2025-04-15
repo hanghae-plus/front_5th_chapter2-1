@@ -111,8 +111,6 @@ const calcCart = () => {
     const quantity = parseInt(item.querySelector('span').textContent.split('x ')[1]);
     const price = parseInt(item.querySelector('span').textContent.split('x ')[0].split(' - ')[1]);
     const itemTot = price * quantity;
-
-    console.log(quantity, item.querySelector('span').textContent, itemTot);
     let disc = 0;
     itemCnt += quantity;
     subTot += itemTot;
@@ -205,6 +203,7 @@ const handleCartAction = (event) => {
   const item = productList.find((p) => p.id === itemId);
   const quantity = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]);
 
+  // TODO: 수량 변경 버튼 클릭 시 수량 변경 다시보기
   switch (action) {
     case 'minus':
       itemElem.querySelector('span').textContent =
@@ -250,6 +249,7 @@ const createItemText = (itemToAdd) => {
   minusBtn.className = 'quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1';
   minusBtn.dataset.productId = itemToAdd.id;
   minusBtn.dataset.action = 'minus';
+  minusBtn.dataset.change = -1;
   minusBtn.textContent = '-';
 
   // ➕ 수량 증가 버튼
@@ -258,6 +258,7 @@ const createItemText = (itemToAdd) => {
   plusBtn.className = 'quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1';
   plusBtn.dataset.productId = itemToAdd.id;
   plusBtn.dataset.action = 'plus';
+  plusBtn.dataset.change = 1;
   plusBtn.textContent = '+';
 
   // 삭제 버튼

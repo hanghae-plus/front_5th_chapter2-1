@@ -1,13 +1,23 @@
-import { DISCOUNT_RATES } from "../configs/discounts";
+import { BULK_DISCOUNT_THRESHOLD, DISCOUNT_RATES } from "../configs/discounts";
 
 export function isTuesday() {
   return new Date().getDay() === 2;
 }
 
+export function applyDiscount(itemCount, discountedTotal, originalSubtotal) {
+  if (isTuesday()) {
+    return calculateDiscountForTuesday(discountedTotal);
+  }
+
+  return itemCount < BULK_DISCOUNT_THRESHOLD
+    ? calculateRegularDiscount(discountedTotal, originalSubtotal)
+    : calculateBulkDiscount(discountedTotal, originalSubtotal);
+}
+
 const createDiscountSummary = (discountedPrice, discountRate) => {
   return {
-    discountedPrice,
     discountRate,
+    discountedPrice,
   };
 };
 

@@ -1,21 +1,21 @@
 import { PRODUCT_INVENTORY } from "../configs/products";
-import { bonusPointService } from "../services/BonusPointService";
-import { discountService } from "../services/DiscountService";
-import { getDiscountRateByProduct } from "./discountUtils";
+import { calculateBonusPoints } from "./bonusPointUtils";
+import { applyDiscount, getDiscountRateByProduct } from "./discountUtils";
 
 export function generateCartInvoice(addedItems) {
+  if (addedItems.length === 0) {
+    return {
+      totalQuantity: 0,
+      totalAmountBeforeDiscount: 0,
+      totalAmount: 0,
+      discountRate: 0,
+      bonusPoints: 0,
+    };
+  }
+
   let totalQuantity = 0;
   let totalAmountBeforeDiscount = 0;
   let totalAmount = 0;
-
-  if (addedItems.length === 0) {
-    bonusPointService.resetBonusPoints();
-    return {
-      totalQuantity,
-      totalAmountBeforeDiscount,
-      totalAmount,
-    };
-  }
 
   for (let cartItem of addedItems) {
     const product = PRODUCT_INVENTORY.find(
@@ -37,18 +37,26 @@ export function generateCartInvoice(addedItems) {
       totalAmountOfItem * (1 - getDiscountRateByProduct(product.id));
   }
 
-  totalAmount = discountService.applyDiscount(
+  // totalAmount = discountService.applyDiscount(
+  //   totalQuantity,
+  //   totalAmount,
+  //   totalAmountBeforeDiscount,
+  // );
+
+  const { discountRate, discountedPrice } = applyDiscount(
     totalQuantity,
     totalAmount,
     totalAmountBeforeDiscount,
   );
 
-  bonusPointService.getBonusPointsFromTotalAmount(totalAmount);
+  const bonusPoints = calculateBonusPoints(totalAmount);
 
   return {
     totalQuantity,
-    totalAmountBeforeDiscount,
-    totalAmount,
+    totalAmountBeforeDiscount: totalAmountBeforeDiscount,
+    totalAmount: discountedPrice,
+    discountRate,
+    bonusPoints,
   };
 }
 

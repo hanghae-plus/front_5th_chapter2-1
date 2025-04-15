@@ -7,8 +7,6 @@ import {
   renderTotalPrice,
 } from "../components/render";
 import { PRODUCT_INVENTORY } from "../lib/configs/products";
-import { bonusPointService } from "../lib/services/BonusPointService";
-import { discountService } from "../lib/services/DiscountService";
 import { cartStore } from "../stores/cartStore";
 import { Template } from "./MainPage.template";
 
@@ -24,8 +22,8 @@ export function MainPage() {
     renderProductInventory();
     renderTotalPrice(state.totalAmount);
     renderCartItems(state.addedItems);
-    renderDiscountRate(discountService.discountRate);
-    renderBonusPoints(bonusPointService.bonusPoints);
+    renderDiscountRate(state.discountRate);
+    renderBonusPoints(state.bonusPoints);
     renderStockInfo();
   });
 
@@ -33,7 +31,7 @@ export function MainPage() {
 
   renderProductInventory();
   renderTotalPrice(cartState.totalAmount);
-  renderBonusPoints(bonusPointService.bonusPoints);
+  renderBonusPoints(cartState.bonusPoints);
 
   setTimeout(() => {
     setInterval(() => {

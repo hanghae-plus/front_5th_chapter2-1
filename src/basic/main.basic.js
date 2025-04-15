@@ -1,7 +1,7 @@
-import updateSelectOptions from './utils/updateSelectOptions';
+import updateSelectOptions from './updater/updateSelectOptions';
 import render from './render';
-import updateCart from './utils/updateCart';
-import alerts from './utils/alerts/alerts';
+import updateCart from './updater/updateCart';
+import alerts from './alerts/alerts';
 import eventHandler from './events/eventHandler';
 
 const main = () => {

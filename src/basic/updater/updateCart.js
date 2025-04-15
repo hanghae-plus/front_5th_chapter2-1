@@ -1,5 +1,5 @@
 import ITEMS from '../constants/items';
-import { $cart, $sum } from '../createElements';
+import { $cart, $sum } from '../components/getElements';
 import { TotalPrice } from '../stores';
 import updatePoint from './updatePoint';
 import updateStockState from './updateStockState';

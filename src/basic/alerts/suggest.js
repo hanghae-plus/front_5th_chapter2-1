@@ -1,6 +1,6 @@
-import ITEMS from '../../constants/items';
-import { RecentSelectedId } from '../../stores';
-import updateSelectOptions from '../updateSelectOptions';
+import ITEMS from '../constants/items';
+import { RecentSelectedId } from '../stores';
+import updateSelectOptions from '../updater/updateSelectOptions';
 import { SUGGEST_DISCOUNT_RATE } from './constants';
 
 let recentSelectedId = new RecentSelectedId().get();

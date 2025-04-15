@@ -1,4 +1,4 @@
-import { $sum } from '../createElements';
+import { $sum } from '../components/getElements';
 
 /**보너스포인터를 계산합니다.*/
 const updatePoint = (totalPrice) => {

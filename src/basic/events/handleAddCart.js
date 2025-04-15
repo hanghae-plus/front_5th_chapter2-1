@@ -1,5 +1,5 @@
-import { $addCartButton, $cart, $itemSelect } from '../createElements';
-import updateCart from '../utils/updateCart';
+import { $addCartButton, $cart, $itemSelect } from '../components/getElements';
+import updateCart from '../updater/updateCart';
 import {
   createCartItem,
   getSelectedItem,

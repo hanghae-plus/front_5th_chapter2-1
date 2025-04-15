@@ -1,4 +1,4 @@
-import { $cart } from '../createElements';
+import { $cart } from '../components/getElements';
 import {
   isSelectedCartAvailable,
   getSelecteItem,
@@ -7,7 +7,7 @@ import {
   removeQuanity,
   updateQuanity,
 } from './cartUtils';
-import updateCart from '../utils/updateCart';
+import updateCart from '../updater/updateCart';
 
 const handleCart = () => {
   $cart.addEventListener('click', (e) => {
@@ -19,7 +19,6 @@ const handleCart = () => {
     let selectedId = $selectedCart.dataset.productId;
     let $selectedItem = document.getElementById(selectedId);
     let selectedItem = getSelecteItem(selectedId);
-
     //장바구니 수량 변화인 경우
     if (isQuantityChange($selectedCart)) {
       updateQuanity($selectedCart, $selectedItem, selectedItem);

@@ -1,4 +1,11 @@
-import { $addCartButton, $cart, $itemSelect, $sum, $stockState, $title } from './createElements';
+import {
+  $addCartButton,
+  $cart,
+  $itemSelect,
+  $sum,
+  $stockState,
+  $title,
+} from './components/getElements';
 
 const render = () => {
   const $elements = document.createElement('div');

@@ -1,14 +1,11 @@
 import { calculateCart } from "../libs";
+import store from "../libs/store";
 
-/**
- * 장바구니 클릭 이벤트
- *
- * @param {HTMLElement} $cartDisplay - 장바구니 요소
- * @param {HTMLElement} $sum - 총 금액 요소
- * @param {HTMLElement} $stockInfo - 재고 정보 요소
- * @param {Product[]} products - 상품 목록
- */
-export const cartDisplayClickEvent = ($cartDisplay, $sum, $stockInfo, products) => {
+/** 장바구니 클릭 이벤트 */
+export const cartDisplayClickEvent = () => {
+  const { $cartDisplay } = store.elements;
+  const { products } = store.states;
+
   $cartDisplay.addEventListener("click", (event) => {
     const { target } = event;
     if (target.classList.contains("quantity-change") && target.classList.contains("remove-item")) return;
@@ -39,6 +36,6 @@ export const cartDisplayClickEvent = ($cartDisplay, $sum, $stockInfo, products) 
       $product.remove();
     }
 
-    calculateCart($cartDisplay, $sum, $stockInfo, products);
+    calculateCart();
   });
 };

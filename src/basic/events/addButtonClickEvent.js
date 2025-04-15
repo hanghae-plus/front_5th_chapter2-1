@@ -1,22 +1,16 @@
 import { calculateCart } from "../libs";
+import store from "../libs/store";
 import { createElement } from "../libs/utils/createElement";
 
 /** @typedef {import("../types").Product} Product */
 
-/**
- * 장바구니 클릭 이벤트
- *
- * @param {HTMLButtonElement} $addCartButton - 장바구니 요소
- * @param {HTMLElement} $cartDisplay - 장바구니 요소
- * @param {HTMLSelectElement} $select - 선택 요소
- * @param {HTMLElement} $sum - 총 금액 요소
- * @param {HTMLElement} $stockInfo - 재고 정보 요소
- * @param {Product[]} products - 상품 목록
- * @param {Object} lastSel - 마지막 선택 상품
- */
-export const addButtonClickEvent = ($addCartButton, $cartDisplay, $select, $sum, $stockInfo, products, lastSel) => {
+/** 장바구니 클릭 이벤트 */
+export const addButtonClickEvent = () => {
+  const { $addCartButton, $cartDisplay, $sum, $stockInfo } = store.elements;
+  const { products, lastSelect } = store.states;
+
   $addCartButton.addEventListener("click", () => {
-    const selectedItemValue = $select.value;
+    const selectedItemValue = store.elements.$select.value;
 
     const targetProduct = products.find((p) => p.id === selectedItemValue);
 
@@ -69,6 +63,6 @@ export const addButtonClickEvent = ($addCartButton, $cartDisplay, $select, $sum,
     }
 
     calculateCart($cartDisplay, $sum, $stockInfo, products);
-    lastSel.value = selectedItemValue;
+    lastSelect.value = selectedItemValue;
   });
 };

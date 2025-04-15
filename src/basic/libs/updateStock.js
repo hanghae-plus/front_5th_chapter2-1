@@ -1,15 +1,10 @@
-/** @typedef {import("../types").Product} Product */
+import store from "./store";
 
-/**
- * 재고 상태 업데이트
- *
- * @param {Element} $stockInfo - 재고 상태 표시 요소
- * @param {Array<Product>} products - 상품 목록
- *
- * @example
- * updateStockInfo($stockInfo, prodList);
- */
-export const updateStockInfo = ($stockInfo, products) => {
+/** 재고 상태 업데이트 */
+export const updateStockInfo = () => {
+  const { $stockInfo } = store.elements;
+  const { products } = store.states;
+
   const stockInfoMessage = products
     .filter((item) => item.stock < 5)
     .reduce((acc, prev) => {

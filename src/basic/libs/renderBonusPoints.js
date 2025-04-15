@@ -1,15 +1,13 @@
+import store from "./store";
 import { createElement } from "./utils/createElement";
 
 /**
  * 보너스 포인트 렌더링
- *
- * @param {HTMLElement} $sum - 총 금액을 표시하는 요소
  * @param {number} totalPrice - 총 금액
- *
- * @example
- * renderBonusPoints($sum, totalPrice);
  */
-export const renderBonusPoints = ($sum, totalPrice) => {
+export const renderBonusPoints = (totalPrice) => {
+  const { $sum } = store.elements;
+
   let $pointsTag = document.getElementById("loyalty-points");
 
   if (!$pointsTag) {

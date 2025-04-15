@@ -1,4 +1,5 @@
 import { renderBonusPoints, updateStockInfo } from ".";
+import store from "./store";
 import { createElement } from "./utils/createElement";
 
 const discountMap = {
@@ -75,15 +76,10 @@ const getDiscountRate = (totalPrice, subTotal, productCount) => {
   return discountRate;
 };
 
-/**
- * 장바구니 계산
- *
- * @param {HTMLElement} $cartDisplay - 장바구니 요소
- * @param {HTMLElement} $sum - 총 금액 요소
- * @param {HTMLElement} $stockInfo - 재고 정보 요소
- * @param {Product[]} products - 상품 목록
- */
-export const calculateCart = ($cartDisplay, $sum, $stockInfo, products) => {
+/** 장바구니 계산 */
+export const calculateCart = () => {
+  const { $cartDisplay, $sum } = store.elements;
+  const { products } = store.states;
   // TODO: totalPrice이 getDiscountRate()에서 변하는데 괜찮은지 확인 ( 테스트 코드는 통과함 )
   const { totalPrice, subTotal, productCount } = calculateCartTotals($cartDisplay, products);
   const discountRate = getDiscountRate(totalPrice, subTotal, productCount);
@@ -101,6 +97,6 @@ export const calculateCart = ($cartDisplay, $sum, $stockInfo, products) => {
     $sum.appendChild($discountInfo);
   }
 
-  updateStockInfo($stockInfo, products);
-  renderBonusPoints($sum, totalPrice);
+  updateStockInfo();
+  renderBonusPoints(totalPrice);
 };

@@ -6,14 +6,14 @@ const updateSelectOptions = () => {
   $itemSelect.innerHTML = '';
 
   //각각의 prodList에 대해 option태그를 생성하고 id와 text를 넣어줍니다.
-  ITEMS.forEach(function (item) {
-    let itemOptionElement = document.createElement('option');
-    itemOptionElement.value = item.id;
-    itemOptionElement.textContent = item.name + ' - ' + item.price + '원';
+  ITEMS.forEach((item) => {
+    let $selectOption = document.createElement('option');
+    $selectOption.value = item.id;
+    $selectOption.textContent = item.name + ' - ' + item.price + '원';
 
-    if (item.stock === 0) itemOptionElement.disabled = true; //q는 재고를 의미합니다.
+    if (item.stock === 0) $selectOption.disabled = true; //q는 재고를 의미합니다.
 
-    $itemSelect.appendChild(itemOptionElement);
+    $itemSelect.appendChild($selectOption);
   });
 };
 

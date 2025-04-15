@@ -1,5 +1,4 @@
 import { $cart } from '../createElements';
-import updateCart from '../utils/updateCart';
 import {
   isSelectedCartAvailable,
   getSelecteItem,
@@ -8,6 +7,7 @@ import {
   removeQuanity,
   updateQuanity,
 } from './cartUtils';
+import updateCart from '../utils/updateCart';
 
 const handleCart = () => {
   $cart.addEventListener('click', (e) => {

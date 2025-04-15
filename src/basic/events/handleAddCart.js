@@ -11,13 +11,11 @@ import {
 const handleAddCart = () => {
   $addCartButton.addEventListener('click', () => {
     let selectedItemId = $itemSelect.value;
-
     let selectedItem = getSelectedItem(selectedItemId);
 
     if (!isItemAvailable(selectedItem)) return;
 
     let item = document.getElementById(selectedItem.id);
-
     item ? updateCartItem(item, selectedItem) : createCartItem(selectedItem, $cart);
 
     updateCart(); //장바구니 계산

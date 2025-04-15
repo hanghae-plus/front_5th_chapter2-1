@@ -35,11 +35,13 @@ const updateQuanity = ($selectedCart, $item, item) => {
     $item.remove();
     item.stock += currentQuantity;
   }
+
   if (newQuantity <= maxAllowedQuantity) {
     // 재고가 충분하면 수량 업데이트
     $itemSpan.textContent = `${itemInfo}x ${newQuantity}`;
     item.stock = maxAllowedQuantity - newQuantity;
   }
+
   alert('재고가 부족합니다.');
 };
 

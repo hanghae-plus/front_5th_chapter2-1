@@ -1,2 +1,4 @@
 export * from './productList';
-export * from './discountTable';
+export * from './discount';
+export * from './styles';
+export * from './dom';

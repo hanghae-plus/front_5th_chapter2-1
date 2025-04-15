@@ -1,4 +1,5 @@
 import { TotalAmountContainerDOM } from '../ui';
+import { STYLES } from '../consts';
 
 export const renderCartTotal = (totalAmount, discountRate) => {
   const container = TotalAmountContainerDOM.get();
@@ -6,7 +7,7 @@ export const renderCartTotal = (totalAmount, discountRate) => {
 
   if (discountRate > 0) {
     const span = document.createElement('span');
-    span.className = 'text-green-500 ml-2';
+    span.className = STYLES.TEXT.SUCCESS;
     span.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
     container.appendChild(span);
   }

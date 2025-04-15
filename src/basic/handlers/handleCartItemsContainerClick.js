@@ -61,15 +61,15 @@ export const handleCartItemsContainerClick = (event) => {
     return;
 
   const cartItemId = target.dataset.productId;
-  const el = getCartItemElement(cartItemId);
+  const element = getCartItemElement(cartItemId);
   const product = PRODUCT_LIST.find((p) => p.id === cartItemId);
 
-  if (!el || !product) return;
+  if (!element || !product) return;
 
   if (target.classList.contains('quantity-change')) {
-    handleQuantityChange(target, product, el);
+    handleQuantityChange(target, product, element);
   } else if (target.classList.contains('remove-item')) {
-    handleRemoveItem(product, el);
+    handleRemoveItem(product, element);
   }
 
   calculateCart();

@@ -1,5 +1,7 @@
+import { DOM_IDS, STYLES } from '../consts';
+
 export const LayoutDOM = {
-  _appRoot: document.getElementById('app'),
+  _appRoot: document.getElementById(DOM_IDS.APP),
   _mainContainer: null,
   _mainWrapper: null,
   _mainHeader: null,
@@ -9,15 +11,14 @@ export const LayoutDOM = {
     this._mainWrapper = document.createElement('div');
     this._mainHeader = document.createElement('h1');
 
-    this._mainContainer.id = 'main-container';
-    this._mainContainer.className = 'bg-gray-100 p-8';
+    this._mainContainer.id = DOM_IDS.CONTAINER.MAIN;
+    this._mainContainer.className = STYLES.CONTAINER.MAIN;
 
-    this._mainWrapper.id = 'main-wrapper';
-    this._mainWrapper.className =
-      'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
+    this._mainWrapper.id = DOM_IDS.CONTAINER.WRAPPER;
+    this._mainWrapper.className = STYLES.CONTAINER.WRAPPER;
 
-    this._mainHeader.id = 'main-header';
-    this._mainHeader.className = 'text-2xl font-bold mb-4';
+    this._mainHeader.id = DOM_IDS.HEADER.TITLE;
+    this._mainHeader.className = STYLES.HEADER.TITLE;
     this._mainHeader.textContent = '장바구니';
   },
 

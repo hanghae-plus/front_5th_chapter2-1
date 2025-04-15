@@ -2,6 +2,7 @@ import { PRODUCT_LIST } from '../consts/productList';
 import { calculateCart } from '../logic';
 import { SelectedProductStore } from '../store/stores';
 import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
+import { DOM_ATTRIBUTES, DOM_CLASSES, STYLES } from '../consts';
 
 const getCartItemElement = (cartItemId) => document.getElementById(cartItemId);
 
@@ -17,15 +18,33 @@ const updateQuantityText = (element, product, quantity) => {
 const createCartItemElement = (item) => {
   const newItem = document.createElement('div');
   newItem.id = item.id;
-  newItem.className = 'flex justify-between items-center mb-2';
+  newItem.className = STYLES.LAYOUT.FLEX;
+
+  const quantityButtons = [
+    { change: -1, text: '-' },
+    { change: 1, text: '+' },
+  ]
+    .map(
+      ({ change, text }) => `
+    <button 
+      class="${STYLES.BUTTON.PRIMARY} ${STYLES.BUTTON.SMALL} ${DOM_CLASSES.BUTTON.QUANTITY_CHANGE}" 
+      ${DOM_ATTRIBUTES.PRODUCT.ID}="${item.id}" 
+      ${DOM_ATTRIBUTES.PRODUCT.CHANGE}="${change}"
+    >${text}</button>
+  `,
+    )
+    .join('');
+
   newItem.innerHTML = `
-    <span data-value="${item.value}" data-quantity="1">
+    <span ${DOM_ATTRIBUTES.PRODUCT.VALUE}="${item.value}" ${DOM_ATTRIBUTES.PRODUCT.QUANTITY}="1">
       ${item.name} - ${item.value}원 x 1
     </span>
     <div>
-      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${item.id}" data-change="-1">-</button>
-      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${item.id}" data-change="1">+</button>
-      <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${item.id}">삭제</button>
+      ${quantityButtons}
+      <button 
+        class="${STYLES.BUTTON.DANGER} ${DOM_CLASSES.BUTTON.REMOVE_ITEM}" 
+        ${DOM_ATTRIBUTES.PRODUCT.ID}="${item.id}"
+      >삭제</button>
     </div>
   `;
   return newItem;

@@ -1,19 +1,18 @@
 import { CartStore } from '../store';
 import { TotalAmountContainerDOM } from '../ui';
+import { DOM_IDS, STYLES } from '../consts';
 
 const calculateBonusPoints = (amount) => Math.floor(amount / 1000);
 
-const getBonusPointsTag = (parentEl) => {
-  const existing = document.getElementById('loyalty-points');
-  if (existing) return existing;
-
-  const element = document.createElement('span');
-
-  element.id = 'loyalty-points';
-  element.className = 'text-blue-500 ml-2';
-  parentEl.appendChild(element);
-
-  return element;
+const getBonusPointsTag = (container) => {
+  let pointsTag = document.getElementById(DOM_IDS.CART.POINTS);
+  if (!pointsTag) {
+    pointsTag = document.createElement('span');
+    pointsTag.id = DOM_IDS.CART.POINTS;
+    pointsTag.className = STYLES.TEXT.SUCCESS;
+    container.appendChild(pointsTag);
+  }
+  return pointsTag;
 };
 
 export const renderBonusPoints = () => {

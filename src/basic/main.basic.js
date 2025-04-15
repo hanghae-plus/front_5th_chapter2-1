@@ -1,7 +1,9 @@
-var lastSelectedId,
-  bonusPts = 0,
-  totalAmt = 0,
-  itemCnt = 0;
+const store = {
+  lastSelectedId: null,
+  bonusPts: 0,
+  totalAmt: 0,
+  itemCnt: 0,
+};
 
 const prodList = [
   { id: 'p1', name: '상품1', price: 10000, quantity: 5 },
@@ -73,9 +75,9 @@ const startLuckyDraw = () => {
 };
 
 const startSuggestion = () => {
-  if (lastSelectedId) {
+  if (store.lastSelectedId) {
     const suggestionItem = prodList.find(
-      (product) => product.id !== lastSelectedId && product.quantity > 0,
+      (product) => product.id !== store.lastSelectedId && product.quantity > 0,
     );
 
     if (!suggestionItem) return;
@@ -118,8 +120,8 @@ function updateSelectOptions() {
 function calcCart() {
   const cartDisp = document.getElementById('cart-items');
   const sum = document.getElementById('cart-total');
-  totalAmt = 0;
-  itemCnt = 0;
+  store.totalAmt = 0;
+  store.itemCnt = 0;
   var cartItems = cartDisp.children;
   var subTot = 0;
   for (var i = 0; i < cartItems.length; i++) {
@@ -136,7 +138,7 @@ function calcCart() {
       );
       var itemTot = curItem.price * q;
       var disc = 0;
-      itemCnt += q;
+      store.itemCnt += q;
       subTot += itemTot;
       if (q >= 10) {
         if (curItem.id === 'p1') disc = 0.1;
@@ -145,29 +147,29 @@ function calcCart() {
         else if (curItem.id === 'p4') disc = 0.05;
         else if (curItem.id === 'p5') disc = 0.25;
       }
-      totalAmt += itemTot * (1 - disc);
+      store.totalAmt += itemTot * (1 - disc);
     })();
   }
   let discRate = 0;
-  if (itemCnt >= 30) {
-    var bulkDisc = totalAmt * 0.25;
-    var itemDisc = subTot - totalAmt;
+  if (store.itemCnt >= 30) {
+    var bulkDisc = store.totalAmt * 0.25;
+    var itemDisc = subTot - store.totalAmt;
     if (bulkDisc > itemDisc) {
-      totalAmt = subTot * (1 - 0.25);
+      store.totalAmt = subTot * (1 - 0.25);
       discRate = 0.25;
     } else {
-      discRate = (subTot - totalAmt) / subTot;
+      discRate = (subTot - store.totalAmt) / subTot;
     }
   } else {
-    discRate = (subTot - totalAmt) / subTot;
+    discRate = (subTot - store.totalAmt) / subTot;
   }
 
   // 화요일 할인
   if (new Date().getDay() === 2) {
-    totalAmt *= 1 - 0.1;
+    store.totalAmt *= 1 - 0.1;
     discRate = Math.max(discRate, 0.1);
   }
-  sum.textContent = '총액: ' + Math.round(totalAmt) + '원';
+  sum.textContent = `총액: ${Math.round(store.totalAmt)}원`;
   if (discRate > 0) {
     var span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
@@ -180,7 +182,7 @@ function calcCart() {
 
 const renderBonusPts = () => {
   const sum = document.getElementById('cart-total');
-  bonusPts = Math.floor(totalAmt / 1000);
+  store.bonusPts = Math.floor(store.totalAmt / 1000);
   var ptsTag = document.getElementById('loyalty-points');
   if (!ptsTag) {
     ptsTag = document.createElement('span');
@@ -188,7 +190,7 @@ const renderBonusPts = () => {
     ptsTag.className = 'text-blue-500 ml-2';
     sum.appendChild(ptsTag);
   }
-  ptsTag.textContent = '(포인트: ' + bonusPts + ')';
+  ptsTag.textContent = `(포인트: ${store.bonusPts})`;
 };
 
 // 재고 상태 업데이트 (5개 미만인 상품에 대한 경고 메시지 표시)
@@ -257,7 +259,7 @@ addBtn.addEventListener('click', function () {
     itemToAdd.quantity--;
   }
   calcCart();
-  lastSelectedId = selectedProductId;
+  store.lastSelectedId = selectedProductId;
 });
 
 const cartDisp = document.getElementById('cart-items');

@@ -1,5 +1,6 @@
 import { CartRenderer } from './components/CartRenderer.js';
-import { CartItemList } from './components/CartItemList.js';
+// import { CartItemList } from './components/CartItemList.js';
+import { CartItemList } from './components/CartItemList/index.js';
 import { ProductSelector } from './components/ProductSelector.js';
 import { INITIAL_PRODUCTS } from './constants.js';
 

@@ -1,29 +1,43 @@
-// 장바구니 아이템 리스트 및 렌더링
+import { messages } from '../messages/messages.js';
+
 export const CartItemList = (cartItemListElement, productList, calculationCart) => {
-    cartItemListElement.addEventListener('click', function (event) {
-        var tgt = event.target;
-        if (tgt.classList.contains('quantity-change') || tgt.classList.contains('remove-item')) {
-            var prodId = tgt.dataset.productId;
-            var itemElem = document.getElementById(prodId);
-            var prod = productList.find(function (p) { return p.id === prodId; });
-            if (tgt.classList.contains('quantity-change')) {
-                var qtyChange = parseInt(tgt.dataset.change);
-                var newQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]) + qtyChange;
-                if (newQty > 0 && newQty <= prod.quantity + parseInt(itemElem.querySelector('span').textContent.split('x ')[1])) {
-                    itemElem.querySelector('span').textContent = itemElem.querySelector('span').textContent.split('x ')[0] + 'x ' + newQty;
-                    prod.quantity -= qtyChange;
-                } else if (newQty <= 0) {
-                    itemElem.remove();
-                    prod.quantity -= qtyChange;
-                } else {
-                    alert('재고가 부족합니다.');
-                }
-            } else if (tgt.classList.contains('remove-item')) {
-                var remQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]);
-                prod.quantity += remQty;
-                itemElem.remove();
+
+    function handleQuentityChange(eventTarget, productList) {
+        const productId = eventTarget.dataset.productId;
+        const productElement = document.getElementById(productId);
+        const product = productList.find(function (p) { return p.id === productId; });
+        if (eventTarget.classList.contains('quantity-change')) {
+            const quantityChange = parseInt(eventTarget.dataset.change);
+            const newQuantity = parseInt(productElement.querySelector('span').textContent.split('x ')[1]) + quantityChange;
+            if (newQuantity > 0 && newQuantity <= product.quantity + parseInt(productElement.querySelector('span').textContent.split('x ')[1])) {
+                productElement.querySelector('span').textContent = productElement.querySelector('span').textContent.split('x ')[0] + 'x ' + newQuantity;
+                product.quantity -= quantityChange;
+            } else if (newQuantity <= 0) {
+                productElement.remove();
+                product.quantity -= quantityChange;
+            } else {
+                alert(messages.OUT_OF_STOCK);
             }
-            calculationCart();
+
         }
+    }
+
+    function handleRemoveItem(productList) {
+        const productElement = document.getElementById(productId);
+        const product = productList.find(function (p) { return p.id === productId; });
+        const removeQuantity = parseInt(productElement.querySelector('span').textContent.split('x ')[1]);
+        product.quantity += removeQuantity;
+        productElement.remove();
+    };
+
+    cartItemListElement.addEventListener('click', function (event) {
+        const eventTarget = event.target;
+        if (eventTarget.classList.contains('quantity-change') || eventTarget.classList.contains('remove-item')) {
+            handleQuentityChange(eventTarget, productList);
+        } else if (eventTarget.classList.contains('remove-item')) {
+            handleRemoveItem(productList);
+        }
+        calculationCart();
     });
+
 }

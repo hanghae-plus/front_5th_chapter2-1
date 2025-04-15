@@ -1,4 +1,4 @@
-import { messages } from '../messages/messages .js';
+import { messages } from '../messages/messages.js';
 
 export const ProductSelector = (productSelectElement, addToCartButtonElement, productList, cartItemList, calculationCart, lastSelectedProduct) => {
     function createProductOption(product) {

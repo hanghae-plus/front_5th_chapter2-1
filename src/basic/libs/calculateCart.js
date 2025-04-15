@@ -1,4 +1,5 @@
 import { renderBonusPoints, updateStockInfo } from ".";
+import { createElement } from "./utils/createElement";
 
 const discountMap = {
   p1: 0.1,
@@ -88,9 +89,13 @@ export const calculateCart = ($cartDisplay, $sum, $stockInfo, products) => {
   $sum.textContent = "총액: " + Math.round(totalPrice) + "원";
 
   if (discountRate > 0) {
-    const $discountInfo = document.createElement("span");
-    $discountInfo.className = "text-green-500 ml-2";
-    $discountInfo.textContent = "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
+    const $discountInfo = createElement(
+      "span",
+      {
+        class: "text-green-500 ml-2",
+      },
+      `(${(discountRate * 100).toFixed(1)}% 할인 적용)`,
+    );
     $sum.appendChild($discountInfo);
   }
 

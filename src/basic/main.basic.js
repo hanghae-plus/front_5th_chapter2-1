@@ -1,5 +1,6 @@
 import { updateSelectOptions, calculateCart } from "./libs";
 import { addButtonClickEvent, cartDisplayClickEvent } from "./events";
+import { createElement } from "./libs/utils/createElement";
 
 /** @typedef {import("./types").Product} Product */
 
@@ -16,33 +17,41 @@ const products = [
 
 // ===============================================
 
-const $select = document.createElement("select");
-$select.id = "product-select";
-$select.className = "border rounded p-2 mr-2";
+const $select = createElement("select", {
+  id: "product-select",
+  class: "border rounded p-2 mr-2",
+});
 
 // ====================== renderBonusPoints =========================
 
-const $sum = document.createElement("div");
-$sum.id = "cart-total";
-$sum.className = "text-xl font-bold my-4";
+const $sum = createElement("div", {
+  id: "cart-total",
+  class: "text-xl font-bold my-4",
+});
 
 // ===============================================
 
-const $cartDisplay = document.createElement("div");
-$cartDisplay.id = "cart-items";
+const $cartDisplay = createElement("div", {
+  id: "cart-items",
+});
 
 // ===============================================
 
-const $addCartButton = document.createElement("button");
-$addCartButton.id = "add-to-cart";
-$addCartButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
-$addCartButton.textContent = "추가";
+const $addCartButton = createElement(
+  "button",
+  {
+    id: "add-to-cart",
+    class: "bg-blue-500 text-white px-4 py-2 rounded",
+  },
+  "추가",
+);
 
 // ===============================================
 
-const $stockInfo = document.createElement("div");
-$stockInfo.id = "stock-status";
-$stockInfo.className = "text-sm text-gray-500 mt-2";
+const $stockInfo = createElement("div", {
+  id: "stock-status",
+  class: "text-sm text-gray-500 mt-2",
+});
 
 // ===============================================
 
@@ -53,22 +62,34 @@ const lastSel = {
 // ===============================================
 
 function main() {
-  const $title = document.createElement("h1");
-  $title.className = "text-2xl font-bold mb-4";
-  $title.textContent = "장바구니";
+  const $title = createElement(
+    "h1",
+    {
+      class: "text-2xl font-bold mb-4",
+    },
+    "장바구니",
+  );
 
-  const $wrapper = document.createElement("div");
-  $wrapper.className = "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
-  $wrapper.appendChild($title);
-  $wrapper.appendChild($cartDisplay);
-  $wrapper.appendChild($sum);
-  $wrapper.appendChild($select);
-  $wrapper.appendChild($addCartButton);
-  $wrapper.appendChild($stockInfo);
+  const $wrapper = createElement(
+    "div",
+    {
+      class: "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8",
+    },
+    $title,
+    $cartDisplay,
+    $sum,
+    $select,
+    $addCartButton,
+    $stockInfo,
+  );
 
-  const $count = document.createElement("div");
-  $count.className = "bg-gray-100 p-8";
-  $count.appendChild($wrapper);
+  const $count = createElement(
+    "div",
+    {
+      class: "bg-gray-100 p-8",
+    },
+    $wrapper,
+  );
 
   const $root = document.getElementById("app");
   $root.appendChild($count);

@@ -1,3 +1,5 @@
+import { createElement } from "./utils/createElement";
+
 /**
  * 보너스 포인트 렌더링
  *
@@ -11,12 +13,13 @@ export const renderBonusPoints = ($sum, totalPrice) => {
   let $pointsTag = document.getElementById("loyalty-points");
 
   if (!$pointsTag) {
-    $pointsTag = document.createElement("span");
-    $pointsTag.id = "loyalty-points";
-    $pointsTag.className = "text-blue-500 ml-2";
+    $pointsTag = createElement("span", {
+      id: "loyalty-points",
+      class: "text-blue-500 ml-2",
+    });
     $sum.appendChild($pointsTag);
   }
 
   const bonusPoints = Math.floor(totalPrice / 1000);
-  $pointsTag.textContent = "(포인트: " + bonusPoints + ")";
+  $pointsTag.textContent = `(포인트: ${bonusPoints})`;
 };

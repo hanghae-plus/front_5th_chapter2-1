@@ -1,4 +1,7 @@
 import { calculateCart } from "../libs";
+import { createElement } from "../libs/utils/createElement";
+
+/** @typedef {import("../types").Product} Product */
 
 /**
  * 장바구니 클릭 이벤트
@@ -34,25 +37,32 @@ export const addButtonClickEvent = ($addCartButton, $cartDisplay, $select, $sum,
         alert("재고가 부족합니다.");
       }
     } else {
-      // FIXME: 상품 추가 이벤트 처리
-      const $newProduct = document.createElement("div");
-      $newProduct.id = targetProduct.id;
-      $newProduct.className = "flex justify-between items-center mb-2";
-      $newProduct.innerHTML =
-        "<span>" +
-        targetProduct.name +
-        " - " +
-        targetProduct.price +
-        "원 x 1</span><div>" +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-        targetProduct.id +
-        '" data-change="-1">-</button>' +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-        targetProduct.id +
-        '" data-change="1">+</button>' +
-        '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
-        targetProduct.id +
-        '">삭제</button></div>';
+      const buttons = [
+        {
+          label: "-",
+          class: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1",
+          dataset: { change: -1, productId: targetProduct.id },
+        },
+        {
+          label: "+",
+          class: "quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1",
+          dataset: { change: 1, productId: targetProduct.id },
+        },
+        {
+          label: "삭제",
+          class: "remove-item bg-red-500 text-white px-2 py-1 rounded",
+          dataset: { productId: targetProduct.id },
+        },
+      ];
+      const $newProduct = createElement(
+        "div",
+        {
+          id: targetProduct.id,
+          class: "flex justify-between items-center mb-2",
+        },
+        createElement("span", null, `${targetProduct.name} - ${targetProduct.price}원 x 1`),
+        createElement("div", null, ...buttons.map(({ label, ...props }) => createElement("button", props, label))),
+      );
 
       $cartDisplay.appendChild($newProduct);
       targetProduct.stock--;

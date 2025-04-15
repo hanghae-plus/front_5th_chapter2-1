@@ -16,15 +16,15 @@ export const cartDisplayClickEvent = ($cartDisplay, $sum, $stockInfo, products) 
     const productId = target.dataset.productId;
     const $product = document.getElementById(productId);
     const product = products.find((p) => p.id === productId);
-    const productName = $product.querySelector("span");
-    const productQuantity = parseInt(productName.textContent.split("x ")[1]);
+    const $productName = $product.querySelector("span");
+    const productQuantity = parseInt($productName.textContent.split("x ")[1]);
 
     if (target.classList.contains("quantity-change")) {
       const quantityChange = parseInt(target.dataset.change);
       const newQuantity = productQuantity + quantityChange;
 
       if (newQuantity > 0 && newQuantity <= product.stock + productQuantity) {
-        $product.querySelector("span").textContent = productName.textContent.split("x ")[0] + "x " + newQuantity;
+        $productName.textContent = $productName.textContent.split("x ")[0] + "x " + newQuantity;
         product.stock -= quantityChange;
       } else if (newQuantity <= 0) {
         $product.remove();

@@ -3,10 +3,24 @@
 
 let products, productSelectedElement, addProductButton, cartItemsElement, totalPayment, stockInfo;
 let lastSelectedProduct, earnedPoints = 0, totalAmount = 0, itemQuantity = 0;
+const SALE_PROBABILITY = 0.3;
+const DISCOUNT_RATE = 0.2;
+const ADDITIONAL_DISCOUNT_RATE = 0.05;
+const LOW_STOCK_THRESHOLD = 5;
+const PRODUCT_DISCOUNT_RATE = {
+  p1: 0.1,
+  p2: 0.15,
+  p3: 0.2,
+  p4: 0.05,
+  p5: 0.25,
+};
+//객체를 변경하지 못하게 위해 어떻게 해야할까?
+//내장함수 무엇이냐
+
+
 
 function main() {
   products = [
-    //id를 수정하는건 어떨까?
     { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
     { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
     { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
@@ -25,15 +39,15 @@ function main() {
   addProductButton = document.createElement('button');
   stockInfo = document.createElement('div');
 
+  CartContainer.className = 'bg-gray-100 p-8';
+  CartWrapper.className = 'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
+  pageHeading.className = 'text-2xl font-bold mb-4';
+
   cartItemsElement.id = 'cart-items';
   totalPayment.id = 'cart-total';
   productSelectedElement.id = 'product-select';
   addProductButton.id = 'add-to-cart';
   stockInfo.id = 'stock-status';
-
-  CartContainer.className = 'bg-gray-100 p-8';
-  CartWrapper.className = 'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-  pageHeading.className = 'text-2xl font-bold mb-4';
 
   totalPayment.className = 'text-xl font-bold my-4';
   productSelectedElement.className = 'border rounded p-2 mr-2';
@@ -42,8 +56,6 @@ function main() {
 
   pageHeading.textContent = '장바구니';
   addProductButton.textContent = '추가';
-
-  updateSelOpts();
 
   CartWrapper.appendChild(pageHeading);
   CartWrapper.appendChild(cartItemsElement);
@@ -54,98 +66,104 @@ function main() {
   CartContainer.appendChild(CartWrapper);
   root.appendChild(CartContainer);
 
-  calcCart();
+  updateSelectOptions();
+  calculateCart();
 
   //이 function을 나누는게 효과적일까?
+  //helper로 빼자.
   setTimeout(function() {
     setInterval(function() {
       let luckyItem = products[Math.floor(Math.random() * products.length)];
-      if (Math.random() < 0.3 && luckyItem.quantity > 0) {
-        luckyItem.price = Math.round(luckyItem.price * 0.8);
+      if (shouldApplyDiscount(luckyItem)) {
+        luckyItem.price = Math.round(luckyItem.price * (1-DISCOUNT_RATE));
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
-        updateSelOpts();
+        updateSelectOptions();
       }
     }, 30000);
   }, Math.random() * 10000);
 
   setTimeout(function() {
     setInterval(function() {
-      if (lastSelectedProduct) {
-        let suggest = products.find(function(item) {
-          return item.id !== lastSelectedProduct && item.quantity > 0;
-        });
-        if (suggest) {
-          alert(suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!');
-          suggest.price = Math.round(suggest.price * 0.95);
-          updateSelOpts();
-        }
-      }
+      // lastSelectedProduct가 없으면 바로 return
+      if (!lastSelectedProduct) return;
+      let alternativeProduct = findAlternativeProduct();
+      if (!alternativeProduct) return;
+      alert(alternativeProduct.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!');
+      alternativeProduct.price = Math.round(suggest.price * (1-ADDITIONAL_DISCOUNT_RATE));
+      updateSelectOptions();
+
     }, 60000);
   }, Math.random() * 20000);
-
 };
 
-function updateSelOpts() {
+function findAlternativeProduct() {
+  return products.find((item) => item.id !== lastSelectedProduct && item.quantity > 0);
+}
+
+function updateSelectOptions() {
   productSelectedElement.innerHTML = '';
   products.forEach(function(item) {
-    let opt = document.createElement('option');
-    opt.value = item.id;
-    opt.textContent = item.name + ' - ' + item.price + '원';
-    if (item.quantity === 0) opt.disabled = true;
+    let opt = createProductOption(item);
     productSelectedElement.appendChild(opt);
   });
 }
 
-function calcCart() {
+function createProductOption(item) {
+  const option = document.createElement('option');
+  option.value = item.id;
+  option.textContent = item.name + ' - ' + item.price + '원';
+  if (item.quantity === 0) option.disabled = true;
+  productSelectedElement.appendChild(option);
+  return option;
+}
+
+function calculateCartItemTotals(cartItem) {
+    // cartItem은 DOM 요소이므로, id를 가져와서 products 배열에서 해당 제품을 찾아야 함
+    const productId = cartItem.id;
+    const product = products.find((p) => p.id === productId);
+    if (!product) return {quantity: 0, itemTotal:0, discountedTotal: 0};
+
+    const quantityText = cartItem.querySelector('span')?.textContent;
+    const quantity = quantityText ? parseInt(quantityText.split('x ')[1]): 0;
+    const itemTotal = product.price * quantity;
+
+    const discountRate = quantity >= 10 ? PRODUCT_DISCOUNT_RATE[productId] ?? 0 : 0;
+    const discountedTotal = itemTotal * (1-discountRate);
+
+    return { quantity, itemTotal, discountedTotal};
+}
+
+function calculateBulkDiscountRate(subTotal, totalAmount, itemQuantity) {
+  if (itemQuantity >= 30) {
+    const bulkDiscount = totalAmount * 0.25; // 💡 할인율은 퍼센트로 표현
+    const itemDiscount = subTotal - totalAmount;
+
+    if (bulkDiscount > itemDiscount) {
+      return 0.25; // 25% 고정 할인
+    }
+  }
+  return (subTotal - totalAmount) / subTotal || 0;
+}
+
+function calculateCart() {
   totalAmount = 0;
   //고민해보자.
   itemQuantity = 0;
   let cartItems = cartItemsElement.children;
-  let subTot = 0;
+  let subTotal = 0;
 
-  for (let i = 0; i < cartItems.length; i++) {
-    //여기는 분리할 필요가 있겠다. 다른 함수로
-    (function() {
-      let currentItem;
-      for (let j = 0; j < products.length; j++) {
-        if (products[j].id === cartItems[i].id) {
-          currentItem = products[j];
-          break;
-        }
-      }
-      let quantity = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
-      let itemTot = currentItem.price * quantity;
-      let disc = 0;
-      itemQuantity += quantity;
-      subTot += itemTot;
 
-      if (quantity >= 10) {
-        if (currentItem.id === 'p1') disc = 0.1;
-        else if (currentItem.id === 'p2') disc = 0.15;
-        else if (currentItem.id === 'p3') disc = 0.2;
-        else if (currentItem.id === 'p4') disc = 0.05;
-        else if (currentItem.id === 'p5') disc = 0.25;
-      }
+  // 각 cartItem에 대해 개별 합계 계산
+  Array.from(cartItems).forEach((cartItem) => {
+    const { quantity, itemTotal, discountedTotal } = calculateCartItemTotals(cartItem);
 
-      totalAmount += itemTot * (1 - disc);
-    })();
-  }
-  let discRate = 0;
+    itemQuantity += quantity;
+    subTotal += itemTotal;
+    totalAmount += discountedTotal;
+  });
 
-  // magin number 분리할 필요 있지 않을까?
-  if (itemQuantity >= 30) {
-    let bulkDisc = totalAmount * 0.25;
-    let itemDisc = subTot - totalAmount;
-    if (bulkDisc > itemDisc) {
-      totalAmount = subTot * (1 - 0.25);
-      // 할인율을 25%로 고정
-      discRate = 0.25;
-    } else {
-      discRate = (subTot - totalAmount) / subTot;
-    }
-  } else {
-    discRate = (subTot - totalAmount) / subTot;
-  }
+  // 대량 구매 할인율 계산
+  let discRate = calculateBulkDiscountRate(subTotal, totalAmount, itemQuantity);
 
   if (new Date().getDay() === 2) {
     totalAmount *= (1 - 0.1);
@@ -166,46 +184,50 @@ function calcCart() {
 
 }
 
-const renderBonusPts = () => {
-  earnedPoints = Math.floor(totalAmount / 1000);
-  let ptsTag = document.getElementById('loyalty-points');
+function shouldApplyDiscount(item) {
+  return Math.random() < SALE_PROBABILITY && item.quantity > 0
+}
 
-  if (!ptsTag) {
-    ptsTag = document.createElement('span');
-    ptsTag.id = 'loyalty-points';
-    ptsTag.className = 'text-blue-500 ml-2';
-    totalPayment.appendChild(ptsTag);
+function renderBonusPoints () {
+
+  const earnedPoints = Math.floor(totalAmount / 1000);
+  let loyaltyPointsTag = document.getElementById('loyalty-points');
+
+  if (!loyaltyPointsTag) {
+    loyaltyPointsTag = document.createElement('span');
+    loyaltyPointsTag.id = 'loyalty-points';
+    loyaltyPointsTag.className = 'text-blue-500 ml-2';
+    totalPayment.appendChild(loyaltyPointsTag);
   }
-  ptsTag.textContent = '(포인트: ' + earnedPoints + ')';
+  loyaltyPointsTag.textContent = '(포인트: ' + earnedPoints + ')';
 };
 
 function updateStockInfo() {
-  let infoMsg = '';
+  let stockStatusMessage = '';
 
   products.forEach(function(item) {
-    if (item.quantity < 5) {
-      infoMsg += item.name + ': ' + (item.quantity > 0 ? '재고 부족 (' + item.quantity + '개 남음)' : '품절') + '\n';
+    if (item.quantity < LOW_STOCK_THRESHOLD) {
+      stockStatusMessage += item.name + ': ' + (item.quantity > 0 ? '재고 부족 (' + item.quantity + '개 남음)' : '품절') + '\n';
     }
   });
 
-  stockInfo.textContent = infoMsg;
+  stockInfo.textContent = stockStatusMessage;
 }
 
 main();
 
 addProductButton.addEventListener('click', function() {
   let selItem = productSelectedElement.value;
-  let itemToAdd = products.find(function(p) {
-    return p.id === selItem;
+  let itemToAdd = products.find(function(product) {
+    return product.id === selItem;
   });
 
-  //q가 뭔지 정확히 알 수가 없네.
   if (itemToAdd && itemToAdd.quantity > 0) {
     let item = document.getElementById(itemToAdd.id);
     if (item) {
-      let newQty = parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
-      if (newQty <= itemToAdd.quantity) {
-        item.querySelector('span').textContent = itemToAdd.name + ' - ' + itemToAdd.price + '원 x ' + newQty;
+      let newQuantity = parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1;
+      if (newQuantity <= itemToAdd.quantity) {
+        item.querySelector('span').textContent = itemToAdd.name + ' - ' + itemToAdd.price + '원 x ' + newQuantity;
         itemToAdd.quantity--;
       } else {
         alert('재고가 부족합니다.');
@@ -221,7 +243,7 @@ addProductButton.addEventListener('click', function() {
       cartItemsElement.appendChild(newItem);
       itemToAdd.quantity--;
     }
-    calcCart();
+    calculateCart();
     lastSelectedProduct = selItem;
   }
 });
@@ -253,6 +275,6 @@ cartItemsElement.addEventListener('click', function(event) {
       prod.quantity += remQty;
       itemElem.remove();
     }
-    calcCart();
+    calculateCart();
   }
 });

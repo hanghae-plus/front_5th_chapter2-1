@@ -1,4 +1,4 @@
-import ITEMS from '../constant';
+import ITEMS from '../constants/items';
 import { $itemSelect } from '../createElements';
 
 /**Select인 sel 밑으로 각 상품을 Option으로 넣습니다*/

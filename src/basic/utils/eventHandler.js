@@ -1,4 +1,4 @@
-import ITEMS from '../constant';
+import ITEMS from '../constants/items';
 import { $addToCartButton, $cart, $itemSelect } from '../createElements';
 import { RecentSelectedId } from '../store';
 import caculateCart from './caculateCart';

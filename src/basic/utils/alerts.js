@@ -1,4 +1,4 @@
-import ITEMS from '../constant';
+import ITEMS from '../constants/items';
 import { RecentSelectedId } from '../store';
 import updateItemOption from './updateOption';
 
@@ -18,8 +18,8 @@ const alertLuckyEvent = () => {
 
 /**알림으로 구매를 제안합니다.*/
 const alertSuggest = () => {
-  let recentId = new RecentSelectedId();
-  let recentSelectedId = recentId.get();
+  let recentSelectedId = new RecentSelectedId().get();
+
   setTimeout(function () {
     setInterval(function () {
       if (recentSelectedId) {
@@ -36,6 +36,7 @@ const alertSuggest = () => {
   }, Math.random() * 20000);
 };
 
+/**전체 알림을 동작시킵니다. */
 const alerts = () => {
   alertLuckyEvent();
   alertSuggest();

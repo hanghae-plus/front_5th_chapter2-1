@@ -1,5 +1,5 @@
 const ITEMS = [
-  { id: 'p1', name: '상품1', price: 10000, stock: 50 }, //val->price: 가격, q->stock:재고 수량(quantity) ->price로 변경
+  { id: 'p1', name: '상품1', price: 10000, stock: 50 },
   { id: 'p2', name: '상품2', price: 20000, stock: 30 },
   { id: 'p3', name: '상품3', price: 30000, stock: 20 },
   { id: 'p4', name: '상품4', price: 15000, stock: 0 },

@@ -1,5 +1,5 @@
 import { TotalPrice } from '../store';
-import ITEMS from '../constant';
+import ITEMS from '../constants/items';
 import { $cart, $sum } from '../createElements';
 import updateBonusPoint from './updateBonusPoint';
 import updateStockState from './updateStockState';
@@ -13,7 +13,7 @@ const caculateCart = () => {
 
   for (let i = 0; i < cartItems.length; i++) {
     //모든 장바구니를 순회
-    (function () {
+    (() => {
       //즉시 실행 함수
       let currentItem; //현재 아이템입니다.
       for (let j = 0; j < ITEMS.length; j++) {
@@ -40,8 +40,6 @@ const caculateCart = () => {
         else if (currentItem.id === 'p4') discount = 0.05;
         else if (currentItem.id === 'p5') discount = 0.25;
       }
-      // totalPrice += itemTotalPrice * (1 - discount); //총액 업데이트
-      // //t = t+ (itemTotalPrice * (1 - discount))
       totalPrice.set(totalPrice.get() + itemTotalPrice * (1 - discount));
     })();
   }
@@ -52,7 +50,6 @@ const caculateCart = () => {
     let itemDiscount = subTotalPrice - totalPrice.get();
 
     if (bulkDiscount > itemDiscount) {
-      // totalPrice = subTotalPrice * (1 - 0.25);
       totalPrice.set(subTotalPrice * (1 - 0.25));
       discount = 0.25;
     } else {
@@ -63,8 +60,6 @@ const caculateCart = () => {
   }
 
   if (new Date().getDay() === 2) {
-    // totalPrice *= 1 - 0.1;
-    //totalPrice=totalPrice * (1 - 0.1)
     totalPrice.set(totalPrice.get() * (1 - 0.1));
     discount = Math.max(discount, 0.1);
   }
@@ -77,6 +72,7 @@ const caculateCart = () => {
     span.textContent = '(' + (discount * 100).toFixed(1) + '% 할인 적용)';
     $sum.appendChild(span);
   }
+
   updateStockState();
   updateBonusPoint(totalPrice);
 };

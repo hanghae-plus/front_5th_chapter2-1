@@ -1,7 +1,7 @@
 import { $addToCartButton, $cart, $itemSelect, $sum, $stockState, $title } from './createElements';
 
 const render = () => {
-  const $elements = document.createElement('div'); //요소들을 둘러싸는 컨테이너, wrap
+  const $elements = document.createElement('div');
   $elements.className = `max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8`;
   $elements.appendChild($title);
   $elements.appendChild($cart);

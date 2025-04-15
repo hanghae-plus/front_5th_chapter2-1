@@ -74,8 +74,8 @@ class StockState extends BaseElement {
 let $addToCartButton = new AddCartButton().get();
 let $cart = new Cart().get();
 let $itemSelect = new ItemSelect().get();
-let $sum = new Sum().get();
 let $title = new Title().get();
+let $sum = new Sum().get();
 let $stockState = new StockState().get();
 
-export { $addToCartButton, $cart, $itemSelect, $sum, $stockState, $title };
+export { $addToCartButton, $cart, $title, $itemSelect, $sum, $stockState };

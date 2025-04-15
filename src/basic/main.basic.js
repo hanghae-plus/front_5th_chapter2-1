@@ -1,17 +1,12 @@
-var products, select, addItemBtn, cartDiv, sum, stockInfo;
+import { products } from "./consts";
+import { updateSelectOptions } from "./events/updateSelectOptions";
+
+var addItemBtn, cartDiv, sum, stockInfo;
 var lastSelectedProduct,
   totalPrice = 0,
   totalEa = 0;
 
 const main = () => {
-  products = [
-    { id: "p1", name: "상품1", price: 10000, stock: 50 },
-    { id: "p2", name: "상품2", price: 20000, stock: 30 },
-    { id: "p3", name: "상품3", price: 30000, stock: 20 },
-    { id: "p4", name: "상품4", price: 15000, stock: 0 },
-    { id: "p5", name: "상품5", price: 25000, stock: 10 },
-  ];
-
   // HTML elements 생성
   var root = document.getElementById("app");
   let container = document.createElement("div");
@@ -19,14 +14,14 @@ const main = () => {
   let titleText = document.createElement("h1");
   cartDiv = document.createElement("div");
   sum = document.createElement("div");
-  select = document.createElement("select");
+  // var select = document.createElement("select");
   addItemBtn = document.createElement("button");
   stockInfo = document.createElement("div");
 
   // IDs 설정
   cartDiv.id = "cart-items";
   sum.id = "cart-total";
-  select.id = "product-select";
+  // select.id = "product-select";
   addItemBtn.id = "add-to-cart";
   stockInfo.id = "stock-status";
 
@@ -36,7 +31,7 @@ const main = () => {
     "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
   titleText.className = "text-2xl font-bold mb-4";
   sum.className = "text-xl font-bold my-4";
-  select.className = "border rounded p-2 mr-2";
+  // select.className = "border rounded p-2 mr-2";
   addItemBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
   stockInfo.className = "text-sm text-gray-500 mt-2";
 
@@ -45,7 +40,7 @@ const main = () => {
   addItemBtn.textContent = "추가";
 
   // 이벤트 리스너 설정
-  updateSelectOptions();
+  var select = updateSelectOptions();
 
   // HTML 요소 추가
   wrapper.appendChild(titleText);
@@ -93,18 +88,6 @@ const updateRecommendation = () => {
       }
     }, 60000);
   }, Math.random() * 20000);
-};
-
-// 상품 선택 옵션 업데이트
-const updateSelectOptions = () => {
-  select.innerHTML = "";
-  products.forEach(function (item) {
-    var opt = document.createElement("option");
-    opt.value = item.id;
-    opt.textContent = item.name + " - " + item.price + "원";
-    if (item.stock === 0) opt.disabled = true;
-    select.appendChild(opt);
-  });
 };
 
 // 상품 추가 시 가격 계산
@@ -313,6 +296,7 @@ main();
 
 // 상품 추가 버튼 클릭 이벤트
 addItemBtn.addEventListener("click", function () {
+  var select = document.getElementById("product-select");
   var selectedItem = select.value;
   var itemToAdd = products.find(function (item) {
     return item.id === selectedItem;

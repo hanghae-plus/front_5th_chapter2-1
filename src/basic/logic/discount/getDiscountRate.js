@@ -1,11 +1,11 @@
 import { CartStore } from '../../store';
 import { BULK_PURCHASE, TUESDAY_DISCOUNT } from '../../consts';
 
-const getBulkDiscountRate = (itemCount, totalAmount, subTotal) => {
+const calculateBulkDiscountRate = (itemCount, totalAmount, subTotal) => {
   if (itemCount < BULK_PURCHASE.THRESHOLD)
     return (subTotal - totalAmount) / subTotal;
 
-  const bulkDiscount = totalAmount * 0.25;
+  const bulkDiscount = totalAmount * BULK_PURCHASE.DISCOUNT_RATE;
   const itemDiscount = subTotal - totalAmount;
 
   if (bulkDiscount > itemDiscount) {
@@ -29,7 +29,7 @@ const applyTuesdayDiscount = (currentRate) => {
 
 export const getDiscountRate = (subTotal) => {
   const { itemCount, totalAmount } = CartStore.get();
-  const rate = getBulkDiscountRate(itemCount, totalAmount, subTotal);
+  const rate = calculateBulkDiscountRate(itemCount, totalAmount, subTotal);
 
   return applyTuesdayDiscount(rate);
 };

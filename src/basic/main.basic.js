@@ -1,5 +1,6 @@
 import { CONSTANTS } from './constants';
 import { textUtils } from './utils/textUtils';
+import { ItemStore } from './store/itemStore';
 import { updateSelectOptions } from './components/itemSelect/updateSelectOptions';
 import { renderCalcCart } from './components/cartTotal/renderCalcCart';
 
@@ -12,7 +13,7 @@ import ItemSelect from './components/itemSelect/ItemSelect';
 import CartTotal from './components/cartTotal/CartTotal';
 import StockStatus from './components/stockStatus/StockStatus';
 
-let items, lastSelectedItem;
+let lastSelectedItem;
 
 function appendDOM() {
   const $contentWrapper = ContentWrapper();
@@ -32,15 +33,10 @@ function appendDOM() {
 }
 
 function main() {
-  items = [
-    { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
-    { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
-    { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
-    { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
-    { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
-  ];
-
   appendDOM();
+
+  const itemStore = ItemStore.getInstance();
+  const items = itemStore.getState().items;
 
   updateSelectOptions(items);
   renderCalcCart(items);
@@ -89,9 +85,10 @@ const $addButton = document.getElementById('add-to-cart');
 $addButton.addEventListener('click', function () {
   const $itemSelect = document.getElementById('product-select');
   const selectItemId = $itemSelect.value;
-  const selectedItem = items.find(function (item) {
-    return item.id === selectItemId;
-  });
+
+  const itemStore = ItemStore.getInstance();
+  const items = itemStore.getState().items;
+  const selectedItem = itemStore.findItem(selectItemId);
 
   // 상품이 선택되었고 재고가 있는 경우
   if (selectedItem && selectedItem.quantity > 0) {
@@ -110,7 +107,7 @@ $addButton.addEventListener('click', function () {
           updatedQuantity,
         );
 
-        selectedItem.quantity--;
+        itemStore.updateItemQuantity(selectedItem.id, -1);
       } else {
         alert(CONSTANTS.OUT_OF_STOCK_MESSAGE);
       }
@@ -143,7 +140,7 @@ $addButton.addEventListener('click', function () {
 
       const $cart = document.getElementById('cart-items');
       $cart.appendChild($newItemsDiv);
-      selectedItem.quantity--;
+      itemStore.updateItemQuantity(selectedItem.id, -1);
     }
 
     renderCalcCart(items);
@@ -162,6 +159,9 @@ $cart.addEventListener('click', function (event) {
   ) {
     const itemId = target.dataset.itemId;
     const $item = document.getElementById(itemId);
+
+    const itemStore = ItemStore.getInstance();
+    const items = itemStore.getState().items;
     const item = items.find(function (i) {
       return i.id === itemId;
     });
@@ -183,10 +183,10 @@ $cart.addEventListener('click', function (event) {
           $item.querySelector('span').textContent.split('x ')[0] +
           'x ' +
           updatedQuantity;
-        item.quantity -= quantityDiff;
+        itemStore.updateItemQuantity(item.id, -quantityDiff);
       } else if (updatedQuantity <= 0) {
         $item.remove();
-        item.quantity -= quantityDiff;
+        itemStore.updateItemQuantity(item.id, -quantityDiff);
       } else {
         alert(CONSTANTS.OUT_OF_STOCK_MESSAGE);
       }
@@ -195,7 +195,7 @@ $cart.addEventListener('click', function (event) {
         $item.querySelector('span').textContent.split('x ')[1],
       );
 
-      item.quantity += removeQuantity;
+      itemStore.updateItemQuantity(item.id, removeQuantity);
       $item.remove();
     }
 

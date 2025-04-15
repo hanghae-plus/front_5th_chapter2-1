@@ -1,0 +1,1 @@
+export { createDiscountText } from './DiscountText';

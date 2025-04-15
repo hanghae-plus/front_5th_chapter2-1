@@ -11,11 +11,11 @@ addBtn.addEventListener("click", function () {
 
 const cartDisp = document.getElementById("cart-items");
 cartDisp.addEventListener("click", function (event) {
-  let tgt = event.target;
-  if (
-    tgt.classList.contains("quantity-change") ||
-    tgt.classList.contains("remove-item")
-  ) {
+  const tgt = event.target;
+
+  if (tgt.classList.contains("quantity-change"))
+    cartStore.dispatch({ type: "CHANGE_ITEM_QUANTITY", payload: tgt });
+
+  if (tgt.classList.contains("remove-item"))
     cartStore.dispatch({ type: "REMOVE_ITEM", payload: tgt });
-  }
 });

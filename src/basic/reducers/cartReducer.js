@@ -1,9 +1,15 @@
 import { renderNewCartItem } from "../components/render";
 import { PRODUCT_LIST } from "../lib/configs/products";
-import { calculateCartTotal } from "../lib/utils/cartUtils";
+import {
+  calculateCartTotal,
+  getNameOfItem,
+  getQuantityOfItem,
+  isProductOutOfSold,
+} from "../lib/utils/cartUtils";
 
 const actions = {
   ADD_ITEM: "ADD_ITEM",
+  CHANGE_ITEM_QUANTITY: "CHANGE_ITEM_QUANTITY",
   REMOVE_ITEM: "REMOVE_ITEM",
 };
 
@@ -16,80 +22,88 @@ export function cartReducer(state, action) {
 
       if (itemToAdd && itemToAdd.stock > 0) {
         let itemInCart = document.getElementById(itemToAdd.id);
+
         if (itemInCart) {
-          let newQty =
-            parseInt(
-              itemInCart.querySelector("span").textContent.split("x ")[1],
-            ) + 1;
-          if (newQty <= itemToAdd.stock) {
-            itemInCart.querySelector("span").textContent =
-              `${itemToAdd.name} - ${itemToAdd.price}원 x ${newQty}`;
-            itemToAdd.stock--;
-          } else {
+          const currentQuantity = getQuantityOfItem(itemInCart);
+          let newQty = currentQuantity + 1;
+
+          if (isProductOutOfSold(newQty, currentQuantity, itemToAdd.stock)) {
             return { ...state, error: "재고가 부족합니다." };
           }
+
+          itemInCart.querySelector("span").textContent =
+            `${itemToAdd.name} - ${itemToAdd.price}원 x ${newQty}`;
         } else {
           renderNewCartItem(itemToAdd);
-          itemToAdd.stock--;
         }
       }
+
+      const newCartTotal = calculateCartTotal();
 
       return {
         ...state,
         items: [...state.items, itemToAdd],
         lastSelected: itemToAdd.id,
         error: null,
-        ...calculateCartTotal(),
+        ...newCartTotal,
+      };
+    }
+
+    case actions.CHANGE_ITEM_QUANTITY: {
+      const selectedItem = action.payload;
+
+      const selectedId = selectedItem.dataset.productId;
+      const $cartItem = document.getElementById(selectedId);
+
+      const prod = PRODUCT_LIST.find((p) => p.id === selectedId);
+
+      const currentQuantity = getQuantityOfItem($cartItem);
+
+      const quantifyChange = parseInt(selectedItem.dataset.change);
+      const newQuantity = currentQuantity + quantifyChange;
+
+      if (isProductOutOfSold(newQuantity, currentQuantity, prod.stock)) {
+        return { ...state, error: "재고가 부족합니다." };
+      }
+
+      $cartItem.querySelector("span").textContent = `${getNameOfItem(
+        $cartItem,
+      )}x ${newQuantity}`;
+
+      const newCartTotal = calculateCartTotal();
+      const newItems =
+        newQuantity > 0
+          ? [...state.items, prod]
+          : state.items.filter((item) => item.id !== selectedId);
+
+      return {
+        ...state,
+        items: newItems,
+        ...newCartTotal,
       };
     }
 
     case actions.REMOVE_ITEM: {
       const selectedItem = action.payload;
 
-      let selectedId = selectedItem.dataset.productId;
-      let itemElem = document.getElementById(selectedId);
+      const selectedId = selectedItem.dataset.productId;
+      const $cartItem = document.getElementById(selectedId);
 
-      let prod = PRODUCT_LIST.find(function (p) {
-        return p.id === selectedId;
-      });
-      if (selectedItem.classList.contains("quantity-change")) {
-        let qtyChange = parseInt(selectedItem.dataset.change);
-        let newQty =
-          parseInt(itemElem.querySelector("span").textContent.split("x ")[1]) +
-          qtyChange;
-        if (
-          newQty > 0 &&
-          newQty <=
-            prod.stock +
-              parseInt(
-                itemElem.querySelector("span").textContent.split("x ")[1],
-              )
-        ) {
-          itemElem.querySelector("span").textContent =
-            itemElem.querySelector("span").textContent.split("x ")[0] +
-            "x " +
-            newQty;
-          prod.stock -= qtyChange;
-        } else if (newQty <= 0) {
-          itemElem.remove();
-          prod.stock -= qtyChange;
-        } else {
-          return { ...state, error: "재고가 부족합니다." };
-        }
-      } else if (selectedItem.classList.contains("remove-item")) {
-        let remQty = parseInt(
-          itemElem.querySelector("span").textContent.split("x ")[1],
-        );
-        prod.stock += remQty;
-        itemElem.remove();
-      }
+      const prod = PRODUCT_LIST.find((p) => p.id === selectedId);
+      const currentQuantity = getQuantityOfItem($cartItem);
+
+      prod.stock += currentQuantity;
+      $cartItem.remove();
+
+      const newCartTotal = calculateCartTotal();
 
       return {
         ...state,
         items: state.items.filter((item) => item.id !== selectedId),
-        ...calculateCartTotal(),
+        ...newCartTotal,
       };
     }
+
     default:
       return state;
   }

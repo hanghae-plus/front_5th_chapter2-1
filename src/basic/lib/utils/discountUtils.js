@@ -34,3 +34,18 @@ export function calculateBulkDiscount(totalPrice, originalTotalPrice) {
 
   return createDiscountSummary(totalPrice, DISCOUNT_RATES.BULK);
 }
+
+export function getDiscountRateByProduct(productId) {
+  switch (productId) {
+    case "p1":
+      return 0.1;
+    case "p2":
+      return 0.15;
+    case "p3":
+      return 0.2;
+    case "p4":
+      return 0.05;
+    case "p5":
+      return 0.25;
+  }
+}

@@ -1,6 +1,7 @@
 import { PRODUCT_LIST } from "../configs/products";
 import { bonusPointService } from "../services/BonusPointService";
 import { discountService } from "../services/DiscountService";
+import { getDiscountRateByProduct } from "./discountUtils";
 
 export function calculateCartTotal() {
   let totalQuantity = 0;
@@ -19,29 +20,24 @@ export function calculateCartTotal() {
     };
   }
 
-  for (let i = 0; i < cartItems.length; i++) {
-    let curItem;
-    for (let j = 0; j < PRODUCT_LIST.length; j++) {
-      if (PRODUCT_LIST[j].id === cartItems[i].id) {
-        curItem = PRODUCT_LIST[j];
-        break;
-      }
-    }
-    let q = parseInt(
-      cartItems[i].querySelector("span").textContent.split("x ")[1],
+  for (let $cartItem of cartItems) {
+    const productItem = PRODUCT_LIST.find((item) => item.id === $cartItem.id);
+
+    const quantity = parseInt(
+      $cartItem.querySelector("span").textContent.split("x ")[1],
     );
-    let itemTot = curItem.price * q;
-    let disc = 0;
-    totalQuantity += q;
-    totalAmountBeforeDiscount += itemTot;
-    if (q >= 10) {
-      if (curItem.id === "p1") disc = 0.1;
-      else if (curItem.id === "p2") disc = 0.15;
-      else if (curItem.id === "p3") disc = 0.2;
-      else if (curItem.id === "p4") disc = 0.05;
-      else if (curItem.id === "p5") disc = 0.25;
+    const totalAmountOfItem = productItem.price * quantity;
+
+    totalQuantity += quantity;
+    totalAmountBeforeDiscount += totalAmountOfItem;
+
+    if (quantity < 10) {
+      totalAmount += totalAmountOfItem;
+      continue;
     }
-    totalAmount += itemTot * (1 - disc);
+
+    totalAmount +=
+      totalAmountOfItem * (1 - getDiscountRateByProduct(productItem.id));
   }
 
   totalAmount = discountService.applyDiscount(
@@ -57,4 +53,16 @@ export function calculateCartTotal() {
     totalAmountBeforeDiscount,
     totalAmount,
   };
+}
+
+export function getQuantityOfItem(itemElem) {
+  return parseInt(itemElem.querySelector("span").textContent.split("x ")[1]);
+}
+
+export function getNameOfItem(itemElem) {
+  return itemElem.querySelector("span").textContent.split("x ")[0];
+}
+
+export function isProductOutOfSold(newQuantity, currentQuantity, stock) {
+  return newQuantity > stock;
 }

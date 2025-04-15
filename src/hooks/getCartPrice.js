@@ -34,18 +34,18 @@ export function getCartPrice () {
         total += discountedTotal;
     });
 
-    let discountRate = computeBulkDiscountRate(itemCount, subtotal, total);
-    total = applySpecialDayDiscount(total, discountRate);
+    let discountRate = getDiscountRate(itemCount, subtotal, total);
+    total = handleTuesdayDiscount(total, discountRate);
 
     state.itemCnt = itemCount;
     state.totalAmt = Math.round(total);
 
-    renderTotal(state.totalAmt, discountRate);
+    getTotalPrice(state.totalAmt, discountRate);
     checkStock();
     getPoints(store.element.sum);
 }
 
-function computeBulkDiscountRate(itemCount, subtotal, currentTotal) {
+function getDiscountRate(itemCount, subtotal, currentTotal) {
     if (itemCount < 30) return (subtotal - currentTotal) / subtotal;
   
     const bulkDiscountAmt = subtotal * 0.25;
@@ -59,7 +59,7 @@ function computeBulkDiscountRate(itemCount, subtotal, currentTotal) {
     return itemDiscountAmt / subtotal;
 }
 
-function applySpecialDayDiscount(total, currentRate) {
+function handleTuesdayDiscount(total, currentRate) {
     const today = new Date().getDay();
     const isTuesday = today === 2;
   
@@ -69,7 +69,7 @@ function applySpecialDayDiscount(total, currentRate) {
     return discounted;
 }
 
-function renderTotal(totalAmt, discountRate) {
+function getTotalPrice(totalAmt, discountRate) {
     const sumEl = store.element.sum;
     sumEl.textContent = `총액: ${Math.round(totalAmt)}원`;
   

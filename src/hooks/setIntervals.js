@@ -23,12 +23,12 @@ export function alertPromotion2 () {
       const lastSel = store.state.lastSel;
       
       if (lastSel) {
-        const suggestion = products.find(
+        const promotion = products.find(
           (item) => item.id !== lastSel && item.q > 0
         );
-        if (suggestion) {
-          alert(`${suggestion.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`);
-          suggestion.val = Math.round(suggestion.val * 0.95);
+        if (promotion) {
+          alert(`${promotion.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`);
+          promotion.val = Math.round(promotion.val * 0.95);
           showSelectList();
         }
       }

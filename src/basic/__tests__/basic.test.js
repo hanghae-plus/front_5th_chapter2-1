@@ -112,7 +112,7 @@ describe('basic test', () => {
     });
 
     it('화요일 할인이 적용되는지 확인', () => {
-      const mockDate=new Date('2025-04-15'); // 화요일
+      const mockDate=new Date('2025-04-14'); // 화요일
       vi.useFakeTimers()
       vi.setSystemTime(mockDate);
       sel.value='p1';

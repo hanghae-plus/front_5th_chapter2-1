@@ -10,3 +10,10 @@ export const createElement = (tag, props) => {
   }
   return element;
 };
+
+export const getProductStockStatusString = (product) => {
+  const hasStock = product.quantity > 0;
+  const status = hasStock ? `재고 부족 (${product.quantity}개 남음)` : '품절';
+
+  return `${product.name}: ${status}`;
+};

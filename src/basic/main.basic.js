@@ -1,5 +1,9 @@
 import { DISCOUNT_RATE, LUCK_THRESHOLD, prodList } from './constants';
-import { createElement, startRandomlyInMs } from './utils';
+import {
+  createElement,
+  getProductStockStatusString,
+  startRandomlyInMs,
+} from './utils';
 
 const store = {
   lastSelectedId: null,
@@ -89,15 +93,16 @@ const startLuckyDraw = () => {
 
 const startSuggestion = () => {
   if (store.lastSelectedId) {
-    const suggestionItem = prodList.find(
+    const suggestion = prodList.find(
       (product) => product.id !== store.lastSelectedId && product.quantity > 0,
     );
 
-    if (!suggestionItem) return;
+    if (!suggestion) return;
+    alert(`${suggestion.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`);
 
-    const alertText = `${suggestionItem.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`;
-    alert(alertText);
-    suggestionItem.price = Math.round(suggestionItem.price * 0.95);
+    suggestion.price = Math.round(
+      suggestion.price * (1 - DISCOUNT_RATE.suggestion),
+    );
     updateSelectOptions();
   }
 };
@@ -212,12 +217,6 @@ function updateStockInfo() {
 
   stockInfo.textContent = infoMsg;
 }
-
-const getProductStockStatusString = (product) => {
-  const status =
-    product.quantity > 0 ? `재고 부족 (${product.quantity}개 남음)` : '품절';
-  return `${product.name}: ${status}`;
-};
 
 main();
 

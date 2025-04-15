@@ -17,3 +17,13 @@ export const getProductStockStatusString = (product) => {
 
   return `${product.name}: ${status}`;
 };
+
+export const extractCartProductInfo = (itemStrElem) => {
+  const itemStr = itemStrElem.textContent;
+  const [name, quantityStr] = itemStr.split(' x ');
+
+  return {
+    name: name.trim(),
+    quantity: parseInt(quantityStr.trim(), 10),
+  };
+};

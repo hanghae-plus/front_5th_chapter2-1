@@ -1,6 +1,6 @@
 import productStore from "./store/product.js";
 
-let lastSel;
+let recentlyAddedCartItemId;
 let bonusPts = 0;
 let totalAmt = 0;
 let itemCnt = 0;
@@ -79,10 +79,10 @@ function main() {
 
   setTimeout(function () {
     setInterval(function () {
-      if (lastSel) {
+      if (recentlyAddedCartItemId) {
         const productList = productStore.getProductList();
         const suggest = productList.find(function (item) {
-          return item.id !== lastSel && item.q > 0;
+          return item.id !== recentlyAddedCartItemId && item.q > 0;
         });
         if (suggest) {
           alert(
@@ -242,7 +242,7 @@ addBtn.addEventListener("click", function () {
     }
 
     calcCart();
-    lastSel = selectedItemId;
+    recentlyAddedCartItemId = selectedItemId;
   }
 });
 

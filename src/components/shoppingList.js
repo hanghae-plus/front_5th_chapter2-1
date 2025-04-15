@@ -2,6 +2,7 @@ import { showSelectList } from '../hooks/selectProduct'
 import { store } from '../store/store'
 import { getPoints } from '../hooks/getPoints';
 import { checkStock } from '../hooks/checkStock';
+// import { addCart } from '../hooks/addCart';
 
 export const ShoppingList = () => {
   const root = document.getElementById('app');
@@ -32,6 +33,7 @@ export const ShoppingList = () => {
   store.element.stockInfo = stockInfo;
 
   showSelectList();
-  checkStock();
-  getPoints(sum);
+  // addCart();
+  // checkStock();
+  // getPoints(sum);
 };

@@ -1,36 +1,56 @@
 import { STYLES, DOM_ATTRIBUTES, DOM_CLASSES } from '../consts';
+import { createElement, formatPrice } from '../utils';
+
+const createQuantityButton = ({ change, text, itemId }) => {
+  return createElement('button', {
+    className: `${STYLES.BUTTON.PRIMARY} ${STYLES.BUTTON.SMALL} ${DOM_CLASSES.BUTTON.QUANTITY_CHANGE}`,
+    attributes: {
+      [DOM_ATTRIBUTES.PRODUCT.ID]: itemId,
+      [DOM_ATTRIBUTES.PRODUCT.CHANGE]: change,
+    },
+    textContent: text,
+  });
+};
+
+const createRemoveButton = (itemId) => {
+  return createElement('button', {
+    className: `${STYLES.BUTTON.DANGER} ${DOM_CLASSES.BUTTON.REMOVE_ITEM}`,
+    attributes: {
+      [DOM_ATTRIBUTES.PRODUCT.ID]: itemId,
+    },
+    textContent: '삭제',
+  });
+};
+
+const createQuantitySpan = (item) => {
+  return createElement('span', {
+    attributes: {
+      [DOM_ATTRIBUTES.PRODUCT.VALUE]: item.value,
+      [DOM_ATTRIBUTES.PRODUCT.QUANTITY]: 1,
+    },
+    textContent: `${item.name} - ${formatPrice(item.value)} x 1`,
+  });
+};
 
 export const cartItemElement = (item) => {
-  const newItem = document.createElement('div');
-  newItem.id = item.id;
-  newItem.className = STYLES.LAYOUT.FLEX;
+  const container = createElement('div', {
+    id: item.id,
+    className: STYLES.LAYOUT.FLEX,
+  });
+  container.appendChild(createQuantitySpan(item));
 
-  const quantityButtons = [
+  const buttonContainer = createElement('div');
+  [
     { change: -1, text: '-' },
     { change: 1, text: '+' },
-  ]
-    .map(
-      ({ change, text }) => `
-    <button 
-      class="${STYLES.BUTTON.PRIMARY} ${STYLES.BUTTON.SMALL} ${DOM_CLASSES.BUTTON.QUANTITY_CHANGE}" 
-      ${DOM_ATTRIBUTES.PRODUCT.ID}="${item.id}" 
-      ${DOM_ATTRIBUTES.PRODUCT.CHANGE}="${change}"
-    >${text}</button>
-  `,
-    )
-    .join('');
+  ].forEach((config) => {
+    buttonContainer.appendChild(
+      createQuantityButton({ ...config, itemId: item.id }),
+    );
+  });
 
-  newItem.innerHTML = `
-    <span ${DOM_ATTRIBUTES.PRODUCT.VALUE}="${item.value}" ${DOM_ATTRIBUTES.PRODUCT.QUANTITY}="1">
-      ${item.name} - ${item.value}원 x 1
-    </span>
-    <div>
-      ${quantityButtons}
-      <button 
-        class="${STYLES.BUTTON.DANGER} ${DOM_CLASSES.BUTTON.REMOVE_ITEM}" 
-        ${DOM_ATTRIBUTES.PRODUCT.ID}="${item.id}"
-      >삭제</button>
-    </div>
-  `;
-  return newItem;
+  buttonContainer.appendChild(createRemoveButton(item.id));
+  container.appendChild(buttonContainer);
+
+  return container;
 };

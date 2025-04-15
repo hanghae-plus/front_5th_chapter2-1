@@ -1,6 +1,6 @@
 import $addCartButton from '../components/AddCartButton';
-import $cart from '../components/Cart';
 import $itemSelect from '../components/ItemSelect';
+import $cart from '../components/Cart';
 import updateCart from '../updater/updateCart';
 import {
   createCartItem,

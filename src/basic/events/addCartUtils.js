@@ -27,12 +27,10 @@ const updateCartItem = (item, selectedItem) => {
 };
 
 const createCartItem = (selectedItem, $cart) => {
-  // 새 아이템 생성
   const newItem = document.createElement('div');
   newItem.id = selectedItem.id;
   newItem.className = 'flex justify-between items-center mb-2';
 
-  // 템플릿 리터럴을 사용하여 HTML 가독성 개선
   newItem.innerHTML = `
 		<span>${selectedItem.name} - ${selectedItem.price}원 x 1</span>
 		<div>

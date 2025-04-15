@@ -1,6 +1,6 @@
 import ITEMS from '../constants/items';
-import updateSelectOptions from '../updater/updateSelectOptions';
 import { LUCKY_DISCONT_RATE, LUCKY_PROBABILITY } from './constants';
+import updateSelectOptions from '../updater/updateSelectOptions';
 
 let luckyItem = ITEMS[Math.floor(Math.random() * ITEMS.length)];
 

@@ -1,9 +1,9 @@
+import { TotalPrice } from '../stores';
+import ITEMS from '../constants/items';
 import $cart from '../components/Cart';
 import $cartTotal from '../components/CartTotal';
-import ITEMS from '../constants/items';
-import { TotalPrice } from '../stores';
-import updatePoint from './updatePoint';
 import updateStockState from './updateStockState';
+import updatePoint from './updatePoint';
 
 const updateCart = () => {
   let totalPrice = new TotalPrice();

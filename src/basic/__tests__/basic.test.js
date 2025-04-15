@@ -15,6 +15,8 @@ describe("basic test", () => {
   ])("$type 장바구니 시나리오 테스트", ({ loadFile }) => {
     let sel, addBtn, cartDisp, sum, stockInfo;
 
+    const defaultDate = new Date("2024-10-16");
+
     beforeAll(async () => {
       // DOM 초기화
       document.body.innerHTML = '<div id="app"></div>';
@@ -28,12 +30,16 @@ describe("basic test", () => {
       stockInfo = document.getElementById("stock-status");
     });
 
+    // 모든 테스트에 대해 fake 타이머 사용 및 기본 날짜 설정
     beforeEach(() => {
-      vi.useRealTimers();
+      vi.useFakeTimers();
+      vi.setSystemTime(defaultDate);
       vi.spyOn(window, "alert").mockImplementation(() => {});
     });
 
+    // 각 테스트 후 타이머 및 모의 기능 복원
     afterEach(() => {
+      vi.useRealTimers();
       vi.restoreAllMocks();
     });
 

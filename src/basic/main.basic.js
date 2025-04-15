@@ -1,4 +1,5 @@
 import { DISCOUNT_RATE, LUCK_THRESHOLD, prodList } from './constants';
+import { MainPage } from './page/main';
 import {
   createElement,
   extractCartProductInfo,
@@ -15,7 +16,10 @@ const store = {
 
 function main() {
   // DOM 레이아웃 생성
-  initLayout();
+  const root = document.getElementById('app');
+  root.innerHTML = MainPage.template();
+  MainPage.onMount?.();
+
   // DB의 product list를 기반으로 select, option 초기화
   updateSelectOptions();
   // 장바구니 초기화
@@ -25,55 +29,6 @@ function main() {
   startRandomlyInMs(10_000)(() => setInterval(startLuckyDraw, 30_000));
   startRandomlyInMs(20_000)(() => setInterval(startSuggestion, 60_000));
 }
-
-const initLayout = () => {
-  const root = document.getElementById('app');
-
-  const cont = createElement('div', { className: 'bg-gray-100 p-8' });
-  const wrap = createElement('div', {
-    className:
-      'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8',
-  });
-
-  const header = createElement('h1', {
-    className: 'text-2xl font-bold mb-4',
-    textContent: '장바구니',
-  });
-
-  const cartDisp = createElement('div', { id: 'cart-items' });
-
-  const totalLabel = createElement('div', {
-    id: 'cart-total',
-    className: 'text-xl font-bold my-4',
-  });
-
-  const productSelect = createElement('select', {
-    id: 'product-select',
-    className: 'border rounded p-2 mr-2',
-  });
-
-  const addBtn = createElement('button', {
-    id: 'add-to-cart',
-    className: 'bg-blue-500 text-white px-4 py-2 rounded',
-    textContent: '추가',
-  });
-
-  const stockInfo = createElement('div', {
-    id: 'stock-status',
-    className: 'text-sm text-gray-500 mt-2 whitespace-pre-wrap',
-  });
-
-  wrap.appendChild(header);
-  wrap.appendChild(cartDisp);
-  wrap.appendChild(totalLabel);
-  wrap.appendChild(productSelect);
-  wrap.appendChild(addBtn);
-  wrap.appendChild(stockInfo);
-
-  cont.appendChild(wrap);
-
-  root.appendChild(cont);
-};
 
 const startLuckyDraw = () => {
   const randomIndex = Math.floor(Math.random() * prodList.length);

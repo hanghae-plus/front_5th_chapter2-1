@@ -4,19 +4,20 @@ import { ProductSelectItem } from "./ProductSelectItem";
 import { StockInfo } from "./StockInfo";
 
 export function renderTotalPrice(totalPrice) {
-  const $cartTotal = document.getElementById("cart-total");
+  const cartTotalElem = document.getElementById("cart-total");
 
-  $cartTotal.textContent = `총액: ${Math.round(totalPrice)}원`;
+  cartTotalElem.textContent = `총액: ${Math.round(totalPrice)}원`;
 }
 
 export function renderDiscountRate(discountRate) {
-  const $cartTotal = document.getElementById("cart-total");
+  const cartTotalELem = document.getElementById("cart-total");
 
   if (discountRate > 0) {
-    const discountSpan = document.createElement("span");
-    discountSpan.classList.add("text-green-500", "ml-2");
-    discountSpan.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
-    $cartTotal.appendChild(discountSpan);
+    const discountElem = document.createElement("span");
+
+    discountElem.classList.add("text-green-500", "ml-2");
+    discountElem.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
+    cartTotalELem.appendChild(discountElem);
   }
 }
 
@@ -29,49 +30,49 @@ export function renderDiscountRate(discountRate) {
  * @param {Array} updatedItems - 업데이트된 장바구니 아이템 배열
  */
 export function renderCartItems(updatedItems) {
-  const $cartItemsContainer = document.getElementById("cart-items");
-  const $cartItems = Array.from($cartItemsContainer.children);
+  const cartItemsElem = document.getElementById("cart-items");
+  const cartItemsChildren = Array.from(cartItemsElem.children);
 
-  const itemsToRemoveFromCart = $cartItems.filter(
+  const itemsToRemoveFromCart = cartItemsChildren.filter(
     (child) => !updatedItems.some((item) => item.id === child.id),
   );
-  itemsToRemoveFromCart.forEach((item) =>
-    $cartItemsContainer.removeChild(item),
-  );
+  itemsToRemoveFromCart.forEach((item) => cartItemsElem.removeChild(item));
 
-  updatedItems.forEach((item) => {
-    const $item = $cartItems.find((child) => child.id === item.id);
+  updatedItems.forEach((updatedItem) => {
+    const itemIndex = cartItemsChildren.findIndex(
+      (child) => child.id === updatedItem.id,
+    );
 
-    if (!$item) {
-      $cartItemsContainer.appendChild(
+    if (itemIndex === -1) {
+      cartItemsElem.appendChild(
         CartItem({
-          id: item.id,
-          name: item.name,
-          price: item.price,
-          quantity: item.quantity,
+          id: updatedItem.id,
+          name: updatedItem.name,
+          price: updatedItem.price,
+          quantity: updatedItem.quantity,
         }),
       );
       return;
     }
 
-    $item.querySelector("span").textContent =
-      `${item.name} - ${item.price}원 x ${item.quantity}`;
+    cartItemsChildren[itemIndex].querySelector("span").textContent =
+      `${updatedItem.name} - ${updatedItem.price}원 x ${updatedItem.quantity}`;
   });
 }
 
 export function renderBonusPoints(bonusPoints) {
-  let $pointsTag = document.getElementById("loyalty-points");
+  let pointsTagElem = document.getElementById("loyalty-points");
 
-  if (!$pointsTag) {
-    $pointsTag = document.createElement("span");
-    $pointsTag.id = "loyalty-points";
-    $pointsTag.className = "text-blue-500 ml-2";
+  if (!pointsTagElem) {
+    pointsTagElem = document.createElement("span");
+    pointsTagElem.id = "loyalty-points";
+    pointsTagElem.className = "text-blue-500 ml-2";
 
-    const sum = document.getElementById("cart-total");
-    sum.appendChild($pointsTag);
+    const cartTotalElem = document.getElementById("cart-total");
+    cartTotalElem.appendChild(pointsTagElem);
   }
 
-  $pointsTag.textContent = "(포인트: " + bonusPoints + ")";
+  pointsTagElem.textContent = "(포인트: " + bonusPoints + ")";
 }
 
 export function renderStockInfo() {
@@ -84,13 +85,13 @@ export function renderStockInfo() {
     });
   });
 
-  const $stockInfo = document.getElementById("stock-status");
-  $stockInfo.textContent = infoMsg;
+  const stockInfoElem = document.getElementById("stock-status");
+  stockInfoElem.textContent = infoMsg;
 }
 
 export function renderProductInventory() {
-  const $productSelect = document.getElementById("product-select");
-  $productSelect.innerHTML = "";
+  const productSelectElem = document.getElementById("product-select");
+  productSelectElem.innerHTML = "";
 
   PRODUCT_INVENTORY.forEach((item) => {
     const selectItem = ProductSelectItem({
@@ -99,6 +100,6 @@ export function renderProductInventory() {
       price: item.price,
       quantity: item.stock,
     });
-    $productSelect.appendChild(selectItem);
+    productSelectElem.appendChild(selectItem);
   });
 }

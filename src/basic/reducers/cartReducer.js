@@ -50,14 +50,14 @@ export function cartReducer(state, action) {
     }
 
     case actions.CHANGE_QUANTITY: {
-      const selectedElement = action.payload;
-      const selectedId = selectedElement.dataset.productId;
+      const selectedElem = action.payload;
+      const selectedId = selectedElem.dataset.productId;
 
       const selectedItem = state.addedItems.find(
         (item) => item.id === selectedId,
       );
       const currentQuantity = selectedItem.quantity;
-      const quantifyChange = getQuantityChangeOfCartItem(selectedElement);
+      const quantifyChange = getQuantityChangeOfCartItem(selectedElem);
       const newQuantity = currentQuantity + quantifyChange;
 
       if (isProductSoldOut(newQuantity, selectedItem.stock)) {
@@ -82,8 +82,8 @@ export function cartReducer(state, action) {
     }
 
     case actions.REMOVE_FROM_CART: {
-      const selectedElement = action.payload;
-      const selectedId = selectedElement.dataset.productId;
+      const selectedElem = action.payload;
+      const selectedId = selectedElem.dataset.productId;
 
       const itemsAfterRemove = removeItemFromAddedItems(
         state.addedItems,

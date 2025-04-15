@@ -1,9 +1,9 @@
 export function ProductSelectItem({ id, name, price, quantity }) {
-  const $selectItem = document.createElement("option");
-  $selectItem.value = id;
-  $selectItem.textContent = `${name} - ${price}원`;
+  const selectItemElem = document.createElement("option");
+  selectItemElem.value = id;
+  selectItemElem.textContent = `${name} - ${price}원`;
 
-  if (quantity === 0) $selectItem.disabled = true;
+  if (quantity === 0) selectItemElem.disabled = true;
 
-  return $selectItem;
+  return selectItemElem;
 }

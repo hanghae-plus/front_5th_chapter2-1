@@ -1,17 +1,14 @@
-import { PRODUCT_LIST } from "../configs/products";
+import { PRODUCT_INVENTORY } from "../configs/products";
 import { bonusPointService } from "../services/BonusPointService";
 import { discountService } from "../services/DiscountService";
 import { getDiscountRateByProduct } from "./discountUtils";
 
-export function calculateCartTotal() {
+export function calculateCartTotal(addedItems) {
   let totalQuantity = 0;
   let totalAmountBeforeDiscount = 0;
   let totalAmount = 0;
 
-  const cartDisp = document.getElementById("cart-items");
-  const cartItems = cartDisp.children;
-
-  if (cartItems.length === 0) {
+  if (addedItems.length === 0) {
     bonusPointService.resetBonusPoints();
     return {
       totalQuantity,
@@ -20,13 +17,13 @@ export function calculateCartTotal() {
     };
   }
 
-  for (let $cartItem of cartItems) {
-    const productItem = PRODUCT_LIST.find((item) => item.id === $cartItem.id);
-
-    const quantity = parseInt(
-      $cartItem.querySelector("span").textContent.split("x ")[1],
+  for (let cartItem of addedItems) {
+    const product = PRODUCT_INVENTORY.find(
+      (product) => product.id === cartItem.id,
     );
-    const totalAmountOfItem = productItem.price * quantity;
+
+    const quantity = cartItem.quantity;
+    const totalAmountOfItem = product.price * quantity;
 
     totalQuantity += quantity;
     totalAmountBeforeDiscount += totalAmountOfItem;
@@ -37,7 +34,7 @@ export function calculateCartTotal() {
     }
 
     totalAmount +=
-      totalAmountOfItem * (1 - getDiscountRateByProduct(productItem.id));
+      totalAmountOfItem * (1 - getDiscountRateByProduct(product.id));
   }
 
   totalAmount = discountService.applyDiscount(
@@ -55,14 +52,25 @@ export function calculateCartTotal() {
   };
 }
 
-export function getQuantityOfItem(itemElem) {
-  return parseInt(itemElem.querySelector("span").textContent.split("x ")[1]);
+export function updateAddedItems(addedItems, itemToUpdate) {
+  return [
+    ...addedItems.filter((item) => item.id !== itemToUpdate.id),
+    itemToUpdate,
+  ];
 }
 
-export function getNameOfItem(itemElem) {
-  return itemElem.querySelector("span").textContent.split("x ")[0];
+export function removeItemFromAddedItems(addedItems, itemIdToRemove) {
+  return addedItems.filter((item) => item.id !== itemIdToRemove);
 }
 
-export function isProductOutOfSold(newQuantity, currentQuantity, stock) {
+export function isProductStockExists(product) {
+  return product && product.stock > 0;
+}
+
+export function isProductSoldOut(newQuantity, stock) {
   return newQuantity > stock;
+}
+
+export function getQuantityChangeOfCartItem(itemElem) {
+  return parseInt(itemElem.dataset.change);
 }

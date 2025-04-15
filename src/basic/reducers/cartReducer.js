@@ -1,105 +1,99 @@
-import { renderNewCartItem } from "../components/render";
-import { PRODUCT_LIST } from "../lib/configs/products";
+import { PRODUCT_INVENTORY } from "../lib/configs/products";
 import {
   calculateCartTotal,
-  getNameOfItem,
-  getQuantityOfItem,
-  isProductOutOfSold,
+  getQuantityChangeOfCartItem,
+  isProductSoldOut,
+  isProductStockExists,
+  removeItemFromAddedItems,
+  updateAddedItems,
 } from "../lib/utils/cartUtils";
 
 const actions = {
-  ADD_ITEM: "ADD_ITEM",
-  CHANGE_ITEM_QUANTITY: "CHANGE_ITEM_QUANTITY",
-  REMOVE_ITEM: "REMOVE_ITEM",
+  ADD_TO_CART: "ADD_TO_CART",
+  CHANGE_QUANTITY: "CHANGE_QUANTITY",
+  REMOVE_FROM_CART: "REMOVE_FROM_CART",
 };
 
 export function cartReducer(state, action) {
   switch (action.type) {
-    case actions.ADD_ITEM: {
-      let itemToAdd = PRODUCT_LIST.find((p) => {
+    case actions.ADD_TO_CART: {
+      const itemToAdd = PRODUCT_INVENTORY.find((p) => {
         return p.id === action.payload.value;
       });
 
-      if (itemToAdd && itemToAdd.stock > 0) {
-        let itemInCart = document.getElementById(itemToAdd.id);
-
-        if (itemInCart) {
-          const currentQuantity = getQuantityOfItem(itemInCart);
-          let newQty = currentQuantity + 1;
-
-          if (isProductOutOfSold(newQty, currentQuantity, itemToAdd.stock)) {
-            return { ...state, error: "재고가 부족합니다." };
-          }
-
-          itemInCart.querySelector("span").textContent =
-            `${itemToAdd.name} - ${itemToAdd.price}원 x ${newQty}`;
-        } else {
-          renderNewCartItem(itemToAdd);
-        }
+      if (!isProductStockExists(itemToAdd)) {
+        return { ...state, error: "재고가 없습니다." };
       }
 
-      const newCartTotal = calculateCartTotal();
+      const itemInCart = state.addedItems.find(
+        (item) => item.id === itemToAdd.id,
+      );
+
+      const newQuantity = itemInCart ? itemInCart.quantity + 1 : 1;
+
+      if (isProductSoldOut(newQuantity, itemToAdd.stock)) {
+        return { ...state, error: "재고가 부족합니다." };
+      }
+
+      itemToAdd.quantity = newQuantity;
+
+      const itemsAfterAdd = updateAddedItems(state.addedItems, itemToAdd);
+      const newCartTotal = calculateCartTotal(itemsAfterAdd);
 
       return {
         ...state,
-        items: [...state.items, itemToAdd],
+        addedItems: itemsAfterAdd,
         lastSelected: itemToAdd.id,
         error: null,
         ...newCartTotal,
       };
     }
 
-    case actions.CHANGE_ITEM_QUANTITY: {
-      const selectedItem = action.payload;
+    case actions.CHANGE_QUANTITY: {
+      const selectedElement = action.payload;
+      const selectedId = selectedElement.dataset.productId;
 
-      const selectedId = selectedItem.dataset.productId;
-      const $cartItem = document.getElementById(selectedId);
-
-      const prod = PRODUCT_LIST.find((p) => p.id === selectedId);
-
-      const currentQuantity = getQuantityOfItem($cartItem);
-
-      const quantifyChange = parseInt(selectedItem.dataset.change);
+      const selectedItem = state.addedItems.find(
+        (item) => item.id === selectedId,
+      );
+      const currentQuantity = selectedItem.quantity;
+      const quantifyChange = getQuantityChangeOfCartItem(selectedElement);
       const newQuantity = currentQuantity + quantifyChange;
 
-      if (isProductOutOfSold(newQuantity, currentQuantity, prod.stock)) {
+      if (isProductSoldOut(newQuantity, selectedItem.stock)) {
+        console.log("재고가 부족합니다.");
         return { ...state, error: "재고가 부족합니다." };
       }
 
-      $cartItem.querySelector("span").textContent = `${getNameOfItem(
-        $cartItem,
-      )}x ${newQuantity}`;
+      selectedItem.quantity = newQuantity;
 
-      const newCartTotal = calculateCartTotal();
-      const newItems =
+      const updatedItems =
         newQuantity > 0
-          ? [...state.items, prod]
-          : state.items.filter((item) => item.id !== selectedId);
+          ? updateAddedItems(state.addedItems, selectedItem)
+          : removeItemFromAddedItems(state.addedItems, selectedId);
+
+      const newCartTotal = calculateCartTotal(updatedItems);
 
       return {
         ...state,
-        items: newItems,
+        addedItems: updatedItems,
         ...newCartTotal,
       };
     }
 
-    case actions.REMOVE_ITEM: {
-      const selectedItem = action.payload;
+    case actions.REMOVE_FROM_CART: {
+      const selectedElement = action.payload;
+      const selectedId = selectedElement.dataset.productId;
 
-      const selectedId = selectedItem.dataset.productId;
-      const $cartItem = document.getElementById(selectedId);
-
-      const prod = PRODUCT_LIST.find((p) => p.id === selectedId);
-      const currentQuantity = getQuantityOfItem($cartItem);
-
-      prod.stock += currentQuantity;
-      $cartItem.remove();
-
-      const newCartTotal = calculateCartTotal();
+      const itemsAfterRemove = removeItemFromAddedItems(
+        state.addedItems,
+        selectedId,
+      );
+      const newCartTotal = calculateCartTotal(itemsAfterRemove);
 
       return {
         ...state,
-        items: state.items.filter((item) => item.id !== selectedId),
+        addedItems: itemsAfterRemove,
         ...newCartTotal,
       };
     }

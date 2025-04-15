@@ -1,4 +1,4 @@
-import { PRODUCT_LIST } from "../lib/configs/products";
+import { PRODUCT_INVENTORY } from "../lib/configs/products";
 import { CartItem } from "./CartItem";
 import { ProductSelectItem } from "./ProductSelectItem";
 import { StockInfo } from "./StockInfo";
@@ -20,19 +20,46 @@ export function renderDiscountRate(discountRate) {
   }
 }
 
-export function renderNewCartItem(item) {
-  const $cartItems = document.getElementById("cart-items");
+/**
+ * 장바구니 아이템 렌더링
+ * 1. 장바구니 아이템 렌더링 시 기존 아이템이 있으면 quantity 업데이트
+ * 2. 기존 아이템이 없으면 새로 추가
+ * 3. 장바구니 아이템에는 있는데 items에는 없는 아이템이 있으면 삭제
+ * @description 장바구니 아이템 렌더링 시 전체 초기화하게 되면 quantity change 버튼의 참조가 변경되어 테스트 살패
+ * @param {Array} updatedItems - 업데이트된 장바구니 아이템 배열
+ */
+export function renderCartItems(updatedItems) {
+  const $cartItemsContainer = document.getElementById("cart-items");
+  const $cartItems = Array.from($cartItemsContainer.children);
 
-  const newItem = CartItem({
-    id: item.id,
-    name: item.name,
-    price: item.price,
-    quantity: 1,
+  const itemsToRemoveFromCart = $cartItems.filter(
+    (child) => !updatedItems.some((item) => item.id === child.id),
+  );
+  itemsToRemoveFromCart.forEach((item) =>
+    $cartItemsContainer.removeChild(item),
+  );
+
+  updatedItems.forEach((item) => {
+    const $item = $cartItems.find((child) => child.id === item.id);
+
+    if (!$item) {
+      $cartItemsContainer.appendChild(
+        CartItem({
+          id: item.id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        }),
+      );
+      return;
+    }
+
+    $item.querySelector("span").textContent =
+      `${item.name} - ${item.price}원 x ${item.quantity}`;
   });
-  $cartItems.appendChild(newItem);
 }
 
-export function renderBonusPts(bonusPoints) {
+export function renderBonusPoints(bonusPoints) {
   let $pointsTag = document.getElementById("loyalty-points");
 
   if (!$pointsTag) {
@@ -50,7 +77,7 @@ export function renderBonusPts(bonusPoints) {
 export function renderStockInfo() {
   let infoMsg = "";
 
-  PRODUCT_LIST.forEach((item) => {
+  PRODUCT_INVENTORY.forEach((item) => {
     infoMsg += StockInfo({
       name: item.name,
       quantityLeft: item.stock,
@@ -61,11 +88,11 @@ export function renderStockInfo() {
   $stockInfo.textContent = infoMsg;
 }
 
-export function renderProductList() {
+export function renderProductInventory() {
   const $productSelect = document.getElementById("product-select");
   $productSelect.innerHTML = "";
 
-  PRODUCT_LIST.forEach((item) => {
+  PRODUCT_INVENTORY.forEach((item) => {
     const selectItem = ProductSelectItem({
       id: item.id,
       name: item.name,

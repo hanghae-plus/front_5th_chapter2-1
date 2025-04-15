@@ -3,7 +3,7 @@ import { bonusPointService } from "../services/BonusPointService";
 import { discountService } from "../services/DiscountService";
 import { getDiscountRateByProduct } from "./discountUtils";
 
-export function calculateCartTotal(addedItems) {
+export function generateCartInvoice(addedItems) {
   let totalQuantity = 0;
   let totalAmountBeforeDiscount = 0;
   let totalAmount = 0;

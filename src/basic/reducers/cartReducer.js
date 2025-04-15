@@ -1,6 +1,6 @@
 import { PRODUCT_INVENTORY } from "../lib/configs/products";
 import {
-  calculateCartTotal,
+  generateCartInvoice,
   getQuantityChangeOfCartItem,
   isProductSoldOut,
   isProductStockExists,
@@ -38,7 +38,7 @@ export function cartReducer(state, action) {
       itemToAdd.quantity = newQuantity;
 
       const itemsAfterAdd = updateAddedItems(state.addedItems, itemToAdd);
-      const newCartTotal = calculateCartTotal(itemsAfterAdd);
+      const newCartTotal = generateCartInvoice(itemsAfterAdd);
 
       return {
         ...state,
@@ -72,7 +72,7 @@ export function cartReducer(state, action) {
           ? updateAddedItems(state.addedItems, selectedItem)
           : removeItemFromAddedItems(state.addedItems, selectedId);
 
-      const newCartTotal = calculateCartTotal(updatedItems);
+      const newCartTotal = generateCartInvoice(updatedItems);
 
       return {
         ...state,
@@ -89,7 +89,7 @@ export function cartReducer(state, action) {
         state.addedItems,
         selectedId,
       );
-      const newCartTotal = calculateCartTotal(itemsAfterRemove);
+      const newCartTotal = generateCartInvoice(itemsAfterRemove);
 
       return {
         ...state,

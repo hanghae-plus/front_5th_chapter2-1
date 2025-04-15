@@ -30,7 +30,6 @@ export function MainPage() {
   });
 
   renderProductInventory();
-  renderCartItems(cartStore.getState().addedItems);
   renderTotalPrice(cartStore.getState().totalAmount);
   renderBonusPoints(bonusPointService.bonusPoints);
 

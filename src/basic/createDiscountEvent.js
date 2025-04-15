@@ -1,7 +1,11 @@
+import updateSelectBoxOptions from './updateSelectBoxOptions.js';
+
 const EVENT_TYPE = {
   FLASH: 'flash',
   SUGGEST: 'suggest',
 };
+
+let lastSel = null;
 
 const eventConfigs = {
   [EVENT_TYPE.FLASH]: {
@@ -20,31 +24,31 @@ const eventConfigs = {
   },
 };
 
-const getAvailableProducts = () => {
+const getAvailableProducts = (eventType, products) => {
   switch (eventType) {
     case EVENT_TYPE.FLASH:
       return products;
     case EVENT_TYPE.SUGGEST:
-      return products.filter((item) => item.id !== lastSel && item.q > 0);
+      return products.filter((item) => item.id !== lastSel && item.quantity > 0);
     default:
       return [];
   }
 };
 
-const createDiscountEvent = (eventType) => {
-  const config = eventConfigs[eventType];
-  if (!config) {
-    return;
-  }
+const createDiscountEvent = (products) => {
+  const runDiscountEvent = (eventType) => {
+    const config = eventConfigs[eventType];
+    if (!config) {
+      return;
+    }
 
-  const runDiscountEvent = () => {
-    const availableProducts = getAvailableProducts();
+    const availableProducts = getAvailableProducts(eventType, products);
     if (availableProducts.length === 0) {
       return;
     }
 
     const randomProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
-    if (randomProduct.q === 0) {
+    if (randomProduct.quantity === 0) {
       return;
     }
 
@@ -52,15 +56,25 @@ const createDiscountEvent = (eventType) => {
       return;
     }
 
-    randomProduct.val = Math.round(randomProduct.val * (1 - config.discountRate));
+    randomProduct.price = Math.round(randomProduct.price * (1 - config.discountRate));
     alert(config.messageTemplate(randomProduct.name));
-    updateSelOpts();
+    lastSel = randomProduct.id;
+
+    updateSelectBoxOptions();
   };
 
   setTimeout(() => {
-    runDiscountEvent();
-    setInterval(runDiscountEvent, config.interval);
-  }, config.delay());
+    runDiscountEvent(EVENT_TYPE.FLASH);
+    setInterval(() => runDiscountEvent(EVENT_TYPE.FLASH), eventConfigs[EVENT_TYPE.FLASH].interval);
+  }, eventConfigs[EVENT_TYPE.FLASH].delay());
+
+  setTimeout(() => {
+    runDiscountEvent(EVENT_TYPE.SUGGEST);
+    setInterval(
+      () => runDiscountEvent(EVENT_TYPE.SUGGEST),
+      eventConfigs[EVENT_TYPE.SUGGEST].interval,
+    );
+  }, eventConfigs[EVENT_TYPE.SUGGEST].delay());
 };
 
 export default createDiscountEvent;

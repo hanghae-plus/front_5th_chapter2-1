@@ -1,15 +1,10 @@
 import createDiscountEvent from './createDiscountEvent';
+import updateSelectBoxOptions from './updateSelectBoxOptions';
 
 let products, productSelectBox, addProductToCartButton, cartList, cartTotalPrice, stockStatus;
-let lastSel = null;
 let bonusPts = 0;
 let totalPrice = 0;
 let totalProductCount = 0;
-
-const DISCOUNT_EVENT_TYPE = {
-  FLASH: 'flash',
-  SUGGEST: 'suggest',
-};
 
 const main = () => {
   products = [
@@ -49,7 +44,7 @@ const main = () => {
   title.textContent = '장바구니';
   addProductToCartButton.textContent = '추가';
 
-  updateSelectBoxOptions();
+  updateSelectBoxOptions(productSelectBox, products);
 
   content.appendChild(title);
   content.appendChild(cartList);
@@ -62,24 +57,7 @@ const main = () => {
 
   calcCart();
 
-  createDiscountEvent(DISCOUNT_EVENT_TYPE.FLASH);
-  createDiscountEvent(DISCOUNT_EVENT_TYPE.SUGGEST);
-};
-
-const updateSelectBoxOptions = () => {
-  productSelectBox.innerHTML = '';
-  products.forEach(({ id, name, price, quantity }) => {
-    const option = document.createElement('option');
-
-    option.value = id;
-    option.textContent = `${name} - ${price}원`;
-
-    if (quantity === 0) {
-      option.disabled = true;
-    }
-
-    productSelectBox.appendChild(option);
-  });
+  createDiscountEvent(products);
 };
 
 const calcCart = () => {
@@ -217,7 +195,6 @@ addProductToCartButton.addEventListener('click', () => {
     }
 
     calcCart();
-    lastSel = selItem;
   }
 });
 

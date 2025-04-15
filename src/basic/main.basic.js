@@ -4,11 +4,11 @@ var lastSelectedId,
   itemCnt = 0;
 
 const prodList = [
-  { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
-  { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
-  { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
+  { id: 'p1', name: '상품1', price: 10000, quantity: 5 },
+  { id: 'p2', name: '상품2', price: 20000, quantity: 3 },
+  { id: 'p3', name: '상품3', price: 30000, quantity: 3 },
   { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
-  { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
+  { id: 'p5', name: '상품5', price: 25000, quantity: 3 },
 ];
 
 function main() {
@@ -43,7 +43,7 @@ function main() {
 
   const stockInfo = document.createElement('div');
   stockInfo.id = 'stock-status';
-  stockInfo.className = 'text-sm text-gray-500 mt-2';
+  stockInfo.className = 'text-sm text-gray-500 mt-2 whitespace-pre-wrap';
 
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
@@ -161,6 +161,8 @@ function calcCart() {
   } else {
     discRate = (subTot - totalAmt) / subTot;
   }
+
+  // 화요일 할인
   if (new Date().getDay() === 2) {
     totalAmt *= 1 - 0.1;
     discRate = Math.max(discRate, 0.1);
@@ -189,22 +191,26 @@ const renderBonusPts = () => {
   ptsTag.textContent = '(포인트: ' + bonusPts + ')';
 };
 
+// 재고 상태 업데이트 (5개 미만인 상품에 대한 경고 메시지 표시)
 function updateStockInfo() {
   const stockInfo = document.getElementById('stock-status');
-  var infoMsg = '';
-  prodList.forEach(function (item) {
-    if (item.quantity < 5) {
-      infoMsg +=
-        item.name +
-        ': ' +
-        (item.quantity > 0
-          ? '재고 부족 (' + item.quantity + '개 남음)'
-          : '품절') +
-        '\n';
-    }
-  });
+
+  const infoMsg = prodList
+    // 재고가 5개 미만인 상품만 필터링
+    .filter((p) => p.quantity < 5)
+    // 각 재고별 상태 문자열로 변환
+    .map(getProductStockStatusString)
+    // 줄바꿈 문자로 연결
+    .join('\n');
+
   stockInfo.textContent = infoMsg;
 }
+
+const getProductStockStatusString = (product) => {
+  const status =
+    product.quantity > 0 ? `재고 부족 (${product.quantity}개 남음)` : '품절';
+  return `${product.name}: ${status}`;
+};
 
 main();
 

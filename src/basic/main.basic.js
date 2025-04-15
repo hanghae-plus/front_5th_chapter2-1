@@ -1,5 +1,5 @@
 import { updateSelectOptions, calculateCart } from "./libs";
-import { cartDisplayClickEvent } from "./events";
+import { addButtonClickEvent, cartDisplayClickEvent } from "./events";
 
 /** @typedef {import("./types").Product} Product */
 
@@ -33,37 +33,44 @@ $cartDisplay.id = "cart-items";
 
 // ===============================================
 
+const $addCartButton = document.createElement("button");
+$addCartButton.id = "add-to-cart";
+$addCartButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
+$addCartButton.textContent = "추가";
+
 // ===============================================
 
-var addBtn, stockInfo;
-var lastSel;
+const $stockInfo = document.createElement("div");
+$stockInfo.id = "stock-status";
+$stockInfo.className = "text-sm text-gray-500 mt-2";
+
+// ===============================================
+
+const lastSel = {
+  value: "",
+};
+
+// ===============================================
 
 function main() {
   var root = document.getElementById("app");
   let cont = document.createElement("div");
   var wrap = document.createElement("div");
   let hTxt = document.createElement("h1");
-  addBtn = document.createElement("button");
-  stockInfo = document.createElement("div");
-  addBtn.id = "add-to-cart";
-  stockInfo.id = "stock-status";
   cont.className = "bg-gray-100 p-8";
   wrap.className = "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
   hTxt.className = "text-2xl font-bold mb-4";
-  addBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
-  stockInfo.className = "text-sm text-gray-500 mt-2";
   hTxt.textContent = "장바구니";
-  addBtn.textContent = "추가";
   updateSelectOptions($select, products);
   wrap.appendChild(hTxt);
   wrap.appendChild($cartDisplay);
   wrap.appendChild($sum);
   wrap.appendChild($select);
-  wrap.appendChild(addBtn);
-  wrap.appendChild(stockInfo);
+  wrap.appendChild($addCartButton);
+  wrap.appendChild($stockInfo);
   cont.appendChild(wrap);
   root.appendChild(cont);
-  calculateCart($cartDisplay, $sum, stockInfo, products);
+  calculateCart($cartDisplay, $sum, $stockInfo, products);
   setTimeout(function () {
     setInterval(function () {
       var luckyItem = products[Math.floor(Math.random() * products.length)];
@@ -76,9 +83,9 @@ function main() {
   }, Math.random() * 10000);
   setTimeout(function () {
     setInterval(function () {
-      if (lastSel) {
+      if (lastSel.value) {
         var suggest = products.find(function (item) {
-          return item.id !== lastSel && item.stock > 0;
+          return item.id !== lastSel.value && item.stock > 0;
         });
         if (suggest) {
           alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");
@@ -91,46 +98,6 @@ function main() {
 }
 
 main();
-addBtn.addEventListener("click", function () {
-  var selItem = $select.value;
-  var itemToAdd = products.find(function (p) {
-    return p.id === selItem;
-  });
-  if (itemToAdd && itemToAdd.stock > 0) {
-    var item = document.getElementById(itemToAdd.id);
-    if (item) {
-      var newQty = parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
-      if (newQty <= itemToAdd.stock) {
-        item.querySelector("span").textContent = itemToAdd.name + " - " + itemToAdd.price + "원 x " + newQty;
-        itemToAdd.stock--;
-      } else {
-        alert("재고가 부족합니다.");
-      }
-    } else {
-      var newItem = document.createElement("div");
-      newItem.id = itemToAdd.id;
-      newItem.className = "flex justify-between items-center mb-2";
-      newItem.innerHTML =
-        "<span>" +
-        itemToAdd.name +
-        " - " +
-        itemToAdd.price +
-        "원 x 1</span><div>" +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-        itemToAdd.id +
-        '" data-change="-1">-</button>' +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-        itemToAdd.id +
-        '" data-change="1">+</button>' +
-        '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
-        itemToAdd.id +
-        '">삭제</button></div>';
-      $cartDisplay.appendChild(newItem);
-      itemToAdd.stock--;
-    }
-    calculateCart($cartDisplay, $sum, stockInfo, products);
-    lastSel = selItem;
-  }
-});
 
-cartDisplayClickEvent($cartDisplay, $sum, stockInfo, products);
+cartDisplayClickEvent($cartDisplay, $sum, $stockInfo, products, lastSel);
+addButtonClickEvent($addCartButton, $cartDisplay, $select, $sum, $stockInfo, products, lastSel);

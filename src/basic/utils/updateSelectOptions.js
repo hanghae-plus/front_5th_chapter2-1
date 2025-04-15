@@ -2,7 +2,7 @@ import ITEMS from '../constants/items';
 import { $itemSelect } from '../createElements';
 
 /**Select인 sel 밑으로 각 상품을 Option으로 넣습니다*/
-const updateItemOption = () => {
+const updateSelectOptions = () => {
   $itemSelect.innerHTML = '';
 
   //각각의 prodList에 대해 option태그를 생성하고 id와 text를 넣어줍니다.
@@ -17,4 +17,4 @@ const updateItemOption = () => {
   });
 };
 
-export default updateItemOption;
+export default updateSelectOptions;

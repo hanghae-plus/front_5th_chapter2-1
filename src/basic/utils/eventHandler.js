@@ -1,7 +1,7 @@
 import ITEMS from '../constants/items';
 import { $addToCartButton, $cart, $itemSelect } from '../createElements';
-import { RecentSelectedId } from '../store';
-import caculateCart from './caculateCart';
+import { RecentSelectedId } from '../stores';
+import updateCart from './updateCart';
 
 const handleAddToCartButton = () => {
   $addToCartButton.addEventListener('click', function () {
@@ -50,7 +50,7 @@ const handleAddToCartButton = () => {
         selecedItem.stock--; //재고를 하나 내립니다.
       } //end of 1D else
 
-      caculateCart(); //장바구니 계산
+      updateCart(); //장바구니 계산
 
       let recentSelectedId = new RecentSelectedId();
       recentSelectedId.set(selectedItemId);
@@ -100,7 +100,7 @@ const handleCart = () => {
         itemElem.remove();
       }
 
-      caculateCart();
+      updateCart();
     }
   });
 };

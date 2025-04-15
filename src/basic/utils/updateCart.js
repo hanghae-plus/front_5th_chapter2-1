@@ -1,10 +1,10 @@
-import { TotalPrice } from '../store';
 import ITEMS from '../constants/items';
 import { $cart, $sum } from '../createElements';
-import updateBonusPoint from './updateBonusPoint';
+import { TotalPrice } from '../stores';
+import updatePoint from './updatePoint';
 import updateStockState from './updateStockState';
 
-const caculateCart = () => {
+const updateCart = () => {
   let totalPrice = new TotalPrice();
   let itemCount = 0;
 
@@ -12,7 +12,6 @@ const caculateCart = () => {
   let subTotalPrice = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
-    //모든 장바구니를 순회
     (() => {
       //즉시 실행 함수
       let currentItem; //현재 아이템입니다.
@@ -24,7 +23,6 @@ const caculateCart = () => {
           break;
         }
       }
-      //q-> stock:장바구니에 담은 개수
       let stock = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
       let itemTotalPrice = currentItem.price * stock; //itemTot: 장바구니에 담은 개수만큼의 총 금액
       let discount = 0;
@@ -63,10 +61,10 @@ const caculateCart = () => {
     totalPrice.set(totalPrice.get() * (1 - 0.1));
     discount = Math.max(discount, 0.1);
   }
+
   $sum.textContent = '총액: ' + Math.round(totalPrice.get()) + '원';
 
   if (discount > 0) {
-    //할인이 있을 경우, 할인 적용
     let span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
     span.textContent = '(' + (discount * 100).toFixed(1) + '% 할인 적용)';
@@ -74,7 +72,7 @@ const caculateCart = () => {
   }
 
   updateStockState();
-  updateBonusPoint(totalPrice);
+  updatePoint(totalPrice);
 };
 
-export default caculateCart;
+export default updateCart;

@@ -1,13 +1,13 @@
-import updateItemOption from './utils/updateOption';
+import updateSelectOptions from './utils/updateSelectOptions';
 import render from './render';
-import caculateCart from './utils/caculateCart';
-import alerts from './utils/alerts';
+import updateCart from './utils/updateCart';
+import alerts from './utils/alerts/alerts';
 import eventHandler from './utils/eventHandler';
 
 const main = () => {
-  updateItemOption();
+  updateSelectOptions();
   render();
-  caculateCart();
+  updateCart();
   alerts();
   eventHandler();
 };

@@ -1,9 +1,7 @@
 import { CartStore } from '../store';
 import { TotalAmountContainerDOM } from '../ui';
 import { DOM_IDS, STYLES } from '../consts';
-import { createElement } from '../utils';
-
-const calculateBonusPoints = (amount) => Math.floor(amount / 1000);
+import { createElement, calculateBonusPoints } from '../utils';
 
 const getBonusPointsTag = (container) => {
   let pointsTag = document.getElementById(DOM_IDS.CART.POINTS);

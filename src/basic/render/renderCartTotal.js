@@ -1,16 +1,26 @@
 import { TotalAmountContainerDOM } from '../ui';
 import { STYLES } from '../consts';
-import { createElement } from '../utils';
+import { createElement, formatPrice, formatDiscountRate } from '../utils';
+
+const createDiscountElement = (discountRate) => {
+  return createElement('span', {
+    className: STYLES.TEXT.SUCCESS,
+    textContent: `(${formatDiscountRate(discountRate)} 할인 적용)`,
+  });
+};
 
 export const renderCartTotal = (totalAmount, discountRate) => {
   const container = TotalAmountContainerDOM.get();
-  container.textContent = `총액: ${Math.round(totalAmount)}원`;
+
+  const existingDiscount = container.querySelector(`.${STYLES.TEXT.SUCCESS}`);
+  if (existingDiscount) {
+    existingDiscount.remove();
+  }
+
+  container.textContent = `총액: ${formatPrice(totalAmount)}`;
 
   if (discountRate > 0) {
-    const discountSpan = createElement('span', {
-      className: STYLES.TEXT.SUCCESS,
-      textContent: `(${(discountRate * 100).toFixed(1)}% 할인 적용)`,
-    });
-    container.appendChild(discountSpan);
+    const discountElement = createDiscountElement(discountRate);
+    container.appendChild(discountElement);
   }
 };

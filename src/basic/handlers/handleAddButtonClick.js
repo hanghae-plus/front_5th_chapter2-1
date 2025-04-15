@@ -1,8 +1,9 @@
 import { PRODUCT_LIST } from '../consts/productList';
 import { calculateCart } from '../logic';
-import { SelectedProductStore } from '../store/stores';
+import { SelectedProductStore } from '../store';
 import { CartItemsContainerDOM, ProductSelectDOM } from '../ui';
 import { cartItemElement } from '../render';
+import { formatPrice } from '../utils';
 
 const getCartItemElement = (cartItemId) => document.getElementById(cartItemId);
 
@@ -12,7 +13,7 @@ const getQuantityFromElement = (element) =>
 const updateQuantityText = (element, product, quantity) => {
   const span = element.querySelector('span');
   span.dataset.quantity = quantity;
-  span.textContent = `${product.name} - ${product.value}원 x ${quantity}`;
+  span.textContent = `${product.name} - ${formatPrice(product.value)} x ${quantity}`;
 };
 
 export const handleAddButtonClick = () => {

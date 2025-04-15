@@ -1,21 +1,25 @@
 import { PRODUCT_LIST } from '../consts';
 import { ProductSelectDOM } from '../ui';
+import { createElement } from '../utils/dom';
 
 const createOptionElement = (item) => {
-  const option = document.createElement('option');
-  option.value = item.id;
-  option.textContent = `${item.name} - ${item.value}원`;
-  if (item.quantity === 0) option.disabled = true;
-  return option;
+  return createElement('option', {
+    attributes: {
+      value: item.id,
+      ...(item.quantity === 0 && { disabled: true }),
+    },
+    textContent: `${item.name} - ${item.value}원`,
+  });
 };
 
 export const updateProductSelectOptions = () => {
   const productSelect = ProductSelectDOM.get();
 
-  const newSelectOptions = PRODUCT_LIST.reduce((fragment, item) => {
-    fragment.appendChild(createOptionElement(item));
-    return fragment;
-  }, document.createDocumentFragment());
+  const fragment = document.createDocumentFragment();
 
-  productSelect.replaceChildren(newSelectOptions);
+  PRODUCT_LIST.forEach((item) => {
+    fragment.appendChild(createOptionElement(item));
+  });
+
+  productSelect.replaceChildren(fragment);
 };

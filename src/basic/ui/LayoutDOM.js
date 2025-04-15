@@ -1,4 +1,5 @@
 import { DOM_IDS, STYLES } from '../consts';
+import { createElement } from '../utils';
 
 export const LayoutDOM = {
   _appRoot: document.getElementById(DOM_IDS.APP),
@@ -7,19 +8,21 @@ export const LayoutDOM = {
   _mainHeader: null,
 
   init() {
-    this._mainContainer = document.createElement('div');
-    this._mainWrapper = document.createElement('div');
-    this._mainHeader = document.createElement('h1');
+    this._mainContainer = createElement('div', {
+      id: 'main-container',
+      className: STYLES.CONTAINER.MAIN,
+    });
 
-    this._mainContainer.id = DOM_IDS.CONTAINER.MAIN;
-    this._mainContainer.className = STYLES.CONTAINER.MAIN;
+    this._mainWrapper = createElement('div', {
+      id: 'main-wrapper',
+      className: STYLES.CONTAINER.WRAPPER,
+    });
 
-    this._mainWrapper.id = DOM_IDS.CONTAINER.WRAPPER;
-    this._mainWrapper.className = STYLES.CONTAINER.WRAPPER;
-
-    this._mainHeader.id = DOM_IDS.HEADER.TITLE;
-    this._mainHeader.className = STYLES.HEADER.TITLE;
-    this._mainHeader.textContent = '장바구니';
+    this._mainHeader = createElement('h1', {
+      id: 'main-header',
+      className: STYLES.HEADER.TITLE,
+      textContent: '장바구니',
+    });
   },
 
   get() {

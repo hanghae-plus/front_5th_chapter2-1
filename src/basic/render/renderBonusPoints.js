@@ -1,15 +1,17 @@
 import { CartStore } from '../store';
 import { TotalAmountContainerDOM } from '../ui';
 import { DOM_IDS, STYLES } from '../consts';
+import { createElement } from '../utils';
 
 const calculateBonusPoints = (amount) => Math.floor(amount / 1000);
 
 const getBonusPointsTag = (container) => {
   let pointsTag = document.getElementById(DOM_IDS.CART.POINTS);
   if (!pointsTag) {
-    pointsTag = document.createElement('span');
-    pointsTag.id = DOM_IDS.CART.POINTS;
-    pointsTag.className = STYLES.TEXT.SUCCESS;
+    pointsTag = createElement('span', {
+      id: DOM_IDS.CART.POINTS,
+      className: STYLES.TEXT.SUCCESS,
+    });
     container.appendChild(pointsTag);
   }
   return pointsTag;

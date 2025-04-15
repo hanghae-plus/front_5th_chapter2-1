@@ -6,6 +6,7 @@ describe('basic test', () => {
     { type: 'basic', loadFile: () => import('../main.basic.js') },
   ])('$type 장바구니 시나리오 테스트', ({ loadFile }) => {
     let sel, addBtn, cartDisp, sum, stockInfo;
+    const today = new Date().getDay();
 
     beforeAll(async () => {
       // DOM 초기화
@@ -89,7 +90,9 @@ describe('basic test', () => {
       sel.value = 'p1';
       addBtn.click();
       addBtn.click();
-      expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
+      const expectedText =
+        today === 2 ? '총액: 18000원(10.0% 할인 적용)(포인트: 18)' : '총액: 20000원(포인트: 20)';
+      expect(sum.textContent).toContain(expectedText);
     });
 
     it('할인이 올바르게 적용되는지 확인', () => {
@@ -103,7 +106,9 @@ describe('basic test', () => {
     it('포인트가 올바르게 계산되는지 확인', () => {
       sel.value = 'p2';
       addBtn.click();
-      expect(document.getElementById('loyalty-points').textContent).toContain('(포인트: 128)');
+      //(포인트: 115)
+      const expectedText = today === 2 ? '(포인트: 115)' : '(포인트: 128)';
+      expect(document.getElementById('loyalty-points').textContent).toContain(expectedText);
     });
 
     it('번개세일 기능이 정상적으로 동작하는지 확인', () => {

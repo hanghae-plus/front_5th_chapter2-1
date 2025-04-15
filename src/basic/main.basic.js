@@ -1,6 +1,6 @@
-let itemSelectElement, addToCartBtn, cartElement, sumElement, stockStateElement;
+let $itemSelect, $addToCartButton, $cart, $sum, $stockState;
 
-const items = [
+const ITEMS = [
   { id: 'p1', name: '상품1', price: 10000, stock: 50 }, //val->price: 가격, q->stock:재고 수량(quantity) ->price로 변경
   { id: 'p2', name: '상품2', price: 20000, stock: 30 },
   { id: 'p3', name: '상품3', price: 30000, stock: 20 },
@@ -8,7 +8,7 @@ const items = [
   { id: 'p5', name: '상품5', price: 25000, stock: 10 },
 ];
 
-let recentSelectedItemId,
+let recentSelectedItemId = 0,
   totalPrice = 0; //총액
 
 const main = () => {
@@ -16,50 +16,50 @@ const main = () => {
   //지역변수를 createElement를 통해 요소로 만듭니다.
   const app = document.getElementById('app');
   const root = document.createElement('div');
-  const elementWrapper = document.createElement('div'); //요소들을 둘러싸는 컨테이너, wrap
+  const elements = document.createElement('div'); //요소들을 둘러싸는 컨테이너, wrap
   const header = document.createElement('h1');
 
   //전역변수를 createElement를 통해 요소로 만듭니다.
-  addToCartBtn = document.createElement('button');
-  cartElement = document.createElement('div'); //장바구니 , disp: display를 뜻합니다.
-  sumElement = document.createElement('div'); //장바구니의 총액
-  itemSelectElement = document.createElement('select'); //select를 의미, 상품들이 들어감
-  stockStateElement = document.createElement('div'); //재품의 재고상태를 나타냄(품절, 남은개수)
+  $addToCartButton = document.createElement('button');
+  $cart = document.createElement('div'); //장바구니 , disp: display를 뜻합니다.
+  $sum = document.createElement('div'); //장바구니의 총액
+  $itemSelect = document.createElement('select'); //select를 의미, 상품들이 들어감
+  $stockState = document.createElement('div'); //재품의 재고상태를 나타냄(품절, 남은개수)
 
   //전역변수의 elem에 id를 정의합니다.
-  addToCartBtn.id = 'add-to-cart';
-  cartElement.id = 'cart-items';
-  sumElement.id = 'cart-total';
-  itemSelectElement.id = 'product-select';
-  stockStateElement.id = 'stock-status';
+  $addToCartButton.id = 'add-to-cart';
+  $cart.id = 'cart-items';
+  $sum.id = 'cart-total';
+  $itemSelect.id = 'product-select';
+  $stockState.id = 'stock-status';
 
   //지역변수의 className을 정의합니다.
   root.className = 'bg-gray-100 p-8';
-  elementWrapper.className =
+  elements.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
   header.className = 'text-2xl font-bold mb-4';
 
   //전역변수의 className을 정의합니다.
-  addToCartBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  sumElement.className = 'text-xl font-bold my-4';
-  itemSelectElement.className = 'border rounded p-2 mr-2';
-  stockStateElement.className = 'text-sm text-gray-500 mt-2';
+  $addToCartButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
+  $sum.className = 'text-xl font-bold my-4';
+  $itemSelect.className = 'border rounded p-2 mr-2';
+  $stockState.className = 'text-sm text-gray-500 mt-2';
 
   //htxt,addbtn에 텍스트를 추가합니다.
   header.textContent = '장바구니';
-  addToCartBtn.textContent = '추가';
+  $addToCartButton.textContent = '추가';
 
   updateItemOption(); //select인 sel에 option인 opt를 할당
 
   //컨테이너인 wrap에 요소들을 추가합니다.
-  elementWrapper.appendChild(header);
-  elementWrapper.appendChild(cartElement);
-  elementWrapper.appendChild(sumElement);
-  elementWrapper.appendChild(itemSelectElement);
-  elementWrapper.appendChild(addToCartBtn);
-  elementWrapper.appendChild(stockStateElement);
+  elements.appendChild(header);
+  elements.appendChild($cart);
+  elements.appendChild($sum);
+  elements.appendChild($itemSelect);
+  elements.appendChild($addToCartButton);
+  elements.appendChild($stockState);
 
-  root.appendChild(elementWrapper);
+  root.appendChild(elements);
   app.appendChild(root);
 
   calcCart();
@@ -68,7 +68,7 @@ const main = () => {
   //번개세일을 진행합니다.
   setTimeout(function () {
     setInterval(function () {
-      let luckyItem = items[Math.floor(Math.random() * items.length)];
+      let luckyItem = ITEMS[Math.floor(Math.random() * ITEMS.length)];
       if (Math.random() < 0.3 && luckyItem.stock > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
@@ -81,7 +81,7 @@ const main = () => {
   setTimeout(function () {
     setInterval(function () {
       if (recentSelectedItemId) {
-        let suggest = items.find(function (item) {
+        let suggest = ITEMS.find(function (item) {
           return item.id !== recentSelectedItemId && item.stock > 0;
         });
         if (suggest) {
@@ -97,26 +97,27 @@ const main = () => {
 //NOTE: UI UPDATE
 /**Select인 sel 밑으로 각 상품을 Option으로 넣습니다*/
 const updateItemOption = () => {
-  itemSelectElement.innerHTML = '';
+  $itemSelect.innerHTML = '';
 
   //각각의 prodList에 대해 option태그를 생성하고 id와 text를 넣어줍니다.
-  items.forEach(function (item) {
+  ITEMS.forEach(function (item) {
     let itemOptionElement = document.createElement('option');
     itemOptionElement.value = item.id;
     itemOptionElement.textContent = item.name + ' - ' + item.price + '원';
 
     if (item.stock === 0) itemOptionElement.disabled = true; //q는 재고를 의미합니다.
 
-    itemSelectElement.appendChild(itemOptionElement);
+    $itemSelect.appendChild(itemOptionElement);
   });
 };
+export { updateItemOption };
 
 /**장바구니를 계산합니다.*/
 const calcCart = () => {
   totalPrice = 0;
   let itemCount = 0;
 
-  let cartItems = cartElement.children; //장바구니의 자식들을 cartItem으로 담습니다.
+  let cartItems = $cart.children; //장바구니의 자식들을 cartItem으로 담습니다.
   let subTotalPrice = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
@@ -124,11 +125,11 @@ const calcCart = () => {
     (function () {
       //즉시 실행 함수
       let currentItem; //현재 아이템입니다.
-      for (let j = 0; j < items.length; j++) {
+      for (let j = 0; j < ITEMS.length; j++) {
         //전체 아이템의 개수만큼 순회
-        if (items[j].id === cartItems[i].id) {
+        if (ITEMS[j].id === cartItems[i].id) {
           //전체 아이템와 장바구니의 아이디를 비교하여 같다면
-          currentItem = items[j]; //현재 아이템으로 등록
+          currentItem = ITEMS[j]; //현재 아이템으로 등록
           break;
         }
       }
@@ -171,25 +172,25 @@ const calcCart = () => {
     totalPrice *= 1 - 0.1;
     discount = Math.max(discount, 0.1);
   }
-  sumElement.textContent = '총액: ' + Math.round(totalPrice) + '원';
+  $sum.textContent = '총액: ' + Math.round(totalPrice) + '원';
 
   if (discount > 0) {
     //할인이 있을 경우, 할인 적용
     let span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
     span.textContent = '(' + (discount * 100).toFixed(1) + '% 할인 적용)';
-    sumElement.appendChild(span);
+    $sum.appendChild(span);
   }
 
   updateStockState();
   updateBonusPoint();
 };
-
+export { calcCart };
 /**각 아이템의 재고가 5개 미만인 경우 재고부족, 품절을 표시. */
 const updateStockState = () => {
   let stockState = '';
 
-  items.forEach(function (item) {
+  ITEMS.forEach(function (item) {
     if (item.stock < 5) {
       stockState +=
         item.name +
@@ -199,7 +200,7 @@ const updateStockState = () => {
     }
   });
 
-  stockStateElement.textContent = stockState;
+  $stockState.textContent = stockState;
 };
 
 /**보너스포인터를 계산합니다.*/
@@ -212,7 +213,7 @@ const updateBonusPoint = () => {
     bonusPointElement = document.createElement('span');
     bonusPointElement.id = 'loyalty-points';
     bonusPointElement.className = 'text-blue-500 ml-2';
-    sumElement.appendChild(bonusPointElement);
+    $sum.appendChild(bonusPointElement);
   }
 
   bonusPointElement.textContent = '(포인트: ' + bonusPoint + ')';
@@ -222,11 +223,11 @@ main();
 
 //이벤트 헨들러
 //추가 버튼 클릭한 경우
-addToCartBtn.addEventListener('click', function () {
+$addToCartButton.addEventListener('click', function () {
   //selItem: 선택된 아이템의 아이디, (ex.p1)
-  let selectedItemId = itemSelectElement.value; //select태그의 값
+  let selectedItemId = $itemSelect.value; //select태그의 값
   //추가될 아이템(선택된 아이디)
-  let selecedItem = items.find(function (p) {
+  let selecedItem = ITEMS.find(function (p) {
     return p.id === selectedItemId;
   });
   console.log(selecedItem);
@@ -264,7 +265,8 @@ addToCartBtn.addEventListener('click', function () {
         '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
         selecedItem.id +
         '">삭제</button></div>';
-      cartElement.appendChild(newItem);
+      $cart.appendChild(newItem);
+
       selecedItem.stock--; //재고를 하나 내립니다.
     } //end of 1D else
 
@@ -275,7 +277,7 @@ addToCartBtn.addEventListener('click', function () {
 });
 
 //장바구니 클릭
-cartElement.addEventListener('click', function (event) {
+$cart.addEventListener('click', function (event) {
   let selectedCartElement = event.target; //장바구니 elem의 클릭요소 (target의 준말같음)
   if (
     selectedCartElement.classList.contains('quantity-change') ||
@@ -285,7 +287,7 @@ cartElement.addEventListener('click', function (event) {
     console.log(selectedItemId);
     let itemElem = document.getElementById(selectedItemId);
 
-    let item = items.find(function (p) {
+    let item = ITEMS.find(function (p) {
       return p.id === selectedItemId;
     });
     console.log(item);

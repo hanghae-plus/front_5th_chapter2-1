@@ -86,7 +86,11 @@ describe('basic test', () => {
       sel.value='p1';
       addBtn.click();
       addBtn.click();
-      expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
+      if(new Date().getDay() === 2) {
+        expect(sum.textContent).toContain('총액: 18000원(10.0% 할인 적용)(포인트: 18)');
+      }else{
+        expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
+      }
     });
 
     it('할인이 올바르게 적용되는지 확인', () => {

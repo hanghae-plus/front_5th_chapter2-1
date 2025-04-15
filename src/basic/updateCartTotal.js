@@ -2,7 +2,7 @@ import {
   calculateProductDiscount,
   calculateCartDiscount,
   calculateTuesdayDiscount,
-} from './calculateDiscounts.js';
+} from './calculateDiscount.js';
 
 const calculateCartTotal = (cartList, products) => {
   let totalPrice = 0;

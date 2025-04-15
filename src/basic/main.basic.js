@@ -1,6 +1,6 @@
 import createDiscountEvent from './createDiscountEvent';
 import updateCartTotal from './updateCartTotal';
-import updateSelectBoxOptions from './updateSelectBoxOptions';
+import updateSelectBoxOptions from './updateSelectBoxOption';
 
 let products, productSelectBox, addProductToCartButton, cartList, cartTotalPrice, stockStatus;
 

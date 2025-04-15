@@ -1,4 +1,4 @@
-import updateSelectBoxOptions from './updateSelectBoxOptions.js';
+import updateSelectBoxOptions from './updateSelectBoxOption.js';
 
 const EVENT_TYPE = {
   FLASH: 'flash',

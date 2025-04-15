@@ -1,6 +1,6 @@
 import { PRODUCT_LIST, PRODUCT_DISCOUNT_RATES } from '../../consts';
 
-export const calculateCartTotals = (cartItemElements) => {
+export const calculateCartAmounts = (cartItemElements) => {
   return cartItemElements.reduce(
     (acc, item) => {
       const product = PRODUCT_LIST.find((p) => p.id === item.id);

@@ -4,7 +4,7 @@ import {
   updateQuantityText,
   alertOutOfStock,
 } from '../../utils';
-import { cartItemElement } from '../../render';
+import { createCartItemElement } from '../../render';
 
 export const addItemToCart = (itemToAdd, cartItemsContainer) => {
   if (!itemToAdd || itemToAdd.quantity <= 0) return;
@@ -22,7 +22,7 @@ export const addItemToCart = (itemToAdd, cartItemsContainer) => {
       return;
     }
   } else {
-    const newItem = cartItemElement(itemToAdd);
+    const newItem = createCartItemElement(itemToAdd);
     cartItemsContainer.appendChild(newItem);
     itemToAdd.quantity--;
   }

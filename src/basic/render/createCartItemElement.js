@@ -32,7 +32,7 @@ const createQuantitySpan = (item) => {
   });
 };
 
-export const cartItemElement = (item) => {
+export const createCartItemElement = (item) => {
   const container = createElement('div', {
     id: item.id,
     className: STYLES.LAYOUT.FLEX,

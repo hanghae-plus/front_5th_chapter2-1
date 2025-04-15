@@ -52,6 +52,8 @@ export const makeUI = () =>{
 
   return {
     select,
-    cartDisplay
+    cartDisplay,
+    stockInfo,
+    sum
   } 
 }

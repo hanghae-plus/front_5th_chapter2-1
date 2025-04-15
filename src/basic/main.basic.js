@@ -1,10 +1,8 @@
 import createDiscountEvent from './createDiscountEvent';
+import updateCartTotal from './updateCartTotal';
 import updateSelectBoxOptions from './updateSelectBoxOptions';
 
 let products, productSelectBox, addProductToCartButton, cartList, cartTotalPrice, stockStatus;
-let bonusPts = 0;
-let totalPrice = 0;
-let totalProductCount = 0;
 
 const main = () => {
   products = [
@@ -55,108 +53,9 @@ const main = () => {
   background.appendChild(content);
   main.appendChild(background);
 
-  calcCart();
+  updateCartTotal(cartList, products, cartTotalPrice, stockStatus);
 
   createDiscountEvent(products);
-};
-
-const calcCart = () => {
-  totalPrice = 0;
-  totalProductCount = 0;
-
-  const cartItems = cartList.children;
-  let totalPriceBeforeDiscount = 0;
-
-  for (let i = 0; i < cartItems.length; i++) {
-    let currentProduct;
-
-    for (let j = 0; j < products.length; j++) {
-      if (products[j].id === cartItems[i].id) {
-        currentProduct = products[j];
-        break;
-      }
-    }
-
-    const { id, price } = currentProduct;
-    const quantity = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
-    const productTotalPrice = price * quantity;
-
-    let disc = 0;
-
-    totalProductCount += quantity;
-    totalPriceBeforeDiscount += productTotalPrice;
-
-    if (quantity >= 10) {
-      if (id === 'p1') disc = 0.1;
-      else if (id === 'p2') disc = 0.15;
-      else if (id === 'p3') disc = 0.2;
-      else if (id === 'p4') disc = 0.05;
-      else if (id === 'p5') disc = 0.25;
-    }
-
-    totalPrice += productTotalPrice * (1 - disc);
-  }
-
-  let discRate = 0;
-
-  if (totalProductCount >= 30) {
-    const bulkDisc = totalPrice * 0.25;
-    const itemDisc = totalPriceBeforeDiscount - totalPrice;
-
-    if (bulkDisc > itemDisc) {
-      totalPrice = totalPriceBeforeDiscount * (1 - 0.25);
-      discRate = 0.25;
-    } else {
-      discRate = (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
-    }
-  } else {
-    discRate = (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
-  }
-
-  if (new Date().getDay() === 2) {
-    totalPrice *= 1 - 0.1;
-    discRate = Math.max(discRate, 0.1);
-  }
-
-  cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
-
-  if (discRate > 0) {
-    const span = document.createElement('span');
-
-    span.className = 'text-green-500 ml-2';
-    span.textContent = `(${(discRate * 100).toFixed(1)}% 할인 적용)`;
-    cartTotalPrice.appendChild(span);
-  }
-
-  updateStockInfo();
-  renderBonusPts();
-};
-
-const renderBonusPts = () => {
-  bonusPts = Math.floor(totalPrice / 1000);
-
-  let ptsTag = document.getElementById('loyalty-points');
-
-  if (!ptsTag) {
-    ptsTag = document.createElement('span');
-    ptsTag.id = 'loyalty-points';
-    ptsTag.className = 'text-blue-500 ml-2';
-    cartTotalPrice.appendChild(ptsTag);
-  }
-
-  ptsTag.textContent = `(포인트: ${bonusPts})`;
-};
-
-const updateStockInfo = () => {
-  let infoMsg = '';
-
-  products.forEach(({ name, quantity }) => {
-    if (quantity < 5) {
-      infoMsg += `${name}: ${quantity > 0 ? `재고 부족 (${quantity}개 남음)` : '품절'}\n`;
-    }
-  });
-
-  stockStatus.textContent = infoMsg;
 };
 
 main();
@@ -194,7 +93,7 @@ addProductToCartButton.addEventListener('click', () => {
       itemToAdd.quantity--;
     }
 
-    calcCart();
+    updateCartTotal(cartList, products, cartTotalPrice, stockStatus);
   }
 });
 
@@ -232,6 +131,6 @@ cartList.addEventListener('click', (event) => {
       itemElem.remove();
     }
 
-    calcCart();
+    updateCartTotal(cartList, products, cartTotalPrice, stockStatus);
   }
 });

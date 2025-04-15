@@ -1,4 +1,4 @@
-import { $cart } from '../components/getElements';
+import $cart from '../components/Cart';
 import {
   isSelectedCartAvailable,
   getSelecteItem,

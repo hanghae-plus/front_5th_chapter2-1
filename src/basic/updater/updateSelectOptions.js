@@ -1,5 +1,5 @@
+import $itemSelect from '../components/ItemSelect';
 import ITEMS from '../constants/items';
-import { $itemSelect } from '../components/getElements';
 
 /**Select인 sel 밑으로 각 상품을 Option으로 넣습니다*/
 const updateSelectOptions = () => {

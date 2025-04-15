@@ -1,4 +1,4 @@
-import { $sum } from '../components/getElements';
+import $cartTotal from '../components/CartTotal';
 
 /**보너스포인터를 계산합니다.*/
 const updatePoint = (totalPrice) => {
@@ -9,7 +9,7 @@ const updatePoint = (totalPrice) => {
     $point = document.createElement('span');
     $point.id = 'loyalty-points';
     $point.className = 'text-blue-500 ml-2';
-    $sum.appendChild($point);
+    $cartTotal.appendChild($point);
   }
 
   $point.textContent = '(포인트: ' + point + ')';

@@ -1,5 +1,6 @@
+import $cart from '../components/Cart';
+import $cartTotal from '../components/CartTotal';
 import ITEMS from '../constants/items';
-import { $cart, $sum } from '../components/getElements';
 import { TotalPrice } from '../stores';
 import updatePoint from './updatePoint';
 import updateStockState from './updateStockState';
@@ -62,13 +63,13 @@ const updateCart = () => {
     discount = Math.max(discount, 0.1);
   }
 
-  $sum.textContent = '총액: ' + Math.round(totalPrice.get()) + '원';
+  $cartTotal.textContent = '총액: ' + Math.round(totalPrice.get()) + '원';
 
   if (discount > 0) {
     let span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
     span.textContent = '(' + (discount * 100).toFixed(1) + '% 할인 적용)';
-    $sum.appendChild(span);
+    $cartTotal.appendChild(span);
   }
 
   updateStockState();

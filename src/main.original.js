@@ -31,7 +31,7 @@ function main() {
   stockInfo.className='text-sm text-gray-500 mt-2';
   hTxt.textContent='장바구니';
   addBtn.textContent='추가';
-  updateSelOpts();
+  updateSelOpts();  // 상품가격 select에 넣기
   wrap.appendChild(hTxt);
   wrap.appendChild(cartDisp);
   wrap.appendChild(sum);
@@ -64,7 +64,7 @@ function main() {
   //   }, 60000);
   // }, Math.random() * 20000);
 };
-function updateSelOpts() {
+function updateSelOpts() { // 상품가격 select에 넣기
   sel.innerHTML='';
   prodList.forEach(function (item) {
     var opt=document.createElement('option');
@@ -130,7 +130,7 @@ function calcCart() {
   updateStockInfo();
   renderBonusPts();
 }
-const renderBonusPts=() => {
+const renderBonusPts=() => { // 포인트얻기
   bonusPts = Math.floor(totalAmt / 1000);
   var ptsTag=document.getElementById('loyalty-points');
   if(!ptsTag) {
@@ -141,7 +141,7 @@ const renderBonusPts=() => {
   }
   ptsTag.textContent='(포인트: ' + bonusPts + ')';
 };
-function updateStockInfo() {
+function updateStockInfo() {  // 재고확인
   var infoMsg='';
   prodList.forEach(function (item) {
     if(item.q < 5) {infoMsg += item.name + ': ' + (item.q > 0 ? '재고 부족 ('+item.q+'개 남음)' : '품절') + '\n';

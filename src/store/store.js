@@ -11,5 +11,12 @@ export const store = {
     bonusPts: 0,
     totalAmt: 0,
     itemCnt: 0,
+  },
+  element: {
+    sel: null,
+    addBtn: null,
+    cartDisp: null,
+    sum: null,
+    stockInfo: null
   }
 };

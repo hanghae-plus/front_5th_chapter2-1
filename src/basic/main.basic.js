@@ -180,17 +180,18 @@ function calcCart() {
   renderBonusPts();
 }
 
+// 포인트 표시 업데이트. 없으면 새로 추가
 const renderBonusPts = () => {
   const sum = document.getElementById('cart-total');
   store.bonusPts = Math.floor(store.totalAmt / 1000);
-  var ptsTag = document.getElementById('loyalty-points');
-  if (!ptsTag) {
-    ptsTag = document.createElement('span');
-    ptsTag.id = 'loyalty-points';
-    ptsTag.className = 'text-blue-500 ml-2';
-    sum.appendChild(ptsTag);
+  let loyaltyPointTag = document.getElementById('loyalty-points');
+  if (!loyaltyPointTag) {
+    loyaltyPointTag = document.createElement('span');
+    loyaltyPointTag.id = 'loyalty-points';
+    loyaltyPointTag.className = 'text-blue-500 ml-2';
+    sum.appendChild(loyaltyPointTag);
   }
-  ptsTag.textContent = `(포인트: ${store.bonusPts})`;
+  loyaltyPointTag.textContent = `(포인트: ${store.bonusPts})`;
 };
 
 // 재고 상태 업데이트 (5개 미만인 상품에 대한 경고 메시지 표시)

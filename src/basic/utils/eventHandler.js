@@ -1,66 +1,83 @@
 import ITEMS from '../constants/items';
-import { $addToCartButton, $cart, $itemSelect } from '../createElements';
+import { $addCartButton, $cart, $itemSelect } from '../createElements';
 import { RecentSelectedId } from '../stores';
 import updateCart from './updateCart';
 
-const handleAddToCartButton = () => {
-  $addToCartButton.addEventListener('click', function () {
-    //selItem: 선택된 아이템의 아이디, (ex.p1)
-    let selectedItemId = $itemSelect.value; //select태그의 값
-    //추가될 아이템(선택된 아이디)
-    let selecedItem = ITEMS.find(function (p) {
-      return p.id === selectedItemId;
-    });
-    if (selecedItem && selecedItem.stock > 0) {
-      let item = document.getElementById(selecedItem.id);
+const isSelectedItem = (p, selectedItemId) => {
+  return p.id === selectedItemId;
+};
 
-      if (item) {
-        //추가할 아이디가 있을 경우
-        let cartCount = parseInt(item.querySelector('span').textContent.split('x ')[1]) + 1; //장바구니에 추가한 개수
-        //장바구니에 추가한 개수와 재고를 비교
-        if (cartCount <= selecedItem.stock) {
-          item.querySelector('span').textContent =
-            selecedItem.name + ' - ' + selecedItem.price + '원 x ' + cartCount;
-          selecedItem.stock--; //재고를 하나 내립니다.
-        } else {
-          alert('재고가 부족합니다.');
-        }
-      } //end of 1D if
-      else {
-        let newItem = document.createElement('div');
-        newItem.id = selecedItem.id;
-        newItem.className = 'flex justify-between items-center mb-2';
-        newItem.innerHTML =
-          '<span>' +
-          selecedItem.name +
-          ' - ' +
-          selecedItem.price +
-          '원 x 1</span><div>' +
-          '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-          selecedItem.id +
-          '" data-change="-1">-</button>' +
-          '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
-          selecedItem.id +
-          '" data-change="1">+</button>' +
-          '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
-          selecedItem.id +
-          '">삭제</button></div>';
-        $cart.appendChild(newItem);
+const getSelectedItem = (selectedItemId) => {
+  return ITEMS.find((id) => isSelectedItem(id, selectedItemId));
+};
 
-        selecedItem.stock--; //재고를 하나 내립니다.
-      } //end of 1D else
+const isItemAvailable = (selecedItem) => {
+  return selecedItem && selecedItem.stock > 0;
+};
 
-      updateCart(); //장바구니 계산
+const updateCartItem = (item, selectedItem) => {
+  const currentCartText = item.querySelector('span').textContent;
+  let cartCount = parseInt(currentCartText.split('x ')[1]) + 1;
 
-      let recentSelectedId = new RecentSelectedId();
-      recentSelectedId.set(selectedItemId);
-    }
+  if (cartCount <= selectedItem.stock) {
+    item.querySelector('span').textContent =
+      `${selectedItem.name} - ${selectedItem.price}원 x ${cartCount}`;
+    selectedItem.stock--;
+  } else {
+    alert('재고가 부족합니다.');
+  }
+};
+
+const createCartItem = (selectedItem, $cart) => {
+  // 새 아이템 생성
+  const newItem = document.createElement('div');
+  newItem.id = selectedItem.id;
+  newItem.className = 'flex justify-between items-center mb-2';
+
+  // 템플릿 리터럴을 사용하여 HTML 가독성 개선
+  newItem.innerHTML = `
+    <span>${selectedItem.name} - ${selectedItem.price}원 x 1</span>
+    <div>
+      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" 
+              data-product-id="${selectedItem.id}" 
+              data-change="-1">-</button>
+      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" 
+              data-product-id="${selectedItem.id}" 
+              data-change="1">+</button>
+      <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" 
+              data-product-id="${selectedItem.id}">삭제</button>
+    </div>
+  `;
+
+  $cart.appendChild(newItem);
+  selectedItem.stock--; // 재고 감소
+};
+
+const updateRecentSelectedId = (selectedItemId) => {
+  let recentSelectedId = new RecentSelectedId();
+  recentSelectedId.set(selectedItemId);
+};
+//TODO: handler 완전 분리 후, 호출
+const handleAddCartButton = () => {
+  $addCartButton.addEventListener('click', () => {
+    let selectedItemId = $itemSelect.value;
+
+    let selectedItem = getSelectedItem(selectedItemId);
+
+    if (!isItemAvailable(selectedItem)) return;
+
+    let item = document.getElementById(selectedItem.id);
+
+    item ? updateCartItem(item, selectedItem) : createCartItem(selectedItem, $cart);
+
+    updateCart(); //장바구니 계산
+    updateRecentSelectedId(selectedItemId);
   });
 };
 
 const handleCart = () => {
   $cart.addEventListener('click', function (event) {
-    let selectedCartElement = event.target; //장바구니 elem의 클릭요소 (target의 준말같음)
+    let selectedCartElement = event.target;
     if (
       selectedCartElement.classList.contains('quantity-change') ||
       selectedCartElement.classList.contains('remove-item')
@@ -106,7 +123,7 @@ const handleCart = () => {
 };
 
 const eventHandler = () => {
-  handleAddToCartButton();
+  handleAddCartButton();
   handleCart();
 };
 

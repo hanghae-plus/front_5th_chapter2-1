@@ -1,4 +1,4 @@
-import { $addToCartButton, $cart, $itemSelect, $sum, $stockState, $title } from './createElements';
+import { $addCartButton, $cart, $itemSelect, $sum, $stockState, $title } from './createElements';
 
 const render = () => {
   const $elements = document.createElement('div');
@@ -7,7 +7,7 @@ const render = () => {
   $elements.appendChild($cart);
   $elements.appendChild($sum);
   $elements.appendChild($itemSelect);
-  $elements.appendChild($addToCartButton);
+  $elements.appendChild($addCartButton);
   $elements.appendChild($stockState);
 
   const $root = document.createElement('div');

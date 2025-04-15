@@ -215,7 +215,11 @@ addBtn.addEventListener("click", function () {
       if (newQty <= itemToAdd.quantity) {
         item.querySelector("span").textContent =
           itemToAdd.name + " - " + itemToAdd.price + "원 x " + newQty;
-        itemToAdd.quantity--;
+
+        productStore.updateProductItem(selectedItemId, (product) => ({
+          ...product,
+          quantity: itemToAdd.quantity - 1,
+        }));
       } else {
         alert("재고가 부족합니다.");
       }
@@ -240,7 +244,10 @@ addBtn.addEventListener("click", function () {
         </div>
       `;
       cartDisp.appendChild(newItem);
-      itemToAdd.quantity--;
+      productStore.updateProductItem(selectedItemId, (product) => ({
+        ...product,
+        quantity: itemToAdd.quantity - 1,
+      }));
     }
 
     renderCart();
@@ -257,10 +264,7 @@ cartDisp.addEventListener("click", function (event) {
   ) {
     const prodId = tgt.dataset.productId;
     const itemElem = document.getElementById(prodId);
-    const productList = productStore.getProductList();
-    const prod = productList.find(function (p) {
-      return p.id === prodId;
-    });
+    const productItem = productStore.getProductItem(prodId);
 
     if (tgt.classList.contains("quantity-change")) {
       const qtyChange = parseInt(tgt.dataset.change);
@@ -271,27 +275,36 @@ cartDisp.addEventListener("click", function (event) {
       if (
         newQty > 0 &&
         newQty <=
-          prod.quantity +
+          productItem.quantity +
             parseInt(itemElem.querySelector("span").textContent.split("x ")[1])
       ) {
         itemElem.querySelector("span").textContent =
           itemElem.querySelector("span").textContent.split("x ")[0] +
           "x " +
           newQty;
-        prod.quantity -= qtyChange;
+        productStore.updateProductItem(prodId, (product) => ({
+          ...product,
+          quantity: productItem.quantity - qtyChange,
+        }));
       } else if (newQty <= 0) {
         itemElem.remove();
-        prod.quantity -= qtyChange;
+        productStore.updateProductItem(prodId, (product) => ({
+          ...product,
+          quantity: productItem.quantity - qtyChange,
+        }));
       } else {
         alert("재고가 부족합니다.");
       }
     }
 
     if (tgt.classList.contains("remove-item")) {
-      const remQty = parseInt(
+      const remainingQuantity = parseInt(
         itemElem.querySelector("span").textContent.split("x ")[1],
       );
-      prod.quantity += remQty;
+      productStore.updateProductItem(prodId, (product) => ({
+        ...product,
+        quantity: productItem.quantity + remainingQuantity,
+      }));
       itemElem.remove();
     }
 

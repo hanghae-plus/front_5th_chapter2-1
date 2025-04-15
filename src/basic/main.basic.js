@@ -32,9 +32,15 @@ const initialProducts = [
   { id: 'p5', name: '상품5', price: 25000, stock: 10 },
 ];
 
+// 최대 재고 상수 추가
+const MAXIMUM_STOCKS = initialProducts.map((product) => ({
+  id: product.id,
+  stock: product.stock,
+}));
+
 const state = {
   lastSelected: null,
-  products: [...initialProducts], // 복사본 생성
+  products: JSON.parse(JSON.stringify(initialProducts)), // 깊은 복사 수행
   totalAmount: 0,
   cartItemCount: 0,
   bonusPts: 0,
@@ -442,7 +448,7 @@ const addToCart = (product) => {
   const { success, quantity, isRemove } = calculateCartQuantity(
     currentQuantity,
     1,
-    product.stock,
+    MAXIMUM_STOCKS.find((p) => p.id === product.id).stock,
   );
 
   if (!success) {

@@ -5,8 +5,6 @@ const EVENT_TYPE = {
   SUGGEST: 'suggest',
 };
 
-let lastSel = null;
-
 const eventConfigs = {
   [EVENT_TYPE.FLASH]: {
     delay: () => Math.random() * 10000,
@@ -24,18 +22,20 @@ const eventConfigs = {
   },
 };
 
-const getAvailableProducts = (eventType, products) => {
-  switch (eventType) {
-    case EVENT_TYPE.FLASH:
-      return products;
-    case EVENT_TYPE.SUGGEST:
-      return products.filter((item) => item.id !== lastSel && item.quantity > 0);
-    default:
-      return [];
-  }
-};
-
 const createDiscountEvent = (products) => {
+  let lastSelectedId = null;
+
+  const getAvailableProducts = (eventType, products) => {
+    switch (eventType) {
+      case EVENT_TYPE.FLASH:
+        return products;
+      case EVENT_TYPE.SUGGEST:
+        return products.filter((item) => item.id !== lastSelectedId && item.quantity > 0);
+      default:
+        return [];
+    }
+  };
+
   const runDiscountEvent = (eventType) => {
     const config = eventConfigs[eventType];
     if (!config) {
@@ -58,7 +58,7 @@ const createDiscountEvent = (products) => {
 
     randomProduct.price = Math.round(randomProduct.price * (1 - config.discountRate));
     alert(config.messageTemplate(randomProduct.name));
-    lastSel = randomProduct.id;
+    lastSelectedId = randomProduct.id;
 
     updateSelectBoxOptions();
   };

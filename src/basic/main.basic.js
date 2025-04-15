@@ -1,9 +1,8 @@
 import { updateSelectOptions, calculateCart } from "./libs";
 import events from "./events";
 import { createElement } from "./libs/utils/createElement";
-import store from "./libs/store";
 
-function main() {
+const main = () => {
   const $title = createElement(
     "h1",
     {
@@ -59,8 +58,8 @@ function main() {
   const $root = document.getElementById("app");
   $root.appendChild($count);
 
-  updateSelectOptions($select, store.states.products);
-  calculateCart($cartDisplay, $sum, $stockInfo, store.states.products);
+  updateSelectOptions();
+  calculateCart();
 
   // 이벤트 바인딩
   $cartDisplay.addEventListener("click", events.cartDisplay.click);
@@ -92,6 +91,6 @@ function main() {
   //     }
   //   }, 60000);
   // }, Math.random() * 20000);
-}
+};
 
 main();

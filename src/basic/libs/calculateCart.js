@@ -49,12 +49,13 @@ const calculateCartTotals = ($cartDisplay, products) => {
 /**
  * 할인 비율 계산
  *
- * @param {number} totalPrice - 총 금액
- * @param {number} subTotal - 총 금액
- * @param {number} productCount - 상품 개수
+ * @param {Object} options - 할인율 계산에 필요한 옵션
+ * @param {number} options.totalPrice - 할인 전 총 금액
+ * @param {number} options.subTotal - 개별 상품 가격의 합계
+ * @param {number} options.productCount - 전체 상품 개수
  * @returns {number} 할인 비율
  */
-const getDiscountRate = (totalPrice, subTotal, productCount) => {
+const getDiscountRate = ({ totalPrice, subTotal, productCount }) => {
   let discountRate = 0;
   const bulkDiscount = totalPrice * BULK_DISCOUNT_RATE;
   const productDiscount = subTotal - totalPrice;
@@ -82,7 +83,7 @@ export const calculateCart = () => {
   const { products } = store.states;
   // TODO: totalPrice이 getDiscountRate()에서 변하는데 괜찮은지 확인 ( 테스트 코드는 통과함 )
   const { totalPrice, subTotal, productCount } = calculateCartTotals($cartDisplay, products);
-  const discountRate = getDiscountRate(totalPrice, subTotal, productCount);
+  const discountRate = getDiscountRate({ totalPrice, subTotal, productCount });
 
   $sum.textContent = "총액: " + Math.round(totalPrice) + "원";
 

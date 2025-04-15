@@ -65,7 +65,9 @@ const getDiscountRate = (totalPrice, subTotal, productCount) => {
     discountRate = productDiscount / subTotal;
   }
 
-  if (new Date().getDay() === 2) {
+  const isTuesday = new Date().getDay() === 2;
+
+  if (isTuesday) {
     totalPrice *= 1 - PRODUCT_DISCOUNT_RATE;
     discountRate = Math.max(discountRate, PRODUCT_DISCOUNT_RATE);
   }

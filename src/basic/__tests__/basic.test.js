@@ -23,10 +23,15 @@ describe("basic test", () => {
     beforeEach(() => {
       vi.useRealTimers();
       vi.spyOn(window, "alert").mockImplementation(() => {});
+
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2024-10-14"));
     });
 
     afterEach(() => {
       vi.restoreAllMocks();
+
+      vi.useRealTimers();
     });
 
     it("초기 상태: 상품 목록이 올바르게 그려졌는지 확인", () => {

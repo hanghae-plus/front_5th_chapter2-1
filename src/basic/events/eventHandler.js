@@ -36,8 +36,6 @@ const handleCart = () => {
         }
       } //end of 1D if
       else if (selectedCartElement.classList.contains('remove-item')) {
-        //remove-item: 장바구니 추가되고 나오는 삭제의 클래스 명
-
         //밑에는 그동안 담아둔 장바구니의 개수
         let remQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1]);
         item.stock += remQty;

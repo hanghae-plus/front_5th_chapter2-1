@@ -27,7 +27,7 @@ const safeCalculateCart = () => {
 };
 
 CartItemList(cartItemList, productList, safeCalculateCart)
-const { updateSelectOptions } = ProductSelector(productSelect, addToCartButton, stockStatus, productList, cartItemList, safeCalculateCart, lastSelectedProduct);
+const { updateSelectOptions } = ProductSelector(productSelect, addToCartButton, productList, cartItemList, safeCalculateCart, lastSelectedProduct);
 
 updateSelectOptions();
 calculateCart(cartItemList, productList, cartTotal, stockStatus, bonusPoints);

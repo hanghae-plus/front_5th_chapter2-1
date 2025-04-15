@@ -1,5 +1,5 @@
-import store from "./store";
-import { createElement } from "./utils/createElement";
+import store from "#basic/libs/store";
+import { createElement } from "#basic/libs/utils";
 
 /**
  * 보너스 포인트 렌더링

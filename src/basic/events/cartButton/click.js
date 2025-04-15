@@ -1,6 +1,6 @@
-import { calculateCart } from "../../libs";
-import store from "../../libs/store";
-import { createElement } from "../../libs/utils/createElement";
+import { calculateCart } from "#basic/libs";
+import store from "#basic/libs/store";
+import { createElement } from "#basic/libs/utils";
 
 /**
  * 장바구니 버튼 클릭 이벤트

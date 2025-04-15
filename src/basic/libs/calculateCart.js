@@ -1,6 +1,7 @@
+import store from "#basic/libs/store";
+import { createElement } from "#basic/libs/utils";
+
 import { renderBonusPoints, updateStockInfo } from ".";
-import store from "./store";
-import { createElement } from "./utils/createElement";
 
 const discountMap = {
   p1: 0.1,

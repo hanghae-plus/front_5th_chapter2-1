@@ -1,4 +1,5 @@
-import store from "../../libs/store";
+import store from "#basic/libs/store";
+
 import { handleCartDisplayClick } from "./click";
 
 const cartDisplay = {

@@ -1,6 +1,6 @@
-/** @typedef {import("../types").Product} Product */
+/** @typedef {import("#basic/types").Product} Product */
 
-import store from "./store";
+import store from "#basic/libs/store";
 
 /**
  * 상품 선택 옵션 생성

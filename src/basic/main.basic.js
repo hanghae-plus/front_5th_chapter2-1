@@ -1,6 +1,6 @@
-import { updateSelectOptions, calculateCart } from "./libs";
-import events from "./events";
-import { createElement } from "./libs/utils/createElement";
+import { updateSelectOptions, calculateCart } from "#basic/libs";
+import events from "#basic/events";
+import { createElement } from "#basic/libs/utils/createElement";
 
 const main = () => {
   const $title = createElement(

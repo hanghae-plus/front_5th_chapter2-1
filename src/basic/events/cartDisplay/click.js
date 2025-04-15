@@ -1,5 +1,5 @@
-import { calculateCart } from "../../libs";
-import store from "../../libs/store";
+import { calculateCart } from "#basic/libs";
+import store from "#basic/libs/store";
 
 /**
  * 장바구니 클릭 이벤트

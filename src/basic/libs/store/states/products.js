@@ -1,4 +1,4 @@
-/** @typedef {import("../../../types").Product} Product */
+/** @typedef {import("#basic/types").Product} Product */
 
 /** @type {Product[]} */
 export const products = [

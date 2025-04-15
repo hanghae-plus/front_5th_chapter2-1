@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "#basic/*": ["./src/basic/*"]
+    }
+  },
+  "include": ["src/**/*"]
+} 

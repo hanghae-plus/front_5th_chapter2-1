@@ -1,4 +1,4 @@
-import store from "./store";
+import store from "#basic/libs/store";
 
 /** 재고 상태 업데이트 */
 export const updateStockInfo = () => {

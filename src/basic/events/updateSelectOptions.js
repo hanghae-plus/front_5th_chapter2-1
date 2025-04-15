@@ -1,4 +1,4 @@
-import { products } from "../consts";
+import { products } from "../consts/products";
 
 // 상품 선택 옵션 업데이트
 export const updateSelectOptions = () => {

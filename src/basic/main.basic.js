@@ -1,9 +1,10 @@
-import { products } from "./consts";
+import { products } from "./consts/products";
+import { updateRandomDiscount } from "./events/updateRandomDiscount";
+import { updateRecommendation } from "./events/updateRecommendation";
 import { updateSelectOptions } from "./events/updateSelectOptions";
 
 var addItemBtn, cartDiv, sum, stockInfo;
-var lastSelectedProduct,
-  totalPrice = 0,
+var totalPrice = 0,
   totalEa = 0;
 
 const main = () => {
@@ -14,14 +15,14 @@ const main = () => {
   let titleText = document.createElement("h1");
   cartDiv = document.createElement("div");
   sum = document.createElement("div");
-  // var select = document.createElement("select");
   addItemBtn = document.createElement("button");
   stockInfo = document.createElement("div");
+
+  var select = updateSelectOptions();
 
   // IDs 설정
   cartDiv.id = "cart-items";
   sum.id = "cart-total";
-  // select.id = "product-select";
   addItemBtn.id = "add-to-cart";
   stockInfo.id = "stock-status";
 
@@ -31,7 +32,6 @@ const main = () => {
     "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
   titleText.className = "text-2xl font-bold mb-4";
   sum.className = "text-xl font-bold my-4";
-  // select.className = "border rounded p-2 mr-2";
   addItemBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
   stockInfo.className = "text-sm text-gray-500 mt-2";
 
@@ -40,7 +40,6 @@ const main = () => {
   addItemBtn.textContent = "추가";
 
   // 이벤트 리스너 설정
-  var select = updateSelectOptions();
 
   // HTML 요소 추가
   wrapper.appendChild(titleText);
@@ -54,40 +53,10 @@ const main = () => {
 
   // 장바구니 계산
   calcCart();
-};
 
-// 랜덤 할인 이벤트 설정
-const updateRandomDiscount = () => {
-  setTimeout(function () {
-    setInterval(function () {
-      var luckyItem = products[Math.floor(Math.random() * products.length)];
-      if (Math.random() < 0.3 && luckyItem.stock > 0) {
-        luckyItem.price = Math.round(luckyItem.price * 0.8);
-        alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
-        updateSelectOptions();
-      }
-    }, 30000);
-  }, Math.random() * 10000);
-};
-
-// 추천 상품 이벤트 설정
-const updateRecommendation = () => {
-  setTimeout(function () {
-    setInterval(function () {
-      if (lastSelectedProduct) {
-        var suggestProd = products.find(function (item) {
-          return item.id !== lastSelectedProduct && item.stock > 0;
-        });
-        if (suggestProd) {
-          alert(
-            suggestProd.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!",
-          );
-          suggestProd.price = Math.round(suggestProd.price * 0.95);
-          updateSelectOptions();
-        }
-      }
-    }, 60000);
-  }, Math.random() * 20000);
+  // 랜덤 할인 이벤트 설정
+  updateRandomDiscount();
+  updateRecommendation();
 };
 
 // 상품 추가 시 가격 계산
@@ -298,6 +267,8 @@ main();
 addItemBtn.addEventListener("click", function () {
   var select = document.getElementById("product-select");
   var selectedItem = select.value;
+  var lastSelectedProduct = updateRecommendation();
+
   var itemToAdd = products.find(function (item) {
     return item.id === selectedItem;
   });

@@ -1,33 +1,44 @@
-let totalPrice = 0;
-let totalProductCount = 0;
-let bonusPts = 0;
+const DISCOUNT_POLICIES = {
+  PRODUCT: {
+    RATES: {
+      p1: 0.1,
+      p2: 0.15,
+      p3: 0.2,
+      p4: 0.05,
+      p5: 0.25,
+    },
+    MIN_QUANTITY: 10,
+  },
+  CART: {
+    BULK_THRESHOLD: 30,
+    BULK_RATE: 0.25,
+  },
+  TUESDAY: {
+    RATE: 0.1,
+  },
+};
 
 const calculateProductDiscount = (product, quantity) => {
-  const productDiscountRates = {
-    p1: 0.1,
-    p2: 0.15,
-    p3: 0.2,
-    p4: 0.05,
-    p5: 0.25,
-  };
-
-  const discountRate = quantity >= 10 ? productDiscountRates[product.id] || 0 : 0;
+  const discountRate =
+    quantity >= DISCOUNT_POLICIES.PRODUCT.MIN_QUANTITY
+      ? DISCOUNT_POLICIES.PRODUCT.RATES[product.id] || 0
+      : 0;
 
   return product.price * quantity * (1 - discountRate);
 };
 
 const calculateCartDiscount = (totalPrice, totalPriceBeforeDiscount, totalProductCount) => {
-  if (totalProductCount < 30) {
+  if (totalProductCount < DISCOUNT_POLICIES.CART.BULK_THRESHOLD) {
     return (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
   }
 
-  const bulkDiscount = totalPrice * 0.25;
+  const bulkDiscount = totalPrice * DISCOUNT_POLICIES.CART.BULK_RATE;
   const itemDiscount = totalPriceBeforeDiscount - totalPrice;
 
   if (bulkDiscount > itemDiscount) {
-    totalPrice = totalPriceBeforeDiscount * (1 - 0.25);
+    totalPrice = totalPriceBeforeDiscount * (1 - DISCOUNT_POLICIES.CART.BULK_RATE);
 
-    return 0.25;
+    return DISCOUNT_POLICIES.CART.BULK_RATE;
   }
 
   return (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
@@ -36,17 +47,17 @@ const calculateCartDiscount = (totalPrice, totalPriceBeforeDiscount, totalProduc
 const calculateTuesdayDiscount = (price, currentDiscountRate) => {
   if (new Date().getDay() === 2) {
     return {
-      price: price * (1 - 0.1),
-      discountRate: Math.max(currentDiscountRate, 0.1),
+      price: price * (1 - DISCOUNT_POLICIES.TUESDAY.RATE),
+      discountRate: Math.max(currentDiscountRate, DISCOUNT_POLICIES.TUESDAY.RATE),
     };
   }
 
   return { price, discountRate: currentDiscountRate };
 };
 
-const updateCartTotal = (cartList, products, cartTotalPrice, stockStatus) => {
-  totalPrice = 0;
-  totalProductCount = 0;
+const calculateCartTotal = (cartList, products) => {
+  let totalPrice = 0;
+  let totalProductCount = 0;
   let totalPriceBeforeDiscount = 0;
 
   const cartItems = cartList.children;
@@ -71,17 +82,13 @@ const updateCartTotal = (cartList, products, cartTotalPrice, stockStatus) => {
   totalPrice = tuesdayDiscount.price;
   totalCartDiscountRate = tuesdayDiscount.discountRate;
 
-  cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
+  const bonusPts = Math.floor(totalPrice / 1000);
 
-  if (totalCartDiscountRate > 0) {
-    const discountBadge = document.createElement('span');
-    discountBadge.className = 'text-green-500 ml-2';
-    discountBadge.textContent = `(${(totalCartDiscountRate * 100).toFixed(1)}% 할인 적용)`;
-    cartTotalPrice.appendChild(discountBadge);
-  }
-
-  updateStockInfo(products, stockStatus);
-  renderBonusPts(cartTotalPrice);
+  return {
+    totalPrice,
+    discountRate: totalCartDiscountRate,
+    bonusPts,
+  };
 };
 
 const updateStockInfo = (products, stockStatus) => {
@@ -96,11 +103,17 @@ const updateStockInfo = (products, stockStatus) => {
   stockStatus.textContent = infoMsg;
 };
 
-const renderBonusPts = (cartTotalPrice) => {
-  bonusPts = Math.floor(totalPrice / 1000);
+const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPts) => {
+  cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
+
+  if (discountRate > 0) {
+    const discountBadge = document.createElement('span');
+    discountBadge.className = 'text-green-500 ml-2';
+    discountBadge.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
+    cartTotalPrice.appendChild(discountBadge);
+  }
 
   let ptsTag = document.getElementById('loyalty-points');
-
   if (!ptsTag) {
     ptsTag = document.createElement('span');
     ptsTag.id = 'loyalty-points';
@@ -109,6 +122,13 @@ const renderBonusPts = (cartTotalPrice) => {
   }
 
   ptsTag.textContent = `(포인트: ${bonusPts})`;
+};
+
+const updateCartTotal = (cartList, products, cartTotalPrice, stockStatus) => {
+  const { totalPrice, discountRate, bonusPts } = calculateCartTotal(cartList, products);
+
+  renderCartTotal(cartTotalPrice, totalPrice, discountRate, bonusPts);
+  updateStockInfo(products, stockStatus);
 };
 
 export default updateCartTotal;

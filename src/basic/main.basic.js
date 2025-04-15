@@ -1,4 +1,3 @@
-let $productSelect, $addBtn, $cartItems, $cartTotal, $stockInfo;
 let lastSelectedProduct,
   totalAmount = 0;
 
@@ -15,54 +14,34 @@ const prodList = [
   { id: "p4", name: "상품4", price: 15000, quantity: 0 },
   { id: "p5", name: "상품5", price: 25000, quantity: 10 },
 ];
+
+const $ = (query) => document.querySelector(query)
+
 function main() {
-  const root = document.getElementById("app");
+  const root = $("#app");
+  root.innerHTML = `
+    <div class="bg-gray-100 p-8">
+      <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
+        <h1 class="text-2xl font-bold mb-4">장바구니</h1>
+        <div id="cart-items">
+        </div>
+        <div id="cart-total" class="text-xl font-bold my-4">
+        </div>
+        <select id="product-select" class="border rounded p-2 mr-2">
+        </select>
+        <button id="add-to-cart" class="bg-blue-500 text-white px-4 py-2 rounded">
+          추가
+        </button>
+        <div id="stock-status" class="text-sm text-gray-500 mt-2">
+        </div>
+      </div>
+    </div>
+  `
 
-  const container = document.createElement("div");
-  container.className = "bg-gray-100 p-8";
-
-  const wrap = document.createElement("div");
-  wrap.className =
-    "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
-
-  let hTxt = document.createElement("h1");
-  hTxt.className = "text-2xl font-bold mb-4";
-  hTxt.textContent = "장바구니";
-
-  $cartItems = document.createElement("div");
-  $cartItems.id = "cart-items";
-
-  $cartTotal = document.createElement("div");
-  $cartTotal.id = "cart-total";
-  $cartTotal.className = "text-xl font-bold my-4";
-
-  $productSelect = document.createElement("select");
-  $productSelect.id = "product-select";
-  $productSelect.className = "border rounded p-2 mr-2";
-
-  $addBtn = document.createElement("button");
-  $addBtn.id = "add-to-cart";
-  $addBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
-  $addBtn.textContent = "추가";
-
-  $stockInfo = document.createElement("div");
-  $stockInfo.id = "stock-status";
-  $stockInfo.className = "text-sm text-gray-500 mt-2";
-
-  updateSelOpts();
-
-  wrap.appendChild(hTxt);
-  wrap.appendChild($cartItems);
-  wrap.appendChild($cartTotal);
-  wrap.appendChild($productSelect);
-  wrap.appendChild($addBtn);
-  wrap.appendChild($stockInfo);
-  container.appendChild(wrap);
-  root.appendChild(container);
-
+  renderSelOpts();
   calcCart();
 
-  // 30초 간격으로 번개세일 진행
+  // 30초 간격으로 번개세일 20% 진행
   setTimeout(function () {
     setInterval(function () {
       const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
@@ -72,7 +51,7 @@ function main() {
         console.log(
           "번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!"
         );
-        updateSelOpts();
+        renderSelOpts();
       }
     }, 30000);
   }, Math.random() * 10000);
@@ -90,14 +69,15 @@ function main() {
             suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!"
           );
           suggest.price = Math.round(suggest.price * DISCOUNT_RATIO.ADDITIONAL);
-          updateSelOpts();
+          renderSelOpts();
         }
       }
     }, 60000);
   }, Math.random() * 20000);
 }
 
-function updateSelOpts() {
+function renderSelOpts() {
+  const $productSelect = $('#product-select')
   $productSelect.innerHTML = "";
   prodList.forEach(function (item) {
     const opt = document.createElement("option");
@@ -109,6 +89,7 @@ function updateSelOpts() {
 }
 
 function calcCart() {
+  const $cartItems = $('#cart-items')
   totalAmount = 0;
   let itemCnt = 0;
   const cartItems = $cartItems.children;
@@ -117,7 +98,7 @@ function calcCart() {
   for (let i = 0; i < cartItems.length; i++) {
     (function () {
       let curItem;
-      // 전체 제품 목록 순회해서 순회 중인 상품의 정보(price: 가격, id)를 알아냄
+      // 전체 제품 목록 순회해서 순회 중인 상품의 정보(price, id)를 알아냄
       for (let j = 0; j < prodList.length; j++) {
         if (prodList[j].id === cartItems[i].id) {
           curItem = prodList[j];
@@ -131,6 +112,11 @@ function calcCart() {
       let discount = 0;
       itemCnt += quantity;
       subTot += itemTot;
+      /**
+       * 상품1 > 10개 이상 구매 시 10% 할인
+       * 상품2 > 10개 이상 구매 시 15% 할인
+       * 상품3 > 10개 이상 구매 시 20% 할인
+       */
       if (quantity >= 10) {
         if (curItem.id === "p1") discount = 0.1;
         else if (curItem.id === "p2") discount = 0.15;
@@ -141,6 +127,8 @@ function calcCart() {
       totalAmount += itemTot * (1 - discount);
     })();
   }
+  
+  // 상품 종류와 상관 없이, 30개 이상 구매할 경우 25% 할인
   let discountRate = 0;
   if (itemCnt >= 30) {
     const bulkDiscount = totalAmount * 0.25;
@@ -154,23 +142,29 @@ function calcCart() {
   } else {
     discountRate = (subTot - totalAmount) / subTot;
   }
+
+  // 화요일에는 특별할인 10%
   if (isTuesDay) {
     totalAmount *= (1 - 0.1);
     discountRate = Math.max(discountRate, 0.1);
   }
+  const $cartTotal = $('#cart-total')
   $cartTotal.textContent = "총액: " + Math.round(totalAmount) + "원";
+
   if (discountRate > 0) {
     let span = document.createElement("span");
     span.className = "text-green-500 ml-2";
     span.textContent = "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
     $cartTotal.appendChild(span);
   }
-  updateStockInfo();
+
+  renderStockInfo();
   renderBonusPoints();
 }
 
 const renderBonusPoints = () => {
   const bonusPoints = Math.floor(totalAmount / 1000);
+  const $cartTotal = $('#cart-total')
   let ptsTag = document.getElementById("loyalty-points");
   if (!ptsTag) {
     ptsTag = document.createElement("span");
@@ -181,7 +175,7 @@ const renderBonusPoints = () => {
   ptsTag.textContent = "(포인트: " + bonusPoints + ")";
 };
 
-function updateStockInfo() {
+function renderStockInfo() {
   let infoMsg = "";
   prodList.forEach(function (item) {
     if (item.quantity < 5) {
@@ -194,21 +188,26 @@ function updateStockInfo() {
         "\n";
     }
   });
-  $stockInfo.textContent = infoMsg;
+  const $stockStatus = $('#stock-status')
+  $stockStatus.textContent = infoMsg;
 }
 
 main();
 
+const $addBtn = $('#add-to-cart')
 $addBtn.addEventListener("click", function () {
+  const $productSelect = $('#product-select')
   const selItem = $productSelect.value;
   const itemToAdd = prodList.find(function (p) {
     return p.id === selItem;
   });
+
   if (itemToAdd && itemToAdd.quantity > 0) {
     const item = document.getElementById(itemToAdd.id);
     if (item) {
       const newQty =
         parseInt(item.querySelector("span").textContent.split("x ")[1]) + 1;
+
       if (newQty <= itemToAdd.quantity) {
         item.querySelector("span").textContent =
           itemToAdd.name + " - " + itemToAdd.price + "원 x " + newQty;
@@ -218,6 +217,8 @@ $addBtn.addEventListener("click", function () {
       }
     } else {
       const newItem = document.createElement("div");
+      const $cartItems = $('#cart-items')
+
       newItem.id = itemToAdd.id;
       newItem.className = "flex justify-between items-center mb-2";
       newItem.innerHTML =
@@ -238,10 +239,14 @@ $addBtn.addEventListener("click", function () {
       $cartItems.appendChild(newItem);
       itemToAdd.quantity--;
     }
+
     calcCart();
     lastSelectedProduct = selItem;
   }
 });
+
+
+const $cartItems = $('#cart-items')
 $cartItems.addEventListener("click", function (event) {
   const tgt = event.target;
   if (
@@ -250,14 +255,17 @@ $cartItems.addEventListener("click", function (event) {
   ) {
     const prodId = tgt.dataset.productId;
     const itemElem = document.getElementById(prodId);
+
     const prod = prodList.find(function (p) {
       return p.id === prodId;
     });
+
     if (tgt.classList.contains("quantity-change")) {
       const qtyChange = parseInt(tgt.dataset.change);
       const newQty =
         parseInt(itemElem.querySelector("span").textContent.split("x ")[1]) +
         qtyChange;
+
       if (
         newQty > 0 &&
         newQty <=
@@ -275,13 +283,16 @@ $cartItems.addEventListener("click", function (event) {
       } else {
         alert("재고가 부족합니다.");
       }
+
     } else if (tgt.classList.contains("remove-item")) {
       const remQty = parseInt(
         itemElem.querySelector("span").textContent.split("x ")[1]
       );
+
       prod.quantity += remQty;
       itemElem.remove();
     }
+
     calcCart();
   }
 });

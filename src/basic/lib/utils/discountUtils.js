@@ -22,9 +22,9 @@ const createDiscountSummary = (discountedPrice, discountRate) => {
 };
 
 export function calculateDiscountForTuesday(totalPrice) {
-  const discountedPrice = totalPrice * (1 - DISCOUNT_RATES.TUESDAY);
+  const discountedPrice = totalPrice * (1 - DISCOUNT_RATES.tuesday);
 
-  return createDiscountSummary(discountedPrice, DISCOUNT_RATES.TUESDAY);
+  return createDiscountSummary(discountedPrice, DISCOUNT_RATES.tuesday);
 }
 
 export function calculateRegularDiscount(totalPrice, originalTotalPrice) {
@@ -34,15 +34,15 @@ export function calculateRegularDiscount(totalPrice, originalTotalPrice) {
 }
 
 export function calculateBulkDiscount(totalPrice, originalTotalPrice) {
-  const bulkDiscountAmount = totalPrice * DISCOUNT_RATES.BULK;
+  const bulkDiscountAmount = totalPrice * DISCOUNT_RATES.bulk;
   const individualDiscountAmount = originalTotalPrice - totalPrice;
 
-  totalPrice =
+  const discountedPrice =
     bulkDiscountAmount > individualDiscountAmount
-      ? originalTotalPrice * (1 - DISCOUNT_RATES.BULK)
+      ? originalTotalPrice * (1 - DISCOUNT_RATES.bulk)
       : originalTotalPrice - individualDiscountAmount;
 
-  return createDiscountSummary(totalPrice, DISCOUNT_RATES.BULK);
+  return createDiscountSummary(discountedPrice, DISCOUNT_RATES.bulk);
 }
 
 export function getDiscountRateByProduct(productId) {

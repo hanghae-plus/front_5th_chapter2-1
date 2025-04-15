@@ -17,7 +17,7 @@ export function generateCartInvoice(addedItems) {
   let totalAmountBeforeDiscount = 0;
   let totalAmount = 0;
 
-  for (let cartItem of addedItems) {
+  for (const cartItem of addedItems) {
     const product = PRODUCT_INVENTORY.find(
       (product) => product.id === cartItem.id,
     );
@@ -80,5 +80,5 @@ export function isProductSoldOut(newQuantity, stock) {
 }
 
 export function getQuantityChangeOfCartItem(itemElem) {
-  return parseInt(itemElem.dataset.change);
+  return Number.parseInt(itemElem.dataset.change);
 }

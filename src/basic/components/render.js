@@ -33,15 +33,14 @@ export function renderCartItems(updatedItems) {
   const cartItemsElem = document.getElementById("cart-items");
   const cartItemsChildren = Array.from(cartItemsElem.children);
 
-  const itemsToRemoveFromCart = cartItemsChildren.filter(
-    (child) => !updatedItems.some((item) => item.id === child.id),
-  );
-  itemsToRemoveFromCart.forEach((item) => cartItemsElem.removeChild(item));
+  const itemsToRemoveFromCart = cartItemsChildren.filter((child) => !updatedItems.some((item) => item.id === child.id));
 
-  updatedItems.forEach((updatedItem) => {
-    const itemIndex = cartItemsChildren.findIndex(
-      (child) => child.id === updatedItem.id,
-    );
+  for (const item of itemsToRemoveFromCart) {
+    cartItemsElem.removeChild(item);
+  }
+
+  for (const updatedItem of updatedItems) {
+    const itemIndex = cartItemsChildren.findIndex((child) => child.id === updatedItem.id);
 
     if (itemIndex === -1) {
       cartItemsElem.appendChild(
@@ -57,7 +56,7 @@ export function renderCartItems(updatedItems) {
 
     cartItemsChildren[itemIndex].querySelector("span").textContent =
       `${updatedItem.name} - ${updatedItem.price}원 x ${updatedItem.quantity}`;
-  });
+  }
 }
 
 export function renderBonusPoints(bonusPoints) {
@@ -72,18 +71,18 @@ export function renderBonusPoints(bonusPoints) {
     cartTotalElem.appendChild(pointsTagElem);
   }
 
-  pointsTagElem.textContent = "(포인트: " + bonusPoints + ")";
+  pointsTagElem.textContent = `(포인트: ${bonusPoints})`;
 }
 
 export function renderStockInfo() {
   let infoMsg = "";
 
-  PRODUCT_INVENTORY.forEach((item) => {
+  for (const item of PRODUCT_INVENTORY) {
     infoMsg += StockInfo({
       name: item.name,
       quantityLeft: item.stock,
     });
-  });
+  }
 
   const stockInfoElem = document.getElementById("stock-status");
   stockInfoElem.textContent = infoMsg;
@@ -93,7 +92,7 @@ export function renderProductInventory() {
   const productSelectElem = document.getElementById("product-select");
   productSelectElem.innerHTML = "";
 
-  PRODUCT_INVENTORY.forEach((item) => {
+  for (const item of PRODUCT_INVENTORY) {
     const selectItem = ProductSelectItem({
       id: item.id,
       name: item.name,
@@ -101,5 +100,5 @@ export function renderProductInventory() {
       quantity: item.stock,
     });
     productSelectElem.appendChild(selectItem);
-  });
+  }
 }

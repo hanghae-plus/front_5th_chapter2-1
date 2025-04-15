@@ -9,14 +9,14 @@ import {
 } from "../lib/utils/cartUtils";
 
 const actions = {
-  ADD_TO_CART: "ADD_TO_CART",
-  CHANGE_QUANTITY: "CHANGE_QUANTITY",
-  REMOVE_FROM_CART: "REMOVE_FROM_CART",
+  addToCart: "ADD_TO_CART",
+  changeQuantity: "CHANGE_QUANTITY",
+  removeFromCart: "REMOVE_FROM_CART",
 };
 
 export function cartReducer(state, action) {
   switch (action.type) {
-    case actions.ADD_TO_CART: {
+    case actions.addToCart: {
       const itemToAdd = PRODUCT_INVENTORY.find((p) => {
         return p.id === action.payload.value;
       });
@@ -49,7 +49,7 @@ export function cartReducer(state, action) {
       };
     }
 
-    case actions.CHANGE_QUANTITY: {
+    case actions.changeQuantity: {
       const selectedElem = action.payload;
       const selectedId = selectedElem.dataset.productId;
 
@@ -81,7 +81,7 @@ export function cartReducer(state, action) {
       };
     }
 
-    case actions.REMOVE_FROM_CART: {
+    case actions.removeFromCart: {
       const selectedElem = action.payload;
       const selectedId = selectedElem.dataset.productId;
 

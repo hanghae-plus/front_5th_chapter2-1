@@ -8,12 +8,10 @@ import Container from './components/Container';
 import ContentWrapper from './components/ContentWrapper';
 import Header from './components/Header';
 import Cart from './components/cart/Cart';
-import CartAddButton from './components/CartAddButton';
+import CartAddButton from './components/cartAddButton/CartAddButton';
 import ItemSelect from './components/itemSelect/ItemSelect';
 import CartTotal from './components/cartTotal/CartTotal';
 import StockStatus from './components/stockStatus/StockStatus';
-
-let lastSelectedItem;
 
 function appendDOM() {
   const $contentWrapper = ContentWrapper();
@@ -37,6 +35,7 @@ function main() {
 
   const itemStore = ItemStore.getInstance();
   const items = itemStore.getState().items;
+  const lastSelectedItem = itemStore.getState().lastSelectedItem;
 
   updateSelectOptions(items);
   renderCalcCart(items);
@@ -79,74 +78,6 @@ function main() {
 } // end of main()
 
 main();
-
-const $addButton = document.getElementById('add-to-cart');
-// 상품 추가 버튼 클릭 이벤트 리스너
-$addButton.addEventListener('click', function () {
-  const $itemSelect = document.getElementById('product-select');
-  const selectItemId = $itemSelect.value;
-
-  const itemStore = ItemStore.getInstance();
-  const items = itemStore.getState().items;
-  const selectedItem = itemStore.findItem(selectItemId);
-
-  // 상품이 선택되었고 재고가 있는 경우
-  if (selectedItem && selectedItem.quantity > 0) {
-    const $item = document.getElementById(selectedItem.id);
-
-    // 이미 장바구니에 있는 상품인지 확인
-    if ($item) {
-      const updatedQuantity =
-        parseInt($item.querySelector('span').textContent.split('x ')[1]) + 1;
-
-      // 재고가 충분한 경우 수량 증가
-      if (updatedQuantity <= selectedItem.quantity) {
-        $item.querySelector('span').textContent = textUtils.getCartItemSummary(
-          selectedItem.name,
-          selectedItem.price,
-          updatedQuantity,
-        );
-
-        itemStore.updateItemQuantity(selectedItem.id, -1);
-      } else {
-        alert(CONSTANTS.OUT_OF_STOCK_MESSAGE);
-      }
-    } else {
-      // 장바구니에 없는 상품인 경우
-      const $newItemsDiv = document.createElement('div');
-      $newItemsDiv.id = selectedItem.id;
-
-      // 상품을 장바구니에 추가
-      $newItemsDiv.className = 'flex justify-between items-center mb-2';
-      $newItemsDiv.innerHTML = `
-        <span>${selectedItem.name} - ${selectedItem.price}원 x 1</span>
-        <div>
-          <button 
-            class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
-            data-item-id="${selectedItem.id}"
-            data-change="-1"
-          >-</button>
-          <button 
-            class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
-            data-item-id="${selectedItem.id}"
-            data-change="1"
-          >+</button>
-          <button 
-            class="remove-item bg-red-500 text-white px-2 py-1 rounded"
-            data-item-id="${selectedItem.id}"
-          >삭제</button>
-        </div>
-      `;
-
-      const $cart = document.getElementById('cart-items');
-      $cart.appendChild($newItemsDiv);
-      itemStore.updateItemQuantity(selectedItem.id, -1);
-    }
-
-    renderCalcCart(items);
-    lastSelectedItem = selectItemId;
-  }
-});
 
 const $cart = document.getElementById('cart-items');
 // 장바구니에서 상품 수량을 변경하거나 삭제하는 이벤트 리스너

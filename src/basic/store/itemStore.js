@@ -13,6 +13,7 @@ export class ItemStore extends Store {
         { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
         { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
       ],
+      lastSelectedItem: null,
     };
   }
 
@@ -41,5 +42,11 @@ export class ItemStore extends Store {
       this.notify(this.getState());
     }
     return this.getState();
+  }
+
+  // 마지막으로 선택한 제품 set
+  setLastSelectedItem(itemId) {
+    this.state.lastSelectedItem = itemId;
+    this.notify(this.getState());
   }
 }

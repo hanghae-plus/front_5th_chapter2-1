@@ -203,11 +203,8 @@ function updateStockInfo() {
 main();
 
 addBtn.addEventListener("click", function () {
-  const selItem = sel.value;
-  const productList = productStore.getProductList();
-  const itemToAdd = productList.find(function (p) {
-    return p.id === selItem;
-  });
+  const selectedItemId = sel.value;
+  const itemToAdd = productStore.getProductItem(selectedItemId);
 
   if (itemToAdd && itemToAdd.q > 0) {
     const item = document.getElementById(itemToAdd.id);
@@ -245,7 +242,7 @@ addBtn.addEventListener("click", function () {
     }
 
     calcCart();
-    lastSel = selItem;
+    lastSel = selectedItemId;
   }
 });
 

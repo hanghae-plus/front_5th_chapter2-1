@@ -5,6 +5,10 @@ const productStore = (function () {
     return [...productList];
   }
 
+  function getProductItem(id) {
+    return productList.find((item) => item.id === id);
+  }
+
   function addProductItem(product) {
     productList.push(product);
   }
@@ -20,6 +24,7 @@ const productStore = (function () {
 
   return {
     getProductList,
+    getProductItem,
     addProductItem,
     updateProductItem,
   };

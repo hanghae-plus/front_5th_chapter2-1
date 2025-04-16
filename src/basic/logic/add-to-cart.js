@@ -1,5 +1,5 @@
 import { products } from "../data/products";
-import { createCartTemplate } from "../ui/create-cart-template";
+import { createCartItemElement } from "../ui/create-cart-element";
 import { calculateCart } from "./calculate-cart";
 
 /**
@@ -29,7 +29,7 @@ export const handleAddToCart = (lastSelectedRef) => {
         alert("재고가 부족합니다.");
       }
     } else {
-      const newItem = createCartTemplate(itemToAdd);
+      const newItem = createCartItemElement(itemToAdd);
       $cartDisplay.appendChild(newItem);
       itemToAdd.q--;
     }

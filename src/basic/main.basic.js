@@ -1,33 +1,30 @@
-
 import { handleAddToCart } from "./logic/add-to-cart";
 import { calculateCart } from "./logic/calculate-cart";
 import { handleCartItemAction } from "./logic/cart-item-action";
 import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale-timer";
-import { CartUiTemplate } from "./ui/cart-template";
+import { renderCartTemplate } from "./ui/cart-template";
 
-const lastSelectedRef = { current: null }; // 외부에서 선택값을 계속 업데이트함
-
+const lastSelectedRef = { current: null };
 
 function main() {
   //요소 생성
-  const $root = document.getElementById('app');
-  $root.innerHTML = CartUiTemplate();
+  const $root = document.getElementById("app");
+  $root.innerHTML = renderCartTemplate();
 
   //요소 찾기
-  const $addBtn = document.getElementById('add-to-cart');
-  const $cartDisplay =document.getElementById('cart-items');
+  const $addBtn = document.getElementById("add-to-cart");
+  const $cartDisplay = document.getElementById("cart-items");
 
   //이벤트 핸들러 등록
-  $addBtn?.addEventListener('click',() => handleAddToCart(lastSelectedRef) );
-  $cartDisplay?.addEventListener('click', handleCartItemAction);
+  $addBtn?.addEventListener("click", () => handleAddToCart(lastSelectedRef));
+  $cartDisplay?.addEventListener("click", handleCartItemAction);
 
   //계산 함수
   calculateCart();
-  
+
   // saleTimer함수
   startLuckySaleTimer();
   startLastSaleTimer(() => lastSelectedRef.current); // 최신 상태를 항상 가져오도록 전달
-};
+}
 
 main();
-

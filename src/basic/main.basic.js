@@ -26,11 +26,25 @@ const PRODUCTS_BY_ID = {
 function main() {
   const root = document.getElementById('app');
 
-  const container = document.createElement('div');
-  container.className = 'bg-gray-100 p-8';
+  const template = () => /* html */ `
+    <div id="container" class="bg-gray-100 p-8">
+      <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
+        <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
+        <div id="carts"></div>
+        <div id="cart-total" class="text-xl font-bold my-4">
+        </div>
+        <div id="products-select-box" class="border rounded p-2 mr-2"></div>
+        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
+        <div id="stock-state" class="text-sm text-gray-500 mt-2">
+      </div>
+    </div>
+  `;
 
-  const wrapper = document.createElement('div');
-  wrapper.className =
+  const $container = document.createElement('div');
+  $container.className = 'bg-gray-100 p-8';
+
+  const $wrapper = document.createElement('div');
+  $wrapper.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
 
   const $title = document.createElement('h1');
@@ -39,7 +53,7 @@ function main() {
 
   /** 장바구니 목록 ui */
   const $cartsWrapper = document.createElement('div');
-  $cartsWrapper.id = 'cart-items';
+  $cartsWrapper.id = 'cart-items'; // carts 변경
 
   /** 장바구니에 담은 상품 총 가격 ui */
   const $totalPriceWrapper = document.createElement('div');
@@ -48,31 +62,31 @@ function main() {
 
   /** select-box ui */
   const $selectBox = document.createElement('select');
-  $selectBox.id = 'product-select';
+  $selectBox.id = 'product-select'; // products-select-box 변경
   $selectBox.className = 'border rounded p-2 mr-2';
 
   /** 장바구니 추가 버튼 */
   const $addCartBtn = document.createElement('button');
-  $addCartBtn.id = 'add-to-cart';
+  $addCartBtn.id = 'add-to-cart'; // add-cart-btn 변경
   $addCartBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   $addCartBtn.textContent = '추가';
 
   /** 재고 현황 ui */
   const $stocksWrapper = document.createElement('div');
-  $stocksWrapper.id = 'stock-status';
+  $stocksWrapper.id = 'stock-status'; // stock-state 변경
   $stocksWrapper.className = 'text-sm text-gray-500 mt-2';
 
-  updateSelOpts();
+  Options();
 
   // ui
-  wrapper.appendChild($title);
-  wrapper.appendChild($cartsWrapper);
-  wrapper.appendChild(sum);
-  wrapper.appendChild(sel);
-  wrapper.appendChild($addCartBtn);
-  wrapper.appendChild(stocksWraper);
-  container.appendChild(wrapper);
-  root.appendChild(container);
+  $wrapper.appendChild($title);
+  $wrapper.appendChild($cartsWrapper);
+  $wrapper.appendChild($totalPriceWrapper);
+  $wrapper.appendChild($selectBox);
+  $wrapper.appendChild($addCartBtn);
+  $wrapper.appendChild($stocksWrapper);
+  $container.appendChild($wrapper);
+  root.appendChild($container);
 
   calcCart();
 
@@ -86,7 +100,7 @@ function main() {
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
 
         // 특가 적용된 select-option으로 변경
-        updateSelOpts();
+        Options();
       }
     }, 30000);
   }, Math.random() * 10000);
@@ -104,7 +118,7 @@ function main() {
 
           // alert 띄운 상품의 select-option에 가격(=val) 수정
           suggest.val = Math.round(suggest.val * 0.95);
-          updateSelOpts();
+          Options();
         }
       }
     }, 60000);
@@ -112,7 +126,7 @@ function main() {
 }
 
 /** option태그 업데이트 함수 */
-function updateSelOpts() {
+function Options() {
   $selectBox.innerHTML = '';
   PRODUCTS.forEach(function (item) {
     const opt = document.createElement('option');

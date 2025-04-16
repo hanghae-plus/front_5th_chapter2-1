@@ -1,10 +1,7 @@
-
-
-
 const BULK_DISCOUNT_THRESHOLD = 30;
 const BULK_DISCOUNT_RATE = 0.25;
 
-const TUESDAY = 2; 
+const TUESDAY = 2;
 const TUESDAY_DISCOUNT_RATE = 0.1;
 
 /**
@@ -17,14 +14,14 @@ const TUESDAY_DISCOUNT_RATE = 0.1;
  * @returns {{ discountRate: number }} - 최종 할인율
  */
 
-export const calculateDiscount = (itemCount,finalTotal,originalTotal) => {
+export const calculateDiscount = (itemCount, finalTotal, originalTotal) => {
   let discountRate = 0;
 
-  if(itemCount >= BULK_DISCOUNT_THRESHOLD){
+  if (itemCount >= BULK_DISCOUNT_THRESHOLD) {
     const bulkDiscount = finalTotal * BULK_DISCOUNT_RATE;
     const itemDiscount = originalTotal - finalTotal;
 
-    if(bulkDiscount > itemDiscount){
+    if (bulkDiscount > itemDiscount) {
       finalTotal = originalTotal * (1 - BULK_DISCOUNT_RATE);
       discountRate = BULK_DISCOUNT_RATE;
     } else {
@@ -34,12 +31,10 @@ export const calculateDiscount = (itemCount,finalTotal,originalTotal) => {
     discountRate = (originalTotal - finalTotal) / originalTotal;
   }
 
-  if(new Date().getDay() === TUESDAY) {
-    finalTotal *= (1 - TUESDAY_DISCOUNT_RATE);
+  if (new Date().getDay() === TUESDAY) {
+    finalTotal *= 1 - TUESDAY_DISCOUNT_RATE;
     discountRate = Math.max(discountRate, TUESDAY_DISCOUNT_RATE);
   }
-  
 
-return { discountRate }
-
-}
+  return { discountRate };
+};

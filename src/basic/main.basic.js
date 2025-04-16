@@ -5,7 +5,7 @@ import { handleCartItemAction } from "./logic/cart-item-action";
 import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale-timer";
 import { CartUiTemplate } from "./ui/cart-template";
 
-const lastSaleRef = { current: null }; // 외부에서 선택값을 계속 업데이트함
+const lastSelectedRef = { current: null }; // 외부에서 선택값을 계속 업데이트함
 
 
 function main() {
@@ -18,7 +18,7 @@ function main() {
   const $cartDisplay =document.getElementById('cart-items');
 
   //이벤트 핸들러 등록
-  $addBtn?.addEventListener('click',() => handleAddToCart(lastSaleRef) );
+  $addBtn?.addEventListener('click',() => handleAddToCart(lastSelectedRef) );
   $cartDisplay?.addEventListener('click', handleCartItemAction);
 
   //계산 함수
@@ -26,7 +26,7 @@ function main() {
   
   // saleTimer함수
   startLuckySaleTimer();
-  startLastSaleTimer(() => lastSaleRef.current); // 최신 상태를 항상 가져오도록 전달
+  startLastSaleTimer(() => lastSelectedRef.current); // 최신 상태를 항상 가져오도록 전달
 };
 
 main();

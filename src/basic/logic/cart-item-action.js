@@ -1,4 +1,3 @@
-
 import { products } from "../data/products";
 import { calculateCart } from "./calculate-cart";
 
@@ -9,39 +8,37 @@ import { calculateCart } from "./calculate-cart";
  */
 
 export const handleCartItemAction = (event) => {
-
   const target = event.target;
-  const isQuantityChangeBtn = target.classList.contains('quantity-change');
-  const isRemoveBtn = target.classList.contains('remove-item');
+  const isQuantityChangeBtn = target.classList.contains("quantity-change");
+  const isRemoveBtn = target.classList.contains("remove-item");
 
   if (!isQuantityChangeBtn && !isRemoveBtn) return;
 
-    const productId = target.dataset.productId;
-    const itemElem = document.getElementById(productId);
-    const product = products.find((p) => p.id === productId);
+  const productId = target.dataset.productId;
+  const itemElem = document.getElementById(productId);
+  const product = products.find((p) => p.id === productId);
 
-    const quantityText = itemElem.querySelector('span').textContent;
-    const currentQuantity = parseInt(quantityText.split('x ')[1]);
+  const quantityText = itemElem.querySelector("span").textContent;
+  const currentQuantity = parseInt(quantityText.split("x ")[1]);
 
-    if (isQuantityChangeBtn) {
-      const quantityChange = parseInt(target.dataset.change);
-      const newQuantity = currentQuantity + quantityChange;
+  if (isQuantityChangeBtn) {
+    const quantityChange = parseInt(target.dataset.change);
+    const newQuantity = currentQuantity + quantityChange;
 
-      if (newQuantity > 0 && newQuantity <= product.q + currentQuantity) {
-        itemElem.querySelector('span').textContent = quantityText.split('x ')[0] + 'x ' + newQuantity;
-        product.q -= quantityChange;
-      } else if (newQuantity <= 0) {
-        itemElem.remove();
-        product.q -= quantityChange;
-      } else {
-        alert("재고가 부족합니다.");
-      }
-    }
-
-    if(isRemoveBtn) {
-      product.q += currentQuantity;
+    if (newQuantity > 0 && newQuantity <= product.q + currentQuantity) {
+      itemElem.querySelector("span").textContent = quantityText.split("x ")[0] + "x " + newQuantity;
+      product.q -= quantityChange;
+    } else if (newQuantity <= 0) {
       itemElem.remove();
+      product.q -= quantityChange;
+    } else {
+      alert("재고가 부족합니다.");
     }
-    calculateCart();
-  
   }
+
+  if (isRemoveBtn) {
+    product.q += currentQuantity;
+    itemElem.remove();
+  }
+  calculateCart();
+};

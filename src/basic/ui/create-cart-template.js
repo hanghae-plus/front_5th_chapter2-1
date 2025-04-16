@@ -8,7 +8,7 @@
  * @returns {HTMLElement} 생성된 장바구니 항목 DOM 요소
  */
 
-export const createCartTemplate= (itemToAdd) => {
+export const createCartTemplate = (itemToAdd) => {
   const $newItem = document.createElement("div");
   $newItem.id = itemToAdd.id;
   $newItem.className = "flex justify-between items-center mb-2";
@@ -25,5 +25,5 @@ export const createCartTemplate= (itemToAdd) => {
     </div>
   `.trim();
 
-  return $newItem ;
+  return $newItem;
 };

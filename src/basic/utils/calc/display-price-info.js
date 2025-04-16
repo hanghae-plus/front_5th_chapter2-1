@@ -6,13 +6,12 @@
  * @param {number} discountRate - 할인율 (예: 0.15 = 15%)
  */
 
-export function displayPriceInfo (sum,finalTotal,discountRate) {
-
+export function displayPriceInfo(sum, finalTotal, discountRate) {
   const baseText = `총액: ${Math.round(finalTotal)}원`;
 
   if (discountRate > 0) {
     const discountHTML = `<span class="text-green-500 ml-2">(${(discountRate * 100).toFixed(1)}% 할인 적용)</span>`;
-    sum.innerHTML = baseText + ' ' + discountHTML;
+    sum.innerHTML = baseText + " " + discountHTML;
   } else {
     sum.innerHTML = baseText;
   }

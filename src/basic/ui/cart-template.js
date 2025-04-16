@@ -2,7 +2,6 @@ import { renderProductOptions } from "../utils/render-product-options";
 
 /** 장바구니 UI의 HTML 문자열 템플릿을 반환하는 함수 */
 export function CartUiTemplate() {
-
   return `
     <div class="bg-gray-100 p-8">
       <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
@@ -18,4 +17,3 @@ export function CartUiTemplate() {
     </div>
   `;
 }
-

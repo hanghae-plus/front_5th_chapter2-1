@@ -1,6 +1,5 @@
 import { products } from "../../data/products";
 
-
 const MIN_DISCOUNT_QUANTITY = 10;
 const DISCOUNT_MAP = {
   p1: 0.1,
@@ -20,11 +19,11 @@ const DISCOUNT_MAP = {
 
 const getDiscountRate = (currentItemId, quantity) => {
   if (quantity < MIN_DISCOUNT_QUANTITY) {
-    return  0;
+    return 0;
   }
 
   return DISCOUNT_MAP[currentItemId] || 0;
-}
+};
 
 /**
  * 주어진 ID에 해당하는 상품 정보를 products 배열에서 찾아 반환
@@ -35,8 +34,8 @@ const getDiscountRate = (currentItemId, quantity) => {
  */
 
 const findProductById = (id, products) => {
-  return products.find(product => product.id === id);
-}
+  return products.find((product) => product.id === id);
+};
 
 /**
  * 장바구니 항목과 전체 상품 목록을 기반으로 총 금액, 수량, 할인 적용 금액을 계산
@@ -49,7 +48,7 @@ export const calculateCartTotals = () => {
   let itemCount = 0;
   let finalTotal = 0;
 
-  const $cartDisplay = document.getElementById('cart-items');
+  const $cartDisplay = document.getElementById("cart-items");
   const cartItems = $cartDisplay.children;
 
   for (let i = 0; i < cartItems.length; i++) {
@@ -58,7 +57,7 @@ export const calculateCartTotals = () => {
     const currentItem = findProductById(cartItem.id, products);
     if (!currentItem) continue;
 
-    const quantity = parseInt(cartItem.querySelector('span').textContent.split('x ')[1]);
+    const quantity = parseInt(cartItem.querySelector("span").textContent.split("x ")[1]);
     const itemTotal = currentItem.val * quantity;
     const discountRate = getDiscountRate(currentItem.id, quantity);
 
@@ -68,4 +67,4 @@ export const calculateCartTotals = () => {
   }
 
   return { originalTotal, itemCount, finalTotal };
-}
+};

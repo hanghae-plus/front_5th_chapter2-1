@@ -1,3 +1,5 @@
+import { productList } from "../stores/store";
+
 // setTimeout 추가
 function makeSetTimeout(func, delay) {
   return setTimeout(() => func, delay);
@@ -39,4 +41,9 @@ function additionalSale(lastSelectedProductId, productList) {
   );
 }
 
-export { flashSale, additionalSale };
+function setAllSale(lastSelectedProductId) {
+  flashSale(productList);
+  additionalSale(lastSelectedProductId, productList);
+}
+
+export { setAllSale };

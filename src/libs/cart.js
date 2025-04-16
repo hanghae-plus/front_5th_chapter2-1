@@ -108,9 +108,8 @@ function getBulkDiscountRate(quantity, discountedPrice, price) {
     discountRate = caculateBulkDiscountRate(quantity, discountedPrice, price);
   }
 
-  // 특정요일 할인 check
+  // 특정요일 할인 check 후 할인율 적용
   discountRate = calculateDayDiscountRate(discountedPrice, discountRate);
-
   return discountRate;
 }
 
@@ -186,14 +185,7 @@ function renderBonusPts($discountedPrice, discountedPrice) {
 }
 
 function getDiscountRate(productId) {
-  let discount = 0;
-  if (productId === "p1") discount = DISCOUNT_RATE.p1;
-  else if (productId === "p2") discount = DISCOUNT_RATE.p2;
-  else if (productId === "p3") discount = DISCOUNT_RATE.p3;
-  else if (productId === "p4") discount = DISCOUNT_RATE.p4;
-  else if (productId === "p5") discount = DISCOUNT_RATE.p5;
-
-  return discount;
+  return DISCOUNT_RATE[productId] || 0;
 }
 
 export { calculateCart, addNewProductToCart, addProductToCart };

@@ -13,6 +13,7 @@ import createCartItem from "./CartItem";
 import renderStockInfo from "./StockInfo";
 import renderTotal from "./TotalDisplay";
 
+// 장바구니 화면을 업데이트하는 함수
 export const updateCartDisplay = (elements, store) => {
   const cartResult = calculateCart(
     Array.from(elements.cartDisplay.children),
@@ -21,6 +22,8 @@ export const updateCartDisplay = (elements, store) => {
   renderTotal(cartResult.total, elements.total, cartResult.discountRate);
   renderStockInfo(elements.stockInfo, store.getState().products);
 };
+
+// 상품 추가 버튼 클릭 시 발생하는 이벤트를 설정하는 함수
 export const setupAddButtonEvent = (elements, store) => {
   elements.addButton.addEventListener("click", () => {
     const state = store.getState();
@@ -49,6 +52,8 @@ export const setupAddButtonEvent = (elements, store) => {
     updateCartDisplay(elements, store);
   });
 };
+
+// 장바구니 버튼 클릭 시 발생하는 이벤트를 설정하는 함수 (삭제, 수량 변경)
 export const setupCartButtonEvents = (elements, store) => {
   elements.cartDisplay.addEventListener("click", (event) => {
     const button = event.target;

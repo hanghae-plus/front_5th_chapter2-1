@@ -11,7 +11,3 @@ export const updateQuantityText = (element, product, quantity) => {
   span.dataset.quantity = quantity;
   span.textContent = `${product.name} - ${formatPrice(product.value)} x ${quantity}`;
 };
-
-export const alertOutOfStock = () => {
-  alert('재고가 부족합니다.');
-};

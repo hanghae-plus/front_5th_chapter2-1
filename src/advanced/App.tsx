@@ -1,12 +1,14 @@
-import React from 'react';
+import { useEffect } from 'react';
 import Title from './components/Title';
 import Cart from './components/Cart';
 import CartTotal from './components/CartTotal';
 import ItemSelect from './components/ItemSelect';
 import AddCartButton from './components/AddCartButton';
 import Stock from './components/Stock';
+import useAlert from './hooks/useAlert';
 
 const App = () => {
+  useAlert();
   return (
     <>
       <div className="bg-gray-100 p-8">

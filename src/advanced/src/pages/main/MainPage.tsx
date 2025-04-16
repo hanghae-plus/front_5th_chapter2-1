@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import BasicLayout from "#advanced/components/layouts/basic/BasicLayout";
 
@@ -41,13 +41,15 @@ const MainPage: React.FC = () => {
     );
   }, []);
 
+  const emptyProducts = useMemo(() => products.filter((p) => p.stock === 0), [products]);
+
   return (
     <BasicLayout className="flex items-center justify-center">
       <article className="flex w-full max-w-5xl min-w-xl flex-col gap-4 rounded-xl bg-white p-8 shadow-md">
         <CartHeader />
         <ProductSelectForm products={products} handleAddCart={handleAddCart} />
         <CartTable cart={cart} handleRemoveProduct={handleRemoveProduct} handleRemoveCart={handleRemoveCart} />
-        <ShoppingHelp />
+        <ShoppingHelp emptyProducts={emptyProducts} />
       </article>
     </BasicLayout>
   );

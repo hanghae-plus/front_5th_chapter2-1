@@ -1,6 +1,7 @@
 import React from "react";
 
 import type { ICart, IProduct } from "#advanced/pages/main/_types";
+import { cn } from "#advanced/libs";
 
 interface IProps {
   cart: ICart[];
@@ -15,7 +16,7 @@ const CartTable: React.FC<IProps> = ({ cart, handleRemoveProduct, handleRemoveCa
   };
 
   return (
-    <section className="my-4 mb-10">
+    <section className={cn("my-4 -mb-2", cart.length === 0 && "mb-10")}>
       <div className="max-h-[600px] overflow-y-auto">
         <table className="w-full divide-y divide-gray-200">
           <thead className="sticky top-0 z-10 bg-gray-50">
@@ -29,7 +30,7 @@ const CartTable: React.FC<IProps> = ({ cart, handleRemoveProduct, handleRemoveCa
           </thead>
           <tbody className="divide-y divide-gray-200 bg-white">
             {cart.map((product, index) => (
-              <tr key={product.id} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+              <tr key={product.id} className="bg-white">
                 <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900">{product.name}</td>
                 <td className="px-6 py-4 text-right text-sm whitespace-nowrap text-gray-500">
                   {product.price.toLocaleString()}원

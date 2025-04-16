@@ -17,7 +17,6 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "#basic/*": ["./src/basic/*"],
       "#advanced/*": ["./src/advanced/*"]
     }
   },

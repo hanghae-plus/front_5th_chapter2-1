@@ -1,6 +1,5 @@
-import { createElement } from '../../../core/dom';
 import { calculateLoyaltyPoints } from '../utils';
-
+import { createElement } from '../../../core/dom';
 /**
  * 포인트 렌더링
  */

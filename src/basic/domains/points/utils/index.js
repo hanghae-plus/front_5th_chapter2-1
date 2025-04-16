@@ -1,1 +1,1 @@
-export * from './point-calculator';
+export * from './point-calculate';

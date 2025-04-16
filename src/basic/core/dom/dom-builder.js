@@ -1,7 +1,7 @@
 /**
  * 요소 생성 및 속성 추가
  * @param {string} tag 요소 태그 이름
- * @param {Object} properties 요소 속성
+ * @param {Object} properties 요소 속성 object
  * @returns {Element} 요소
  */
 const createElement = (tag, properties = {}) => {

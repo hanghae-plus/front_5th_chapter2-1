@@ -8,10 +8,8 @@ export const renderCartItems = () => {
 
   const cartElement = document.getElementById("cart-items");
 
-  console.log(cartItems, "cart");
-
   if (!cartElement) return;
-  console.log(products, "pr");
+
   cartElement.innerHTML = "";
 
   Object.entries(cartItems).forEach(([productId, quantity]) => {

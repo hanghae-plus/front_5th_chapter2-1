@@ -20,7 +20,7 @@ const handleAddCart = () => {
     let item = document.getElementById(selectedItem.id);
     item ? updateCartItem(item, selectedItem) : createCartItem(selectedItem, $cart);
 
-    updateCart(); //장바구니 계산
+    updateCart();
     updateRecentSelectedId(selectedItemId);
   });
 };

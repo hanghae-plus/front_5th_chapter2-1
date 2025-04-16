@@ -5,7 +5,6 @@ import $cartTotal from '../components/CartTotal';
 import updateStockState from './updateStockState';
 import updatePoint from './updatePoint';
 
-//FIXME: code refactoring 필요
 const updateCart = () => {
   let totalPrice = new TotalPrice();
   let itemCount = 0;

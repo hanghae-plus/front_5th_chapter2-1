@@ -5,7 +5,7 @@ import ITEMS from '../constants/items';
 const updateStockState = () => {
   let stockState = '';
 
-  ITEMS.forEach(function (item) {
+  ITEMS.forEach((item) => {
     if (item.stock < 5) {
       stockState +=
         item.name +

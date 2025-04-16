@@ -1,4 +1,4 @@
-import type { GlobalState } from "../../state/globalState";
+import type { GlobalState } from "../../types";
 
 interface TotalPriceProps {
   target: HTMLElement;
@@ -11,6 +11,14 @@ export function TotalPrice({ target, initialState }: TotalPriceProps) {
   this.element.className = "text-xl font-bold my-4";
 
   this.state = initialState;
+
+  this.setState = (newState: GlobalState) => {
+    const isChanged = JSON.stringify(this.state) !== JSON.stringify(newState);
+    if (isChanged) {
+      this.state = newState;
+      this.render();
+    }
+  };
 
   target.appendChild(this.element);
 

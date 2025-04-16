@@ -1,5 +1,8 @@
 import { globalState } from "../state/globalState";
+import type { GlobalState } from "../types";
+import { handleAddButtonClick } from "../utils";
 import { TotalPrice } from "./cart";
+import { ProductSelector } from "./cart";
 import { Header } from "./common";
 
 export function App() {
@@ -8,6 +11,14 @@ export function App() {
   const wrapper = document.createElement("div");
 
   this.state = globalState;
+  this.setState = (newState: GlobalState) => {
+    const isChanged = JSON.stringify(this.state) !== JSON.stringify(newState);
+    if (isChanged) {
+      this.state = newState;
+    }
+    totalPrice.setState(this.state);
+    productSelector.setState(this.state);
+  };
 
   this.init = () => {
     container.className = "bg-gray-100 p-8";
@@ -17,8 +28,20 @@ export function App() {
   };
 
   new Header({ target: wrapper });
-  new TotalPrice({ target: wrapper, initialState: this.state });
-  console.log("hihi2");
+  const totalPrice = new TotalPrice({ target: wrapper, initialState: this.state });
+  const productSelector = new ProductSelector({
+    target: wrapper,
+    initialState: this.state,
+    handleButtonClick: (selectedProductId: string) => {
+      const { updatedProductList, updatedCartList, newTotal } = handleAddButtonClick(selectedProductId, this.state);
+
+      this.setState({
+        productList: updatedProductList,
+        cartList: updatedCartList,
+        totalPrice: newTotal,
+      });
+    },
+  });
 
   this.init();
 }

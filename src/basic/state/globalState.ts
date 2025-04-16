@@ -1,9 +1,4 @@
-export interface GlobalState {
-  productList: { id: string; name: string; price: number; count: number }[];
-  cartList: { id: string; name: string; price: number; count: number }[];
-  totalPrice: number;
-  totalDiscountRate: number;
-}
+import type { GlobalState } from "../types";
 
 export const globalState: GlobalState = {
   productList: [

@@ -1,16 +1,16 @@
 
-import { calculateCart } from "./logic/calculateCart";
-import { startLastSaleTimer, startLuckySaleTimer, updateSelOpts } from "./logic/sale";
-import { makeUI } from "./ui/makeUI";
+import { calculateCart } from "./logic/calculate-cart";
+import { startLastSaleTimer, startLuckySaleTimer, updateSelectOptions } from "./logic/sale";
+import { makeUI } from "./ui/make-ui";
 
-var lastSel;
+let lastSale = null; // 외부에서 선택값을 계속 업데이트함
 
 
 function main() {
   //요소 생성
-  let lastSale = null; // 외부에서 선택값을 계속 업데이트함
+
   const {select} = makeUI(); 
-  updateSelOpts(select);
+  updateSelectOptions(select);
 
   //계산 함수
   calculateCart();
@@ -23,8 +23,10 @@ function main() {
 main();
 
 addBtn.addEventListener('click', function () {
-  var selItem=sel.value;
-  var itemToAdd=prodList.find(function (p) { return p.id === selItem; });
+  const {select} = makeUI(); 
+  const selectedItem=sel.value;
+  var itemToAdd=prodList.find(function (p) { return p.id === selectedItem; });
+
   if(itemToAdd && itemToAdd.q > 0) {
     var item=document.getElementById(itemToAdd.id);
     if(item) {

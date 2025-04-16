@@ -1,5 +1,5 @@
 
-export function calculateDiscount(itemCount,totalAmount,subTotal) {
+export const calculateDiscount = (itemCount,totalAmount,subTotal) => {
   let discountRate = 0;
 
   if(itemCount >= 30){

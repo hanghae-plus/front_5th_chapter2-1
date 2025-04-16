@@ -2,9 +2,10 @@
 import { TAGS } from "../../constant/tags";
 import { createElement } from "../utils/createElement";
 
-export const makeUI = () =>{
+export const makeUI = () => {
     // 요소 생성하기
-    const root=document.getElementById(TAGS.APP);
+    const $root = document.getElementById('app');
+
 
     const cont = createElement(TAGS.DIV,{
       className:'bg-gray-100 p-8'
@@ -48,7 +49,7 @@ export const makeUI = () =>{
     elements.forEach(child => wrap.appendChild(child));
 
     cont.appendChild(wrap);
-    root.appendChild(cont);
+    $root.appendChild(cont);
 
   return {
     select,

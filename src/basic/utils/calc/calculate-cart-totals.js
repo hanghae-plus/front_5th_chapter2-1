@@ -1,10 +1,10 @@
 
-function findProductById(id, productList) {
+const findProductById = (id, productList) => {
   return productList.find(product => product.id === id);
 }
 
 
-function getDiscountRate(currentItemId, quantity) {
+const getDiscountRate = (currentItemId, quantity) => {
   if (quantity < 10) return 0;
 
   const discountMap = {
@@ -19,7 +19,7 @@ function getDiscountRate(currentItemId, quantity) {
 }
 
 
-export function calculateCartTotals(cartItems, prodList) {
+export const calculateCartTotals = (cartItems, prodList) => {
   let subTotal = 0;
   let itemCount = 0;
   let totalAmount = 0;

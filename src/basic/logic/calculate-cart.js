@@ -1,11 +1,11 @@
 
 import { prodList } from "../data/product";
-import { makeUI } from "../ui/makeUI";
+import { makeUI } from "../ui/make-ui";
 import { calculateCartTotals, calculateDiscount, displayPriceInfo } from "../utils/calc";
 
 
 
-const renderBonusPoints=(totalAmount,sum) => {
+const renderBonusPoints = (totalAmount,sum) => {
   const bonusPoints = Math.floor(totalAmount / 1000);
   let pointsTag = document.getElementById('loyalty-points');
 
@@ -20,7 +20,7 @@ const renderBonusPoints=(totalAmount,sum) => {
 };
 
 
-function updateStockInfo(stockInfo) {
+const updateStockInfo = (stockInfo) => {
   let infoMsg = '';
 
   prodList.forEach(function (item) {

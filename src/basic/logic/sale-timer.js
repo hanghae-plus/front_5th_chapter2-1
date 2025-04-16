@@ -44,11 +44,11 @@ const startLastSaleTimer =(getLastSale) =>{
 
         const lastSale = getLastSale(); 
         if(lastSale) {
-          const suggest=products.find(function (item) { return item.id !== lastSel && item.q > 0; });
-          
+          const suggest = products.find( (item) => item.id !== lastSel && item.q > 0);
+
           if(suggest) {
             alert(suggest.name + '은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!');
-            suggest.val=Math.round(suggest.val * SALE_CONFIG.LAST_SALE_DISCOUNT);
+            suggest.val = Math.round(suggest.val * SALE_CONFIG.LAST_SALE_DISCOUNT);
 
             updateSelectOptions();
           }

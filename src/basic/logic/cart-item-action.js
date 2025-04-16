@@ -8,27 +8,26 @@ import { calculateCart } from "./calculate-cart";
  * @param {MouseEvent} event
  */
 
-
 export const handleCartItemAction = (event) => {
 
   const target = event.target;
   const isQuantityChangeBtn = target.classList.contains('quantity-change');
   const isRemoveBtn = target.classList.contains('remove-item');
 
-  if ( isQuantityChangeBtn || isRemoveBtn ) {
-  
+  if (!isQuantityChangeBtn && !isRemoveBtn) return;
+
     const productId = target.dataset.productId;
     const itemElem = document.getElementById(productId);
     const product = products.find((p) => p.id === productId);
 
     const quantityText = itemElem.querySelector('span').textContent;
-    const currentQty = parseInt(quantityText.split('x ')[1]);
+    const currentQuantity = parseInt(quantityText.split('x ')[1]);
 
     if (isQuantityChangeBtn) {
       const quantityChange = parseInt(target.dataset.change);
-      const newQuantity = currentQty + quantityChange;
+      const newQuantity = currentQuantity + quantityChange;
 
-      if (newQuantity > 0 && newQuantity <= product.q + currentQty) {
+      if (newQuantity > 0 && newQuantity <= product.q + currentQuantity) {
         itemElem.querySelector('span').textContent = quantityText.split('x ')[0] + 'x ' + newQuantity;
         product.q -= quantityChange;
       } else if (newQuantity <= 0) {
@@ -40,9 +39,9 @@ export const handleCartItemAction = (event) => {
     }
 
     if(isRemoveBtn) {
-      product.q += currentQty;
+      product.q += currentQuantity;
       itemElem.remove();
     }
     calculateCart();
-  }
+  
   }

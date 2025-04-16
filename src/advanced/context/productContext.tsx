@@ -3,17 +3,17 @@ import { createContext, useContext, useState } from "react";
 import type { ProductState } from "./types";
 
 interface ProductContextType {
-  selectedProduct: ProductState["selectedProduct"];
-  setSelectedProduct: React.Dispatch<React.SetStateAction<ProductState["selectedProduct"]>>;
+  selectedProductId: ProductState["selectedProductId"];
+  setSelectedProductId: React.Dispatch<React.SetStateAction<ProductState["selectedProductId"]>>;
 }
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedProduct, setSelectedProduct] = useState<ProductState["selectedProduct"]>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   return (
-    <ProductContext.Provider value={{ selectedProduct, setSelectedProduct }}>
+    <ProductContext.Provider value={{ selectedProductId, setSelectedProductId }}>
       {children}
     </ProductContext.Provider>
   );

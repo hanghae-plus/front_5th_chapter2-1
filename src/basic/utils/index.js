@@ -1,3 +1,4 @@
 export * from './dom';
-export * from './calculation';
+export * from './format';
 export * from './cart';
+export * from './calculate';

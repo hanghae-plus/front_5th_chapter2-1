@@ -1,10 +1,10 @@
-import { formatPrice } from './calculation';
+import { formatPrice } from './format';
 
 export const getCartItemElement = (cartItemId) =>
   document.getElementById(cartItemId);
 
 export const getQuantityFromElement = (element) =>
-  parseInt(element.querySelector('span').dataset.quantity, 10);
+  Number.parseInt(element.querySelector('span').dataset.quantity, 10);
 
 export const updateQuantityText = (element, product, quantity) => {
   const span = element.querySelector('span');

@@ -20,7 +20,10 @@ import {
     startProductSuggestionTimer,
 } from "./service/promotion.js";
 
-import { setupAddButtonHandler } from "./events/cartEvent.js";
+import {
+    setupAddButtonHandler,
+    setupCartItemEvents,
+} from "./events/cartEvent.js";
 
 import {
     buildLayout,
@@ -75,7 +78,7 @@ function main() {
         updateSelectOptions(productList, selectProductEl)
     );
 
-    // 이벤트 핸들러 설정
+    // 추가 버튼 이벤트 핸들러 설정
     setupAddButtonHandler(
         addBtn,
         cartDisplayEl,
@@ -86,6 +89,8 @@ function main() {
             lastSel = value;
         }
     );
+    // 장바구니 Item 클릭 리스너
+    setupCartItemEvents(cartDisplayEl, productList, calcCart);
 }
 
 // 기존 함수 제거 후 이렇게 호출
@@ -253,58 +258,3 @@ function calcCart() {
 }
 
 main();
-
-cartDisplayEl.addEventListener("click", function (event) {
-    console.log("cartDisplayEl");
-
-    var tgt = event.target;
-    console.log("tgt: ", tgt);
-
-    // quantity-change: - + class
-    // remove-item: 삭제 class
-    if (
-        tgt.classList.contains("quantity-change") ||
-        tgt.classList.contains("remove-item")
-    ) {
-        var prodId = tgt.dataset.productId;
-        var itemElem = document.getElementById(prodId);
-        var prod = productList.find(function (p) {
-            return p.id === prodId;
-        });
-        if (tgt.classList.contains("quantity-change")) {
-            var qtyChange = parseInt(tgt.dataset.change);
-            var newQty =
-                parseInt(
-                    itemElem.querySelector("span").textContent.split("x ")[1]
-                ) + qtyChange;
-            if (
-                newQty > 0 &&
-                newQty <=
-                    prod.q +
-                        parseInt(
-                            itemElem
-                                .querySelector("span")
-                                .textContent.split("x ")[1]
-                        )
-            ) {
-                itemElem.querySelector("span").textContent =
-                    itemElem.querySelector("span").textContent.split("x ")[0] +
-                    "x " +
-                    newQty;
-                prod.q -= qtyChange;
-            } else if (newQty <= 0) {
-                itemElem.remove();
-                prod.q -= qtyChange;
-            } else {
-                alert("재고가 부족합니다.");
-            }
-        } else if (tgt.classList.contains("remove-item")) {
-            var remQty = parseInt(
-                itemElem.querySelector("span").textContent.split("x ")[1]
-            );
-            prod.q += remQty;
-            itemElem.remove();
-        }
-        calcCart();
-    }
-});

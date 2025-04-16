@@ -78,9 +78,11 @@ export function renderStockInfo() {
   let infoMsg = "";
 
   for (const item of PRODUCT_INVENTORY) {
+    const cartItem = cartStore.getState().addedItems.find((cartItem) => cartItem.id === item.id);
+
     infoMsg += StockInfo({
       name: item.name,
-      quantityLeft: item.stock,
+      quantityLeft: item.stock - cartItem.quantity,
     });
   }
 

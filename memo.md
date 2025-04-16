@@ -278,3 +278,20 @@ export default App;
 - 우선 상태 관리 로직을 먼저 변경하자.
 - state + props 방식을 사용할까? vs context api 방식을 사용할까? vs 전역 상태 관리 라이브러리 사용할까?
 - 기존 구조와 가장 닮아있는 context api 방식으로 진행
+
+#### 순수함수 ts 래핑
+
+- 계산, alert, 포맷팅 등 외부 DOM을 건드리지 않고, 순수함수로 구성된 코드들 ts로 래핑
+- 이렇게 하면 외부 DOM을 건드리지 않고, 순수함수로 구성된 코드들을 재활용할 수 있음
+- 또한, 타입 추론이 쉬워짐
+
+- 다음엔, render, logic, handler 중 고민
+- handler와 render는 엮여있어서 따로 관리해봤자 의미가 없음
+
+#### render 컴포넌트 작업
+
+- 이미 기본 컴포넌트 구조는 만들어둔 상태
+- render → React 컴포넌트로의 변환이 가장 명확함
+- 이후에 logic과 handler를 수정하기가 더 쉬워질 것
+
+- 기존에 그냥 DOM에 직접 element를 추가하고, 그 element에 직접 저장하던 방식을 state나 context에 저장하도록 변경해야 함

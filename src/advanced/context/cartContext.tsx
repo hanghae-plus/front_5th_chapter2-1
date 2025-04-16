@@ -1,10 +1,17 @@
 import type React from "react";
 import { createContext, useContext, useState } from "react";
 import type { CartState } from "./types";
+import type { Product } from "@/advanced/types";
 
 interface CartContextType {
   cart: CartState;
   setCart: React.Dispatch<React.SetStateAction<CartState>>;
+  cartItems: CartItem[];
+  setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
+}
+
+interface CartItem extends Product {
+  quantity: number;
 }
 
 const CartContext = createContext<CartContextType | null>(null);
@@ -15,9 +22,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     subTotal: 0,
     totalAmount: 0,
   });
-
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  
   return (
-    <CartContext.Provider value={{ cart, setCart }}>
+    <CartContext.Provider value={{ cart, setCart, cartItems, setCartItems }}>
       {children}
     </CartContext.Provider>
   );

@@ -11,4 +11,5 @@ export const globalState: GlobalState = {
   cartList: [],
   totalPrice: 0,
   totalDiscountRate: 0,
+  lastSelectedProduct: null,
 };

@@ -17,4 +17,5 @@ export interface GlobalState {
   cartList: CartItem[];
   totalPrice: number;
   totalDiscountRate: number;
+  lastSelectedProduct: CartItem | null;
 }

@@ -1,7 +1,7 @@
 import { handleAddButtonClick, handleCartItemRemove, handleCountChange } from "../handler";
 import { globalState } from "../state/globalState";
 import type { GlobalState } from "../types";
-import { calculateDiscountRate } from "../utils";
+import { calculateDiscountRate, setLuckySaleEvent, setSuggestSaleEvent } from "../utils";
 import { CartList, ProductSelector, SoldOutList, TotalPrice } from "./cart";
 import { Header } from "./common";
 
@@ -27,6 +27,32 @@ export function App() {
     wrapper.className = "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
     container.appendChild(wrapper);
     app?.appendChild(container);
+  };
+
+  this.setupPromotionalEvents = () => {
+    // 번개세일 (20% 할인) 이벤트
+    setTimeout(() => {
+      setInterval(() => {
+        const updatedProductList = setLuckySaleEvent(this.state);
+        this.setState({
+          ...this.state,
+          productList: updatedProductList,
+        });
+        console.log(updatedProductList);
+        console.log(this.state.productList);
+      }, 30000);
+    }, Math.random() * 10000);
+
+    // 추천 할인 (추가 5% 할인) 이벤트
+    setTimeout(() => {
+      setInterval(() => {
+        const updatedProductList = setSuggestSaleEvent(this.state);
+        this.setState({
+          ...this.state,
+          productList: updatedProductList,
+        });
+      }, 60000);
+    }, Math.random() * 20000);
   };
 
   new Header({ target: wrapper });
@@ -63,7 +89,7 @@ export function App() {
     target: wrapper,
     initialState: this.state,
     handleButtonClick: (selectedProductId: string) => {
-      const { updatedProductList, updatedCartList, newTotalPrice } = handleAddButtonClick(
+      const { updatedProductList, updatedCartList, newTotalPrice, selectedProduct } = handleAddButtonClick(
         selectedProductId,
         this.state,
       );
@@ -75,10 +101,13 @@ export function App() {
         cartList: updatedCartList,
         totalPrice: finalDiscountPrice,
         totalDiscountRate: finalDiscountRate,
+        lastSelectedProduct: selectedProduct,
       });
     },
   });
   const soldOutList = new SoldOutList({ target: wrapper, initialState: this.state });
 
   this.init();
+
+  this.setupPromotionalEvents();
 }

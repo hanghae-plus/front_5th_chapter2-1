@@ -1,4 +1,4 @@
-import type { GlobalState } from "../../types";
+import type { CartItem, GlobalState } from "../../types";
 
 interface ProductSelectorProps {
   target: HTMLElement;
@@ -31,9 +31,10 @@ export function ProductSelector({ target, initialState, handleButtonClick }: Pro
   };
 
   this.render = () => {
+    console.log("productList", this.state.productList);
     this.select.innerHTML = this.state.productList
       .map(
-        (product) =>
+        (product: CartItem) =>
           `<option value="${product.id}" ${product.count <= 0 ? "disabled = true" : ""}>${product.name} - ${product.price}원</option>`,
       )
       .join("");

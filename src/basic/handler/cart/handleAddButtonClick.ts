@@ -1,8 +1,8 @@
 import type { CartItem, GlobalState } from "../../types";
 
 export const handleAddButtonClick = (selectedProductId: string, state: GlobalState) => {
-  const product = state.productList.find((product) => product.id === selectedProductId);
-  if (!product) {
+  const selectedProduct = state.productList.find((product) => product.id === selectedProductId);
+  if (!selectedProduct) {
     alert("상품을 찾을 수 없습니다.");
     return {
       updatedProductList: state.productList,
@@ -12,7 +12,7 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
   }
 
   // 재고가 없으면 중단
-  if (product.count <= 0) {
+  if (selectedProduct.count <= 0) {
     alert("재고가 부족합니다.");
     return {
       updatedProductList: state.productList,
@@ -22,8 +22,8 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
   }
 
   const updatedProduct = {
-    ...product,
-    count: product.count - 1,
+    ...selectedProduct,
+    count: selectedProduct.count - 1,
   };
   const updatedProductList = state.productList.map((product) =>
     product.id === selectedProductId ? updatedProduct : product,
@@ -48,5 +48,6 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
     updatedProductList,
     updatedCartList,
     newTotalPrice,
+    selectedProduct,
   };
 };

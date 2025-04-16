@@ -39,7 +39,9 @@ function main() {
     <div id="container" class="bg-gray-100 p-8">
       <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
-        <div id="carts"></div>
+        <div id="carts">
+
+        </div>
         <div id="cart-total" class="text-xl font-bold my-4">
         </div>
         ${Options()}
@@ -100,8 +102,8 @@ function main() {
   calcCart();
 
   // 광고 alert
-  setTimeout(function () {
-    setInterval(function () {
+  setTimeout(() => {
+    setInterval(() => {
       // 랜덤으로 특가 상품 alert 실행
       const luckyItem = PRODUCTS[Math.floor(Math.random() * PRODUCTS.length)];
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
@@ -114,11 +116,11 @@ function main() {
     }, 30000);
   }, Math.random() * 10000);
 
-  setTimeout(function () {
-    setInterval(function () {
+  setTimeout(() => {
+    setInterval(() => {
       // 마지막으로 구매한 상품 cta alert 실행
       if (lastAddedItem) {
-        const suggest = PRODUCTS.find(function (item) {
+        const suggest = PRODUCTS.find((item) => {
           return item.id !== lastAddedItem && item.q > 0;
         });
 
@@ -260,7 +262,7 @@ const expectedPointsComponent = () => {
 /** 재고 업데이트 함수 */
 function updatestocksWrapper() {
   let message = '';
-  PRODUCTS.forEach(function (item) {
+  PRODUCTS.forEach((item) => {
     if (item.q < 5) {
       message +=
         item.name + ': ' + (item.q > 0 ? '재고 부족 (' + item.q + '개 남음)' : '품절') + '\n';
@@ -272,10 +274,10 @@ function updatestocksWrapper() {
 main();
 
 // 장바구니 추가 버튼 클릭 이벤트
-$addCartBtn.addEventListener('click', function () {
+$addCartBtn.addEventListener('click', () => {
   // 선택된 옵션
   const selectedItem = $selectBox.value;
-  const currentAddedItem = PRODUCTS.find(function (p) {
+  const currentAddedItem = PRODUCTS.find((p) => {
     return p.id === selectedItem;
   });
 
@@ -328,7 +330,7 @@ $addCartBtn.addEventListener('click', function () {
 });
 
 // 장바구니 수량 변경 및 삭제 클릭 이벤트
-$cartsWrapper.addEventListener('click', function (e) {
+$cartsWrapper.addEventListener('click', (e) => {
   const target = e.target;
 
   // className에 quantity-change이 포함된 경우
@@ -337,7 +339,7 @@ $cartsWrapper.addEventListener('click', function (e) {
     const id = target.dataset.productId;
     const $tagetItem = document.getElementById(id);
 
-    const product = PRODUCTS.find(function (p) {
+    const product = PRODUCTS.find((p) => {
       return p.id === id;
     });
 

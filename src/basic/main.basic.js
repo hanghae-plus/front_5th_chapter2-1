@@ -1,41 +1,16 @@
+import App from './app';
+
 import { CONSTANTS } from './constants';
 import { textUtils } from './utils/textUtils';
 import { ItemStore } from './store/itemStore';
 import { updateSelectOptions } from './components/itemSelect/updateSelectOptions';
 import { renderCalcCart } from './components/cartTotal/renderCalcCart';
 
-import Container from './components/Container';
-import ContentWrapper from './components/ContentWrapper';
-import Header from './components/Header';
-import Cart from './components/cart/Cart';
-import CartAddButton from './components/cartAddButton/CartAddButton';
-import ItemSelect from './components/itemSelect/ItemSelect';
-import CartTotal from './components/cartTotal/CartTotal';
-import StockStatus from './components/stockStatus/StockStatus';
-
-function appendDOM() {
-  const $contentWrapper = ContentWrapper();
-
-  $contentWrapper.appendChild(Header({ title: '장바구니' }));
-  $contentWrapper.appendChild(Cart());
-  $contentWrapper.appendChild(CartTotal());
-  $contentWrapper.appendChild(ItemSelect());
-  $contentWrapper.appendChild(CartAddButton());
-  $contentWrapper.appendChild(StockStatus());
-
-  const $containerDiv = Container();
-  $containerDiv.appendChild($contentWrapper);
-
-  const $root = document.getElementById('app');
-  $root.appendChild($containerDiv);
-}
-
 function main() {
-  appendDOM();
+  const $root = document.getElementById('app');
+  $root.appendChild(App());
 
-  const itemStore = ItemStore.getInstance();
-  const items = itemStore.getState().items;
-  const lastSelectedItem = itemStore.getState().lastSelectedItem;
+  const { items, lastSelectedItem } = ItemStore.getInstance().getState();
 
   updateSelectOptions(items);
   renderCalcCart(items);

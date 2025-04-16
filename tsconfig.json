@@ -27,6 +27,6 @@
     "noImplicitReturns": true, // 함수에 return이 없는 경우 에러
     "skipLibCheck": true // node_modules 타입 검사는 건너뜀 (속도 ↑)
   },
-  "include": ["src/advanced/**/*"],
+  "include": ["src/advanced/**/*", "**/*.tsx"],
   "exclude": ["node_modules", "src/basic", "src/main.original.js"]
 }

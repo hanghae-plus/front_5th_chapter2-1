@@ -1,10 +1,12 @@
+import { STYLES } from '../consts';
+
 export const TotalAmountContainerDOM = {
   _totalAmountContainer: null,
 
   init() {
     this._totalAmountContainer = document.createElement('div');
     this._totalAmountContainer.id = 'cart-total';
-    this._totalAmountContainer.className = 'text-xl font-bold my-4';
+    this._totalAmountContainer.className = STYLES.TEXT.TOTAL;
   },
 
   get() {

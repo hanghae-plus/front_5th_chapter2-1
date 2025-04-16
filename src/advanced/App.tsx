@@ -1,13 +1,11 @@
-import React from 'react';
+import { MainPage } from './pages';
 
-console.log('Hello App');
-
-const App = () => {
+function App() {
   return (
-    <main>
-      <h1>Hello World</h1>
-    </main>
+    <>
+      <MainPage />
+    </>
   );
-};
+}
 
 export default App;

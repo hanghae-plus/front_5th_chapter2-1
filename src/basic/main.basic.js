@@ -18,7 +18,7 @@ function main() {
   const $cartDisplay =document.getElementById('cart-items');
 
   //이벤트 핸들러 등록
-  $addBtn?.addEventListener('click', handleAddToCart(lastSaleRef) );
+  $addBtn?.addEventListener('click',() => handleAddToCart(lastSaleRef) );
   $cartDisplay?.addEventListener('click', handleCartItemAction);
 
   //계산 함수

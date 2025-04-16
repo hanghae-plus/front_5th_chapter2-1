@@ -38,6 +38,7 @@ export const calculateDiscount = (itemCount,finalTotal,originalTotal) => {
     finalTotal *= (1 - TUESDAY_DISCOUNT_RATE);
     discountRate=Math.max(discountRate, TUESDAY_DISCOUNT_RATE);
   }
+  
 
 return { discountRate }
 

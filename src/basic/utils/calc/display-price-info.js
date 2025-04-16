@@ -7,6 +7,7 @@
  */
 
 export function displayPriceInfo (sum,finalTotal,discountRate) {
+
   const baseText = `총액: ${Math.round(finalTotal)}원`;
 
   if (discountRate > 0) {

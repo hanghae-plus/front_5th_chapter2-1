@@ -46,15 +46,11 @@ const updateStockInfo = () => {
 /** 장바구니 항목을 기반으로 금액 및 할인 정보를 계산하고 화면에 렌더링하는 함수 */
 function calculateCart () {
 
-  const $cartDisplay =document.getElementById("cart-items");
   const $sum = document.getElementById("cart-total");
-
-  const cartItems = $cartDisplay.children;
-  const {originalTotal,itemCount,finalTotal} = calculateCartTotals(cartItems,products);
-
+  const {originalTotal,itemCount,finalTotal} = calculateCartTotals();
   const {discountRate} = calculateDiscount(itemCount,finalTotal,originalTotal);
-  displayPriceInfo($sum,finalTotal,discountRate);
 
+  displayPriceInfo($sum,finalTotal,discountRate);
   updateStockInfo();
   renderBonusPoints(finalTotal,$sum);
 

@@ -1,3 +1,4 @@
+import { products } from "../../data/products";
 
 
 const MIN_DISCOUNT_QUANTITY = 10;
@@ -40,15 +41,16 @@ const findProductById = (id, products) => {
 /**
  * 장바구니 항목과 전체 상품 목록을 기반으로 총 금액, 수량, 할인 적용 금액을 계산
  *
- * @param {HTMLElement[]} cartItems - 장바구니에 담긴 DOM 요소 리스트
- * @param {Array} products - 전체 상품 목록
  * @returns {{ originalTotal: number, itemCount: number, finalTotal: number }} - 계산된 합계
  */
 
-export const calculateCartTotals = (cartItems, products) => {
+export const calculateCartTotals = () => {
   let originalTotal = 0;
   let itemCount = 0;
   let finalTotal = 0;
+
+  const $cartDisplay = document.getElementById('cart-items');
+  const cartItems = $cartDisplay.children;
 
   for (let i = 0; i < cartItems.length; i++) {
     const cartItem = cartItems[i];

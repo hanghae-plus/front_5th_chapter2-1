@@ -1,6 +1,7 @@
 import { useAtom } from "jotai";
 import { cartAtom } from "../../state";
 import type { CartItem } from "../../types";
+import { calculateDiscountRate } from "../../utils";
 export const useAddToCart = () => {
   const [cart, setCart] = useAtom(cartAtom);
 
@@ -40,13 +41,15 @@ export const useAddToCart = () => {
       (acc: number, item: CartItem) => acc + item.price * (item.count || 1),
       0,
     );
+    const { finalDiscountRate, finalDiscountPrice } = calculateDiscountRate(newTotalPrice, updatedCartList);
 
     setCart({
       ...cart,
       productList: updatedProductList,
       cartList: updatedCartList,
-      totalPrice: newTotalPrice,
+      totalPrice: finalDiscountPrice,
       lastSelectedProduct: updatedProduct,
+      totalDiscountRate: finalDiscountRate,
     });
   };
 

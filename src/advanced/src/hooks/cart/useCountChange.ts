@@ -1,5 +1,6 @@
 import { useAtom } from "jotai";
 import { cartAtom } from "../../state";
+import { calculateDiscountRate } from "../../utils";
 
 export const useQuantityChange = () => {
   const [cart, setCart] = useAtom(cartAtom);
@@ -26,11 +27,14 @@ export const useQuantityChange = () => {
 
     const newTotalPrice = updatedCartList.reduce((acc: number, item) => acc + item.price * (item.count || 1), 0);
 
+    const { finalDiscountRate, finalDiscountPrice } = calculateDiscountRate(newTotalPrice, updatedCartList);
+
     setCart({
       ...cart,
       productList: updatedProductList,
       cartList: updatedCartList,
-      totalPrice: newTotalPrice,
+      totalPrice: finalDiscountPrice,
+      totalDiscountRate: finalDiscountRate,
     });
   };
 

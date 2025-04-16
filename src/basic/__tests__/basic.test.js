@@ -32,9 +32,9 @@ describe("basic test", () => {
       vi.useRealTimers();
 
       // 화요일이 아니다 라는 것을 설정
-      const today = new Date("2025-04-14"); // 월요일
+      const monday = new Date("2025-04-14"); // 월요일
       vi.useFakeTimers();
-      vi.setSystemTime(today);
+      vi.setSystemTime(monday);
 
       vi.spyOn(window, "alert").mockImplementation(() => {});
     });

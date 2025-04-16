@@ -10,8 +10,8 @@ interface CartItemProps {
 export const CartItem: React.FC<CartItemProps> = ({ item }) => {
   return (
     <div id={item.id} className={STYLES.LAYOUT.FLEX}>
-      <span data-value={item.value} data-quantity={1}>
-        {`${item.name} - ${formatPrice(item.value)} x 1`}
+      <span data-value={item.value} data-quantity={item.quantity}>
+        {`${item.name} - ${formatPrice(item.value)} x ${item.quantity}`}
       </span>
       <div>
         <button

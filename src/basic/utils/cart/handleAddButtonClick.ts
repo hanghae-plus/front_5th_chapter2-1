@@ -7,7 +7,7 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
     return {
       updatedProductList: state.productList,
       updatedCartList: state.cartList,
-      newTotal: state.totalPrice,
+      newTotalPrice: state.totalPrice,
     };
   }
 
@@ -17,7 +17,7 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
     return {
       updatedProductList: state.productList,
       updatedCartList: state.cartList,
-      newTotal: state.totalPrice,
+      newTotalPrice: state.totalPrice,
     };
   }
 
@@ -39,11 +39,14 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
     updatedCartList = [...state.cartList, { ...updatedProduct, count: 1 }];
   }
 
-  const newTotal = updatedCartList.reduce((acc: number, item: CartItem) => acc + item.price * (item.count || 1), 0);
+  const newTotalPrice = updatedCartList.reduce(
+    (acc: number, item: CartItem) => acc + item.price * (item.count || 1),
+    0,
+  );
 
   return {
     updatedProductList,
     updatedCartList,
-    newTotal,
+    newTotalPrice,
   };
 };

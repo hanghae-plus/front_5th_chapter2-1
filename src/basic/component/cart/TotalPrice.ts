@@ -7,6 +7,9 @@ interface TotalPriceProps {
 
 export function TotalPrice({ target, initialState }: TotalPriceProps) {
   this.element = document.createElement("div");
+
+  target.appendChild(this.element);
+
   this.element.id = "cart-total";
   this.element.className = "text-xl font-bold my-4";
 
@@ -25,6 +28,4 @@ export function TotalPrice({ target, initialState }: TotalPriceProps) {
   };
 
   this.render();
-
-  target.appendChild(this.element);
 }

@@ -9,9 +9,13 @@ interface ProductSelectorProps {
 export function ProductSelector({ target, initialState, handleButtonClick }: ProductSelectorProps) {
   this.select = document.createElement("select");
   this.addButton = document.createElement("button");
+
+  target.appendChild(this.select);
+  target.appendChild(this.addButton);
+
   this.state = initialState;
 
-  this.select.id = "product-selector";
+  this.select.id = "product-select";
   this.select.className = "border rounded p-2 mr-2";
 
   this.addButton.id = "add-to-cart";
@@ -36,9 +40,6 @@ export function ProductSelector({ target, initialState, handleButtonClick }: Pro
   };
 
   this.render();
-
-  target.appendChild(this.select);
-  target.appendChild(this.addButton);
 
   this.addButton.addEventListener("click", () => {
     const selectedProductId = this.select.value;

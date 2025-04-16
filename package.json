@@ -7,7 +7,11 @@
     "dev": "vite",
     "dev:advanced": "vite --config vite.config.js --open index.advanced.html",
     "build": "vite build",
+    "build:basic": "vite build --config vite.config.js --emptyOutDir false",
+    "build:advanced": "vite build --config vite.config.js --emptyOutDir false",
     "preview": "vite preview",
+    "preview:basic": "vite preview --outDir dist/basic",
+    "preview:advanced": "vite preview --outDir dist/advanced",
     "start:basic": "vite serve --open ./index.basic.html",
     "start:advanced": "vite serve --open ./index.advanced.html",
     "test": "vitest",
@@ -30,6 +34,7 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.7.0",
     "@tailwindcss/vite": "^4.1.4",
     "clsx": "^2.1.1",
     "react": "^19.1.0",

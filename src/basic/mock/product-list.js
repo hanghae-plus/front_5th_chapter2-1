@@ -1,4 +1,4 @@
-export const producList = [
+export const productList = [
   { id: 'p1', name: '상품1', val: 10000, stock: 50 },
   { id: 'p2', name: '상품2', val: 20000, stock: 30 },
   { id: 'p3', name: '상품3', val: 30000, stock: 20 },

@@ -1,5 +1,6 @@
+import { ITEM_DISCOUNT_RATES, ITEM_DISCOUNT_START } from "./consts/discounts";
 import products from "./consts/products";
-import calcCart from "./events/calcCart";
+import calculateCart from "./events/calculateCart";
 import updateRandomDiscount from "./events/updateRandomDiscount";
 import updateRecommendation from "./events/updateRecommendation";
 import updateSelectOptions from "./events/updateSelectOptions";
@@ -53,7 +54,7 @@ const main = () => {
   root.appendChild(container);
 
   // 장바구니 계산
-  calcCart();
+  calculateCart();
 
   // 랜덤 할인 이벤트 설정
   updateRandomDiscount();
@@ -88,13 +89,13 @@ export const handleAddItem = () => {
       totalEa += itemEa;
       noDiscountTotalPrice += itemTotalPrice;
 
-      if (itemEa >= 10) {
+      if (itemEa >= ITEM_DISCOUNT_START) {
         // 상품별 10개 이상 구매 시 할인율
-        if (item.id === "p1") itemDiscountRate = 0.1;
-        else if (item.id === "p2") itemDiscountRate = 0.15;
-        else if (item.id === "p3") itemDiscountRate = 0.2;
-        else if (item.id === "p4") itemDiscountRate = 0.05;
-        else if (item.id === "p5") itemDiscountRate = 0.25;
+        if (item.id === "p1") itemDiscountRate = ITEM_DISCOUNT_RATES.p1;
+        else if (item.id === "p2") itemDiscountRate = ITEM_DISCOUNT_RATES.p2;
+        else if (item.id === "p3") itemDiscountRate = ITEM_DISCOUNT_RATES.p3;
+        else if (item.id === "p4") itemDiscountRate = ITEM_DISCOUNT_RATES.p4;
+        else if (item.id === "p5") itemDiscountRate = ITEM_DISCOUNT_RATES.p5;
       }
       totalPrice += itemTotalPrice * (1 - itemDiscountRate);
     })();
@@ -248,7 +249,7 @@ addItemBtn.addEventListener("click", function () {
     } else {
       addNewItem(itemToAdd);
     }
-    calcCart();
+    calculateCart();
     lastSelectedProduct = selectedItem;
   }
 });
@@ -268,6 +269,6 @@ cartDiv.addEventListener("click", function (event) {
     } else if (isTargetRemoveItem) {
       removeItemEa(target, itemElem);
     }
-    calcCart();
+    calculateCart();
   }
 });

@@ -1,3 +1,7 @@
+import {
+  RECOMMENDATION_DISCOUNT_RATE,
+  RECOMMENDATION_DISCOUNT_TIME,
+} from "../consts/discounts";
 import products from "../consts/products";
 
 // 추천 상품 이벤트 설정
@@ -12,13 +16,15 @@ const updateRecommendation = () => {
         });
         if (suggestProd) {
           alert(
-            suggestProd.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!",
+            `${suggestProd.name} 은(는) 어떠세요? 지금 구매하시면 ${RECOMMENDATION_DISCOUNT_RATE * 100}% 추가 할인!`,
           );
-          suggestProd.price = Math.round(suggestProd.price * 0.95);
+          suggestProd.price = Math.round(
+            suggestProd.price * (1 - RECOMMENDATION_DISCOUNT_RATE),
+          );
           updateSelectOptions();
         }
       }
-    }, 60000);
+    }, RECOMMENDATION_DISCOUNT_TIME);
   }, Math.random() * 20000);
 
   return lastSelectedProduct;

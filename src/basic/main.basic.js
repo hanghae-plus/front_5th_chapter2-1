@@ -151,14 +151,18 @@ function applyBulkDiscount(productCount, subTotalBeforeDiscount, totalAmount) {
 }
 // 요일 할인
 function applyWeekdayDiscount(totalAmount, discountRate) {
-    // let totalAmount = 0;
+    let finalAmount = totalAmount;
+    let finalDiscountRate = discountRate;
+
     const today = new Date().getDay();
     if (today === 2) {
-        return {
-            finalAmount: totalAmount * 0.9,
-            finalDiscountRate: Math.max(discountRate, 0.1), // 할인 중 큰 값을 유지
-        };
+        finalAmount = totalAmount * 0.9;
+        finalDiscountRate = Math.max(discountRate, 0.1);
     }
+    return {
+        finalAmount,
+        finalDiscountRate,
+    };
 }
 
 function calculateTotalAmount(cartItems) {
@@ -177,7 +181,7 @@ function calculateTotalAmount(cartItems) {
                 currentItem.querySelector("span").textContent.split("x ")[1]
             );
             const itemPriceTotal = currentCartItem.val * orderCount; // 상품가격 * 개수
-            const discount = getItemDiscount();
+            const discount = getItemDiscount(orderCount, currentCartItem);
             productCount += orderCount; // 총 상품 갯수
             subTotalBeforeDiscount += itemPriceTotal; // 할인 전 전체 금액
 

@@ -1,11 +1,12 @@
 import { useAtom } from "jotai";
-import { useQuantityChange } from "../../hooks";
+import { useCartItemRemove, useQuantityChange } from "../../hooks";
 import { cartAtom } from "../../state";
 
 export const CartList = () => {
   const [cart] = useAtom(cartAtom);
 
   const { handleQuantityChange } = useQuantityChange();
+  const { handleCartItemRemove } = useCartItemRemove();
 
   return (
     <>
@@ -31,7 +32,12 @@ export const CartList = () => {
             >
               +
             </button>
-            <button type="button" className="bg-red-500 text-white px-2 py-1 rounded" data-product-id={item.id}>
+            <button
+              onClick={() => handleCartItemRemove(item.id)}
+              type="button"
+              className="bg-red-500 text-white px-2 py-1 rounded"
+              data-product-id={item.id}
+            >
               삭제
             </button>
           </div>

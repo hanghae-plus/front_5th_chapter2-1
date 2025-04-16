@@ -32,6 +32,11 @@ const PRODUCTS = [
   { id: 'p5', name: '상품5', price: 25000, quantity: 2 },
 ];
 
+const MOCKCARTS = [
+  { id: 'p1', quantity: 4 },
+  { id: 'p2', quantity: 1 },
+];
+
 function main() {
   const root = document.getElementById('app');
 
@@ -43,59 +48,13 @@ function main() {
         <div id="cart-total" class="text-xl font-bold my-4">
         </div>
         ${Options()}
-        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
+        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가ddd</button>
         <div id="stock-state" class="text-sm text-gray-500 mt-2">
       </div>
     </div>
   `;
 
-  const $container = document.createElement('div');
-  $container.className = 'bg-gray-100 p-8';
-
-  const $wrapper = document.createElement('div');
-  $wrapper.className =
-    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-
-  const $title = document.createElement('h1');
-  $title.className = 'text-2xl font-bold mb-4';
-  $title.textContent = '장바구니';
-
-  /** 장바구니 목록 ui */
-  const $cartsWrapper = document.createElement('div');
-  $cartsWrapper.id = 'cart-items'; // carts 변경
-
-  /** 장바구니에 담은 상품 총 가격 ui */
-  const $totalPriceWrapper = document.createElement('div');
-  $totalPriceWrapper.id = 'cart-total';
-  $totalPriceWrapper.className = 'text-xl font-bold my-4';
-
-  /** select-box ui */
-  const $selectBox = document.createElement('select');
-  $selectBox.id = 'product-select'; // products-select-box 변경
-  $selectBox.className = 'border rounded p-2 mr-2';
-
-  /** 장바구니 추가 버튼 */
-  const $addCartBtn = document.createElement('button');
-  $addCartBtn.id = 'add-to-cart'; // add-cart-btn 변경
-  $addCartBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  $addCartBtn.textContent = '추가';
-
-  /** 재고 현황 ui */
-  const $stocksWrapper = document.createElement('div');
-  $stocksWrapper.id = 'stock-status'; // stock-state 변경
-  $stocksWrapper.className = 'text-sm text-gray-500 mt-2';
-
-  Options();
-
-  // ui
-  $wrapper.appendChild($title);
-  $wrapper.appendChild($cartsWrapper);
-  $wrapper.appendChild($totalPriceWrapper);
-  $wrapper.appendChild($selectBox);
-  $wrapper.appendChild($addCartBtn);
-  $wrapper.appendChild($stocksWrapper);
-  $container.appendChild($wrapper);
-  root.appendChild($container);
+  root.innerHTML = template();
 
   calcCart();
 
@@ -132,8 +91,6 @@ function main() {
       }
     }, 60000);
   }, Math.random() * 20000);
-
-  root.appendChild(template());
 }
 
 /** selectBox 컴포넌트 */
@@ -142,12 +99,12 @@ function Options() {
     ({ id, name, price, quantity }) => /* html */ `
     <option id="${id}" ${quantity === 0 ? 'disable' : ''}>${name} - ${price}원</option>
   `,
-  );
+  ).join('');
 
   return /* html */ `
-    <div id="products-select-box" class="border rounded p-2 mr-2">
+    <select id="products-select-box" class="border rounded p-2 mr-2">
       ${options}
-    </div>;
+    </select>
     `;
 }
 
@@ -329,24 +286,31 @@ $addCartBtn.addEventListener('click', () => {
   }
 });
 
-const MOCKCARTS = [
-  { id: 'p1', quantity: 4 },
-  { id: 'p2', quantity: 1 },
-];
-
 /** 장바구니 목록 ui 컴포넌트 */
 function Carts() {
-  // todo - carts 담긴 항목 가져오는 로직 만들기
-  const cartsProducts = MOCKCARTS.map(
-    ({ id, name, price, quantity }) => /* html */ `
+  // todo
+  const carts = MOCKCARTS.map((cartItem) => {
+    const product = PRODUCTS.find((p) => p.id === cartItem.id);
+    return {
+      ...product,
+      quantity: cartItem.quantity,
+    };
+  });
+
+  const cartsProducts = carts
+    .map(
+      ({ id, name, price, quantity }) => /* html */ `
     <div id="${id}" class="flex justify-between items-center mb-2">
       <span>${name} - ${price}원 x ${quantity}</span>
-      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">-</button>
-      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">+</button>
-      <button class="remove-item bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
+      <div>
+        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">-</button>
+        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">+</button>
+        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
+      </div>
     </div>
     `,
-  );
+    )
+    .join('');
 
   return /* html */ `
     <div id="carts">

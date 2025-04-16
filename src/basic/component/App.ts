@@ -1,6 +1,7 @@
 import { handleAddButtonClick, handleCartItemRemove, handleCountChange } from "../handler";
 import { globalState } from "../state/globalState";
 import type { GlobalState } from "../types";
+import { calculateDiscountRate } from "../utils";
 import { CartList, ProductSelector, SoldOutList, TotalPrice } from "./cart";
 import { Header } from "./common";
 
@@ -35,19 +36,25 @@ export function App() {
     handleCountChange: (productId: string, change: number) => {
       const { updatedProductList, updatedCartList, newTotalPrice } = handleCountChange(productId, change, this.state);
 
+      const { finalDiscountRate, finalDiscountPrice } = calculateDiscountRate(newTotalPrice, updatedCartList);
+
       this.setState({
         productList: updatedProductList,
         cartList: updatedCartList,
-        totalPrice: newTotalPrice,
+        totalPrice: finalDiscountPrice,
+        totalDiscountRate: finalDiscountRate,
       });
     },
     handleCartItemRemove: (productId: string) => {
       const { updatedProductList, updatedCartList, newTotalPrice } = handleCartItemRemove(productId, this.state);
 
+      const { finalDiscountRate, finalDiscountPrice } = calculateDiscountRate(newTotalPrice, updatedCartList);
+
       this.setState({
         productList: updatedProductList,
         cartList: updatedCartList,
-        totalPrice: newTotalPrice,
+        totalPrice: finalDiscountPrice,
+        totalDiscountRate: finalDiscountRate,
       });
     },
   });
@@ -61,10 +68,13 @@ export function App() {
         this.state,
       );
 
+      const { finalDiscountRate, finalDiscountPrice } = calculateDiscountRate(newTotalPrice, updatedCartList);
+
       this.setState({
         productList: updatedProductList,
         cartList: updatedCartList,
-        totalPrice: newTotalPrice,
+        totalPrice: finalDiscountPrice,
+        totalDiscountRate: finalDiscountRate,
       });
     },
   });

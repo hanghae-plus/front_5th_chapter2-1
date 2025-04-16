@@ -23,7 +23,7 @@ export function TotalPrice({ target, initialState }: TotalPriceProps) {
   };
 
   this.render = () => {
-    this.element.innerHTML = `총액: ${this.state.totalPrice}원${this.state.totalDiscountRate > 0 ? `<span class="text-green-500 ml-2">(${this.state.totalDiscountRate * 100}% 할인 적용)</span>` : ""}<span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${this.state.totalPrice / 1000})</span>
+    this.element.innerHTML = `총액: ${this.state.totalPrice}원${(this.state.totalDiscountRate * 10) / 10 > 0 ? `<span class="text-green-500 ml-2">(${(this.state.totalDiscountRate * 100).toFixed(1)}% 할인 적용)</span>` : ""}<span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${Math.round((this.state.totalPrice / 1000) * 10) / 10})</span>
     `;
   };
 

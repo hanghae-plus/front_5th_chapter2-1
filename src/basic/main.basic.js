@@ -1,16 +1,15 @@
 
 import { calculateCart } from "./logic/calculate-cart";
-import { startLastSaleTimer, startLuckySaleTimer, updateSelectOptions } from "./logic/sale";
-import { makeUI } from "./ui/make-ui";
+import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale";
+import { makeUI, UiTemplate } from "./ui/make-ui";
 
 let lastSale = null; // 외부에서 선택값을 계속 업데이트함
 
 
 function main() {
   //요소 생성
-
-  const {select} = makeUI(); 
-  updateSelectOptions(select);
+  const $root = document.getElementById('app');
+  $root.innerHTML = UiTemplate();
 
   //계산 함수
   calculateCart();

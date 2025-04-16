@@ -1,5 +1,5 @@
 
-import { prodList } from "../data/product";
+import { prodList } from "../data/products";
 import { makeUI } from "../ui/make-ui";
 import { calculateCartTotals, calculateDiscount, displayPriceInfo } from "../utils/calc";
 

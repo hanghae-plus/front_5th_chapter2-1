@@ -1,9 +1,15 @@
 import { AppComponent } from "./App";
-import { flashSale } from "./utils/intervalAlerts";
+import { productList } from "./stores";
+import { additionalSale, flashSale } from "./utils/intervalAlerts";
 
 const App = new AppComponent("app");
 
 function init() {
   App.render();
-  flashSale();
+
+  // sale alert 추가
+  flashSale(productList);
+  additionalSale(App.lastSelectedProductId, productList);
 }
+
+init();

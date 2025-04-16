@@ -1,6 +1,6 @@
 // setTimeout 추가
 function makeSetTimeout(func, delay) {
-  return setTimeout(() => func, delay);
+  return setTimeout(func, delay);
 }
 
 // setInterval 추가

@@ -1,6 +1,7 @@
-import { StrictMode, useState } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Container } from "./components";
+import { LastSelectedProvider, ProductProvider } from "./providers";
 import { Product } from "./types";
 
 const initialProductState: Product[] = [
@@ -12,8 +13,13 @@ const initialProductState: Product[] = [
 ];
 
 const App = () => {
-  const [products, setProducts] = useState<Product[]>(initialProductState);
-  return <Container />;
+  return (
+    <ProductProvider products={initialProductState}>
+      <LastSelectedProvider>
+        <Container />
+      </LastSelectedProvider>
+    </ProductProvider>
+  );
 };
 
 createRoot(document.getElementById("app")!).render(

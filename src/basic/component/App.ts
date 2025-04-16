@@ -1,8 +1,7 @@
 import { globalState } from "../state/globalState";
 import type { GlobalState } from "../types";
 import { handleAddButtonClick } from "../utils";
-import { TotalPrice } from "./cart";
-import { ProductSelector } from "./cart";
+import { CartList, ProductSelector, TotalPrice } from "./cart";
 import { Header } from "./common";
 
 export function App() {
@@ -16,6 +15,7 @@ export function App() {
     if (isChanged) {
       this.state = newState;
     }
+    cartList.setState(this.state);
     totalPrice.setState(this.state);
     productSelector.setState(this.state);
   };
@@ -28,6 +28,7 @@ export function App() {
   };
 
   new Header({ target: wrapper });
+  const cartList = new CartList({ target: wrapper, initialState: this.state });
   const totalPrice = new TotalPrice({ target: wrapper, initialState: this.state });
   const productSelector = new ProductSelector({
     target: wrapper,

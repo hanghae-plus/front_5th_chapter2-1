@@ -18,9 +18,6 @@ export function ProductSelector({ target, initialState, handleButtonClick }: Pro
   this.addButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
   this.addButton.textContent = "추가";
 
-  target.appendChild(this.select);
-  target.appendChild(this.addButton);
-
   this.setState = (newState: GlobalState) => {
     const isChanged = JSON.stringify(this.state) !== JSON.stringify(newState);
     if (isChanged) {
@@ -40,9 +37,11 @@ export function ProductSelector({ target, initialState, handleButtonClick }: Pro
 
   this.render();
 
+  target.appendChild(this.select);
+  target.appendChild(this.addButton);
+
   this.addButton.addEventListener("click", () => {
     const selectedProductId = this.select.value;
-    console.log(selectedProductId);
     handleButtonClick(selectedProductId);
   });
 }

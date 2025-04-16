@@ -20,7 +20,7 @@ function main() {
   sel = document.createElement("select");
   addBtn = document.createElement("button");
   stockInfo = document.createElement("div");
-  cartDisp.id = "cart-items";
+  //   cartDisp.id = "cart-items";
   //   sum.id = "cart-total";
   sel.id = "product-select";
   addBtn.id = "add-to-cart";

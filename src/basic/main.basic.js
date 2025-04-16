@@ -28,13 +28,13 @@ let productSelect;
 let addButton;
 let cartList;
 let totalDisplay;
-let stockInfiDisplay;
+let stockInfoDisplay;
 
 // 장바구니 관련 상태
 let lastSelectedProduct = null;
 let loyaltyPoints = 0;
 let totalAmount = 0;
-let titalItemCount = 0;
+let totalItemCount = 0;
 
 /*
 * 문자열 템플릿을 DOM 요소로 변환하는 함수
@@ -45,7 +45,6 @@ let titalItemCount = 0;
 function createElementFromTemplate(template, children = '') {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = template.replace('{{__Children__}}', children || '');
-  // TODO: 왜 firstChild 만 반환하는지 알아보기
   return tempDiv.firstChild;
 }
 
@@ -96,7 +95,7 @@ function initApp() {
   updateCart();
 
 //   이벤트 리스너 등록
-  registerEventListeners();
+  regEventListeners();
 
 //   프로모션 이벤트 초기화
   initPromotions();
@@ -134,7 +133,7 @@ function updateCart() {
     const itemTotal = product.price * quantity;
     let discount = 0;
 
-    totalITemCount += quantity;
+    totalItemCount += quantity;
     subtotal += itemTotal;
 
   //   개별 상품 할인 적용
@@ -233,7 +232,7 @@ function updateLoyaltyPoints() {
     totalDisplay.appendChild(pointsTag);
   }
 
-  pointTag.textContent = `(포인트: ${loyaltyPoints})`;
+  pointsTag.textContent = `(포인트: ${loyaltyPoints})`;
 }
 
 /*
@@ -244,7 +243,7 @@ function updateStockInfo() {
 
   PRODUCTS.forEach(product => {
     if (product.stock < 5) {
-      infoText += `${product.name}L ${
+      infoText += `${product.name} ${
         product.stock > 0
           ? `재고 부족 (${product.stock}개 남음`
           : '품절'

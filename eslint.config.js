@@ -14,6 +14,10 @@ export default [
         }
       }
     },
+    globals: {
+      document: "readonly",
+      window: "readonly"
+    },
     plugins: {
       prettier: prettierPlugin
     },
@@ -23,6 +27,7 @@ export default [
       "no-unused-vars": "warn",
       "no-debugger": "warn",
       "no-var": "error",
+      "no-undef": "error",
       "prefer-spread": "error",
       "prefer-const": "error"
     }

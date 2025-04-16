@@ -11,7 +11,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "#basic": path.resolve(__dirname, "./src/basic"),
-      "#advanced": path.resolve(__dirname, "./src/advanced"),
+      "#advanced": path.resolve(__dirname, "./src/advanced/src"),
     },
   },
   plugins: [tailwindcss()],

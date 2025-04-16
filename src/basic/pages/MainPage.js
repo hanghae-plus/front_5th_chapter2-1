@@ -5,7 +5,7 @@ import {
   renderProductInventory,
   renderStockInfo,
   renderTotalPrice,
-} from "../components/render";
+} from "../lib/utils/renderUtils";
 import { PRODUCT_INVENTORY } from "../lib/configs/products";
 import { cartStore } from "../stores/cartStore";
 import { Template } from "./MainPage.template";
@@ -35,8 +35,7 @@ export function MainPage() {
 
   setTimeout(() => {
     setInterval(() => {
-      const luckyItem =
-        PRODUCT_INVENTORY[Math.floor(Math.random() * PRODUCT_INVENTORY.length)];
+      const luckyItem = PRODUCT_INVENTORY[Math.floor(Math.random() * PRODUCT_INVENTORY.length)];
 
       if (Math.random() < 0.3 && luckyItem.stock > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
@@ -51,9 +50,7 @@ export function MainPage() {
     setInterval(() => {
       if (!cartState.lastSelected) return;
 
-      const suggest = PRODUCT_INVENTORY.find(
-        (item) => item.id !== cartState.lastSelected && item.stock > 0,
-      );
+      const suggest = PRODUCT_INVENTORY.find((item) => item.id !== cartState.lastSelected && item.stock > 0);
 
       if (!suggest) return;
 

@@ -25,9 +25,7 @@ export function cartReducer(state, action) {
         return { ...state, error: "재고가 없습니다." };
       }
 
-      const itemInCart = state.addedItems.find(
-        (item) => item.id === itemToAdd.id,
-      );
+      const itemInCart = state.addedItems.find((item) => item.id === itemToAdd.id);
 
       const newQuantity = itemInCart ? itemInCart.quantity + 1 : 1;
 
@@ -53,9 +51,7 @@ export function cartReducer(state, action) {
       const selectedElem = action.payload;
       const selectedId = selectedElem.dataset.productId;
 
-      const selectedItem = state.addedItems.find(
-        (item) => item.id === selectedId,
-      );
+      const selectedItem = state.addedItems.find((item) => item.id === selectedId);
       const currentQuantity = selectedItem.quantity;
       const quantifyChange = getQuantityChangeOfCartItem(selectedElem);
       const newQuantity = currentQuantity + quantifyChange;
@@ -85,10 +81,7 @@ export function cartReducer(state, action) {
       const selectedElem = action.payload;
       const selectedId = selectedElem.dataset.productId;
 
-      const itemsAfterRemove = removeItemFromAddedItems(
-        state.addedItems,
-        selectedId,
-      );
+      const itemsAfterRemove = removeItemFromAddedItems(state.addedItems, selectedId);
       const newCartTotal = generateCartInvoice(itemsAfterRemove);
 
       return {

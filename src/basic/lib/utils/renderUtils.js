@@ -1,7 +1,8 @@
-import { PRODUCT_INVENTORY } from "../lib/configs/products";
-import { CartItem } from "./CartItem";
-import { ProductSelectItem } from "./ProductSelectItem";
-import { StockInfo } from "./StockInfo";
+import { PRODUCT_INVENTORY } from "../configs/products";
+import { CartItem } from "../../components/CartItem";
+import { ProductSelectItem } from "../../components/ProductSelectItem";
+import { StockInfo } from "../../components/StockInfo";
+import { cartStore } from "../../stores/cartStore";
 
 export function renderTotalPrice(totalPrice) {
   const cartTotalElem = document.getElementById("cart-total");
@@ -82,7 +83,7 @@ export function renderStockInfo() {
 
     infoMsg += StockInfo({
       name: item.name,
-      quantityLeft: item.stock - cartItem.quantity,
+      quantityLeft: item.stock - (cartItem?.quantity ?? 0),
     });
   }
 

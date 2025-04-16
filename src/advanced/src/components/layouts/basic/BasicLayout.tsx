@@ -9,7 +9,7 @@ interface IProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 const BasicLayout: React.FC<React.PropsWithChildren<IProps>> = ({ children, className, ...props }) => {
   return (
-    <div {...props} className={cn("bg-gray-100 min-h-screen", className)}>
+    <div {...props} className={cn("min-h-screen bg-gray-100", className)}>
       <Header />
       <Main>{children}</Main>
       <Footer />

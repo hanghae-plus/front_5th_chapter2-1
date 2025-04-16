@@ -8,8 +8,8 @@ import ShoppingHelp from "./_components/ShoppingHelp";
 
 const MainPage: React.FC = () => {
   return (
-    <BasicLayout className="flex justify-center items-center">
-      <article className="bg-indigo-400 rounded-xl shadow-md p-8 w-full max-w-5xl min-w-md -translate-y-1/2">
+    <BasicLayout className="flex items-center justify-center">
+      <article className="w-full max-w-5xl min-w-md -translate-y-1/2 rounded-xl bg-indigo-400 p-8 shadow-md">
         <CartHeader />
         <CartTable />
         <CartSummary />

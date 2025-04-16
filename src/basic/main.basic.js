@@ -3,9 +3,9 @@ let lastSelectedProduct,
 
 const DISCOUNT_RATIO = {
   THUNDER: 0.2,
-  ADDITIONAL: 0.05
-}
-const isTuesDay = new Date().getDay() === 2 ? true : false
+  ADDITIONAL: 0.05,
+};
+const isTuesDay = () => (new Date().getDay() === 2 ? true : false);
 
 const prodList = [
   { id: "p1", name: "상품1", price: 10000, quantity: 50 },
@@ -15,7 +15,7 @@ const prodList = [
   { id: "p5", name: "상품5", price: 25000, quantity: 10 },
 ];
 
-const $ = (query) => document.querySelector(query)
+const $ = (query) => document.querySelector(query);
 
 function main() {
   const root = $("#app");
@@ -36,7 +36,7 @@ function main() {
         </div>
       </div>
     </div>
-  `
+  `;
 
   renderSelOpts();
   calcCart();
@@ -46,7 +46,9 @@ function main() {
     setInterval(function () {
       const luckyItem = prodList[Math.floor(Math.random() * prodList.length)];
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
-        luckyItem.price = Math.round(luckyItem.price * (1 - DISCOUNT_RATIO.THUNDER)); 
+        luckyItem.price = Math.round(
+          luckyItem.price * (1 - DISCOUNT_RATIO.THUNDER)
+        );
         // alert
         console.log(
           "번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!"
@@ -68,7 +70,9 @@ function main() {
           console.log(
             suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!"
           );
-          suggest.price = Math.round(suggest.price * (1 - DISCOUNT_RATIO.ADDITIONAL));
+          suggest.price = Math.round(
+            suggest.price * (1 - DISCOUNT_RATIO.ADDITIONAL)
+          );
           renderSelOpts();
         }
       }
@@ -77,7 +81,7 @@ function main() {
 }
 
 function renderSelOpts() {
-  const $productSelect = $('#product-select')
+  const $productSelect = $("#product-select");
   $productSelect.innerHTML = "";
   prodList.forEach(function (item) {
     const opt = document.createElement("option");
@@ -89,7 +93,7 @@ function renderSelOpts() {
 }
 
 function calcCart() {
-  const $cartItems = $('#cart-items')
+  const $cartItems = $("#cart-items");
   totalAmount = 0;
   let itemCnt = 0;
   const cartItems = $cartItems.children;
@@ -127,7 +131,7 @@ function calcCart() {
       totalAmount += itemTot * (1 - discount);
     })();
   }
-  
+
   // 상품 종류와 상관 없이, 30개 이상 구매할 경우 25% 할인
   let discountRate = 0;
   if (itemCnt >= 30) {
@@ -144,11 +148,12 @@ function calcCart() {
   }
 
   // 화요일에는 특별할인 10%
-  if (isTuesDay) {
-    totalAmount *= (1 - 0.1);
+  if (isTuesDay()) {
+    totalAmount *= 1 - 0.1;
     discountRate = Math.max(discountRate, 0.1);
+    console.log(totalAmount, discountRate);
   }
-  const $cartTotal = $('#cart-total')
+  const $cartTotal = $("#cart-total");
   $cartTotal.textContent = "총액: " + Math.round(totalAmount) + "원";
 
   if (discountRate > 0) {
@@ -164,7 +169,7 @@ function calcCart() {
 
 const renderBonusPoints = () => {
   const bonusPoints = Math.floor(totalAmount / 1000);
-  const $cartTotal = $('#cart-total')
+  const $cartTotal = $("#cart-total");
   let ptsTag = document.getElementById("loyalty-points");
   if (!ptsTag) {
     ptsTag = document.createElement("span");
@@ -188,17 +193,17 @@ function renderStockInfo() {
         "\n";
     }
   });
-  const $stockStatus = $('#stock-status')
+  const $stockStatus = $("#stock-status");
   $stockStatus.textContent = infoMsg;
 }
 
 main();
 
-const $addBtn = $('#add-to-cart')
+const $addBtn = $("#add-to-cart");
 $addBtn.addEventListener("click", handleClickAdd);
 
 function handleClickAdd() {
-  const $productSelect = $('#product-select')
+  const $productSelect = $("#product-select");
   const selItem = $productSelect.value;
   const itemToAdd = prodList.find(function (p) {
     return p.id === selItem;
@@ -219,7 +224,7 @@ function handleClickAdd() {
       }
     } else {
       const newItem = document.createElement("div");
-      const $cartItems = $('#cart-items')
+      const $cartItems = $("#cart-items");
 
       newItem.id = itemToAdd.id;
       newItem.className = "flex justify-between items-center mb-2";
@@ -247,16 +252,13 @@ function handleClickAdd() {
   }
 }
 
-
-const $cartItems = $('#cart-items')
+const $cartItems = $("#cart-items");
 $cartItems.addEventListener("click", handleRemoveItem);
-$cartItems.addEventListener("click", handleClickQuantityChange)
+$cartItems.addEventListener("click", handleClickQuantityChange);
 
 function handleRemoveItem(event) {
   const tgt = event.target;
-  if (
-    tgt.classList.contains("remove-item")
-  ) {
+  if (tgt.classList.contains("remove-item")) {
     const prodId = tgt.dataset.productId;
     const itemElem = document.getElementById(prodId);
 
@@ -277,10 +279,10 @@ function handleRemoveItem(event) {
 
 function handleClickQuantityChange(event) {
   const tgt = event.target;
-  if(tgt.classList.contains("quantity-change")) {
+  if (tgt.classList.contains("quantity-change")) {
     const prodId = tgt.dataset.productId;
     const itemElem = document.getElementById(prodId);
-  
+
     const prod = prodList.find(function (p) {
       return p.id === prodId;
     });

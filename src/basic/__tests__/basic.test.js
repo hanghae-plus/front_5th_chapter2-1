@@ -123,9 +123,15 @@ describe("basic test", () => {
     it("포인트가 올바르게 계산되는지 확인", () => {
       sel.value = "p2";
       addBtn.click();
-      expect(document.getElementById("loyalty-points").textContent).toContain(
-        "(포인트: 18)"
-      );
+      if (new Date().getDay() === 2) {
+        expect(document.getElementById("loyalty-points").textContent).toContain(
+          "(포인트: 18)"
+        );
+      } else {
+        expect(document.getElementById("loyalty-points").textContent).toContain(
+          "(포인트: 20)"
+        );
+      }
     });
 
     it("번개세일 기능이 정상적으로 동작하는지 확인", () => {

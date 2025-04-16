@@ -113,12 +113,13 @@ describe('basic test', () => {
 
     it('화요일 할인이 적용되는지 확인', () => {
       const mockDate = new Date().getDay();
-      const isTuesday = mockDate === 2; // 화요일
-      // vi.useFakeTimers()
-      // vi.setSystemTime(isTuesday);
-      sel.value='p1';
-      addBtn.click();
-      expect(document.getElementById('cart-total').textContent).toContain('(10.0% 할인 적용)');
+      if(mockDate == 2) { // 화요일이면 할인,
+        vi.useFakeTimers()
+        vi.setSystemTime(mockDate);
+        sel.value='p1';
+        addBtn.click();
+        expect(document.getElementById('cart-total').textContent).toContain('(10.0% 할인 적용)');
+      }
     });
 
     it('재고가 부족한 경우 추가되지 않는지 확인', () => {

@@ -1,5 +1,6 @@
 import { renderProductOptions } from "../utils/render-product-options";
 
+/** 장바구니 UI의 HTML 문자열 템플릿을 반환하는 함수 */
 export function UiTemplate() {
 
   return `

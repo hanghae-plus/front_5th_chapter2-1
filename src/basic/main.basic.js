@@ -1,6 +1,6 @@
 
 import { calculateCart } from "./logic/calculate-cart";
-import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale";
+import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale-timer";
 import { makeUI, UiTemplate } from "./ui/make-ui";
 
 let lastSale = null; // 외부에서 선택값을 계속 업데이트함

@@ -8,7 +8,6 @@ import { renderProductOptions } from "../utils/render-product-options";
 function updateSelectOptions() {
 
   const select = document.getElementById('product-select');
-
   select.innerHTML = renderProductOptions();
 }
 
@@ -52,5 +51,5 @@ const startLastSaleTimer =(getLastSale) =>{
     }, Math.random() * 20000);
 }
 
-export { startLastSaleTimer, startLuckySaleTimer, updateSelectOptions };
+export { startLastSaleTimer, startLuckySaleTimer };
 

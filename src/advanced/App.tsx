@@ -3,6 +3,7 @@ import CartLayout from './components/CartLayout';
 import ProductSelector from './components/ProductSelector';
 import CartSummary from './components/CartSummary';
 import CartItemList from './components/CartItemList';
+import StockStatus from './components/StockStatus';
 
 import { Product, CartItem } from './types/product';
 import { INITIAL_PRODUCTS } from './constants/constants';
@@ -45,6 +46,7 @@ const App = () => {
                     setBonusPoints={setBonusPoints}
                     cartItems={cartItems}
                     onCartChange={handleCartChange} />
+                <StockStatus productList={productList} />
             </CartLayout>
         </div>
     );

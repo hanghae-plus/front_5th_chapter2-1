@@ -1,4 +1,4 @@
-import { Store } from './Store';
+import { Store } from './store.js';
 import { deepCopy } from '../utils/deepCopy.js';
 
 // 제품 정보 관리 스토어

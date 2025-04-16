@@ -14,11 +14,11 @@ export const ProductService = (productStore) => ({
 
 	// 재고 감소
 	decreaseProduct: (productId, amount = 1) => {
-		return productStore.decreaseProductQuantity(productId, amount);
+		return productStore.decreaseQuantity(productId, amount);
 	},
 
 	// 재고 증가
-	increaseProductQuantity: (productId, amount = 1) => {
-		return productStore.increaseProductQuantity(productId, amount);
+	increaseProduct: (productId, amount = 1) => {
+		return productStore.increaseQuantity(productId, amount);
 	},
 });

@@ -53,7 +53,7 @@ export class ProductStore {
 		return false;
 	}
 
-	decreaseProductQuantity(productId, amount = 1) {
+	decreaseQuantity(productId, amount = 1) {
 		const product = this.#products.find((p) => p.id === productId);
 		if (product && product.quantity >= amount) {
 			product.quantity -= amount;
@@ -62,7 +62,7 @@ export class ProductStore {
 		return false;
 	}
 
-	increaseProductQuantity(productId, amount = 1) {
+	increaseQuantity(productId, amount = 1) {
 		const product = this.#products.find((p) => p.id === productId);
 		if (product) {
 			product.quantity += amount;

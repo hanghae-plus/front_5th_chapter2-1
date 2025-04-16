@@ -126,7 +126,7 @@ export const CartService = () => ({
 		const { product: cartProduct, quantity } = itemInfo;
 		const newQuantity = quantity - 1;
 
-		productService.increaseProductQuantity(productId, 1);
+		productService.increaseQuantity(productId, 1);
 		onChangeCart?.();
 
 		if (newQuantity > 0) {
@@ -151,7 +151,7 @@ export const CartService = () => ({
 
 		const { quantity } = itemInfo;
 
-		productService.increaseProductQuantity(productId, quantity);
+		productService.increaseProduct(productId, quantity);
 
 		cartItemElement.remove();
 

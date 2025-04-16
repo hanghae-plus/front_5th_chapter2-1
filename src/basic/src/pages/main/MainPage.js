@@ -1,76 +1,90 @@
-import { createHeader } from '../components/header';
-import { createProductStateText } from '../components/product-state/ProductStateText';
-import { createSelect } from '../components/select/Select';
-import { createTotalAmountText } from '../components/total-amount/TotalAmountText';
-import { Cart } from '../entities/cart/model/cart.model';
-import { CartService } from '../features/cart/services/cart.service';
+import { createButton } from '../../components/button';
+import { createCartList } from '../../components/cart-list';
+import { createContainer } from '../../components/container';
+import { createHeader } from '../../components/header';
+import { createProductStateText } from '../../components/product-state';
+import { createSelect } from '../../components/select';
+import { createTotalAmountText } from '../../components/total-amount';
+import { createWrapper } from '../../components/wrapper';
 import {
 	useRandomFlashDiscount,
 	useSuggestiveDiscount,
-} from '../features/discounts';
-import { ProductService } from '../features/product/services/product.service';
-import { updateSelOpts } from '../shared/utils';
-import { createAddButton } from '../widgets/add-button';
-import { createCartList } from '../widgets/cart-list';
-import { createContainer } from '../widgets/container';
-import { createWrapper } from '../widgets/wrapper';
+} from '../../hooks/discount';
+import { CartService } from '../../services/cart';
+import { productSelectionTracker } from '../../stores/product';
 
-export const createMainPage = () => {
-	const cart = new Cart();
-
-	let lastSel = 0;
+import { updateLoyaltyPoints } from '../../utils/points';
+import { updateProductInformation } from '../../utils/product';
+import { updateProductSelectOptions, updateTotalUI } from '../../utils/ui';
+export const createMainPage = ({ cart }) => {
 	const container = createContainer();
 	const wrapper = createWrapper();
-	const productStateText = createProductStateText({ id: 'stock-status' });
+	const productStateText = createProductStateText({
+		id: 'stock-status',
+		className: 'text-sm text-gray-500 mt-2',
+	});
 	const header = createHeader({ text: '장바구니' });
 
-	const totalAmountText = createTotalAmountText({ id: 'cart-total' });
-	const select = createSelect({ id: 'product-select' });
+	const totalAmountText = createTotalAmountText({
+		id: 'cart-total',
+		className: 'text-xl font-bold my-4',
+	});
 
-	// 카트 UI 업데이트 함수
+	const select = createSelect({
+		id: 'product-select',
+		className: 'border rounded p-2 mr-2',
+	});
+
 	const updateCartUI = () => {
-		CartService().calculate(cartList, totalAmountText, productStateText);
+		const { totalAmount, discountRate } = CartService().calculate(
+			cartList,
+			totalAmountText,
+			productStateText,
+		);
+		updateTotalUI(totalAmountText, totalAmount, discountRate);
+		updateLoyaltyPoints(totalAmountText, totalAmount);
+		productStateText.textContent = updateProductInformation();
 	};
 
 	const cartList = createCartList({
-		onCartChanged: () => {
+		onChangeCart: () => {
 			updateCartUI();
 		},
 	});
 
-	const addBtn = createAddButton({
-		select,
-		cartList,
-		onItemAdded: (selectedItemId) => {
-			lastSel = selectedItemId;
-
-			// ProductService를 통해 상품 정보 가져오기
-			const product = ProductService().findProductById(selectedItemId);
-
-			// 카트 모델에 상품 추가
-			if (product) {
-				cart.addItem(product);
-
-				// 카트 UI 업데이트
-				updateCartUI();
+	const button = createButton({
+		text: '추가',
+		id: 'add-to-cart',
+		className: 'bg-blue-500 text-white px-4 py-2 rounded',
+		onClick: () => {
+			const result = CartService().handleAddToCart(
+				select.value,
+				cartList,
+				updateCartUI,
+				productSelectionTracker.setLastSelectedProductId.bind(
+					productSelectionTracker,
+				),
+			);
+			if (!result) {
+				alert('재고가 부족합니다.');
+			} else {
+				cart.addItem(result);
 			}
 		},
 	});
 
-	updateSelOpts(select);
+	updateProductSelectOptions(select);
 	wrapper.appendChild(header);
 	wrapper.appendChild(cartList);
 	wrapper.appendChild(totalAmountText);
 	wrapper.appendChild(select);
-	wrapper.appendChild(addBtn);
+	wrapper.appendChild(button);
 	wrapper.appendChild(productStateText);
 	container.appendChild(wrapper);
 
-	// 초기 UI 업데이트
 	updateCartUI();
 
 	useRandomFlashDiscount(select);
-	useSuggestiveDiscount(select, lastSel);
-
+	useSuggestiveDiscount(select);
 	return container;
 };

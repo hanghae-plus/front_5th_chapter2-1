@@ -1,39 +1,73 @@
 import React from 'react';
-import { CartItem } from '../types/product';
+import { Product, CartItem } from '../types/product';
 
 type Props = {
     cartItems: CartItem[];
     setCartItems: (items: CartItem[]) => void;
+    productList: Product[]; setProductList: (products: Product[]) => void;
 };
 
-export const CartItemList = ({ cartItems, setCartItems }: Props) => {
+export const CartItemList = ({ cartItems, setCartItems, productList, setProductList }: Props) => {
     const handleRemoveItem = (item: CartItem) => {
         const updatedCart = cartItems.filter(cartItem => cartItem.id !== item.id);
         setCartItems(updatedCart);
     };
 
     const handleIncrease = (item: CartItem) => {
+        const product = productList.find(p => p.id === item.id);
+        if (!product) return;
+
+        if (product.stock <= 0) {
+            alert("재고가 부족합니다.");
+            return;
+        }
+
+        // 1. 장바구니 수량 증가
         const updatedCart = cartItems.map(cartItem =>
             cartItem.id === item.id
                 ? { ...cartItem, quantity: cartItem.quantity + 1 }
                 : cartItem
         );
         setCartItems(updatedCart);
+
+        // 2. 상품 재고 감소
+        const updatedProducts = productList.map(p =>
+            p.id === item.id
+                ? { ...p, stock: p.stock - 1 }
+                : p
+        );
+        setProductList(updatedProducts);
     };
+
 
     const handleDecrease = (item: CartItem) => {
-        if (item.quantity <= 1) {
-            handleRemoveItem(item);
-            return;
-        }
+        const newQuantity = item.quantity - 1;
 
-        const updatedCart = cartItems.map(cartItem =>
-            cartItem.id === item.id
-                ? { ...cartItem, quantity: cartItem.quantity - 1 }
-                : cartItem
+        // productList에서 해당 상품 찾기
+        const updatedProducts = productList.map(p =>
+            p.id === item.id
+                ? { ...p, stock: p.stock + 1 }
+                : p
         );
-        setCartItems(updatedCart);
+
+        console.log("updatedProducts", updatedProducts);
+        setProductList(updatedProducts);
+
+        if (newQuantity <= 0) {
+            // 수량 0이면 삭제
+            const updatedCart = cartItems.filter(cartItem => cartItem.id !== item.id);
+            setCartItems(updatedCart);
+        } else {
+            // 수량 감소
+            const updatedCart = cartItems.map(cartItem =>
+                cartItem.id === item.id
+                    ? { ...cartItem, quantity: newQuantity }
+                    : cartItem
+            );
+            setCartItems(updatedCart);
+        }
     };
+
 
     return (
         <>

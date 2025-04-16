@@ -1,6 +1,6 @@
-import { CartRenderer } from './components/CartRenderer.js';
+import { CartLayout } from './components/cartLayout.js';
 import { CartItemList } from './components/CartItemList/index.js';
-import { ProductSelector } from './components/ProductSelector.js';
+import { ProductSelector } from './components/ProductSelector/index.js';
 import { INITIAL_PRODUCTS } from './constants.js';
 
 //util.js
@@ -17,7 +17,7 @@ const { cartItemList,
   cartTotal,
   productSelect,
   addToCartButton,
-  stockStatus } = CartRenderer(root);
+  stockStatus } = CartLayout(root);
 
 /* 상품 데이터 초기화 */
 productList = [...INITIAL_PRODUCTS];

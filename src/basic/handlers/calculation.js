@@ -1,7 +1,7 @@
 import { DOM } from '../elements';
 import { PRODUCT, CART } from '../store';
 
-export function calculateCart() {
+export const calculateCart = () => {
   CART.resetCalculation();
 
   const allProducts = PRODUCT.getAll();
@@ -66,9 +66,9 @@ export function calculateCart() {
 
   updateStockInfo();
   renderBonusPoint();
-}
+};
 
-export function updateStockInfo() {
+const updateStockInfo = () => {
   let infoMsg = '';
 
   PRODUCT.getAll().forEach(({ name, quantity }) => {
@@ -85,7 +85,7 @@ export function updateStockInfo() {
   });
 
   DOM.getElement('stockInfo').textContent = infoMsg;
-}
+};
 
 export function renderBonusPoint() {
   const bonusPoint = Math.floor(CART.getTotalAmount() / 1000);
@@ -110,7 +110,7 @@ export function renderBonusPoint() {
   pointTag().textContent = `(포인트: ${bonusPoint})`;
 }
 
-export function updateSelectOptions() {
+export const updateSelectOptions = () => {
   DOM.getElement('select').innerHTML = '';
 
   PRODUCT.getAll().forEach((item) => {
@@ -125,4 +125,4 @@ export function updateSelectOptions() {
 
     DOM.appendElement('select', option);
   });
-}
+};

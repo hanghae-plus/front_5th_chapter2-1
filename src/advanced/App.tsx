@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CartLayout from './components/CartLayout';
 import ProductSelector from './components/ProductSelector';
 import CartSummary from './components/CartSummary';
+import CartItemList from './components/CartItemList';
 
 import { Product, CartItem } from './types/product';
 import { INITIAL_PRODUCTS } from './constants/constants';
@@ -30,6 +31,7 @@ const App = () => {
     return (
         <div className="max-w-4xl mx-auto">
             <CartLayout>
+                <CartItemList cartItems={cartItems} setCartItems={setCartItems} />
                 <CartSummary cartItems={cartItems} />
                 <ProductSelector
                     productList={productList}

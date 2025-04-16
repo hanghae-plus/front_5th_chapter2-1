@@ -1,4 +1,5 @@
 import { getStore, updateStore } from "../store/store";
+
 export const CartList = () => {
   return `<div id="cart-items"></div>`;
 };

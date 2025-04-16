@@ -12,7 +12,9 @@ export const BULK_DISCOUNT_START = 30; // 대량 구매 할인 시작 수량
 
 export const BULK_DISCOUNT_RATE = 0.25; // 대량 구매 할인율
 
-export const TUESDAY_DISCOUNT_RATE = 0.1; // 화요일 할인율
+export const SPECIAL_DAY_DISCOUNT_DATE = 2; // 특별 요일 (화요일)
+
+export const SPECIAL_DAY_DISCOUNT_RATE = 0.1; // 특별 요일 할인율
 
 export const LUCKY_ITEM_DISCOUNT_RATE = 0.2; // 랜덤 할인율
 

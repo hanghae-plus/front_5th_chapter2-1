@@ -10,7 +10,8 @@ const updateSelectOptions = () => {
   products.forEach(function (item) {
     var opt = document.createElement("option");
     opt.value = item.id;
-    opt.textContent = item.name + " - " + item.price + "원";
+    opt.textContent = `${item.name} - ${item.price}원`;
+
     if (item.stock === 0) opt.disabled = true;
     select.appendChild(opt);
   });

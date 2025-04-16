@@ -105,12 +105,11 @@ export const handleAddItem = () => {
 
 // 총액 표시 - 파일 분리 중
 export const showSumText = (totalPrice, totalDiscountRate) => {
-  sum.textContent = "총액: " + Math.round(totalPrice) + "원";
+  sum.textContent = `총액: ${Math.round(totalPrice)}원`;
   if (totalDiscountRate > 0) {
     var span = document.createElement("span");
     span.className = "text-green-500 ml-2";
-    span.textContent =
-      "(" + (totalDiscountRate * 100).toFixed(1) + "% 할인 적용)";
+    span.textContent = `(${(totalDiscountRate * 100).toFixed(1)}% 할인 적용)`;
     sum.appendChild(span);
   }
 
@@ -129,7 +128,7 @@ export const calcPoints = (totalPrice) => {
     pointsElem.className = "text-blue-500 ml-2";
     sum.appendChild(pointsElem);
   }
-  pointsElem.textContent = "(포인트: " + points + ")";
+  pointsElem.textContent = `(포인트: ${points})`;
 };
 
 // 재고 정보 업데이트 - 파일 분리 중
@@ -137,11 +136,7 @@ export const updateStockInfo = () => {
   var stockInfoMsg = "";
   products.forEach(function (item) {
     if (item.stock < 5) {
-      stockInfoMsg +=
-        item.name +
-        ": " +
-        (item.stock > 0 ? "재고 부족 (" + item.stock + "개 남음)" : "품절") +
-        "\n";
+      stockInfoMsg += `${item.name}: ${item.stock > 0 ? `재고 부족 (${item.stock}개 남음)` : `품절`}\n`;
     }
   });
   stockInfo.textContent = stockInfoMsg;
@@ -174,7 +169,7 @@ const addExistingItem = (existingItem, itemToAdd) => {
 
   if (itemEa <= itemToAdd.stock) {
     existingItem.querySelector("span").textContent =
-      itemToAdd.name + " - " + itemToAdd.price + "원 x " + itemEa;
+      `${itemToAdd.name} - ${itemToAdd.price}원 x ${itemEa}`;
     itemToAdd.stock--;
   } else {
     alert("재고가 부족합니다.");
@@ -205,7 +200,7 @@ const updateItemEa = (target, itemElem) => {
   });
 
   if (newEa > 0 && newEa <= itemToChange.stock + currentEa) {
-    itemSpan.textContent = itemText.split("x ")[0] + "x " + newEa;
+    itemSpan.textContent = `${itemText.split("x ")[0]}x ${newEa}`;
     itemToChange.stock -= eaToChange;
   } else if (newEa <= 0) {
     itemElem.remove();

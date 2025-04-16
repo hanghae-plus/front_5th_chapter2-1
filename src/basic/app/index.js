@@ -1,4 +1,4 @@
-import { logic } from "./Cart/logic.js";
+import { updateCartDom } from "./Cart/updateCartDom.js";
 import { setSaleAlert, setSuggestionAlert } from "./logic.js";
 import { createCart } from "./Cart/index.js";
 
@@ -13,7 +13,7 @@ export function createRootChildren() {
 }
 
 export function setUp() {
-  logic();
+  updateCartDom();
   setSaleAlert();
   setSuggestionAlert();
 }

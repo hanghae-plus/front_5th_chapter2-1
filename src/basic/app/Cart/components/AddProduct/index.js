@@ -1,4 +1,4 @@
-import { ElementIds } from "../../../../../constants.js";
+import { ElementIds } from "../../../constants.js";
 import { handleClickAddBtn, updateSelOpts } from "./logic.js";
 
 function createSel() {

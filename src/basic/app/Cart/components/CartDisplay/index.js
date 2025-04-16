@@ -1,4 +1,4 @@
-import { ElementIds } from "../../../../../constants.js";
+import { ElementIds } from "../../../constants.js";
 import { handleClickCartDisp } from "./logic.js";
 
 export function createCartDisplay() {

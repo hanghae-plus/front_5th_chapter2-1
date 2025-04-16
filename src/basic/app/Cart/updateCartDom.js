@@ -1,4 +1,4 @@
-import { ElementIds } from "../../../constants.js";
+import { ElementIds } from "../constants.js";
 import { findProduct, getProductList } from "../../store/prodList.js";
 
 /** DATA */
@@ -72,7 +72,7 @@ function createPointTag() {
   return ptsTag;
 }
 
-function renderBonusPts(totalAmt) {
+function updateBonusPointDom(totalAmt) {
   const sum = document.getElementById(ElementIds.SUM);
   let ptsTag = document.getElementById(ElementIds.LOYALTY_POINTS);
 
@@ -85,7 +85,7 @@ function renderBonusPts(totalAmt) {
   ptsTag.textContent = "(포인트: " + bonusPts + ")";
 }
 
-function updateStockInfo() {
+function updateStockInfoDom() {
   const stockInfo = document.getElementById(ElementIds.STOCK_INFO);
   const productList = getProductList();
   if (stockInfo) {
@@ -112,13 +112,14 @@ export function getValueFromCardItem(item, type = "quantity") {
   return itemText.textContent.split("x ")[0];
 }
 
-export function logic() {
+
+function getFinalAmount (){
+  let totalAmt = 0;
+  let subTot = 0;
+  let itemCnt = 0;
+
   const cartDisp = document.getElementById(ElementIds.CART_DISP);
   const cartItems = cartDisp?.children;
-
-  let subTot = 0;
-  let totalAmt = 0;
-  let itemCnt = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
     let curItem = findProduct(cartItems[i].id);
@@ -132,19 +133,36 @@ export function logic() {
     totalAmt += itemTot * (1 - disc);
   }
 
-  const finalAmounts = getFinalAmounts(itemCnt, totalAmt, subTot);
-  totalAmt = finalAmounts.totalAmt;
+  return getFinalAmounts(itemCnt, totalAmt, subTot);
+}
 
+function updateSumDom(totalAmt,discRate ){
   const sum = document.getElementById(ElementIds.SUM);
-  if (sum) {
-    sum.textContent = "총액: " + Math.round(totalAmt) + "원";
+
+  if (!sum) {
+    return;
   }
 
-  if (finalAmounts.discRate > 0) {
-    const discountRateSpan = createDiscountRateMessage(finalAmounts.discRate);
+  sum.textContent = "총액: " + Math.round(totalAmt) + "원";
+  if (discRate > 0) {
+    const discountRateSpan = createDiscountRateMessage(discRate);
     sum?.appendChild(discountRateSpan);
   }
+}
 
-  updateStockInfo();
-  renderBonusPts(totalAmt);
+/**
+ * 장바구니에서 확인한 총액과 할인율로 관련 DOM 업데이트
+ */
+export function updateCartDom() {
+ // 장바구니 에 담긴 상품들을 확인해서 총액과 할인율을 계산
+  const {totalAmt, discRate} = getFinalAmount()
+
+  // 총액 & 할인율 DOM 업데이트
+  updateSumDom(totalAmt, discRate);
+
+  // 재고 정보 DOM 업데이트
+  updateStockInfoDom();
+
+  // 보너스 보인트 DOM 업데이트
+  updateBonusPointDom(totalAmt);
 }

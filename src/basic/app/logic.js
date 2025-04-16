@@ -1,5 +1,5 @@
 import { prodList } from "../store/prodList.js";
-import { lastSel } from "../store/lastSel.js";
+import { getLastSelValue } from "../store/lastSel.js";
 
 function getRandomProduct() {
   return prodList[Math.floor(Math.random() * prodList.length)];
@@ -25,6 +25,8 @@ export function setSuggestionAlert() {
 
   setTimeout(() => {
     setInterval(() => {
+      const lastSel = getLastSelValue();
+
       if (!lastSel) {
         return;
       }

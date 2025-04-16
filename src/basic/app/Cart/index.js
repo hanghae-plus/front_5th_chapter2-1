@@ -1,4 +1,4 @@
-import { ElementIds } from "../../../constants.js";
+import { ElementIds } from "../constants.js";
 import { createCartDisplay } from "./components/CartDisplay/index.js";
 import { createAddProduct } from "./components/AddProduct/index.js";
 

@@ -1,5 +1,5 @@
 import { findProduct } from "../../../../store/prodList.js";
-import { logic, getCartItemText, getValueFromCardItem } from "../../logic.js";
+import { updateCartDom, getCartItemText, getValueFromCardItem } from "../../updateCartDom.js";
 
 function changeCardItemQuantity(tgt, itemElem, prod) {
   var qtyChange = parseInt(tgt.dataset.change);
@@ -52,5 +52,5 @@ export function handleClickCartDisp(event) {
     removeCardItem(itemElem, prod);
   }
 
-  logic();
+  updateCartDom();
 }

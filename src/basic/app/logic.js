@@ -14,7 +14,7 @@ export function setSaleAlert() {
       if (Math.random() < 0.3 && luckyItem.q > 0) {
         luckyItem.val = Math.round(luckyItem.val * 0.8);
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
-        // updateSelOpts(); //selectOptions 을 수정하는 액션이 없으므로 없어도 될것으로 예상
+        // updateSelectOptionsDom(); //selectOptions 을 수정하는 액션이 없으므로 없어도 될것으로 예상
       }
     }, INTERVAL_TIME);
   }, Math.random() * 10000);
@@ -38,7 +38,7 @@ export function setSuggestionAlert() {
       if (suggest) {
         alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");
         suggest.val = Math.round(suggest.val * 0.95);
-        // updateSelOpts(); //selectOptions 을 수정하는 액션이 없으므로 없어도 될것으로 예상
+        // updateSelectOptionsDom(); //selectOptions 을 수정하는 액션이 없으므로 없어도 될것으로 예상
       }
     }, INTERVAL_TIME);
   }, Math.random() * 20000);

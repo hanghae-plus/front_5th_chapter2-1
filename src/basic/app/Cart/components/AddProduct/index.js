@@ -1,11 +1,11 @@
 import { ElementIds } from "../../../constants.js";
-import { handleClickAddBtn, updateSelOpts } from "./logic.js";
+import { handleClickAddBtn, updateSelectOptionsDom } from "./logic.js";
 
 function createSel() {
   const sel = document.createElement("select");
   sel.id = ElementIds.SEL;
   sel.className = "border rounded p-2 mr-2";
-  updateSelOpts(sel);
+  updateSelectOptionsDom(sel);
 
   return sel;
 }

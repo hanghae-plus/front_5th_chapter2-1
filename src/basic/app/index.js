@@ -1,4 +1,4 @@
-import { updateCartDom } from "./Cart/updateCartDom.js";
+import { updateCartDom } from "./Cart/logics/updateCartDom.js";
 import { setSaleAlert, setSuggestionAlert } from "./logic.js";
 import { createCart } from "./Cart/index.js";
 

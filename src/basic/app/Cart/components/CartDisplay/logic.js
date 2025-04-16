@@ -1,5 +1,5 @@
 import { findProduct } from "../../../../store/prodList.js";
-import { updateCartDom, getCartItemText, getValueFromCardItem } from "../../updateCartDom.js";
+import { updateCartDom, getCartItemText, getValueFromCardItem } from "../../logics/updateCartDom.js";
 
 function changeCardItemQuantity(tgt, itemElem, prod) {
   var qtyChange = parseInt(tgt.dataset.change);

@@ -1,13 +1,13 @@
 import { ElementIds } from "../../../constants.js";
 import { findProduct, prodList } from "../../../../store/prodList.js";
-import { updateCartDom, getCartItemText, getValueFromCardItem } from "../../updateCartDom.js";
+import { updateCartDom, getCartItemText, getValueFromCardItem } from "../../logics/updateCartDom.js";
 import { updateLastSelValue } from "../../../../store/lastSel.js";
 
 function isSoldOut(quantity) {
   return quantity === 0;
 }
 
-function createOptionFromItem(item) {
+function createItemOptionDom(item) {
   const opt = document.createElement("option");
   opt.value = item.id;
   opt.textContent = item.name + " - " + item.val + "원";
@@ -15,16 +15,17 @@ function createOptionFromItem(item) {
   return opt;
 }
 
-export function updateSelOpts(selElem) {
+export function updateSelectOptionsDom(selElem) {
   const sel = selElem ?? document.getElementById(ElementIds.SEL);
 
   sel.innerHTML = "";
 
   prodList.forEach((item) => {
-    const opt = createOptionFromItem(item);
+    const opt = createItemOptionDom(item);
     sel.appendChild(opt);
   });
 }
+
 
 function createNewCartItem(itemToAdd) {
   const newItem = document.createElement("div");
@@ -39,7 +40,7 @@ function createNewCartItem(itemToAdd) {
   return newItem;
 }
 
-function updateQuantityFromCardItem(item, itemToAdd) {
+function updateCartItemQuantityDom(item, itemToAdd) {
   const newQty = getValueFromCardItem(item) + 1;
   const { name, val, q } = itemToAdd;
 
@@ -60,15 +61,12 @@ function addItemToCart(itemToAdd) {
   itemToAdd.q--;
 }
 
+
 function updateCartDisplay(itemToAdd) {
   const item = document.getElementById(itemToAdd.id);
-
-  if (item) {
-    updateQuantityFromCardItem(item, itemToAdd);
-  } else {
-    addItemToCart(itemToAdd);
-  }
+  item ? updateCartItemQuantityDom(item, itemToAdd) : addItemToCart(itemToAdd);
 }
+
 export function handleClickAddBtn() {
   const sel = document.getElementById(ElementIds.SEL);
 

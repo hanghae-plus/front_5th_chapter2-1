@@ -1,5 +1,5 @@
-import { ElementIds } from "../constants.js";
-import { findProduct, getProductList } from "../../store/prodList.js";
+import { ElementIds } from "../../constants.js";
+import { findProduct, getProductList } from "../../../store/prodList.js";
 
 /** DATA */
 const discountRateById = {

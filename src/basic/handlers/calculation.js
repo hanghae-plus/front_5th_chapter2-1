@@ -61,7 +61,7 @@ export function calculateCart() {
     discountTag.className = 'text-green-500 ml-2';
     discountTag.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
 
-    DOM.getElement('summary').appendChild(discountTag);
+    DOM.appendElement('summary', discountTag);
   }
 
   updateStockInfo();
@@ -102,7 +102,7 @@ export function renderBonusPoint() {
     newTag.id = 'loyalty-points';
     newTag.className = 'text-blue-500 ml-2';
 
-    DOM.getElement('summary').appendChild(newTag);
+    DOM.appendElement('summary', newTag);
 
     return newTag;
   };
@@ -123,6 +123,6 @@ export function updateSelectOptions() {
       option.disabled = true;
     }
 
-    DOM.getElement('select').appendChild(option);
+    DOM.appendElement('select', option);
   });
 }

@@ -19,11 +19,13 @@ export const DOM = {
     stockInfo,
   },
 
-  getElement(name) {
-    return DOM.elements[name];
+  getElement: (name) => DOM.elements[name],
+
+  appendElement: (name, element) => {
+    DOM.elements[name].appendChild(element);
   },
 
-  initializeElements() {
+  initializeElements: () => {
     DOM.elements.cartItemContainer.id = 'cart-items';
     DOM.elements.summary.id = 'cart-total';
     DOM.elements.select.id = 'product-select';
@@ -41,8 +43,7 @@ export const DOM = {
     DOM.elements.header.textContent = '장바구니';
     DOM.elements.addProductButton.textContent = '추가';
   },
-
-  buildDOMStructure() {
+  buildDOMStructure: () => {
     DOM.elements.wrapper.appendChild(DOM.elements.header);
     DOM.elements.wrapper.appendChild(DOM.elements.cartItemContainer);
     DOM.elements.wrapper.appendChild(DOM.elements.summary);

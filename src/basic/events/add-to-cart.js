@@ -1,6 +1,6 @@
 import { products } from "../data/products";
+import { calculateCart } from "../logic/calculate-cart";
 import { createCartItemElement } from "../ui/create-cart-element";
-import { calculateCart } from "./calculate-cart";
 
 /**
  * 선택한 상품을 장바구니에 추가하고, 재고와 총액을 갱신

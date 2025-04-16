@@ -1,6 +1,6 @@
 import { SALE_CONFIG } from "../config/sale-config";
 import { products } from "../data/products";
-import { renderProductOptions } from "../utils/render-product-options";
+import { renderProductOptions } from "../ui/render-product-options";
 
 /** 상품 선택 옵션을 새로 렌더링하는 함수 */
 function updateSelectOptions() {

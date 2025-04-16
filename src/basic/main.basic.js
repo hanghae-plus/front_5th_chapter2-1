@@ -1,8 +1,8 @@
-import { handleAddToCart } from "./logic/add-to-cart";
+import { handleAddToCart } from "./events/add-to-cart";
+import { handleCartItemAction } from "./events/cart-item-action";
 import { calculateCart } from "./logic/calculate-cart";
-import { handleCartItemAction } from "./logic/cart-item-action";
 import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale-timer";
-import { renderCartTemplate } from "./ui/cart-template";
+import { renderCartTemplate } from "./ui/render-cart-template";
 
 const lastSelectedRef = { current: null };
 

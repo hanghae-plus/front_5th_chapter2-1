@@ -1,10 +1,6 @@
 import { PRODUCT_LIST } from '../consts';
 import { ProductSelectDOM } from '../ui';
-import { createElement, formatPrice } from '../utils';
-
-const createOptionText = (item) => {
-  return `${item.name} - ${formatPrice(item.value)}`;
-};
+import { createElement, formatProductOption } from '../utils';
 
 const createOptionElement = (item) => {
   return createElement('option', {
@@ -12,7 +8,7 @@ const createOptionElement = (item) => {
       value: item.id,
       ...(item.quantity === 0 && { disabled: true }),
     },
-    textContent: createOptionText(item),
+    textContent: formatProductOption(item),
   });
 };
 

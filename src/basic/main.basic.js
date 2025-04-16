@@ -1,15 +1,16 @@
 import { CartLayout } from './components/cartLayout.js';
 import { CartItemList } from './components/CartItemList/index.js';
 import { ProductSelector } from './components/ProductSelector/index.js';
-import { INITIAL_PRODUCTS } from './constants.js';
 
 //util.js
 import { saleTimer } from './utils/saleTimer.js';
 import { calculateCart } from './utils/cart.js';
 
-// TODO:state로 뺄 변수
-let productList;
-var lastSelectedProduct, bonusPoints = 0
+// constants.js
+import { INITIAL_PRODUCTS } from './constants.js';
+
+//state.js
+import { getState, setState } from './state.js';
 
 /* DON 생성 */
 const root = document.getElementById('app');
@@ -19,19 +20,25 @@ const { cartItemList,
   addToCartButton,
   stockStatus } = CartLayout(root);
 
-/* 상품 데이터 초기화 */
-productList = [...INITIAL_PRODUCTS];
+/* 상태 초기화 */
+setState({
+  productList: [...INITIAL_PRODUCTS],
+  lastSelectedProduct: null,
+  bonusPoints: 0
+});
 
 /* 장바구니 아이템 */
 const safeCalculateCart = () => {
+  const { productList, bonusPoints } = getState();
   calculateCart(cartItemList, productList, cartTotal, stockStatus, bonusPoints);
 };
-CartItemList(cartItemList, productList, safeCalculateCart)
+CartItemList(cartItemList, getState().productList, safeCalculateCart)
 
-const { updateSelectOptions } = ProductSelector(productSelect, addToCartButton, productList, cartItemList, safeCalculateCart, lastSelectedProduct);
+const { updateSelectOptions } = ProductSelector(productSelect, addToCartButton, getState().productList,
+  cartItemList, safeCalculateCart, getState().lastSelectedProduct);
 
 updateSelectOptions();
-calculateCart(cartItemList, productList, cartTotal, stockStatus, bonusPoints);
+calculateCart(cartItemList, getState().productList, cartTotal, stockStatus, getState().bonusPoints);
 
 /* 상품 할인 타이머 설정 */
-saleTimer(productList, lastSelectedProduct, updateSelectOptions);
+saleTimer(getState().productList, getState().lastSelectedProduct, updateSelectOptions);

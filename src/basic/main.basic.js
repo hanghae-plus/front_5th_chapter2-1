@@ -1,109 +1,7 @@
-var bonusPts = 0;
-
-// 세일 이벤트 상수
-const SALE_CONFIG = {
-  FLASH_SALE: {
-    INTERVAL: 30000, // 30초
-    CHANCE: 0.3, // 30% 확률
-    DISCOUNT: 0.2, // 20% 할인
-  },
-  RECOMMENDATION_SALE: {
-    INTERVAL: 60000, // 60초
-    DISCOUNT: 0.05, // 5% 할인
-  },
-};
-
-// 상품 상수
-const PRODUCT_CONFIG = {
-  DISCOUNT_RATE: {
-    p1: 0.1,
-    p2: 0.15,
-    p3: 0.2,
-    p4: 0.05,
-    p5: 0.25,
-  },
-};
-
-const initialProducts = [
-  { id: 'p1', name: '상품1', price: 10000, stock: 50 },
-  { id: 'p2', name: '상품2', price: 20000, stock: 30 },
-  { id: 'p3', name: '상품3', price: 30000, stock: 20 },
-  { id: 'p4', name: '상품4', price: 15000, stock: 0 },
-  { id: 'p5', name: '상품5', price: 25000, stock: 10 },
-];
-
-// 최대 재고 상수 추가
-const MAXIMUM_STOCKS = initialProducts.map((product) => ({
-  id: product.id,
-  stock: product.stock,
-}));
-
-const state = {
-  lastSelected: null,
-  products: JSON.parse(JSON.stringify(initialProducts)), // 깊은 복사 수행
-  totalAmount: 0,
-  cartItemCount: 0,
-  bonusPts: 0,
-};
-
-/**
- * 요소 생성 및 속성 추가
- * @param {string} tag 요소 태그 이름
- * @param {Object} properties 요소 속성
- * @returns {Element} 요소
- */
-const createElement = (tag, properties = {}) => {
-  const element = document.createElement(tag);
-  for (const [key, value] of Object.entries(properties)) {
-    if (key && value) element[key] = value;
-  }
-  return element;
-};
-
-// 요소 생성
-const $root = document.getElementById('app');
-const $container = createElement('div', { className: 'bg-gray-100 p-8' });
-const $wrapper = createElement('div', {
-  className:
-    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8',
-});
-
-const elements = {
-  header: createElement('h1', {
-    className: 'text-2xl font-bold mb-4',
-    textContent: '장바구니',
-  }),
-  cartItemsContainer: createElement('div', {
-    id: 'cart-items',
-    className: 'text-xl font-bold my-4',
-  }),
-  cartTotal: createElement('div', {
-    id: 'cart-total',
-    className: 'text-xl font-bold my-4',
-  }),
-  productSelect: createElement('select', {
-    id: 'product-select',
-    className: 'border rounded p-2 mr-2',
-  }),
-  addToCartBtn: createElement('button', {
-    id: 'add-to-cart',
-    className: 'bg-blue-500 text-white px-4 py-2 rounded',
-    textContent: '추가',
-  }),
-  stockStatus: createElement('div', {
-    id: 'stock-status',
-    className: 'text-sm text-gray-500 mt-2',
-  }),
-};
-
-/**
- * DOM 요소 생성
- */
-const createElements = () => {
-  $root.append($container);
-  $container.append($wrapper);
-  $wrapper.append(...Object.values(elements));
-};
+import { createElement, render, elements } from './core/dom';
+import { renderLoyaltyPoints } from './domains/points';
+import { MAXIMUM_STOCKS, state } from './core/state';
+import { SALE_CONFIG, PRODUCT_CONFIG } from './core/constants';
 
 /**
  * 상품 선택 옵션 업데이트
@@ -147,8 +45,7 @@ const getDiscountPrice = (price, discountRate) => price * (1 - discountRate);
  */
 const main = () => {
   // DOM요소 추가
-  createElements();
-
+  render();
   updateProductOption();
   calculateCartDiscountPrice();
 
@@ -289,28 +186,6 @@ const calculateCartDiscountPrice = () => {
 
   updateStockStatus();
   renderLoyaltyPoints();
-};
-
-/**
- * 포인트 계산
- * @returns {number} 포인트
- */
-const calculateLoyaltyPoints = () => {
-  return Math.floor(state.totalAmount / 1000);
-};
-
-/**
- * 포인트 렌더링
- */
-const renderLoyaltyPoints = () => {
-  const loyaltyPoints = calculateLoyaltyPoints();
-
-  var pointsTag = createElement('span', {
-    id: 'loyalty-points',
-    className: 'text-blue-500 ml-2',
-    textContent: '(포인트: ' + loyaltyPoints + ')',
-  });
-  elements.cartTotal.appendChild(pointsTag);
 };
 
 /**

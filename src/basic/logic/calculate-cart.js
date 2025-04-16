@@ -1,4 +1,4 @@
-import { products } from "../data/products";
+import { cartState } from "../store/state";
 import { calculateCartTotals, calculateDiscount, displayPriceInfo } from "../utils/calc";
 
 /** 포인트 표시용 span 엘리먼트를 생성하여 부모 요소에 추가하고 반환 */
@@ -13,11 +13,10 @@ const createLoyaltyTag = (parent) => {
 /**
  * 총액에 따라 적립 포인트를 계산하고, 포인트 표시 엘리먼트를 갱신
  *
- * @param {number} finalTotal - 총 결제 금액
  * @param {HTMLElement} sum - 포인트 표시를 추가할 부모 엘리먼트
  */
-const renderBonusPoints = (finalTotal, sum) => {
-  const bonusPoints = Math.floor(finalTotal / 1000);
+const renderBonusPoints = (sum) => {
+  const bonusPoints = Math.floor(cartState.finalTotal / 1000);
   const pointsTag = document.getElementById("loyalty-points") ?? createLoyaltyTag(sum);
 
   pointsTag.innerHTML = `(포인트: <span>${bonusPoints}</span>)`;
@@ -27,7 +26,7 @@ const renderBonusPoints = (finalTotal, sum) => {
 const updateStockInfo = () => {
   const $stockInfo = document.getElementById("stock-status");
 
-  const infoMsg = products
+  const infoMsg = cartState.products
     .filter((item) => item.q < 5)
     .map((item) => {
       const status =
@@ -44,12 +43,12 @@ const updateStockInfo = () => {
 /** 장바구니 항목을 기반으로 금액 및 할인 정보를 계산하고 화면에 렌더링하는 함수 */
 function calculateCart() {
   const $sum = document.getElementById("cart-total");
-  const { originalTotal, itemCount, finalTotal } = calculateCartTotals();
-  const { discountRate } = calculateDiscount(itemCount, finalTotal, originalTotal);
+  calculateCartTotals();
+  calculateDiscount();
 
-  displayPriceInfo($sum, finalTotal, discountRate);
+  displayPriceInfo($sum);
   updateStockInfo();
-  renderBonusPoints(finalTotal, $sum);
+  renderBonusPoints($sum);
 }
 
 export { calculateCart };

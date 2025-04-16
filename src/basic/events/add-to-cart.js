@@ -1,17 +1,16 @@
-import { products } from "../data/products";
 import { calculateCart } from "../logic/calculate-cart";
+import { cartState } from "../store/state";
 import { createCartItemElement } from "../ui/create-cart-element";
 
 /**
  * 선택한 상품을 장바구니에 추가하고, 재고와 총액을 갱신
  *
- * @param {{ current: string | null }} lastSelectedRef - 최근 장바구니에 추가된 상품의 참조 객체
  */
 
-export const handleAddToCart = (lastSelectedRef) => {
+export const handleAddToCart = () => {
   const $select = document.getElementById("product-select");
   const selectedItem = $select.value;
-  const itemToAdd = products.find((product) => product.id === selectedItem);
+  const itemToAdd = cartState.products.find((product) => product.id === selectedItem);
 
   const $cartDisplay = document.getElementById("cart-items");
 
@@ -35,6 +34,6 @@ export const handleAddToCart = (lastSelectedRef) => {
     }
 
     calculateCart();
-    lastSelectedRef.current = selectedItem;
+    cartState.lastSelected = selectedItem;
   }
 };

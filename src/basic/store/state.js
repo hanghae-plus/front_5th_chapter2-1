@@ -1,9 +1,10 @@
 import { products } from "../data/products";
 
-const cartState = {
+export const cartState = {
   products: [...products],
-  lastSelectedProductId: null,
-  bonusPoints: 0,
-  totalAmount: 0,
+  lastSelected: null,
+  finalTotal: 0,
+  originalTotal: 0,
   itemCount: 0,
+  discountRate: 0,
 };

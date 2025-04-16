@@ -6,6 +6,10 @@ import { createUIElements } from "./components/UIElements";
 import PRODUCTS from "./product";
 import createStore from "./store";
 import { appendUIElements } from "./utils/domUtils";
+import {
+  startLightningSale,
+  startRecommendation,
+} from "./utils/promotionUtils";
 
 // 초기 상태 설정 및 UI 요소들 생성하는 함수
 function main() {
@@ -13,6 +17,9 @@ function main() {
     products: [...PRODUCTS],
   });
 
+  const updateSelOpts = () => {
+    renderStockInfo(elements.stockInfo, store.getState().products);
+  };
   const root = document.getElementById("app");
 
   const elements = createUIElements();
@@ -28,6 +35,10 @@ function main() {
   setupAddButtonEvent(elements, store);
 
   setupCartButtonEvents(elements, store);
+
+  startLightningSale(store.getState().products, updateSelOpts);
+
+  startRecommendation(store.getState().products, null, updateSelOpts);
 }
 
 main();

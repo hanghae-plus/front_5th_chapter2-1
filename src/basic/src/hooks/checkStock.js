@@ -1,4 +1,4 @@
-import { store } from "../store/store.js"
+import { store } from "../store/store"
 
 // 재고확인
 export function checkStock () {

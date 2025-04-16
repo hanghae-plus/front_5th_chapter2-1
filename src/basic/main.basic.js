@@ -1,8 +1,8 @@
-import { ShoppingList } from "../components/shoppingList.js";
-import { alertPromotion1, alertPromotion2 } from "../hooks/setIntervals.js";
-import { getCartPrice } from "../hooks/getCartPrice.js";
-import { addCart } from "../hooks/addCart.js";
-import { DeleteCart } from "../hooks/deleteCart.js";
+import { ShoppingList } from "./src/components/shoppingList.js";
+import { alertPromotion1, alertPromotion2 } from "./src/hooks/setIntervals.js";
+import { getCartPrice } from "./src/hooks/getCartPrice.js";
+import { addCart } from "./src/hooks/addCart.js";
+import { DeleteCart } from "./src/hooks/deleteCart.js";
 
 ShoppingList();
 getCartPrice();

@@ -5,6 +5,7 @@ import { selectBox } from './ui/selectBox';
 import { cartAddBtn } from './ui/cartAddBtn';
 import { stockInfo } from './ui/StockInfo';
 import { useCart } from './module/useCart';
+import { timeOutSale } from './module/timeOutSale';
 
 function main() {
   // 루트 요소
@@ -25,7 +26,6 @@ function main() {
   // 장바구니 금액 합계 컴포넌트 생성
   const cartResultC = cartResult();
   cartResultC.render(containerC.wrapperEl);
-  const $cartResult = cartResultC.element;
 
   // 상품 선택 컴포넌트 생성
   const selectBoxC = selectBox();
@@ -39,26 +39,25 @@ function main() {
   // 재고 정보 컴포넌트 생성
   const stockInfoC = stockInfo();
   stockInfoC.render(containerC.wrapperEl);
-  const $stockInfo = stockInfoC.element;
 
   // 장바구니 클릭 이벤트 핸들러 등록
   $cartItem.addEventListener('click', (event) => {
     cart.handleCartItemChange(event, $cartItem);
-    cart.calculateCart($cartItem, cartResultC, stockInfoC);
+    cart.calculateCart($cartItem, cartResultC, stockInfoC, selectBoxC);
   });
 
   // 장바구니 추가 버튼 클릭 이벤트 핸들러 등록
   cartAddBtnC.setupEventHandler(() => {
     cart.addToCart($selectBox, $cartItem);
     cart.setLastSelected($selectBox.value);
-    cart.calculateCart($cartItem, cartResultC, stockInfoC);
+    cart.calculateCart($cartItem, cartResultC, stockInfoC, selectBoxC);
   });
 
   // 초기 계산
   cart.calculateCart($cartItem, cartResultC, stockInfoC);
 
   // 타이머 시작
-  // timeOutSale();
+  timeOutSale();
 }
 
 // 앱 초기화

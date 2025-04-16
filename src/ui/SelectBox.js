@@ -1,4 +1,4 @@
-import { PRODUCT_ITEM } from '../store/PRODUCT';
+import { ProductStore } from '../store/productState';
 
 // 상품 선택 컴포넌트
 const selectBox = () => {
@@ -7,14 +7,21 @@ const selectBox = () => {
   selectEle.id = 'product-select';
   selectEle.className = 'border rounded p-2 mr-2';
 
-  // 옵션 업데이트 함수
+  //  재고에따른 옵션 업데이트 함수
   const updateOptions = () => {
     selectEle.innerHTML = '';
-    PRODUCT_ITEM.forEach(function (item) {
-      var opt = document.createElement('option');
+
+    const allProducts = ProductStore.getAllProducts();
+
+    allProducts.forEach((item) => {
+      let opt = document.createElement('option');
       opt.value = item.id;
       opt.textContent = item.name + ' - ' + item.price + '원';
-      if (item.stock === 0) opt.disabled = true;
+
+      if (!ProductStore.hasEnoughStock(item.id)) {
+        opt.disabled = true;
+      }
+
       selectEle.appendChild(opt);
     });
   };

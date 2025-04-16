@@ -58,3 +58,9 @@ export function createBonusPoints() {
         class: "text-blue-500 ml-2",
     });
 }
+export function createCartItem(id) {
+    return createElement("div", {
+        id: id,
+        class: "flex justify-between items-center mb-2",
+    });
+}

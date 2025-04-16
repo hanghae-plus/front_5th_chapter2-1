@@ -65,7 +65,6 @@ function calculateTotalAmount(cartItems, productList) {
     let subTotalBeforeDiscount = 0;
 
     // 상품별 가격 계산 로직
-    // ...
     for (let i = 0; i < cartItems.length; i++) {
         (function () {
             const currentItem = cartItems[i];

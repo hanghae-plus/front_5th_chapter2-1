@@ -3,7 +3,7 @@ import {
   addProductToCart,
   calculateCart,
 } from "./libs/cart";
-import { productList } from "./stores";
+import { productList } from "./stores/store";
 import { getProductElementAndProduct } from "./utils/function";
 
 export class AppComponent {
@@ -17,8 +17,8 @@ export class AppComponent {
   #wrap;
   #h1;
 
-  constructor(elementId) {
-    this.elementId = elementId;
+  constructor(rootId) {
+    this.rootId = rootId;
 
     // element 변수 선언
     this.#cartBox;
@@ -93,8 +93,8 @@ export class AppComponent {
     this.#wrap.appendChild(this.#stockStatus);
     this.#container.appendChild(this.#wrap);
 
-    const $parentElement = document.getElementById(this.elementId);
-    $parentElement.appendChild(this.#container);
+    const $root = document.getElementById(this.rootId);
+    $root.appendChild(this.#container);
   }
 
   // 이벤트 설정

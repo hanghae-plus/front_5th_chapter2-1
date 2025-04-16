@@ -1,5 +1,5 @@
 import { AppComponent } from "./App";
-import { productList } from "./stores";
+import { productList } from "./stores/store";
 import { additionalSale, flashSale } from "./utils/intervalAlerts";
 
 const App = new AppComponent("app");

@@ -1,19 +1,23 @@
 import type React from "react";
 import { createContext, useContext, useState } from "react";
-import type { ProductState } from "./types";
+import type { ProductList } from "@/advanced/types";
+import { PRODUCT_LIST } from "@/basic/consts";
 
 interface ProductContextType {
-  selectedProductId: ProductState["selectedProductId"];
-  setSelectedProductId: React.Dispatch<React.SetStateAction<ProductState["selectedProductId"]>>;
+  productList: ProductList;
+  setProductList: React.Dispatch<React.SetStateAction<ProductList>>;
+  selectedProductId: string;
+  setSelectedProductId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ProductContext = createContext<ProductContextType | null>(null);
 
 export const ProductProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<string>(PRODUCT_LIST[0].id);
+  const [productList, setProductList] = useState<ProductList>(PRODUCT_LIST);
 
   return (
-    <ProductContext.Provider value={{ selectedProductId, setSelectedProductId }}>
+    <ProductContext.Provider value={{ selectedProductId, setSelectedProductId, productList, setProductList }}>
       {children}
     </ProductContext.Provider>
   );

@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
-import { cartAtom } from "../state";
-import type { CartItem } from "../types";
+import { cartAtom } from "../../state";
+import type { CartItem } from "../../types";
 export const useAddToCart = () => {
   const [cart, setCart] = useAtom(cartAtom);
 

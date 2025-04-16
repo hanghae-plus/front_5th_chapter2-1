@@ -1,8 +1,11 @@
 import { useAtom } from "jotai";
+import { useQuantityChange } from "../../hooks";
 import { cartAtom } from "../../state";
 
 export const CartList = () => {
   const [cart] = useAtom(cartAtom);
+
+  const { handleQuantityChange } = useQuantityChange();
 
   return (
     <>
@@ -12,10 +15,20 @@ export const CartList = () => {
             {item.name} - {item.price}원 x {item.count}
           </span>
           <div>
-            <button type="button" className="bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id={item.id}>
+            <button
+              onClick={() => handleQuantityChange(item.id, -1)}
+              type="button"
+              className="bg-blue-500 text-white px-2 py-1 rounded mr-1"
+              data-product-id={item.id}
+            >
               -
             </button>
-            <button type="button" className="bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id={item.id}>
+            <button
+              onClick={() => handleQuantityChange(item.id, 1)}
+              type="button"
+              className="bg-blue-500 text-white px-2 py-1 rounded mr-1"
+              data-product-id={item.id}
+            >
               +
             </button>
             <button type="button" className="bg-red-500 text-white px-2 py-1 rounded" data-product-id={item.id}>

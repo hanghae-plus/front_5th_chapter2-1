@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useState } from "react";
-import { useAddToCart } from "../../hooks/useAddToCart";
+import { useAddToCart } from "../../hooks";
 import { cartAtom } from "../../state";
 
 export const ProductSelector = () => {

@@ -1,5 +1,5 @@
 import { Provider } from "jotai";
-import { Header, Layout, ProductSelector, TotalPrice } from "./components";
+import { CartList, Header, Layout, ProductSelector, TotalPrice } from "./components";
 
 function App() {
   return (
@@ -7,6 +7,7 @@ function App() {
       <Layout>
         <Header />
         <TotalPrice />
+        <CartList />
         <ProductSelector />
       </Layout>
     </Provider>

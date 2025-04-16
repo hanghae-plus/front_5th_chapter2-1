@@ -1,6 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
+import "./styles/tailwind.css";
+
 const $root = document.getElementById("root");
 
 if ($root) {
@@ -8,7 +10,7 @@ if ($root) {
 
   root.render(
     <StrictMode>
-      <div>Hello World</div>
+      <div className="text-red-500">Hello World</div>
     </StrictMode>,
   );
 }

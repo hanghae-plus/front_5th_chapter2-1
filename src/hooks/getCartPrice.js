@@ -36,7 +36,7 @@ export function getCartPrice () {
     });
 
     let discountRate = getDiscountRate(itemCount, subtotal, total);
-    total = handleTuesdayDiscount(total, discountRate);
+    // total = handleTuesdayDiscount(total, discountRate);
 
     state.itemCnt = itemCount;
     state.totalAmt = Math.round(total);
@@ -46,7 +46,7 @@ export function getCartPrice () {
     getPoints(store.element.sum);
 }
 
-// 대량구매시 할인
+// 30개 이상 구매시 할인
 function getDiscountRate(itemCount, subtotal, currentTotal) {
     if (itemCount < 30) return (subtotal - currentTotal) / subtotal;
   
@@ -61,16 +61,20 @@ function getDiscountRate(itemCount, subtotal, currentTotal) {
     return itemDiscountAmt / subtotal;
 }
 
-// 화요일 할인인
-function handleTuesdayDiscount(total, currentRate) {
-    const today = new Date().getDay();
-    const isTuesday = today === 2;
+// 화요일 할인
+// function handleTuesdayDiscount(total, currentRate) {
+//     const today = new Date().getDay();
+//     const isTuesday = today === 3;
   
-    if (!isTuesday) return total;
-    const discounted = total * 0.9;
-    store.state.totalAmt = discounted;
-    return discounted;
-}
+//     if (!isTuesday) return total;
+//     if (isTuesday) {
+//     const discounted = total * 0.9;
+//     store.state.totalAmt = discounted;
+//     // console.log('테스트 : ', discounted);
+//     return discounted;
+//     }
+// }
+
 
 // 총액계산
 function getTotalPrice(totalAmt, discountRate) {

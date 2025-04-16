@@ -3,47 +3,49 @@ import products from "./consts/products";
 import calculateCart from "./events/calculateCart";
 import updateRandomDiscount from "./events/updateRandomDiscount";
 import updateRecommendation from "./events/updateRecommendation";
-import updateSelectOptions from "./events/updateSelectOptions";
 
-var addItemBtn, cartDiv, sum, stockInfo;
+var addItemBtn, select, cartDiv, sum, stockInfo;
 var totalPrice = 0,
   totalEa = 0;
 
 const main = () => {
   // HTML elements 생성
   var root = document.getElementById("app");
+
   let container = document.createElement("div");
-  var wrapper = document.createElement("div");
-  let titleText = document.createElement("h1");
-  cartDiv = document.createElement("div");
-  sum = document.createElement("div");
-  addItemBtn = document.createElement("button");
-  stockInfo = document.createElement("div");
-
-  var select = updateSelectOptions();
-
-  // IDs 설정
-  cartDiv.id = "cart-items";
-  sum.id = "cart-total";
-  addItemBtn.id = "add-to-cart";
-  stockInfo.id = "stock-status";
-
-  // className 설정
   container.className = "bg-gray-100 p-8";
+
+  var wrapper = document.createElement("div");
   wrapper.className =
     "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
+
+  let titleText = document.createElement("h1");
   titleText.className = "text-2xl font-bold mb-4";
+  titleText.textContent = "장바구니";
+
+  cartDiv = document.createElement("div");
+  cartDiv.id = "cart-items";
+
+  sum = document.createElement("div");
+  sum.id = "cart-total";
   sum.className = "text-xl font-bold my-4";
-  addItemBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
+
+  addItemBtn = document.createElement("button");
+  addItemBtn.id = "add-to-cart";
+
+  stockInfo = document.createElement("div");
+  stockInfo.id = "stock-status";
   stockInfo.className = "text-sm text-gray-500 mt-2";
 
-  // 텍스트 설정
-  titleText.textContent = "장바구니";
+  select = document.createElement("select");
+  select.id = "product-select";
+  select.innerHTML = "";
+  select.className = "border rounded p-2 mr-2";
+
+  addItemBtn.className = "bg-blue-500 text-white px-4 py-2 rounded";
   addItemBtn.textContent = "추가";
 
-  // 이벤트 리스너 설정
-
-  // HTML 요소 추가
+  updateSelectOptions();
   wrapper.appendChild(titleText);
   wrapper.appendChild(cartDiv);
   wrapper.appendChild(sum);
@@ -61,7 +63,7 @@ const main = () => {
   updateRecommendation();
 };
 
-// 상품 추가 시 가격 계산 - 파일 분리 중
+// 상품 추가 시 가격 계산
 export const handleAddItem = () => {
   var cartDiv = document.getElementById("cart-items");
   var cartItems = cartDiv.children;
@@ -103,7 +105,19 @@ export const handleAddItem = () => {
   return { noDiscountTotalPrice, totalPrice, totalEa };
 };
 
-// 총액 표시 - 파일 분리 중
+export const updateSelectOptions = () => {
+  select.innerHTML = "";
+  products.forEach(function (item) {
+    var opt = document.createElement("option");
+    opt.value = item.id;
+    opt.textContent = `${item.name} - ${item.price}원`;
+
+    if (item.stock === 0) opt.disabled = true;
+    select.appendChild(opt);
+  });
+};
+
+// 총액 표시
 export const showSumText = (totalPrice, totalDiscountRate) => {
   sum.textContent = `총액: ${Math.round(totalPrice)}원`;
   if (totalDiscountRate > 0) {
@@ -116,7 +130,7 @@ export const showSumText = (totalPrice, totalDiscountRate) => {
   return { totalPrice };
 };
 
-// 포인트 계산 -  파일 분리 중
+// 포인트 계산
 export const calcPoints = (totalPrice) => {
   let points = 0;
   points = Math.floor(totalPrice / 1000);
@@ -131,7 +145,7 @@ export const calcPoints = (totalPrice) => {
   pointsElem.textContent = `(포인트: ${points})`;
 };
 
-// 재고 정보 업데이트 - 파일 분리 중
+// 재고 정보 업데이트
 export const updateStockInfo = () => {
   var stockInfoMsg = "";
   products.forEach(function (item) {

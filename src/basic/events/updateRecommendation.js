@@ -3,6 +3,7 @@ import {
   RECOMMENDATION_DISCOUNT_TIME,
 } from "../consts/discounts";
 import products from "../consts/products";
+import { updateSelectOptions } from "../main.basic";
 
 // 추천 상품 이벤트 설정
 const updateRecommendation = () => {

@@ -3,6 +3,7 @@ import {
   LUCKY_ITEM_DISCOUNT_TIME,
 } from "../consts/discounts";
 import products from "../consts/products";
+import { updateSelectOptions } from "../main.basic";
 
 // 랜덤 할인 이벤트 설정
 const updateRandomDiscount = () => {

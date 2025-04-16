@@ -15,7 +15,7 @@ const notifySuggestedProduct = (item) => {
   );
 };
 
-export const AdditionalDiscount = () => {
+export const additionalDiscount = () => {
   const lastId = SelectedProductStore.get('selectedProduct');
   if (!lastId) return;
 

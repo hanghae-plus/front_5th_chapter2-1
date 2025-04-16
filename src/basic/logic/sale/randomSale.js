@@ -1,4 +1,5 @@
-import { FlashSale, AdditionalDiscount } from './index';
+import { flashSale } from './flashSale';
+import { additionalDiscount } from './additionalDiscount';
 import { FLASH_SALE, SUGGESTED_PRODUCT } from '../../consts';
 
 const scheduleRandomInterval = (fn, interval, maxInitialDelay) => {
@@ -10,12 +11,12 @@ const scheduleRandomInterval = (fn, interval, maxInitialDelay) => {
 
 export const RandomSale = () => {
   scheduleRandomInterval(
-    FlashSale,
+    flashSale,
     FLASH_SALE.INTERVAL,
     FLASH_SALE.MAX_INITIAL_DELAY,
   );
   scheduleRandomInterval(
-    AdditionalDiscount,
+    additionalDiscount,
     SUGGESTED_PRODUCT.INTERVAL,
     SUGGESTED_PRODUCT.MAX_INITIAL_DELAY,
   );

@@ -1,5 +1,6 @@
 import { store } from "../store/store.js"
 
+// 포인트계산
 export function getPoints (sum) {
     const { totalAmt } = store.state;
     const bonusPts = Math.floor(totalAmt / 1000);

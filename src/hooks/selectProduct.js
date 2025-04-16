@@ -1,5 +1,6 @@
 import { store } from '../store/store.js';
 
+// 상품리스트 select box에 보여주기
 export function showSelectList () {
   const products = store.products;
   

@@ -1,6 +1,7 @@
 import { store } from "../store/store";
 import { getCartPrice } from "./getCartPrice";
 
+// 장바구니 빼기
 export function DeleteCart () {
     const { cartDisp, products } = store.element;
 

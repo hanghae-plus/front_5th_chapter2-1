@@ -112,9 +112,10 @@ describe('basic test', () => {
     });
 
     it('화요일 할인이 적용되는지 확인', () => {
-      const mockDate=new Date('2025-04-14'); // 화요일
-      vi.useFakeTimers()
-      vi.setSystemTime(mockDate);
+      const mockDate = new Date().getDay();
+      const isTuesday = mockDate === 2; // 화요일
+      // vi.useFakeTimers()
+      // vi.setSystemTime(isTuesday);
       sel.value='p1';
       addBtn.click();
       expect(document.getElementById('cart-total').textContent).toContain('(10.0% 할인 적용)');

@@ -1,6 +1,7 @@
 import { store } from "../store/store.js";
 import { showSelectList } from "./selectProduct.js";
 
+// 번개세일 alert
 export function alertPromotion1 () {
   const products = store.products;
   setTimeout(() => {
@@ -16,6 +17,7 @@ export function alertPromotion1 () {
   }, Math.random() * 10000)
 }
 
+// 추가할인 alert
 export function alertPromotion2 () {
   setTimeout(() => {
     setInterval(() => {

@@ -1,5 +1,6 @@
 import { store } from "../store/store.js"
 
+// 재고확인
 export function checkStock () {
     const products = store.products;
     let infoMsg = '';

@@ -1,3 +1,5 @@
+
+// 장바구니 내용물 보여주는 레이아웃
 export function CartList (product) {
     const item = document.createElement('div');
     item.id = product.id;

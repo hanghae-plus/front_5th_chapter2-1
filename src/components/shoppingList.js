@@ -1,9 +1,7 @@
 import { showSelectList } from '../hooks/selectProduct'
 import { store } from '../store/store'
-import { getPoints } from '../hooks/getPoints';
-import { checkStock } from '../hooks/checkStock';
-// import { addCart } from '../hooks/addCart';
 
+// 장바구니 레이아웃
 export const ShoppingList = () => {
   const root = document.getElementById('app');
 
@@ -33,7 +31,4 @@ export const ShoppingList = () => {
   store.element.stockInfo = stockInfo;
 
   showSelectList();
-  // addCart();
-  // checkStock();
-  // getPoints(sum);
 };

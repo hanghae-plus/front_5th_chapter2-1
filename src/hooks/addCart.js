@@ -2,6 +2,7 @@ import { store } from "../store/store";
 import { getCartPrice } from "./getCartPrice";
 import { CartList } from "../components/cartList";
 
+// 장바구니 담기
 export function addCart () {
 
     const { sel, addBtn, cartDisp } = store.element;

@@ -10,6 +10,7 @@ const PRODUCT_DISCOUNTS = {
     p5: 0.25,
 };
 
+// 장바구니 총액 계산
 export function getCartPrice () {
     const cartItems = store.element.cartDisp.children;
     const { products, state } = store;
@@ -45,6 +46,7 @@ export function getCartPrice () {
     getPoints(store.element.sum);
 }
 
+// 대량구매시 할인
 function getDiscountRate(itemCount, subtotal, currentTotal) {
     if (itemCount < 30) return (subtotal - currentTotal) / subtotal;
   
@@ -59,6 +61,7 @@ function getDiscountRate(itemCount, subtotal, currentTotal) {
     return itemDiscountAmt / subtotal;
 }
 
+// 화요일 할인인
 function handleTuesdayDiscount(total, currentRate) {
     const today = new Date().getDay();
     const isTuesday = today === 2;
@@ -69,6 +72,7 @@ function handleTuesdayDiscount(total, currentRate) {
     return discounted;
 }
 
+// 총액계산
 function getTotalPrice(totalAmt, discountRate) {
     const sumEl = store.element.sum;
     sumEl.textContent = `총액: ${Math.round(totalAmt)}원`;

@@ -32,7 +32,11 @@ describe("basic test", () => {
       vi.useRealTimers();
       vi.spyOn(window, "alert").mockImplementation(() => {});
 
-      cartDisp.innerHTML = "";
+      while (true) {
+        const delBtn = document.querySelector(".remove-item");
+        if (!delBtn) break;
+        delBtn.click();
+      }
     });
 
     afterEach(() => {
@@ -184,6 +188,9 @@ describe("basic test", () => {
 
       // 수량을 10번 증가시키기
       for (let i = 0; i < 10; i++) {
+        const increaseBtn = cartDisp.querySelector(
+          '#p5 .quantity-change[data-change="1"]'
+        );
         increaseBtn.click();
       }
 

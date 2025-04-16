@@ -2,9 +2,7 @@ import { messages } from "../messages/messages";
 
 export const saleTimer = (productList, lastSelectedProduct, updateSelectOptions) => {
 
-    // 번개 세일(랜덤 상품 20프로 할인)
-    // 30초마다 랜덤 상품을 찾아서 20% 할인 적용
-    // 재고가 있는 상품 중에서 랜덤으로 선택
+    /* 번개 세일(랜덤 상품 20프로 할인) */
     let lightningSaleTimer;
     const getRandomProduct = () => {
         const availableProducts = productList.filter(product => product.quantity > 0);
@@ -23,9 +21,7 @@ export const saleTimer = (productList, lastSelectedProduct, updateSelectOptions)
 
     }
 
-    // 추천 상품(마지막 선택 상품 기준 다른 상품 5% 할인)
-    // 60초마다 추천 상품을 보여줌
-    // 마지막 선택 상품과 다른 상품 중 재고가 있는 상품을 찾음
+    /* 추천 상품(마지막 선택 상품 기준 다른 상품 5% 할인) */
     let recommendationTimer;
     const startRecommendSale = () => {
         recommendationTimer = setInterval(() => {

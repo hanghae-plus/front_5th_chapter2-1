@@ -34,6 +34,27 @@ export default [
     },
   },
   {
+    files: ["src/advanced/**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        sourceType: "module",
+        ecmaVersion: "latest",
+        project: "./src/advanced/tsconfig.json", // 선택적
+      },
+    },
+    plugins: {
+      "@typescript-eslint": tseslint.plugin,
+    },
+    rules: {
+      ...tseslint.configs.recommended.rules,
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+      ],
+    },
+  },
+  {
     ignores: ["src/main.original.js"],
   },
 ];

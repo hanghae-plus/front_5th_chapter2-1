@@ -1,15 +1,13 @@
-import { useState } from "react";
+import React from "react";
 
 import type { IProduct } from "#advanced/pages/main/_types";
-import { PRODUCTS } from "#advanced/pages/main/_constants";
 
 interface IProps {
-  handleAddProduct: (product: IProduct) => void;
+  products: IProduct[];
+  handleAddCart: (product: IProduct) => void;
 }
 
-const ProductSelectForm: React.FC<IProps> = ({ handleAddProduct }) => {
-  const [products, setProducts] = useState<IProduct[]>(PRODUCTS);
-
+const ProductSelectForm: React.FC<IProps> = ({ products, handleAddCart }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -22,16 +20,7 @@ const ProductSelectForm: React.FC<IProps> = ({ handleAddProduct }) => {
     const selectedProduct = products.find((product) => product.id === productId);
     if (!selectedProduct) return;
 
-    handleAddProduct(selectedProduct);
-    setProducts((prev) =>
-      prev.map((product) => {
-        if (product.id !== productId) {
-          return product;
-        }
-
-        return { ...product, stock: product.stock - 1 };
-      }),
-    );
+    handleAddCart(selectedProduct);
   };
 
   return (
@@ -53,4 +42,4 @@ const ProductSelectForm: React.FC<IProps> = ({ handleAddProduct }) => {
   );
 };
 
-export default ProductSelectForm;
+export default React.memo(ProductSelectForm);

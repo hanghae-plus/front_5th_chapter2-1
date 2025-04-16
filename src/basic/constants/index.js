@@ -20,8 +20,10 @@ const BUNGAE_SALE_DELAY = 10000; // 번개세일 초기 알림 지연 시간 (10
 const SUGGEST_SALE_INTERVAL = 60000; // 추천 상품 알림 주기 (1분)
 const SUGGEST_SALE_DELAY = 20000; // 추천 상품 알림 초기 지연 시간 (20초)
 
-// 메시지
+// 확률
+const RANDOM_BUNGAE_SALE_RATE = 0.3; // 번개세일 확률 (30%)
 
+// 메시지
 const OUT_OF_STOCK_MESSAGE = '재고가 부족합니다.';
 
 export const CONSTANTS = {
@@ -38,5 +40,6 @@ export const CONSTANTS = {
   BUNGAE_SALE_DELAY,
   SUGGEST_SALE_INTERVAL,
   SUGGEST_SALE_DELAY,
+  RANDOM_BUNGAE_SALE_RATE,
   OUT_OF_STOCK_MESSAGE,
 };

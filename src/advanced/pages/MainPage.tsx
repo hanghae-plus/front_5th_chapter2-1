@@ -1,9 +1,9 @@
-import { Layout } from "@/advanced/components/layout";
+import { Layout, ProductSelect } from "@/advanced/components";
 
 export const MainPage = () => {
   return (
     <Layout>
-      <div>MainPage</div>
+      <ProductSelect/>
     </Layout>
   );
 };

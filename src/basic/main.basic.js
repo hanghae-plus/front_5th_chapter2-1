@@ -6,10 +6,10 @@ import eventHandler from './events/eventHandler';
 
 const main = () => {
   updateSelectOptions();
-  render();
   updateCart();
   alerts();
   eventHandler();
+  render();
 };
 
 main();

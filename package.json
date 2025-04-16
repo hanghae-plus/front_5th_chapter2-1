@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "start:basic": "vite serve --open ./index.basic.html",
     "start:advanced": "vite serve --open ./index.advanced.html",
+    "prestart:advanced": "tsc --project tsconfig.json && npx tsc-alias -p tsconfig.json",
     "test": "vitest",
     "test:basic": "vitest basic.test.js",
     "test:advanced": "vitest advanced.test.js",
@@ -20,8 +21,11 @@
     "@eslint/js": "^9.24.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "@typescript-eslint/eslint-plugin": "^8.29.1",
     "@typescript-eslint/parser": "^8.29.1",
+    "@vitejs/plugin-react": "^4.4.0",
     "@vitest/ui": "^3.1.1",
     "eslint": "^9.24.0",
     "eslint-config-prettier": "^10.1.2",
@@ -37,8 +41,13 @@
     "jsdom": "^26.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-packagejson": "^2.5.10",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.29.1",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

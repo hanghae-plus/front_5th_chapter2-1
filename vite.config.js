@@ -1,5 +1,10 @@
+import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
-import { resolve } from 'path';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default defineConfig({
   test: {
@@ -15,5 +20,9 @@ export default defineConfig({
         advanced: resolve(__dirname, 'index.advanced.html'),
       },
     },
+  },
+  plugins: [react()],
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'], // 파일 확장자 지원
   },
 });

@@ -1,33 +1,59 @@
 
-const findProductById = (id, productList) => {
-  return productList.find(product => product.id === id);
-}
 
+const MIN_DISCOUNT_QUANTITY = 10;
+const DISCOUNT_MAP = {
+  p1: 0.1,
+  p2: 0.15,
+  p3: 0.2,
+  p4: 0.05,
+  p5: 0.25,
+};
+
+/**
+ * 특정 상품 ID와 수량에 따라 할인율을 반환
+ *
+ * @param {string} currentItemId - 상품 ID
+ * @param {number} quantity - 해당 상품의 수량
+ * @returns {number} - 할인율 (0.1 = 10%)
+ */
 
 const getDiscountRate = (currentItemId, quantity) => {
-  if (quantity < 10) return 0;
+  if (quantity < MIN_DISCOUNT_QUANTITY) {
+    return  0;
+  }
 
-  const discountMap = {
-    p1: 0.1,
-    p2: 0.15,
-    p3: 0.2,
-    p4: 0.05,
-    p5: 0.25,
-  };
-
-  return discountMap[currentItemId] || 0;
+  return DISCOUNT_MAP[currentItemId] || 0;
 }
 
+/**
+ * 주어진 ID에 해당하는 상품 정보를 products 배열에서 찾아 반환
+ *
+ * @param {string} id - 찾고자 하는 상품 ID
+ * @param {Array} products - 상품 목록
+ * @returns {Object|undefined} - 일치하는 상품 객체 또는 undefined
+ */
 
-export const calculateCartTotals = (cartItems, prodList) => {
-  let subTotal = 0;
+const findProductById = (id, products) => {
+  return products.find(product => product.id === id);
+}
+
+/**
+ * 장바구니 항목과 전체 상품 목록을 기반으로 총 금액, 수량, 할인 적용 금액을 계산
+ *
+ * @param {HTMLElement[]} cartItems - 장바구니에 담긴 DOM 요소 리스트
+ * @param {Array} products - 전체 상품 목록
+ * @returns {{ originalTotal: number, itemCount: number, finalTotal: number }} - 계산된 합계
+ */
+
+export const calculateCartTotals = (cartItems, products) => {
+  let originalTotal = 0;
   let itemCount = 0;
-  let totalAmount = 0;
+  let finalTotal = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
     const cartItem = cartItems[i];
 
-    const currentItem = findProductById(cartItem.id, prodList);
+    const currentItem = findProductById(cartItem.id, products);
     if (!currentItem) continue;
 
     const quantity = parseInt(cartItem.querySelector('span').textContent.split('x ')[1]);
@@ -35,9 +61,9 @@ export const calculateCartTotals = (cartItems, prodList) => {
     const discountRate = getDiscountRate(currentItem.id, quantity);
 
     itemCount += quantity;
-    subTotal += itemTotal;
-    totalAmount += itemTotal * (1 - discountRate);
+    originalTotal += itemTotal;
+    finalTotal += itemTotal * (1 - discountRate);
   }
 
-  return { subTotal, itemCount, totalAmount };
+  return { originalTotal, itemCount, finalTotal };
 }

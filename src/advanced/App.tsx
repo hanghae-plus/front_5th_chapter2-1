@@ -1,9 +1,14 @@
 import { MainPage } from './pages';
+import { CartProvider, ProductProvider } from './context';
 
 function App() {
   return (
     <>
-      <MainPage />
+      <CartProvider>
+        <ProductProvider>
+          <MainPage />
+        </ProductProvider>
+      </CartProvider>
     </>
   );
 }

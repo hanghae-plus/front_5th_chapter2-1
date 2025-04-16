@@ -1,24 +1,14 @@
-// TODO: 상수로 분리
-// 임시메모: price는 보통 제품이나 서비스 1단위당의 금액
-// 임시메모: amount는 전체 계산된 금액, price × 수량
-const products = [
-  { id: "p1", name: "상품1", price: 10000, units: 50 },
-  { id: "p2", name: "상품2", price: 20000, units: 30 },
-  { id: "p3", name: "상품3", price: 30000, units: 20 },
-  { id: "p4", name: "상품4", price: 15000, units: 0 },
-  { id: "p5", name: "상품5", price: 25000, units: 10 },
-];
+import { products, discountRateMap } from "./constants.js";
 
 let productSelector, addToCartButton, cartItemList, cartTotal, stockStatus;
 let lastSel,
   bonusPts = 0,
   finalTotal = 0,
-  totalItemsInCart = 0; // TODO: Cart를 뺄지 말지 고민
+  totalItemsInCart = 0;
 
 main();
 addEventListener();
 
-// function
 function main() {
   render();
   updateProductSelector();
@@ -27,7 +17,6 @@ function main() {
 }
 
 function render() {
-  // 요소를 탐색하는 역할
   const root = document.getElementById("app");
   const cont = document.createElement("div");
   const wrap = document.createElement("div");
@@ -39,7 +28,6 @@ function render() {
   addToCartButton = document.createElement("button");
   stockStatus = document.createElement("div");
 
-  // 스타일 적용
   cartItemList.id = "cart-items";
   cartTotal.id = "cart-total";
   productSelector.id = "product-select";
@@ -55,8 +43,6 @@ function render() {
   stockStatus.className = "text-sm text-gray-500 mt-2";
   hTxt.textContent = "장바구니";
   addToCartButton.textContent = "추가";
-
-  // ------- 요소에 스타일 적용
 
   wrap.appendChild(hTxt);
   wrap.appendChild(cartItemList);
@@ -293,13 +279,7 @@ function getCartItems() {
 
 function getItemDiscountRate(units, productId) {
   if (units < 10) return 0;
-  const discountRateMap = {
-    p1: 0.1,
-    p2: 0.15,
-    p3: 0.2,
-    p4: 0.05,
-    p5: 0.25,
-  };
+
   return discountRateMap[productId] ?? 0;
 }
 
@@ -313,7 +293,9 @@ function getDiscountRate({ originalTotal, finalTotal, totalItemsInCart }) {
       rate = 0.25;
     }
   }
-  if (new Date().getDay() === 2) {
+
+  const isTuesday = new Date().getDay() === 2;
+  if (isTuesday) {
     finalTotal *= 0.9;
     rate = Math.max(rate, 0.1);
   }

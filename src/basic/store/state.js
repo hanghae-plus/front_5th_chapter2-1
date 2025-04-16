@@ -1,5 +1,5 @@
 import { products } from "../data/products";
-import { cloneProducts } from "../utils/\bclone-product";
+import { cloneProducts } from "../utils/clone-product";
 
 export const cartState = {
   products: cloneProducts(products),

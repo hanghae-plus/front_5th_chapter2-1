@@ -1,7 +1,7 @@
-import { products } from "../consts/products";
+import products from "../consts/products";
 
 // 상품 선택 옵션 업데이트
-export const updateSelectOptions = () => {
+const updateSelectOptions = () => {
   var select = document.createElement("select");
   select.id = "product-select";
   select.innerHTML = "";
@@ -16,3 +16,5 @@ export const updateSelectOptions = () => {
   });
   return select;
 };
+
+export default updateSelectOptions;

@@ -1,7 +1,7 @@
-import { products } from "../consts/products";
+import products from "../consts/products";
 
 // 랜덤 할인 이벤트 설정
-export const updateRandomDiscount = () => {
+const updateRandomDiscount = () => {
   setTimeout(function () {
     setInterval(function () {
       var luckyItem = products[Math.floor(Math.random() * products.length)];
@@ -13,3 +13,5 @@ export const updateRandomDiscount = () => {
     }, 30000);
   }, Math.random() * 10000);
 };
+
+export default updateRandomDiscount;

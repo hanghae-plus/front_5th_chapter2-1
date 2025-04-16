@@ -1,7 +1,7 @@
-import { products } from "../consts/products";
+import products from "../consts/products";
 
 // 추천 상품 이벤트 설정
-export const updateRecommendation = () => {
+const updateRecommendation = () => {
   var lastSelectedProduct;
 
   setTimeout(function () {
@@ -23,3 +23,5 @@ export const updateRecommendation = () => {
 
   return lastSelectedProduct;
 };
+
+export default updateRecommendation;

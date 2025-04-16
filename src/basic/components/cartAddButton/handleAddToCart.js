@@ -1,12 +1,12 @@
 import { ItemStore } from '../../store/itemStore';
 import { renderCalcCart } from '../cartTotal/renderCalcCart';
+import { renderUpdatedQuantity } from './cartItemRow/renderUpdatedQuantity';
 import { CONSTANTS } from '../../constants';
-import { textUtils } from '../../utils/textUtils';
+import { CartItemRow } from './cartItemRow/CartItemRow.js';
 
 export function handleAddToCart() {
   const $itemSelect = document.getElementById('product-select');
   const selectItemId = $itemSelect.value;
-
   const itemStore = ItemStore.getInstance();
   const selectedItem = itemStore.findItem(selectItemId);
 
@@ -24,12 +24,7 @@ export function handleAddToCart() {
 
     // 재고가 충분한 경우 수량 증가
     if (updatedQuantity <= selectedItem.quantity) {
-      $item.querySelector('span').textContent = textUtils.getCartItemSummary(
-        selectedItem.name,
-        selectedItem.price,
-        updatedQuantity,
-      );
-
+      renderUpdatedQuantity($item, selectedItem, updatedQuantity);
       itemStore.updateItemQuantity(selectedItem.id, -1);
     } else {
       // 재고가 부족하다면 재고 부족 문구 얼럿
@@ -37,34 +32,10 @@ export function handleAddToCart() {
     }
   } else {
     // 장바구니에 없는 상품인 경우
-    // TODO: 렌더링 부분 분리하기
-    const $newItemsDiv = document.createElement('div');
-    $newItemsDiv.id = selectedItem.id;
-
     // 상품을 장바구니에 추가
-    $newItemsDiv.className = 'flex justify-between items-center mb-2';
-    $newItemsDiv.innerHTML = `
-        <span>${selectedItem.name} - ${selectedItem.price}원 x 1</span>
-        <div>
-          <button 
-            class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
-            data-item-id="${selectedItem.id}"
-            data-change="-1"
-          >-</button>
-          <button 
-            class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
-            data-item-id="${selectedItem.id}"
-            data-change="1"
-          >+</button>
-          <button 
-            class="remove-item bg-red-500 text-white px-2 py-1 rounded"
-            data-item-id="${selectedItem.id}"
-          >삭제</button>
-        </div>
-      `;
-
+    const $newItemRow = CartItemRow(selectedItem);
     const $cart = document.getElementById('cart-items');
-    $cart.appendChild($newItemsDiv);
+    $cart.appendChild($newItemRow);
     itemStore.updateItemQuantity(selectedItem.id, -1);
   }
 

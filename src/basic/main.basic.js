@@ -1,62 +1,21 @@
 import { products, discountRateMap } from "./constants.js";
+import { mount } from "./helpers/render.js";
 import {
   scheduleFlashSale,
   scheduleRecommendationSale,
 } from "./helpers/scheduleTask.js";
 
-let productSelector, addToCartButton, cartItemList, cartTotal, stockStatus;
 let lastSelectedProductId,
   bonusPts = 0,
   finalTotal = 0,
   totalItemsInCart = 0;
 
-main();
+let [cartItemList, cartTotal, productSelector, addToCartButton, stockStatus] =
+  mount();
+updateProductSelector();
+calculateCart();
+triggerRandomSales();
 addEventListener();
-
-function main() {
-  render();
-  updateProductSelector();
-  calculateCart();
-  triggerRandomSales();
-}
-
-function render() {
-  const root = document.getElementById("app");
-  const cont = document.createElement("div");
-  const wrap = document.createElement("div");
-  const hTxt = document.createElement("h1");
-
-  cartItemList = document.createElement("div");
-  cartTotal = document.createElement("div");
-  productSelector = document.createElement("select");
-  addToCartButton = document.createElement("button");
-  stockStatus = document.createElement("div");
-
-  cartItemList.id = "cart-items";
-  cartTotal.id = "cart-total";
-  productSelector.id = "product-select";
-  addToCartButton.id = "add-to-cart";
-  stockStatus.id = "stock-status";
-  cont.className = "bg-gray-100 p-8";
-  wrap.className =
-    "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
-  hTxt.className = "text-2xl font-bold mb-4";
-  cartTotal.className = "text-xl font-bold my-4";
-  productSelector.className = "border rounded p-2 mr-2";
-  addToCartButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
-  stockStatus.className = "text-sm text-gray-500 mt-2";
-  hTxt.textContent = "장바구니";
-  addToCartButton.textContent = "추가";
-
-  wrap.appendChild(hTxt);
-  wrap.appendChild(cartItemList);
-  wrap.appendChild(cartTotal);
-  wrap.appendChild(productSelector);
-  wrap.appendChild(addToCartButton);
-  wrap.appendChild(stockStatus);
-  cont.appendChild(wrap);
-  root.appendChild(cont);
-}
 
 function triggerRandomSales() {
   scheduleFlashSale({ onSale: updateProductSelector });

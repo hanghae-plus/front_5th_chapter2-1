@@ -5,7 +5,7 @@ import { useCart, useProduct } from "@/advanced/context";
 export const AddButton: React.FC = () => {
 
   const { cartItems, setCartItems } = useCart();
-  const { selectedProductId, productList } = useProduct();
+  const { selectedProductId, productList, setProductList } = useProduct();
 
   const handleClick = () => {
     if (!selectedProductId) return;
@@ -27,6 +27,12 @@ export const AddButton: React.FC = () => {
     } else {
       setCartItems([...cartItems, { ...itemToAdd, quantity: 1 }]);
     }
+
+    setProductList(productList.map(product => 
+      product.id === itemToAdd.id 
+        ? { ...product, quantity: product.quantity - 1 }
+        : product
+    ));
   };
 
   return (

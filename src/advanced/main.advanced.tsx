@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import "#advanced/styles/tailwind.css";
-import MainPage from "#advanced/pages/Main";
+import MainPage from "#advanced/pages/main/MainPage";
 
 const $root = document.getElementById("root");
 

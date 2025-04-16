@@ -11,10 +11,11 @@ export default function Cart() {
     const $target = event.target;
     if (!$target.dataset.itemId) return;
 
-    handleCartAction($target);
-
-    const itemStore = ItemStore.getInstance();
-    renderCalcCart(itemStore.getState().items);
+    const isUpdated = handleCartAction($target);
+    if (isUpdated) {
+      const itemStore = ItemStore.getInstance();
+      renderCalcCart(itemStore.getState().items);
+    }
   });
 
   return $cartItemsDiv;

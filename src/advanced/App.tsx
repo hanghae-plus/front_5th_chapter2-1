@@ -1,5 +1,4 @@
 import {
-  AddToCartButton,
   CartItemContainer,
   ProductSelect,
   StockStatusDisplay,
@@ -16,7 +15,6 @@ const App = () => {
           <CartItemContainer />
           <TotalAmountDisplay />
           <ProductSelect />
-          <AddToCartButton />
           <StockStatusDisplay />
         </div>
       </div>

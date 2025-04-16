@@ -39,9 +39,7 @@ function main() {
     <div id="container" class="bg-gray-100 p-8">
       <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
-        <div id="carts">
-
-        </div>
+        ${Carts()}
         <div id="cart-total" class="text-xl font-bold my-4">
         </div>
         ${Options()}
@@ -134,6 +132,8 @@ function main() {
       }
     }, 60000);
   }, Math.random() * 20000);
+
+  root.appendChild(template());
 }
 
 /** selectBox 컴포넌트 */
@@ -328,6 +328,32 @@ $addCartBtn.addEventListener('click', () => {
     lastAddedItem = selectedItem;
   }
 });
+
+const MOCKCARTS = [
+  { id: 'p1', quantity: 4 },
+  { id: 'p2', quantity: 1 },
+];
+
+/** 장바구니 목록 ui 컴포넌트 */
+function Carts() {
+  // todo - carts 담긴 항목 가져오는 로직 만들기
+  const cartsProducts = MOCKCARTS.map(
+    ({ id, name, price, quantity }) => /* html */ `
+    <div id="${id}" class="flex justify-between items-center mb-2">
+      <span>${name} - ${price}원 x ${quantity}</span>
+      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">-</button>
+      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">+</button>
+      <button class="remove-item bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
+    </div>
+    `,
+  );
+
+  return /* html */ `
+    <div id="carts">
+      ${cartsProducts}
+    </div>
+    `;
+}
 
 // 장바구니 수량 변경 및 삭제 클릭 이벤트
 $cartsWrapper.addEventListener('click', (e) => {

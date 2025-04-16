@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import "#advanced/styles/tailwind.css";
+import MainPage from "#advanced/pages/Main";
 
 const $root = document.getElementById("root");
 
@@ -10,7 +11,7 @@ if ($root) {
 
   root.render(
     <StrictMode>
-      <div className="text-red-500">Hello World</div>
+      <MainPage />
     </StrictMode>,
   );
 }

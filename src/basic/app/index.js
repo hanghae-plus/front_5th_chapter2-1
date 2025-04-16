@@ -1,10 +1,10 @@
-import { updateCartDom } from "./Cart/logics/updateCartDom.js";
-import { setSaleAlert, setSuggestionAlert } from "./logic.js";
-import { createCart } from "./Cart/index.js";
+import { logic } from './Cart/logic.js';
+import { setSaleAlert, setSuggestionAlert } from './logic.js';
+import { createCart } from './Cart/index.js';
 
 export function createRootChildren() {
-  const cont = document.createElement("div");
-  cont.className = "bg-gray-100 p-8";
+  const cont = document.createElement('div');
+  cont.className = 'bg-gray-100 p-8';
 
   const cart = createCart();
   cont.appendChild(cart);
@@ -13,7 +13,7 @@ export function createRootChildren() {
 }
 
 export function setUp() {
-  updateCartDom();
+  logic();
   setSaleAlert();
   setSuggestionAlert();
 }

@@ -1,30 +1,7 @@
-import { ElementIds } from '../../../../../shared/app/constants.js';
-import { findProduct, prodList } from '../../../../store/prodList.js';
 import { logic, getCartItemText, getValueFromCardItem } from '../../logic.js';
 import { updateLastSelValue } from '../../../../store/lastSel.js';
-
-function isSoldOut(quantity) {
-  return quantity === 0;
-}
-
-function createItemOptionDom(item) {
-  const opt = document.createElement('option');
-  opt.value = item.id;
-  opt.textContent = item.name + ' - ' + item.val + '원';
-  opt.disabled = isSoldOut(item.q);
-  return opt;
-}
-
-export function updateSelectOptionsDom(selElem) {
-  const sel = selElem ?? document.getElementById(ElementIds.SEL);
-
-  sel.innerHTML = '';
-
-  prodList.forEach((item) => {
-    const opt = createItemOptionDom(item);
-    sel.appendChild(opt);
-  });
-}
+import { ElementIds } from '../../../../../shared/app/constants.js';
+import { createCartItemText } from '../../../../../shared/app/Cart/components/AddProduct/calculation.js';
 
 function createNewCartItem(itemToAdd) {
   const newItem = document.createElement('div');
@@ -44,20 +21,27 @@ function updateCartItemQuantityDom(item, itemToAdd) {
   const { name, val, q } = itemToAdd;
 
   if (newQty <= q) {
-    getCartItemText(item).textContent = `${name} - ${val}원 x ${newQty}`;
+    getCartItemText(item).textContent = createCartItemText(name, val, newQty);
     itemToAdd.q--;
   } else {
     alert('재고가 부족합니다.');
   }
 }
 
-function addItemToCart(itemToAdd) {
+function createNewItemToCart() {
   const cartDisplay = document.getElementById(ElementIds.CART_DISP);
 
   const newItem = createNewCartItem(itemToAdd);
   cartDisplay.appendChild(newItem);
+}
 
+function decreaseProductItemQuantity(itemToAdd) {
   itemToAdd.q--;
+}
+
+function addItemToCart(itemToAdd) {
+  createNewItemToCart();
+  decreaseProductItemQuantity();
 }
 
 function updateCartDisplay(itemToAdd) {
@@ -65,16 +49,7 @@ function updateCartDisplay(itemToAdd) {
   item ? updateCartItemQuantityDom(item, itemToAdd) : addItemToCart(itemToAdd);
 }
 
-export function handleClickAddBtn() {
-  const sel = document.getElementById(ElementIds.SEL);
-
-  const selItem = sel.value;
-  const itemToAdd = findProduct(selItem);
-
-  if (!itemToAdd || itemToAdd.q <= 0) {
-    return;
-  }
-
+export function addItemToCart(itemToAdd) {
   updateCartDisplay(itemToAdd);
   logic();
   updateLastSelValue(selItem);

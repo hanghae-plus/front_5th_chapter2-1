@@ -1,20 +1,17 @@
-import { PRODUCT_LIST } from "../store/PRODUCT";
+import { PRODUCT_ITEM } from '../store/PRODUCT';
 
-//
 const stockInfo = () => {
   // 요소 생성
-  const stockInfoElement = document.createElement("div");
-  stockInfoElement.id = "stock-status";
-  stockInfoElement.className = "text-sm text-gray-500 mt-2";
+  const stockInfoElement = document.createElement('div');
+  stockInfoElement.id = 'stock-status';
+  stockInfoElement.className = 'text-sm text-gray-500 mt-2';
 
   // 재고 업데이트 함수
   const updateStockInfo = () => {
-    let infoMsg = "";
-    PRODUCT_LIST.forEach(function (item) {
-      if (item.q < 5) {
-        infoMsg += `${item.name}: ${
-          item.q > 0 ? `재고 부족 (${item.q}개 남음)` : "품절"
-        }\n`;
+    let infoMsg = '';
+    PRODUCT_ITEM.forEach(function (item) {
+      if (item.stock < 5) {
+        infoMsg += `${item.name}: ${item.stock > 0 ? `재고 부족 (${item.stock}개 남음)` : '품절'}\n`;
       }
     });
     stockInfoElement.textContent = infoMsg;

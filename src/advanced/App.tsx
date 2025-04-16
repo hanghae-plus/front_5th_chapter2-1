@@ -31,7 +31,10 @@ const App = () => {
     return (
         <div className="max-w-4xl mx-auto">
             <CartLayout>
-                <CartItemList cartItems={cartItems} setCartItems={setCartItems} />
+                <CartItemList cartItems={cartItems}
+                    setCartItems={setCartItems}
+                    productList={productList}
+                    setProductList={setProductList} />
                 <CartSummary cartItems={cartItems} />
                 <ProductSelector
                     productList={productList}

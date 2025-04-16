@@ -14,7 +14,7 @@
 
 let lastAddedItem = null;
 
-/** 등록된 상품 목록 */
+/** 등록된 상품 목록 - 정규화 */
 const PRODUCTS_BY_ID = {
   p1: { id: 'p1', name: '상품1', price: 10000, quantity: 50, discount: 0.1 },
   p2: { id: 'p2', name: '상품2', price: 20000, quantity: 30, disconnt: 0.15 },
@@ -22,6 +22,15 @@ const PRODUCTS_BY_ID = {
   p4: { id: 'p4', name: '상품4', price: 15000, quantity: 0, disconnt: 0.05 },
   p5: { id: 'p5', name: '상품5', price: 25000, quantity: 10, disconnt: 0.25 },
 };
+
+/** 등록된 상품 목록 */
+const PRODUCTS = [
+  { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
+  { id: 'p2', name: '상품2', price: 20000, quantity: 3 },
+  { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
+  { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
+  { id: 'p5', name: '상품5', price: 25000, quantity: 2 },
+];
 
 function main() {
   const root = document.getElementById('app');
@@ -33,7 +42,7 @@ function main() {
         <div id="carts"></div>
         <div id="cart-total" class="text-xl font-bold my-4">
         </div>
-        <div id="products-select-box" class="border rounded p-2 mr-2"></div>
+        ${Options()}
         <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
         <div id="stock-state" class="text-sm text-gray-500 mt-2">
       </div>
@@ -125,16 +134,19 @@ function main() {
   }, Math.random() * 20000);
 }
 
-/** option태그 업데이트 함수 */
+/** selectBox 컴포넌트 */
 function Options() {
-  $selectBox.innerHTML = '';
-  PRODUCTS.forEach(function (item) {
-    const opt = document.createElement('option');
-    opt.value = item.id;
-    opt.textContent = item.name + ' - ' + item.val + '원';
-    if (item.q === 0) opt.disabled = true;
-    $selectBox.appendChild(opt);
-  });
+  const options = PRODUCTS.map(
+    ({ id, name, price, quantity }) => /* html */ `
+    <option id="${id}" ${quantity === 0 ? 'disable' : ''}>${name} - ${price}원</option>
+  `,
+  );
+
+  return /* html */ `
+    <div id="products-select-box" class="border rounded p-2 mr-2">
+      ${options}
+    </div>;
+    `;
 }
 
 /** 장바구니에 담긴 총 가격 계산 함수 */

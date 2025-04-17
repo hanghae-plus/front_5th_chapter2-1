@@ -61,8 +61,8 @@ export const useCart = () => {
 
     // 자주 사용하는 메서드 참조 저장
     const getItemCount = cartState.getItemCount;
-    const getTotalAmount = cartState.getTotalAmount;
-    const getDiscountRate = cartState.getDiscountRate;
+    const getTotalAmount = cartState.getTotalAmount; // 지역변수로 한 후에 -> 마지막에 set
+    const getDiscountRate = cartState.getDiscountRate; // 얘도될듯
     const setItemCount = cartState.setItemCount;
     const setTotalAmount = cartState.setTotalAmount;
     const setDiscountRate = cartState.setDiscountRate;

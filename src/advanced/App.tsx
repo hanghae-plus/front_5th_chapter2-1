@@ -1,22 +1,19 @@
+//components
 import Title from './components/Title';
 import Cart from './components/Cart';
 import CartTotal from './components/CartTotal';
 import ItemSelect from './components/ItemSelect';
 import AddCartButton from './components/AddCartButton';
 import Stock from './components/Stock';
-import { useState } from 'react';
+
+//constants
 
 import usePromotion from './hooks/usePromotion';
-import ITEMS from './constants/items';
+import useSelect from './hooks/useSelect';
 
 const App = () => {
   usePromotion();
-
-  const [selectedItemId, setSelectedItemId] = useState('p1');
-
-  const handleItemSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedItemId(event.target.value);
-  };
+  const { selectedItemId, handleItemSelect } = useSelect();
 
   return (
     <>
@@ -25,11 +22,7 @@ const App = () => {
           <Title />
           <Cart />
           <CartTotal />
-          <ItemSelect
-            items={ITEMS}
-            selectedItemId={selectedItemId}
-            onSelectItem={handleItemSelect}
-          />
+          <ItemSelect selectedItemId={selectedItemId} onSelectItem={handleItemSelect} />
           <AddCartButton />
           <Stock />
         </div>

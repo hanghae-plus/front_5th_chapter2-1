@@ -1,6 +1,6 @@
-import { FLASH_SALE } from '@/basic/consts';
-import { calculateDiscountedPrice, alertFlashSale } from '@/advanced/utils';
-import type { Product } from '@/advanced/types';
+import { FLASH_SALE } from "@/basic/consts";
+import { alertFlashSale } from "@/advanced/utils";
+import type { Product } from "@/advanced/types";
 
 const getRandomProduct = (productList: Product[]): Product => {
   return productList[Math.floor(Math.random() * productList.length)];
@@ -16,18 +16,20 @@ interface FlashSaleParams {
 }
 
 export const flashSale = ({ productList, setProductList }: FlashSaleParams): void => {
-  const luckyItem = getRandomProduct(productList);
-  if (!isEligibleForFlashSale(luckyItem)) return;
+  const eligibleProducts = productList.filter((product) => product.quantity > 0 && isEligibleForFlashSale(product));
 
-  const discountedValue = calculateDiscountedPrice(luckyItem.value, FLASH_SALE.DISCOUNT_RATE);
-  
-  setProductList(currentProductList => 
-    currentProductList.map(product => 
-      product.id === luckyItem.id 
-        ? { ...product, value: discountedValue }
-        : product
-    )
+  const selectedProduct = getRandomProduct(eligibleProducts);
+  if (!selectedProduct) return;
+
+  setProductList((prev) =>
+    prev.map((product) =>
+      product.id === selectedProduct.id
+        ? {
+            ...product,
+            value: Math.floor(product.value * (1 - FLASH_SALE.DISCOUNT_RATE)),
+          }
+        : product,
+    ),
   );
-
-  alertFlashSale(luckyItem);
+  alertFlashSale(selectedProduct);
 };

@@ -27,11 +27,19 @@ export const useCartActions = (
       if (existing) {
         return prev.map((item) =>
           item.id === productId
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { 
+                ...item, 
+                quantity: item.quantity + 1,
+                value: product.value // 현재 상품의 가격으로 업데이트
+              }
             : item,
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { 
+        ...product, 
+        quantity: 1,
+        value: product.value // 현재 상품의 가격으로 설정
+      }];
     });
   }, [productList, setProductList, setCartItems]);
 

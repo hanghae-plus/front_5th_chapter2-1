@@ -6,7 +6,7 @@ const TIMEOUTS = [LUCKY_TIMEOUT, SUGGEST_TIMEOUT];
 const INTERVALS = [LUCKY_INTERVAL, SUGGEST_INTERVAL];
 const INNER_FUNCTIONS = [lucky, suggest];
 
-const alerts = () => {
+const promotion = () => {
   for (let i = 0; i < TIMEOUTS.length; i++) {
     setTimeout(() => {
       setInterval(() => {
@@ -16,4 +16,4 @@ const alerts = () => {
   }
 };
 
-export default alerts;
+export default promotion;

@@ -1,6 +1,14 @@
 import { Items } from '../types/items';
 
-const ItemSelect = ({ items, selectedItemId, onSelectItem }) => {
+const ItemSelect = ({
+  items,
+  selectedItemId,
+  onSelectItem,
+}: {
+  items: Items[];
+  selectedItemId: string;
+  onSelectItem: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+}) => {
   // return <select id="product-select" className="border rounded p-2 mr-2"></select>;
   return (
     <select

@@ -4,15 +4,15 @@ import {
   SUGGEST_TIMEOUT,
   LUCKY_INTERVAL,
   SUGGEST_INTERVAL,
-} from '../utils/alerts/alertConstants';
-import lucky from '../utils/alerts/lucky';
-import suggest from '../utils/alerts/suggest';
+} from '../utils/promotion/constants';
+import lucky from '../utils/promotion/lucky';
+import suggest from '../utils/promotion/suggest';
 
 const TIMEOUTS = [LUCKY_TIMEOUT, SUGGEST_TIMEOUT];
 const INTERVALS = [LUCKY_INTERVAL, SUGGEST_INTERVAL];
 const INNER_FUNCTIONS = [lucky, suggest];
 
-const useAlert = () => {
+const usePromotion = () => {
   useEffect(() => {
     for (let i = 0; i < TIMEOUTS.length; i++) {
       setTimeout(() => {
@@ -24,4 +24,4 @@ const useAlert = () => {
   }, []);
 };
 
-export default useAlert;
+export default usePromotion;

@@ -4,10 +4,20 @@ import CartTotal from './components/CartTotal';
 import ItemSelect from './components/ItemSelect';
 import AddCartButton from './components/AddCartButton';
 import Stock from './components/Stock';
-import useAlert from './hooks/useAlert';
+import { useState } from 'react';
+
+import usePromotion from './hooks/usePromotion';
+import ITEMS from './constants/items';
 
 const App = () => {
-  useAlert();
+  usePromotion();
+
+  const [selectedItemId, setSelectedItemId] = useState('p1');
+
+  const handleItemSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedItemId(event.target.value);
+  };
+
   return (
     <>
       <div className="bg-gray-100 p-8">
@@ -16,7 +26,7 @@ const App = () => {
           <Cart />
           <CartTotal />
           <ItemSelect
-            items={items}
+            items={ITEMS}
             selectedItemId={selectedItemId}
             onSelectItem={handleItemSelect}
           />

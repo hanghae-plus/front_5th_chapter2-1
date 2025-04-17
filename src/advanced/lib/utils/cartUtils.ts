@@ -3,9 +3,12 @@ import type { CartItem, Product } from "@advanced/lib/types";
 import { calculateBonusPoints } from "@advanced/lib/utils/bonusPointUtils";
 import { applyDiscount, getDiscountRateByProduct } from "@advanced/lib/utils/discountUtils";
 
-interface CartInvoice {
+interface CartTotals {
   totalQuantity: number;
   totalAmountBeforeDiscount: number;
+  totalAmountAfterItemDiscounts: number;
+}
+interface CartInvoice extends Omit<CartTotals, "totalAmountAfterItemDiscounts"> {
   totalAmount: number;
   discountRate: number;
   bonusPoints: number;
@@ -19,12 +22,6 @@ const emptyCartInvoice: CartInvoice = {
   bonusPoints: 0,
 };
 
-type CartTotals = {
-  totalQuantity: number;
-  totalAmountBeforeDiscount: number;
-  totalAmountAfterItemDiscounts: number;
-};
-
 export function generateCartInvoice(addedItems: CartItem[]): CartInvoice {
   if (addedItems.length === 0) return emptyCartInvoice;
 
@@ -36,14 +33,16 @@ export function generateCartInvoice(addedItems: CartItem[]): CartInvoice {
 }
 
 function getCartEntries(addedItems: CartItem[]): { product: Product; quantity: number }[] | null {
-  const entries: { product: Product; quantity: number }[] = [];
-  for (const { id, quantity } of addedItems) {
-    const product = PRODUCT_INVENTORY.find((p) => p.id === id);
-    if (!product) return null;
+  return addedItems.reduce(
+    (entries, { id, quantity }) => {
+      const product = PRODUCT_INVENTORY.find((p) => p.id === id);
+      if (!product) return entries;
 
-    entries.push({ product, quantity });
-  }
-  return entries;
+      entries.push({ product, quantity });
+      return entries;
+    },
+    [] as { product: Product; quantity: number }[],
+  );
 }
 
 function calculateCartItemTotals(entries: { product: Product; quantity: number }[]): CartTotals {
@@ -53,8 +52,8 @@ function calculateCartItemTotals(entries: { product: Product; quantity: number }
       totals.totalQuantity += quantity;
       totals.totalAmountBeforeDiscount += itemTotal;
 
-      const itemDiscount = quantity >= 10 ? getDiscountRateByProduct(product.id) : 0;
-      totals.totalAmountAfterItemDiscounts += itemTotal * (1 - itemDiscount);
+      const discountRate = quantity >= 10 ? getDiscountRateByProduct(product.id) : 0;
+      totals.totalAmountAfterItemDiscounts += itemTotal * (1 - discountRate);
 
       return totals;
     },

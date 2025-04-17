@@ -10,41 +10,47 @@ interface Product {
 
 interface SelectProps {
   products: Product[];
+  onClick: (productId: string) => void;
 }
 
-function Select({ products }: SelectProps) {
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+function Select({ products, onClick }: SelectProps) {
+  const [selectedProduct, setSelectedProduct] = useState<string>('');
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const id = e.target.value;
-    setSelectedProduct(products.find((product) => product.id === id) || null);
+    setSelectedProduct(e.target.value);
   };
 
-  const handleClickAdd = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAddToCart = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(selectedProduct);
+    if (selectedProduct) {
+      onClick(selectedProduct);
+    }
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}>
-      <form onSubmit={handleClickAdd}>
-        <select
-          id='product-select'
-          className='border rounded p-2 mr-2'
-          onChange={handleChange}>
-          {products.map((product) => (
-            <option key={product.id} value={product.id}>
-              {`${product.name}-${product.price}원`}
-            </option>
-          ))}
-        </select>
-        <Button />
-      </form>
-    </div>
+    <form onSubmit={handleAddToCart} className='flex items-center'>
+      <select
+        id='product-select'
+        className='border rounded p-2 mr-2'
+        onChange={handleChange}
+        value={selectedProduct}>
+        {products.map((product) => (
+          <option
+            key={product.id}
+            value={product.id}
+            disabled={product.quantity === 0}>
+            {`${product.name} - ${product.price}원`}
+          </option>
+        ))}
+      </select>
+      <Button
+        id='add-to-cart'
+        className='bg-blue-500 text-white px-4 py-2 rounded'
+        type='submit'
+        disabled={!selectedProduct}>
+        추가
+      </Button>
+    </form>
   );
 }
 

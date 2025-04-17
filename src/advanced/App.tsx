@@ -1,15 +1,11 @@
 import { MainPage } from "./pages";
-import { CartProvider, ProductProvider } from "./context";
+import { ShoppingProvider } from "./context";
 
 function App() {
   return (
-    <>
-      <CartProvider>
-        <ProductProvider>
-          <MainPage />
-        </ProductProvider>
-      </CartProvider>
-    </>
+    <ShoppingProvider>
+      <MainPage />
+    </ShoppingProvider>
   );
 }
 

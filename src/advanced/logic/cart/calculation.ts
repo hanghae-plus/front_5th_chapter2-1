@@ -1,13 +1,7 @@
-import { PRODUCT_DISCOUNT_RATES } from '@/basic/consts';
-import type { CartItem } from '@/advanced/context';
+import type { CartItem } from "@/advanced/types";
+import { PRODUCT_DISCOUNT_RATES } from "@/basic/consts";
 
-interface CartAmounts {
-  itemCount: number;
-  subTotal: number;
-  totalAmount: number;
-}
-
-export const calculateCartAmounts = (cartItems: CartItem[]): CartAmounts => {
+export const calculation = (cartItems: CartItem[]) => {
   return cartItems.reduce(
     (acc, item) => {
       const itemTotal = item.value * item.quantity;

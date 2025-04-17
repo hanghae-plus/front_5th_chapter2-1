@@ -1,13 +1,13 @@
 import type React from "react";
-import { formatStockStatusMessage } from "@/advanced/utils/format";
-import { useProduct } from "@/advanced/context";
+import { useShoppingContext } from "@/advanced/context";
+import { formatStockStatusMessage } from "@/advanced/utils";
 
 export const StockStatus: React.FC = () => {
-  const { productList } = useProduct();
+  const { productList } = useShoppingContext();
+  
+  const stockMessage = productList.reduce((acc, item) => 
+    acc + formatStockStatusMessage(item)
+  , '');
 
-  const infoMessage = productList.reduce((acc, item) => {
-    return acc + formatStockStatusMessage(item);
-  }, '');
-
-  return <>{infoMessage}</>;
+  return <>{stockMessage}</>;
 };

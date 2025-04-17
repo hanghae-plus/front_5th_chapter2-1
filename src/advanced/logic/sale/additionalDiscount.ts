@@ -2,8 +2,8 @@ import { ADDITIONAL_DISCOUNT } from '@/basic/consts';
 import { alertSuggestedProduct } from '@/advanced/utils';
 import type { Product } from '@/advanced/types';
 
-const getSuggestedProduct = (products: Product[], lastId: string | null): Product | undefined => {
-  return products.find((item) => item.id !== lastId && item.quantity > 0);
+const getSuggestedProduct = (productList: Product[], lastId: string | null): Product | undefined => {
+  return productList.find((item) => item.id !== lastId && item.quantity > 0);
 };
 
 interface AdditionalDiscountParams {
@@ -13,19 +13,18 @@ interface AdditionalDiscountParams {
 }
 
 export const additionalDiscount = ({ selectedProductId, productList, setProductList }: AdditionalDiscountParams): void => {
-  console.log('additionalDiscount');
   if (!selectedProductId) return;
 
-  const suggest = getSuggestedProduct(productList, selectedProductId);
-  if (!suggest) return;
+  const suggestedProduct = getSuggestedProduct(productList, selectedProductId);
+  if (!suggestedProduct) return;
 
-  alertSuggestedProduct(suggest);
+  alertSuggestedProduct(suggestedProduct);
   
-  const discountedValue = Math.round(suggest.value * (1 - ADDITIONAL_DISCOUNT.RATE));
+  const discountedValue = Math.round(suggestedProduct.value * (1 - ADDITIONAL_DISCOUNT.RATE));
   
   setProductList(currentProductList => 
     currentProductList.map(product => 
-      product.id === suggest.id 
+      product.id === suggestedProduct.id 
         ? { ...product, value: discountedValue }
         : product
     )

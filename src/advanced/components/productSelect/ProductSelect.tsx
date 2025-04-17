@@ -1,14 +1,20 @@
+import type React from "react";
 import { DOM_IDS, STYLES } from "@/basic/consts";
+import { useShoppingContext } from "@/advanced/context";
 import { formatProductOption } from "@/advanced/utils";
-import { useProduct } from "@/advanced/context";
 
 export const ProductSelect: React.FC = () => {
-  const { productList, setSelectedProductId } = useProduct();
+  const { 
+    productList, 
+    selectedProductId, 
+    setSelectedProductId 
+  } = useShoppingContext();
 
   return (
     <select 
       id={DOM_IDS.PRODUCT.SELECT} 
       className={STYLES.FORM.SELECT}
+      value={selectedProductId}
       onChange={(e) => setSelectedProductId(e.target.value)}
     >
       {productList.map((item) => (

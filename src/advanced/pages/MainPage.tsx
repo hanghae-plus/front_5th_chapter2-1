@@ -1,24 +1,32 @@
-import { useEffect } from 'react';
-import { Layout, ProductSelect, AddButton, StockStatusContainer, CartItemListContainer, TotalAmountContainer } from '@/advanced/components';
-import { useProduct } from '@/advanced/context';
-import { RandomSale } from '@/advanced/logic/sale';
+import { useEffect } from "react";
+import {
+  Layout,
+  ProductSelect,
+  AddButton,
+  StockStatusContainer,
+  CartItemListContainer,
+  TotalAmountContainer,
+} from "@/advanced/components";
+import { useShoppingContext } from "@/advanced/context";
+import { RandomSale } from "@/advanced/logic/sale";
 
 export const MainPage = () => {
-    const { productList, setProductList, selectedProductId } = useProduct();
+  const { selectedProductId, productList, setProductList } = useShoppingContext();
 
-    useEffect(() => {
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
     RandomSale({
       selectedProductId,
       productList,
       setProductList
     });
-  }, [productList, selectedProductId, setProductList]);
+  }, []);
 
   return (
     <Layout>
       <CartItemListContainer />
       <TotalAmountContainer />
-      <ProductSelect/>
+      <ProductSelect />
       <AddButton />
       <StockStatusContainer />
     </Layout>

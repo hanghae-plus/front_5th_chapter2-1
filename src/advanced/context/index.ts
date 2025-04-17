@@ -1,3 +1,1 @@
-export * from './cartContext';
-export * from './productContext';
-export * from './types';
+export * from './ShoppingContext';

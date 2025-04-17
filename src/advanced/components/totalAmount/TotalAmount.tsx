@@ -1,28 +1,30 @@
 import type React from "react";
 import { STYLES } from "@/basic/consts";
+import { BonusPoints } from "./BonusPoints";
+import { useShoppingContext } from "@/advanced/context";
 import { formatPrice, formatDiscountRate } from "@/advanced/utils";
-import { useCart } from "@/advanced/context";
-import { getDiscountRate } from "@/advanced/logic";
-import { BonusPoints } from "./BonutPoints";
+import { getDiscountRate } from "@/advanced/logic/discount";
 
 export const TotalAmount: React.FC = () => {
-  const { cart, setCart } = useCart();
+  const { cartItems, totalAmount } = useShoppingContext();
+  
   const discountRate = getDiscountRate({
-    itemCount: cart.itemCount,
-    totalAmount: cart.totalAmount,
-    subTotal: cart.subTotal,
-    setCart: setCart
+    itemCount: cartItems.length,
+    totalAmount,
+    subTotal: cartItems.reduce((acc, item) => acc + item.value * item.quantity, 0),
   });
+
+  const hasDiscount = discountRate > 0;
 
   return (
     <>
-      총액: {formatPrice(cart.totalAmount)}
-      {discountRate > 0 && (
+      총액: {formatPrice(totalAmount)}
+      {hasDiscount && (
         <span className={STYLES.TEXT.SUCCESS}>
           ({formatDiscountRate(discountRate)} 할인 적용)
         </span>
       )}
-      <BonusPoints totalAmount={cart.totalAmount} />
+      <BonusPoints totalAmount={totalAmount} />
     </>
   );
 };

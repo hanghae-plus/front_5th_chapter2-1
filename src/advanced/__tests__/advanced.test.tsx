@@ -224,7 +224,6 @@ describe('advanced test', () => {
     }
 
     // 11번째 클릭 시 재고 부족 알림이 표시되어야 함
-
     fireEvent.click(increaseBtn!);
 
     // 재고 부족 알림이 표시되었는지 확인

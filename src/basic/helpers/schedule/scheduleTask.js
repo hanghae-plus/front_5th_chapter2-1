@@ -1,4 +1,4 @@
-import { products } from "../../constants.js";
+import { products } from '../../constants.js';
 
 const FLASH_SALE_DELAY_MAX = 10000;
 const FLASH_SALE_INTERVAL = 30000;
@@ -47,9 +47,7 @@ function triggerFlashSale(onSale) {
     const newPrice = item.price * (1 - FLASH_SALE_DISCOUNT);
     item.price = Math.round(newPrice);
 
-    alert(
-      `번개세일! ${item.name}이(가) ${FLASH_SALE_DISCOUNT * 100}% 할인 중입니다!`,
-    );
+    alert(`번개세일! ${item.name}이(가) ${FLASH_SALE_DISCOUNT * 100}% 할인 중입니다!`);
     onSale();
   }
 }
@@ -57,15 +55,13 @@ function triggerFlashSale(onSale) {
 function triggerRecommendationSale(lastSelectedId, onSale) {
   if (!lastSelectedId) return;
 
-  const suggestion = products.find(
-    (product) => product.id !== lastSelectedId && product.units > 0,
-  );
+  const suggestion = products.find((product) => product.id !== lastSelectedId && product.units > 0);
   if (suggestion) {
     const newPrice = suggestion.price * (1 - RECOMMENDATION_DISCOUNT);
     suggestion.price = Math.round(newPrice);
 
     alert(
-      `${suggestion.name}은(는) 어떠세요? 지금 구매하시면 ${RECOMMENDATION_DISCOUNT * 100}% 추가 할인!`,
+      `${suggestion.name}은(는) 어떠세요? 지금 구매하시면 ${RECOMMENDATION_DISCOUNT * 100}% 추가 할인!`
     );
     onSale();
   }

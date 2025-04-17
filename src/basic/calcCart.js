@@ -100,8 +100,13 @@ function createDiscountRateMessage(discRate) {
   return span;
 }
 
-function getQuantityFromCardItem(item) {
-  return parseInt(item.querySelector("span").textContent.split("x ")[1]);
+export function getCartItemText(item) {
+  return item.querySelector("span");
+}
+
+export function getQuantityFromCardItem(item) {
+  const itemText = getCartItemText(item);
+  return parseInt(itemText.textContent.split("x ")[1]);
 }
 
 export function calcCart() {

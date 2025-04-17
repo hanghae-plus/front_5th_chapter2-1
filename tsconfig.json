@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", // 최신 JS 출력
+    "useDefineForClassFields": true,
+    "module": "ESNext", // Vite용 모듈 시스템
+    "moduleResolution": "bundler", // import 경로 해석
+    "lib": ["DOM", "ESNext", "DOM.Iterable"], // DOM API + 최신 JS
+    "jsx": "react-jsx", // React 17+ JSX 변환
+    "strict": true, // 타입 검사 강화
+    "skipLibCheck": true, // 라이브러리 타입 체크 생략
+    "isolatedModules": true, // Vite에서 필수
+    "resolveJsonModule": true, // JSON import 허용
+    "moduleDetection": "force",
+    "noEmit": true,
+    "allowImportingTsExtensions": true // .ts 확장자 import 허용
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

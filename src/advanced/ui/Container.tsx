@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import { memo, ReactNode } from 'react';
 
 // 컨테이너 요소 묶음 +  heading
 const Container = ({ children }: { children: ReactNode }) => {
@@ -12,4 +12,4 @@ const Container = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default Container;
+export default memo(Container);

@@ -47,7 +47,7 @@ function MainComponent() {
 
   // 장바구니 추가 버튼 클릭 이벤트 핸들러 등록
   cartAddBtnC.setupEventHandler(() => {
-    cart.addToCart($selectBox, $cartItem);
+    cart.addToCart($selectBox);
     cart.setLastSelected($selectBox.value);
     cart.calculateCart($cartItem, cartResultC, stockInfoC, selectBoxC);
   });

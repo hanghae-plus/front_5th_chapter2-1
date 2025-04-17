@@ -1,8 +1,9 @@
 import { ItemListType } from 'src/advanced/types/ItemType.js';
 import ItemSelectOption from './ItemSelectOption.js';
+import { initialItemList } from '../../data/initialItemList.js';
 
 export default function ItemSelect() {
-  const itemList: ItemListType = [];
+  const itemList: ItemListType = initialItemList;
 
   return (
     <select

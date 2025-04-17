@@ -1,24 +1,26 @@
-import React from 'react';
+import { createElementFromHTML } from '../utils/dom-utils.js';
 
-const CartItem = ({ product, onQuantityChange, onRemove }) => {
-  return (
-    <div>
-      <h3>{product.name}</h3>
-      <p>Price: {product.price}</p>
-      <button
-        onClick={() => onQuantityChange(product.id, product.quantity - 1)}
-      >
-        -
-      </button>
-      <span>{product.quantity}</span>
-      <button
-        onClick={() => onQuantityChange(product.id, product.quantity + 1)}
-      >
-        +
-      </button>
-      <button onClick={() => onRemove(product.id)}>Remove</button>
-    </div>
+/**
+ * 장바구니 상품 생성
+ * @param {Object} product 상품 객체
+ * @returns {Element} 장바구니 상품 요소
+ */
+const $cartItem = (product) => {
+  return createElementFromHTML(
+    /* html */
+    `<div id="${product.id}" class="flex justify-between items-center mb-2">
+          <span>${product.name} - ${product.price}원 x 1</span>
+          <div>
+            <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+                    data-product-id="${product.id}" data-change="-1">-</button>
+            <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+                    data-product-id="${product.id}" data-change="1">+</button>
+            <button class="remove-item bg-red-500 text-white px-2 py-1 rounded"
+                    data-product-id="${product.id}">삭제</button>
+          </div>
+        </div>
+      `,
   );
 };
 
-export default CartItem;
+export { $cartItem };

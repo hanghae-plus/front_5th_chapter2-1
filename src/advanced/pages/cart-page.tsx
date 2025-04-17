@@ -3,7 +3,7 @@ import BonusPoint from "../components/bonus-points";
 import CartItem from "../components/cart-item";
 import PriceInfo from "../components/price-info";
 import ProductSelect from "../components/product-select";
-import { StockStatus } from "../components/stock-info";
+import StockStatus from "../components/stock-info";
 import { useLastSaleTimer } from "../hooks/useLastSaleTimer";
 import { useLuckySaleTimer } from "../hooks/useLuckySaleTimer";
 import { useCartStore } from "../store/useCartStore";

@@ -2,7 +2,7 @@ import React from "react";
 import { useCartStore } from "../store/useCartStore";
 
 /**재고 현황  */
-export const StockStatus = () => {
+function StockStatus() {
   const { products } = useCartStore();
 
   const info = products
@@ -22,4 +22,5 @@ export const StockStatus = () => {
       {info}
     </div>
   );
-};
+}
+export default StockStatus;

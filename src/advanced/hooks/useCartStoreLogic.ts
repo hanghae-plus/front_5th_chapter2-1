@@ -18,22 +18,18 @@ const useCartStoreLogic = (initialCart: ProductInfo[]) => {
     if (existingItem) {
       const newQuantity = (existingItem.quantity || 0) + 1;
 
-      if (newQuantity <= itemToAdd.stock) {
-        setProductList(
-          productList.map((p) =>
-            p.id === productId
-              ? {
-                  ...p,
-                  quantity: newQuantity,
-                  stock: p.stock - 1,
-                }
-              : p,
-          ),
-        );
-        setLastSaleItem(productId);
-      } else {
-        alert("재고가 부족합니다.");
-      }
+      setProductList(
+        productList.map((p) =>
+          p.id === productId
+            ? {
+                ...p,
+                quantity: newQuantity,
+                stock: p.stock - 1,
+              }
+            : p,
+        ),
+      );
+      setLastSaleItem(productId);
     } else {
       setProductList([
         ...productList,

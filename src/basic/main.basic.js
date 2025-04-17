@@ -1,3 +1,14 @@
+import {
+  container,
+  wrapper,
+  cartList,
+  cartTitle,
+  cartTotal,
+  select,
+  addButton,
+  stockStatus,
+} from './src/components';
+
 const products = [
   { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
   { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
@@ -6,7 +17,6 @@ const products = [
   { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
 ];
 
-let select, addButton, cartList, cartTotal, stockStatus;
 let lastSelectedProduct,
   LoyaltyPoints = 0,
   finalPrice = 0,
@@ -18,39 +28,6 @@ setupEventListeners();
 function main() {
   const root = document.getElementById('app');
 
-  const container = document.createElement('div');
-  container.className = 'bg-gray-100 p-8';
-
-  const wrapper = document.createElement('div');
-  wrapper.className =
-    'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-
-  const cartTitle = document.createElement('h1');
-  cartTitle.className = 'text-2xl font-bold mb-4';
-  cartTitle.textContent = '장바구니';
-
-  cartList = document.createElement('div');
-  cartList.id = 'cart-items';
-
-  cartTotal = document.createElement('div');
-  cartTotal.id = 'cart-total';
-  cartTotal.className = 'text-xl font-bold my-4';
-
-  select = document.createElement('select');
-  select.className = 'border rounded p-2 mr-2';
-  select.id = 'product-select';
-
-  addButton = document.createElement('button');
-  addButton.id = 'add-to-cart';
-  addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-  addButton.textContent = '추가';
-
-  stockStatus = document.createElement('div');
-  stockStatus.id = 'stock-status';
-  stockStatus.className = 'text-sm text-gray-500 mt-2';
-
-  addSelectOptions();
-
   wrapper.appendChild(cartTitle);
   wrapper.appendChild(cartList);
   wrapper.appendChild(cartTotal);
@@ -60,6 +37,7 @@ function main() {
   container.appendChild(wrapper);
   root.appendChild(container);
 
+  addSelectOptions();
   calculateCart();
 
   setTimeout(function () {

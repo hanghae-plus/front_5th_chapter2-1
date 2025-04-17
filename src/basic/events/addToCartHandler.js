@@ -54,6 +54,12 @@ const createNewCartItem = (product) => {
 }
 
 export const initAddToCartHandler = () => {
-    state.elements.addBtn.addEventListener('click', handleAddToCart);
+    const addBtn = state.elements.addBtn;
+    if (!addBtn) {
+        console.log('addBtn 아직 렌더링 전');
+        return;
+    }
+
+    addBtn.addEventListener('click', handleAddToCart);
 };
    

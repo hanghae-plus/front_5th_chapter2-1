@@ -50,9 +50,12 @@ const handleCartDisplayClick = (event) => {
     if (target.classList.contains('remove-item')) {
         handleRemoveItem(target);
     }
-
-}
-
+};
 export const initCartDisplayEvents = () => {
-    state.elements.cartDisplay.addEventListener('click', handleCartDisplayClick);
+    const cartDisplay = state.elements.cartDisplay;
+    if (!cartDisplay) {
+        console.log('cartDisplay 아직 렌더링 전');
+        return;
+    }
+    cartDisplay.addEventListener('click', handleCartDisplayClick);
 };

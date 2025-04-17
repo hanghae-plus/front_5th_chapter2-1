@@ -17,7 +17,7 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       rollupOptions: {
         input: {
-          main: "index.advanced.html",
+          main: "./index.advanced.html",
         },
       },
     },

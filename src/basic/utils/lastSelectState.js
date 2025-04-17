@@ -1,9 +1,12 @@
-export let lastSelectState = null;
+export default function lastSelectState() {
+  let lastSelectState = null;
 
-export function setLastSelectState(item) {
-  lastSelectState = item;
-}
+  function setLastSelectState(item) {
+    lastSelectState = item;
+  }
+  function getLastSelectState() {
+    return lastSelectState;
+  }
 
-export function getLastSelectState() {
-  return lastSelectState;
+  return { getLastSelectState, setLastSelectState };
 }

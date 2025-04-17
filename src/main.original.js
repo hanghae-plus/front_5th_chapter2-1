@@ -23,9 +23,9 @@ function main() {
   stockInfo = document.createElement('div');
   cartDisp.id = 'cart-items';
   sum.id = 'cart-total';
-  sel.id = 'product-select';
+  sel.id = 'renderProduct-select';
   addBtn.id = 'add-to-cart';
-  stockInfo.id = 'stock-status';
+  stockInfo.id = 'renderStock-status';
   cont.className = 'bg-gray-100 p-8';
   wrap.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
@@ -197,13 +197,13 @@ addBtn.addEventListener('click', function () {
         ' - ' +
         itemToAdd.val +
         '원 x 1</span><div>' +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
+        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-renderProduct-id="' +
         itemToAdd.id +
         '" data-change="-1">-</button>' +
-        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="' +
+        '<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-renderProduct-id="' +
         itemToAdd.id +
         '" data-change="1">+</button>' +
-        '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="' +
+        '<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-renderProduct-id="' +
         itemToAdd.id +
         '">삭제</button></div>';
       cartDisp.appendChild(newItem);

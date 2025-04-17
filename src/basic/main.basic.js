@@ -1,38 +1,31 @@
-import calculatePrice from './calculatePrice.js';
-import addButton from './components/addButton.js';
-import productList from './components/productList.js';
-import productSelect from './components/productSelect.js';
-import stockInfo from './components/stockInfo.js';
-import sum from './components/sum.js';
-import titleText from './components/titleText.js';
-import renderProductSelectOptions from './renderProductSelectOptions.js';
-import startRecommendationTimer from './startRecommendationTimer.js';
-import startSaleTimer from './startSaleTimer.js';
-
-function main() {
-  render();
-  renderProductSelectOptions();
-  calculatePrice();
-
-  document.addEventListener('cartUpdated', () => {
-    calculatePrice();
-  });
-
-  startSaleTimer({ interval: 30000, delay: Math.random() * 10000 });
-  startRecommendationTimer({ interval: 60000, delay: Math.random() * 20000 });
-}
+import {
+  renderPoint,
+  renderPrice,
+  renderTitle,
+} from './components/common/index.js';
+import {
+  renderProductAddButton,
+  renderProductList,
+  renderProductSelect,
+  renderStock,
+} from './components/product/index.js';
+import { renderStockInfo } from './components/product/renderStock.js';
+import {
+  calculatePrice,
+  luckySaleTimer,
+  recommendationTimer,
+} from './utils/index.js';
 
 function render() {
   const wrap = document.createElement('div');
   wrap.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
 
-  wrap.appendChild(titleText('h1', '장바구니'));
-  wrap.appendChild(sum());
-  wrap.appendChild(productSelect());
-  wrap.appendChild(addButton());
-  wrap.appendChild(stockInfo());
-  wrap.appendChild(productList());
+  wrap.appendChild(renderTitle('h1', '장바구니'));
+  wrap.appendChild(renderProductSelect());
+  wrap.appendChild(renderProductAddButton());
+  wrap.appendChild(renderStock());
+  wrap.appendChild(renderProductList());
 
   const cont = document.createElement('div');
   cont.className = 'bg-gray-100 p-8';
@@ -40,6 +33,27 @@ function render() {
 
   const root = document.getElementById('app');
   root.appendChild(cont);
+
+  calculatePrice();
+
+  return cont;
+}
+
+function main() {
+  const root = document.getElementById('app');
+  root.appendChild(render());
+
+  luckySaleTimer({ interval: 30000, delay: Math.random() * 10000 });
+  recommendationTimer({ interval: 60000, delay: Math.random() * 20000 });
+
+  document.addEventListener('cartUpdated', () => {
+    const cartItems = document.getElementById('cart-items').children;
+    const result = calculatePrice(cartItems);
+
+    renderPrice(result);
+    renderPoint();
+    renderStockInfo();
+  });
 }
 
 main();

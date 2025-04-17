@@ -1,5 +1,6 @@
-export default function product({ id, name, price }) {
+export default function renderProduct({ id, name, price }) {
   const product = document.createElement('div');
+
   product.id = id;
   product.className = 'flex justify-between items-center mb-2';
   product.innerHTML = `

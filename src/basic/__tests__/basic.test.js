@@ -22,11 +22,11 @@ describe('basic test', () => {
       await loadFile();
 
       // 전역 변수 참조
-      sel = document.getElementById('product-select');
+      sel = document.getElementById('renderProduct-select');
       addBtn = document.getElementById('add-to-cart');
       cartDisp = document.getElementById('cart-items');
       sum = document.getElementById('cart-total');
-      stockInfo = document.getElementById('stock-status');
+      stockInfo = document.getElementById('renderStock-status');
     });
 
     beforeEach(() => {

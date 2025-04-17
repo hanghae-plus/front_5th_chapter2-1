@@ -1,7 +1,7 @@
-import calculatePrice from '../calculatePrice.js';
-import { PRODUCTS } from '../productList.constant.js';
+import { PRODUCT_LIST } from './ProductList.constant.js';
+import calculatePrice from '../../utils/calculatePrice.js';
 
-export default function productList() {
+export default function renderProductList() {
   const cartItems = document.createElement('div');
   cartItems.id = 'cart-items';
   cartItems.addEventListener('click', handleChangeQuantity);
@@ -17,10 +17,10 @@ function handleChangeQuantity(event) {
     const productId = target.dataset.productId;
 
     const itemElement = document.getElementById(productId);
-    const product = PRODUCTS.find((product) => product.id === productId);
+    const product = PRODUCT_LIST.find((product) => product.id === productId);
 
     const span = itemElement.querySelector('span');
-    // [상품명 - 가격, 수량]
+    // [상품명 - 가격, 수량] 분리
     const [productName, quantity] = span.textContent.split('x ');
 
     const currentQuantity = parseInt(quantity);
@@ -28,6 +28,7 @@ function handleChangeQuantity(event) {
 
     const newQuantity = currentQuantity + quantityIncrement;
     const maxQuantity = product.quantity + currentQuantity;
+
     if (target.classList.contains('quantity-change')) {
       // 수량이 0개 이상이고, 재고 범위 내의 경우 -> 목록에 추가
       if (newQuantity > 0 && newQuantity <= maxQuantity) {
@@ -49,7 +50,6 @@ function handleChangeQuantity(event) {
       product.quantity += currentQuantity;
       itemElement.remove();
     }
-    // document.dispatchEvent(new CustomEvent('cartUpdated'));
     calculatePrice();
   }
 }

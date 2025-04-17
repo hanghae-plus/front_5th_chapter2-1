@@ -1,7 +1,21 @@
 /**
  * todo
- * -[ ] 초기 createElement된 요소들은 template으로 관리
- * -[ ] 만들 수 있는 부분은 component로 만들기
+ * -[v] 초기 createElement된 요소들은 template으로 관리
+ * -[v] 만들 수 있는 부분은 component로 만들기 -> 진행중
+ * -[ ] 장바구니 같은 아이디값 여러개 렌더링 되는 문제
+ * -[ ] 재고 확인하는 함수
+ * -[ ] 재고 확인하고 재고량에 맞춰서 업데이트하기 -> 재고가 부족합니다.
+ * -[ ] totalPrice 소수점 맞추기
+ * -[ ] 재고 상태 ( = stocksState ) 확인하는 ui 컴포넌트 만들기
+ * -[ ] 시간별 랜덤 상품 할인 alert
+ * -[ ] 최근 장바구니에 담은 상품 할인 alert
+ * -[ ] alert뜬 값 기반으로 options에 products 가격도 업데이트 되어야함.
+ * -[ ] 로컬 스토리지에 products도 저장해버리기
+ * -[ ] 화요일에러 해결하기
+ *
+ * -[ ] Store 필요
+ *
+ * - 내가 가장 부족한 부분 : 함수 실행 후 재렌더링을 못함. = SPA에서 가장 중요한 것이라고 생각..
  *
  * - 필요한 상태값
  *  - 최근 담긴 상품 : lastAddedItem? lastAddedItemected?
@@ -51,12 +65,15 @@ const carts = MOCKCARTS.map((cartItem) => {
 function main() {
   const root = document.getElementById('app');
 
+  const carts = getCarts();
+
   const template = () => /* html */ `
     <div id="container" class="bg-gray-100 p-8">
       <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
-        ${CartsList()}
-        ${totalPrice()}
+        <div id="carts"> 
+        ${carts.map(CartItem).join('')}
+        </div>
         ${Options()}
         <div id="stock-state" class="text-sm text-gray-500 mt-2">
       </div>
@@ -236,15 +253,17 @@ const handleAddCarts = (e) => {
     const selectBox = wrapper.querySelector('#products-select-box');
     const id = selectBox.options[selectBox.selectedIndex].id;
 
-    const carts = getCarts();
-    const aleadyInclude = carts.find((v) => id === v.id);
+    // 장바구니
+    const carts = JSON.parse(localStorage.getItem('carts')) || [];
 
-    if (aleadyInclude) {
-      updateQuantity(aleadyInclude);
+    // 이미 존재하는 아이템인지 체크
+    const isAleadyInclude = carts.find((v) => id === v.id);
+
+    if (isAleadyInclude) {
+      updateQuantity(isAleadyInclude);
     } else {
       addCart({ id });
     }
-    App();
   } catch (e) {
     console.error(e);
   }
@@ -262,8 +281,6 @@ const handleUpdateCarts = (e) => {
     updateCarts(target);
   }
 };
-
-App();
 
 // 장바구니 추가 버튼 클릭 이벤트
 // $addCartBtn.addEventListener('click', () => {
@@ -322,29 +339,16 @@ App();
 // });
 
 /** 장바구니 목록 ui 컴포넌트 */
-function CartsList() {
-  const carts = getCarts();
-  const cartsProducts = carts
-    .map(
-      ({ id, name, price, quantity }) => /* html */ `
-    <div id="${id}" class="cart flex justify-between items-center mb-2">
+const CartItem = ({ id, name, price, quantity }) => `
+  <div id="${id}" class="cart flex justify-between items-center mb-2"}>
       <span>${name} - ${price}원 x ${quantity}</span>
       <div>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="subtract">-</button>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="add">+</button>
         <button class="remove-item bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
       </div>
-    </div>
-    `,
-    )
-    .join('');
-
-  return /* html */ `
-    <div id="carts">
-      ${cartsProducts}
-    </div>
-    `;
-}
+  </div>
+`;
 
 // 장바구니 수량 변경 및 삭제 클릭 이벤트
 // $cartsWrapper.addEventListener('click', (e) => {
@@ -400,3 +404,5 @@ function App() {
   const $updatedQuantityBtn = document.querySelector('#carts');
   $updatedQuantityBtn.addEventListener('click', handleUpdateCarts);
 }
+
+App();

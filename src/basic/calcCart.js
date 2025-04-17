@@ -104,9 +104,12 @@ export function getCartItemText(item) {
   return item.querySelector("span");
 }
 
-export function getQuantityFromCardItem(item) {
+export function getValueFromCardItem(item, type = "quantity") {
   const itemText = getCartItemText(item);
-  return parseInt(itemText.textContent.split("x ")[1]);
+  if (type === "quantity") {
+    return parseInt(itemText.textContent.split("x ")[1]);
+  }
+  return itemText.textContent.split("x ")[0];
 }
 
 export function calcCart() {
@@ -120,7 +123,7 @@ export function calcCart() {
   for (let i = 0; i < cartItems.length; i++) {
     let curItem = findProduct(cartItems[i].id);
 
-    const quantity = getQuantityFromCardItem(cartItems[i]);
+    const quantity = getValueFromCardItem(cartItems[i]);
     const itemTot = curItem.val * quantity;
     itemCnt += quantity;
     subTot += itemTot;

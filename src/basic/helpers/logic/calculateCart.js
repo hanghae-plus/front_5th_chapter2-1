@@ -1,11 +1,11 @@
-import { products, discountRateMap } from "../constants.js";
+import { products, discountRateMap } from "../../constants.js";
 
 let originalTotal = 0;
 let finalTotal = 0;
 let totalItemsInCart = 0;
 let bonusPoints = 0;
 
-export function calculateCart({ cartItemList, cartTotal, stockStatus }) {
+export function calculateCart({ cartItemList, cartTotalEl, stockStatusEl }) {
   originalTotal = 0;
   finalTotal = 0;
   totalItemsInCart = 0;
@@ -25,18 +25,18 @@ export function calculateCart({ cartItemList, cartTotal, stockStatus }) {
 
   const discountRate = getDiscountRate();
 
-  updateCartTotal(finalTotal, discountRate, cartTotal);
-  updateStockStatus(stockStatus);
-  updateLoyaltyPoints(cartTotal);
+  updateCartTotal(finalTotal, discountRate, cartTotalEl);
+  updateStockStatus(stockStatusEl);
+  updateLoyaltyPoints(cartTotalEl);
 }
 
-function updateCartTotal(finalTotal, discountRate, cartTotal) {
-  cartTotal.textContent = `총액: ${Math.round(finalTotal)}원`;
+function updateCartTotal(finalTotal, discountRate, cartTotalEl) {
+  cartTotalEl.textContent = `총액: ${Math.round(finalTotal)}원`;
   if (discountRate > 0) {
     const discountText = document.createElement("span");
     discountText.className = "text-green-500 ml-2";
     discountText.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
-    cartTotal.appendChild(discountText);
+    cartTotalEl.appendChild(discountText);
   }
 }
 
@@ -80,7 +80,7 @@ function getDiscountRate() {
   return rate;
 }
 
-function updateLoyaltyPoints(cartTotal) {
+function updateLoyaltyPoints(cartTotalEl) {
   bonusPoints = Math.floor(finalTotal / 1000);
   let points = document.getElementById("loyalty-points");
 
@@ -88,12 +88,12 @@ function updateLoyaltyPoints(cartTotal) {
     points = document.createElement("span");
     points.id = "loyalty-points";
     points.className = "text-blue-500 ml-2";
-    cartTotal.appendChild(points);
+    cartTotalEl.appendChild(points);
   }
   points.textContent = "(포인트: " + bonusPoints + ")";
 }
 
-function updateStockStatus(stockStatus) {
+function updateStockStatus(stockStatusEl) {
   const limitUnits = 5;
   let statusMessage = "";
 
@@ -106,5 +106,5 @@ function updateStockStatus(stockStatus) {
   };
 
   products.forEach(checkStockStatus);
-  stockStatus.textContent = statusMessage;
+  stockStatusEl.textContent = statusMessage;
 }

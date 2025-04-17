@@ -22,9 +22,9 @@ function addChildren(wrap) {
   const cartItemList = document.createElement("div");
   cartItemList.id = "cart-items";
 
-  const cartTotal = document.createElement("div");
-  cartTotal.id = "cart-total";
-  cartTotal.className = "text-xl font-bold my-4";
+  const cartTotalEl = document.createElement("div");
+  cartTotalEl.id = "cart-total";
+  cartTotalEl.className = "text-xl font-bold my-4";
 
   const productSelector = document.createElement("select");
   productSelector.id = "product-select";
@@ -35,22 +35,22 @@ function addChildren(wrap) {
   addToCartButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
   addToCartButton.textContent = "추가";
 
-  const stockStatus = document.createElement("div");
-  stockStatus.id = "stock-status";
-  stockStatus.className = "text-sm text-gray-500 mt-2";
+  const stockStatusEl = document.createElement("div");
+  stockStatusEl.id = "stock-status";
+  stockStatusEl.className = "text-sm text-gray-500 mt-2";
 
   wrap.appendChild(head);
   wrap.appendChild(cartItemList);
-  wrap.appendChild(cartTotal);
+  wrap.appendChild(cartTotalEl);
   wrap.appendChild(productSelector);
   wrap.appendChild(addToCartButton);
-  wrap.appendChild(stockStatus);
+  wrap.appendChild(stockStatusEl);
 
   return [
     cartItemList,
-    cartTotal,
+    cartTotalEl,
     productSelector,
     addToCartButton,
-    stockStatus,
+    stockStatusEl,
   ];
 }

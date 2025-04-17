@@ -2,7 +2,7 @@ import { useReducer, useState, useEffect } from 'react';
 import { Product } from './types/product';
 import { products } from './data/products';
 import CartList from './components/CartList';
-import CartTotal from './components/CartTotal';
+import { CartTotal } from './components/CartTotal';
 import StockStatus from './components/StockStatus';
 import ProductSelect from './components/ProductSelect';
 import { createDiscountEvent } from './utils/createDiscountEvent';

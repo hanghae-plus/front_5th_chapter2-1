@@ -1,6 +1,9 @@
-import React from 'react';
 import { Product } from '../types/product';
-import { calculateCartTotal, getStockStatus } from '../utils/calculateCart';
+import {
+  calculateProductDiscount,
+  calculateCartDiscount,
+  calculateTuesdayDiscount,
+} from './calculateDiscount';
 
 export interface CartTotalResult {
   totalPrice: number;
@@ -52,26 +55,4 @@ export const getStockStatus = (products: Product[]): StockStatus[] => {
     quantity,
     status: quantity === 0 ? 'soldOut' : quantity < 5 ? 'low' : 'normal',
   }));
-};
-
-export interface CartTotalProps {
-  totalPrice: number;
-  discountRate: number;
-  bonusPoints: number;
-}
-
-export const CartTotal: React.FC<CartTotalProps> = ({ totalPrice, discountRate, bonusPoints }) => {
-  return (
-    <div>
-      <div className="cart-total">
-        <span>총액: {Math.round(totalPrice)}원</span>
-        {discountRate > 0 && (
-          <span className="text-green-500 ml-2">
-            ({(discountRate * 100).toFixed(1)}% 할인 적용)
-          </span>
-        )}
-        <span className="text-blue-500 ml-2">(포인트: {bonusPoints})</span>
-      </div>
-    </div>
-  );
 };

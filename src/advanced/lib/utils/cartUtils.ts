@@ -11,55 +11,68 @@ interface CartInvoice {
   bonusPoints: number;
 }
 
+const emptyCartInvoice: CartInvoice = {
+  totalQuantity: 0,
+  totalAmountBeforeDiscount: 0,
+  totalAmount: 0,
+  discountRate: 0,
+  bonusPoints: 0,
+};
+
+type CartTotals = {
+  totalQuantity: number;
+  totalAmountBeforeDiscount: number;
+  totalAmountAfterItemDiscounts: number;
+};
+
 export function generateCartInvoice(addedItems: CartItem[]): CartInvoice {
-  if (addedItems.length === 0) {
-    return {
-      totalQuantity: 0,
-      totalAmountBeforeDiscount: 0,
-      totalAmount: 0,
-      discountRate: 0,
-      bonusPoints: 0,
-    };
+  if (addedItems.length === 0) return emptyCartInvoice;
+
+  const entries = getCartEntries(addedItems);
+  if (!entries) return emptyCartInvoice;
+
+  const totals = calculateCartItemTotals(entries);
+  return createInvoiceFromTotals(totals);
+}
+
+function getCartEntries(addedItems: CartItem[]): { product: Product; quantity: number }[] | null {
+  const entries: { product: Product; quantity: number }[] = [];
+  for (const { id, quantity } of addedItems) {
+    const product = PRODUCT_INVENTORY.find((p) => p.id === id);
+    if (!product) return null;
+
+    entries.push({ product, quantity });
   }
+  return entries;
+}
 
-  let totalQuantity = 0;
-  let totalAmountBeforeDiscount = 0;
-  let totalAmount = 0;
+function calculateCartItemTotals(entries: { product: Product; quantity: number }[]): CartTotals {
+  return entries.reduce(
+    (totals, { product, quantity }) => {
+      const itemTotal = product.price * quantity;
+      totals.totalQuantity += quantity;
+      totals.totalAmountBeforeDiscount += itemTotal;
 
-  for (const cartItem of addedItems) {
-    const product = PRODUCT_INVENTORY.find((product) => product.id === cartItem.id);
+      const itemDiscount = quantity >= 10 ? getDiscountRateByProduct(product.id) : 0;
+      totals.totalAmountAfterItemDiscounts += itemTotal * (1 - itemDiscount);
 
-    if (!product) {
-      return {
-        totalQuantity: 0,
-        totalAmountBeforeDiscount: 0,
-        totalAmount: 0,
-        discountRate: 0,
-        bonusPoints: 0,
-      };
-    }
+      return totals;
+    },
+    { totalQuantity: 0, totalAmountBeforeDiscount: 0, totalAmountAfterItemDiscounts: 0 },
+  );
+}
 
-    const quantity = cartItem.quantity;
-    const totalAmountOfItem = product.price * quantity;
-
-    totalQuantity += quantity;
-    totalAmountBeforeDiscount += totalAmountOfItem;
-
-    if (quantity < 10) {
-      totalAmount += totalAmountOfItem;
-      continue;
-    }
-
-    totalAmount += totalAmountOfItem * (1 - getDiscountRateByProduct(product.id));
-  }
-
-  const { discountRate, discountedPrice } = applyDiscount(totalQuantity, totalAmount, totalAmountBeforeDiscount);
-
-  const bonusPoints = calculateBonusPoints(totalAmount);
+function createInvoiceFromTotals(totals: CartTotals): CartInvoice {
+  const { discountRate, discountedPrice } = applyDiscount(
+    totals.totalQuantity,
+    totals.totalAmountAfterItemDiscounts,
+    totals.totalAmountBeforeDiscount,
+  );
+  const bonusPoints = calculateBonusPoints(discountedPrice);
 
   return {
-    totalQuantity,
-    totalAmountBeforeDiscount,
+    totalQuantity: totals.totalQuantity,
+    totalAmountBeforeDiscount: totals.totalAmountBeforeDiscount,
     totalAmount: discountedPrice,
     discountRate,
     bonusPoints,

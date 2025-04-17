@@ -1,4 +1,5 @@
 import { PRODUCT_INVENTORY } from "@advanced/lib/configs/product";
+import type { CartItem, CartState, Product } from "@advanced/lib/types";
 import {
   generateCartInvoice,
   isProductSoldOut,
@@ -6,7 +7,6 @@ import {
   removeItemFromAddedItems,
   updateAddedItems,
 } from "@advanced/lib/utils";
-import type { CartState, CartItem, Product } from "@advanced/lib/types";
 
 const CART_ACTIONS = {
   addToCart: "ADD_TO_CART",
@@ -63,7 +63,6 @@ export function cartReducer(state: CartState, action: CartAction) {
       const newQuantity = quantity + change;
 
       if (isProductSoldOut(newQuantity, stock)) {
-        console.log("재고가 부족합니다.");
         return { ...state, error: "재고가 부족합니다." };
       }
 

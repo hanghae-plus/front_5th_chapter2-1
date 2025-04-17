@@ -12,15 +12,14 @@ export function CartContainer() {
 
   useEffect(() => {
     registerOutOfStockAlert();
-    registerFlashSale();
-    registerRecommendSale();
+    const cleanupRegisterFlashSale = registerFlashSale();
+    const cleanupRegisterRecommendSale = registerRecommendSale();
 
     return () => {
-      registerOutOfStockAlert();
-      registerFlashSale();
-      registerRecommendSale();
+      cleanupRegisterFlashSale();
+      cleanupRegisterRecommendSale();
     };
-  }, [registerOutOfStockAlert, registerFlashSale, registerRecommendSale]);
+  }, [registerFlashSale, registerRecommendSale, registerOutOfStockAlert]);
 
   return (
     <div className="space-y-4">

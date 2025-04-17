@@ -1,0 +1,61 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "airbnb-base"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "no-var": "off",
+    "vars-on-top": "off",
+    "prefer-const": "warn",
+    "prefer-template": "warn",
+    "no-unused-vars": "warn",
+    "func-names": "off",
+    "no-use-before-define": [
+      "error",
+      {
+        "functions": false
+      }
+    ],
+    "no-alert": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-shadow": "warn",
+    "max-len": [
+      "error",
+      {
+        "code": 120
+      }
+    ]
+  }
+//  "globals": {
+//    "document": "readonly",
+//    "window": "readonly",
+//    "prodList": "writable",
+//    "sel": "writable",
+//    "addBtn": "writable",
+//    "cartDisp": "writable",
+//    "sum": "writable",
+//    "stockInfo": "writable",
+//    "lastSel": "writable",
+//    "bonusPts": "writable",
+//    "totalAmt": "writable",
+//    "itemCnt": "writable"
+//  }
+}

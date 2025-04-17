@@ -60,12 +60,11 @@ export const DOM = {
     DOM.getElement('addProductButton').textContent = '추가';
   },
   buildDOMStructure: () => {
-    DOM.getElement('wrapper').appendChild(DOM.getElement('header'));
-    DOM.getElement('wrapper').appendChild(DOM.getElement('cartItemContainer'));
-    DOM.getElement('wrapper').appendChild(DOM.getElement('summary'));
-    DOM.getElement('wrapper').appendChild(DOM.getElement('select'));
-    DOM.getElement('wrapper').appendChild(DOM.getElement('addProductButton'));
-    DOM.getElement('wrapper').appendChild(DOM.getElement('stockInfo'));
+    const WRAPPER_CHILDREN = ['header', 'cartItemContainer', 'summary', 'select', 'addProductButton', 'stockInfo'];
+
+    WRAPPER_CHILDREN.forEach((child) => {
+      DOM.getElement('wrapper').appendChild(DOM.getElement(child));
+    });
 
     DOM.getElement('container').appendChild(DOM.getElement('wrapper'));
 

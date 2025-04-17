@@ -2,7 +2,6 @@ import { useCartStore } from "../../hooks/useCart";
 
 export const Stock = () => {
   const { productList } = useCartStore();
-  console.log(productList);
 
   const defaultStock = productList
     .filter((item) => item.stock <= 5)

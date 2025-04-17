@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { useProductList } from '../context/product';
-import { Product } from '../data/products';
 
 export const ProductSelect = () => {
   const { productList, setProductList, lastSelectedOption } = useProductList();
 
-  const [selectedProduct, setSelectedProduct] = useState<Product>(
-    productList[0],
-  );
+  const [selectedProductId, setSelectedProductId] = useState(productList[0].id);
 
   return (
     <>
@@ -15,15 +12,10 @@ export const ProductSelect = () => {
         id="product-select"
         data-testid="product-select"
         className="border rounded p-2 mr-2"
-        value={selectedProduct.id}
+        value={selectedProductId}
         onChange={(e) => {
           const selectedId = e.target.value;
-          const selectedProduct = productList.find(
-            (product) => product.id === selectedId,
-          );
-          if (selectedProduct) {
-            setSelectedProduct(selectedProduct);
-          }
+          setSelectedProductId(selectedId);
         }}
       >
         {productList.map((product) => (
@@ -42,7 +34,7 @@ export const ProductSelect = () => {
         className="bg-blue-500 text-white px-4 py-2 rounded"
         onClick={() => {
           const productToAdd = productList.find(
-            (product) => product.id === selectedProduct.id,
+            (product) => product.id === selectedProductId,
           );
           if (productToAdd) {
             if (productToAdd.stockQuantity > 0) {

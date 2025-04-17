@@ -42,7 +42,7 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
           prev.amountWithDiscount +
           product.price *
             product.cartQuantity *
-            (1 - (product.cartQuantity > 10 ? product.discountRate : 0)),
+            (1 - (product.cartQuantity >= 10 ? product.discountRate : 0)),
         amountWithoutDiscount:
           prev.amountWithoutDiscount + product.price * product.cartQuantity,
       };

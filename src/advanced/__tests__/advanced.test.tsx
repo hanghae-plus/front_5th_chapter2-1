@@ -1,6 +1,7 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
 import App from '../App';
 
 describe('advanced test', () => {
@@ -116,5 +117,45 @@ describe('advanced test', () => {
     fireEvent.click(addBtn);
 
     expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
+  });
+
+  it('할인이 올바르게 적용되고, 포인트가 올바르게 계산되는지 확인', async () => {
+    render(<App />);
+    const user = userEvent.setup();
+    const sel = screen.getByTestId('product-select') as HTMLSelectElement;
+    const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
+    const sum = screen.getByTestId('cart-total');
+    const cartDisp = screen.getByTestId('cart-items');
+
+    await user.selectOptions(sel, 'p2');
+    user.click(addBtn);
+
+    Array.from({ length: 10 }).forEach(() => {
+      fireEvent.click(addBtn);
+    });
+
+    expect(sum.textContent).toContain('(10.0% 할인 적용)');
+
+    // p2 상품 선택 및 추가
+    user.selectOptions(screen.getByTestId('product-select'), 'p2');
+
+    const newAddBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
+    user.click(newAddBtn);
+
+    console.log(sel.value);
+    console.log(sum.textContent);
+    console.log(cartDisp.innerHTML);
+
+    expect(document.getElementById('loyalty-points')?.textContent).toContain(
+      '(포인트: 128)',
+    );
+  });
+
+  it('번개세일 기능이 정상적으로 동작하는지 확인', () => {
+    // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+  });
+
+  it('추천 상품 알림이 표시되는지 확인', () => {
+    // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
   });
 });

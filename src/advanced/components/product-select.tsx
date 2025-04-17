@@ -2,8 +2,7 @@ import { useState } from 'react';
 import { useStock } from '../context/stock';
 
 export const ProductSelect = () => {
-  const { stockList, setProductList, setLastAddedProductId } = useStock();
-
+  const { stockList, dispatch, setLastAddedProductId } = useStock();
   const [selectedProductId, setSelectedProductId] = useState(stockList[0].id);
 
   return (
@@ -38,17 +37,7 @@ export const ProductSelect = () => {
           );
           if (productToAdd) {
             if (productToAdd.stockQuantity > 0) {
-              setProductList((prev) =>
-                prev.map((product) =>
-                  product.id === productToAdd.id
-                    ? {
-                        ...product,
-                        cartQuantity: product.cartQuantity + 1,
-                        stockQuantity: product.stockQuantity - 1,
-                      }
-                    : product,
-                ),
-              );
+              dispatch({ type: 'INCREMENT', id: productToAdd.id });
               setLastAddedProductId(productToAdd.id);
             } else {
               alert('재고가 부족합니다.');

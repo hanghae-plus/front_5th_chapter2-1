@@ -1,24 +1,21 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Product, INITIAL_PRODUCT_LIST } from '../data/products';
-import { CartSummary, getCartSummary } from '../utils/product';
-
-interface StockContextType {
-  stockList: Product[];
-  setProductList: React.Dispatch<React.SetStateAction<Product[]>>;
-  cartList: Product[];
-  lastAddedProductId: string | undefined;
-  setLastAddedProductId: React.Dispatch<
-    React.SetStateAction<string | undefined>
-  >;
-  summary: CartSummary;
-}
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useReducer,
+} from 'react';
+import { INITIAL_PRODUCT_LIST } from '../../data/products';
+import { StockContextType } from 'src/advanced/config/types';
+import { getCartSummary } from '../../utils/product';
+import { stockReducer } from './reducer';
 
 const StockContext = createContext<StockContextType | undefined>(undefined);
 
 export const StockProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [stockList, setProductList] = useState<Product[]>(INITIAL_PRODUCT_LIST);
+  const [stockList, dispatch] = useReducer(stockReducer, INITIAL_PRODUCT_LIST);
   const [lastAddedProductId, setLastAddedProductId] = useState<
     string | undefined
   >();
@@ -30,7 +27,7 @@ export const StockProvider: React.FC<{ children: ReactNode }> = ({
     <StockContext.Provider
       value={{
         stockList,
-        setProductList,
+        dispatch,
         lastAddedProductId,
         setLastAddedProductId,
         cartList,

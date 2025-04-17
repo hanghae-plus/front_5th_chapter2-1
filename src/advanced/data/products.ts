@@ -1,14 +1,6 @@
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  stockQuantity: number;
-  cartQuantity: number;
-  discountRate: number;
-  discountThreshold: number;
-}
+import { Product } from '../config/types';
 
-export const INITIAL_PRODUCT_LIST = [
+export const INITIAL_PRODUCT_LIST: Product[] = [
   {
     id: 'p1',
     name: '상품1',

@@ -1,16 +1,5 @@
 import { DISCOUNT_RATE, THRESHOLD } from '../config/constants';
-import { Product } from '../data/products';
-
-interface CartTotal {
-  count: number;
-  amountWithDiscount: number;
-  amountWithoutDiscount: number;
-}
-
-export interface CartSummary extends CartTotal {
-  discountRate: number;
-  totalAmount: number;
-}
+import { CartSummary, CartTotal, Product } from '../config/types';
 
 export const getCartSummary = (cartList: Product[]) => {
   const total: CartTotal = cartList.reduce(

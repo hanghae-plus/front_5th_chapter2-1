@@ -1,5 +1,5 @@
+import { Product } from 'src/advanced/config/types';
 import { useStock } from '../../context/stock';
-import { Product } from 'src/advanced/data/products';
 
 interface CartRemoveButtonProps
   extends React.HTMLAttributes<HTMLButtonElement> {
@@ -10,7 +10,7 @@ export const CartRemoveButton: React.FC<CartRemoveButtonProps> = ({
   cart,
   ...props
 }) => {
-  const { cartList, setProductList } = useStock();
+  const { cartList, dispatch } = useStock();
 
   return (
     <button
@@ -21,17 +21,7 @@ export const CartRemoveButton: React.FC<CartRemoveButtonProps> = ({
           (product) => product.id === cart.id,
         );
         if (productToRemove) {
-          setProductList((prev) =>
-            prev.map((product) =>
-              product.id === productToRemove.id
-                ? {
-                    ...product,
-                    cartQuantity: 0,
-                    stockQuantity: product.stockQuantity + product.cartQuantity,
-                  }
-                : product,
-            ),
-          );
+          dispatch({ type: 'REMOVE', id: cart.id });
         }
       }}
       {...props}

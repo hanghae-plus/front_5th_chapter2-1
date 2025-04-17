@@ -11,3 +11,10 @@ export const getCartItems = (state) => state.cartItems;
  * @returns {number} 적립 포인트
  */
 export const getBonusPoints = (state) => state.bonusPoints;
+
+/**
+ * 마지막 선택 상품 ID 조회 셀렉터
+ * @param {Object} state - 스토어 상태
+ * @returns {string|null} 마지막 선택 상품 ID
+ */
+export const getLastSelectedProduct = (state) => state.lastSelectedProduct;

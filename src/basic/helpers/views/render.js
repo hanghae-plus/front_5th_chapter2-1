@@ -1,7 +1,7 @@
 export function mount() {
   const root = document.getElementById("app");
   const { container, wrapper } = createLayout();
-  const children = initChildren(wrapper);
+  const children = appendChildren(wrapper);
 
   root.appendChild(container);
 
@@ -20,7 +20,7 @@ function createLayout() {
   return { container, wrapper };
 }
 
-function initChildren(wrapper) {
+function appendChildren(wrapper) {
   const heading = document.createElement("h1");
   heading.className = "text-2xl font-bold mb-4";
   heading.textContent = "장바구니";
@@ -53,11 +53,11 @@ function initChildren(wrapper) {
   wrapper.appendChild(addToCartButton);
   wrapper.appendChild(stockStatusEl);
 
-  return [
+  return {
     cartItemList,
     cartTotalEl,
     productSelector,
     addToCartButton,
     stockStatusEl,
-  ];
+  };
 }

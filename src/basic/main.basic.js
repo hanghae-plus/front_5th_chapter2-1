@@ -8,28 +8,49 @@ import {
 import { bindCartEvents } from "./helpers/events/cart.js";
 
 const context = { lastSelectedProductId: null };
-let [
-  cartItemList,
-  cartTotalEl,
-  productSelector,
-  addToCartButton,
-  stockStatusEl,
-] = mount();
+let cartItemList, cartTotalEl, productSelector, addToCartButton, stockStatusEl;
 
-updateProductSelector(productSelector);
-calculateCart({ cartItemList, cartTotalEl, stockStatusEl });
+initShoppingCartApp();
 
-scheduleFlashSale({ onSale: () => updateProductSelector(productSelector) });
-scheduleRecommendationSale({
-  productId: () => context.lastSelectedProductId,
-  onSale: () => updateProductSelector(productSelector),
-});
+function initShoppingCartApp() {
+  renderElement();
+  initialState();
+  setupSaleSchedule();
+  setupEventHandlers();
 
-bindCartEvents({
-  cartItemList,
-  addToCartButton,
-  productSelector,
-  cartTotalEl,
-  stockStatusEl,
-  context,
-});
+  function renderElement() {
+    const elements = mount();
+
+    cartItemList = elements.cartItemList;
+    cartTotalEl = elements.cartTotalEl;
+    productSelector = elements.productSelector;
+    addToCartButton = elements.addToCartButton;
+    stockStatusEl = elements.stockStatusEl;
+  }
+
+  function initialState() {
+    updateProductSelector(productSelector);
+    calculateCart({ cartItemList, cartTotalEl, stockStatusEl });
+  }
+
+  function setupSaleSchedule() {
+    scheduleFlashSale({
+      onSale: () => updateProductSelector(productSelector),
+    });
+    scheduleRecommendationSale({
+      productId: () => context.lastSelectedProductId,
+      onSale: () => updateProductSelector(productSelector),
+    });
+  }
+
+  function setupEventHandlers() {
+    const eventTargets = {
+      cartItemList,
+      addToCartButton,
+      productSelector,
+      cartTotalEl,
+      stockStatusEl,
+    };
+    bindCartEvents({ ...eventTargets, context });
+  }
+}

@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import App from '../App';
 
@@ -23,25 +23,26 @@ describe('advanced test', () => {
     expect(productList.tagName.toLowerCase()).toBe('select');
     expect(productList.children.length).toBe(5);
 
+    const productOptions = productList.children as HTMLOptionsCollection;
+
     // 첫 번째 상품 확인
-    expect((productList.children[0] as HTMLOptionElement).value).toBe('p1');
-    expect(productList.children[0].textContent).toBe('상품1 - 10000원');
-    expect((productList.children[0] as HTMLOptionElement).disabled).toBe(false);
+    expect(productOptions[0]?.value).toBe('p1');
+    expect(productOptions[0].textContent).toBe('상품1 - 10000원');
+    expect(productOptions[0].disabled).toBe(false);
 
     // 마지막 상품 확인
-    expect((productList.children[4] as HTMLOptionElement).value).toBe('p5');
-    expect(productList.children[4].textContent).toBe('상품5 - 25000원');
-    expect((productList.children[4] as HTMLOptionElement).disabled).toBe(false);
+    expect(productOptions[4].value).toBe('p5');
+    expect(productOptions[4].textContent).toBe('상품5 - 25000원');
+    expect(productOptions[4].disabled).toBe(false);
 
     // 재고 없는 상품 확인 (상품4)
-    expect((productList.children[3] as HTMLOptionElement).value).toBe('p4');
-    expect(productList.children[3].textContent).toBe('상품4 - 15000원');
-    expect((productList.children[3] as HTMLOptionElement).disabled).toBe(true);
+    expect(productOptions[3].value).toBe('p4');
+    expect(productOptions[3].textContent).toBe('상품4 - 15000원');
+    expect(productOptions[3].disabled).toBe(true);
   });
 
   it('초기 상태: DOM 요소가 올바르게 생성되었는지 확인', () => {
     render(<App />);
-
     const sel = screen.getByTestId('product-select');
     const addBtn = screen.getByTestId('add-to-cart');
     const cartDisp = screen.getByTestId('cart-items');
@@ -53,5 +54,67 @@ describe('advanced test', () => {
     expect(cartDisp).toBeInTheDocument();
     expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
     expect(stockInfo).toBeInTheDocument();
+  });
+
+  it('상품을 장바구니에 추가하고, 수량을 추가 있는지 확인', async () => {
+    render(<App />);
+    const sel = screen.getByTestId('product-select') as HTMLSelectElement;
+    const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
+
+    fireEvent.select(sel, { target: { value: 'p1' } });
+    fireEvent.click(addBtn);
+
+    const cartDisp = screen.getByTestId('cart-items');
+    expect(cartDisp.children.length).toBe(1);
+    expect(cartDisp.children?.[0].querySelector('span')?.textContent).toContain(
+      '상품1 - 10000원 x 1',
+    );
+
+    const increaseBtn = cartDisp.querySelector(
+      '.quantity-change[data-change="1"]',
+    ) as HTMLButtonElement;
+
+    fireEvent.click(increaseBtn);
+    expect(cartDisp.children[0].querySelector('span')?.textContent).toContain(
+      '상품1 - 10000원 x 2',
+    );
+  });
+
+  it('장바구니 추가된 상품을 삭제할 수 있는지 확인', async () => {
+    render(<App />);
+    const sel = screen.getByTestId('product-select') as HTMLSelectElement;
+    const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
+
+    fireEvent.select(sel, { target: { value: 'p1' } });
+    fireEvent.click(addBtn);
+
+    const cartDisp = screen.getByTestId('cart-items');
+    expect(cartDisp.children.length).toBe(1);
+    expect(cartDisp.children?.[0].querySelector('span')?.textContent).toContain(
+      '상품1 - 10000원 x 1',
+    );
+
+    const removeBtn = cartDisp.querySelector(
+      '.remove-item',
+    ) as HTMLButtonElement;
+    expect(removeBtn).toBeInTheDocument();
+    fireEvent.click(removeBtn);
+    expect(cartDisp.children.length).toBe(0);
+
+    const sum = screen.getByTestId('cart-total');
+    expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
+  });
+
+  it('총액이 올바르게 계산되는지 확인', () => {
+    render(<App />);
+    const sel = screen.getByTestId('product-select') as HTMLSelectElement;
+    const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
+    const sum = screen.getByTestId('cart-total');
+
+    fireEvent.select(sel, { target: { value: 'p1' } });
+    fireEvent.click(addBtn);
+    fireEvent.click(addBtn);
+
+    expect(sum.textContent).toContain('총액: 20000원(포인트: 20)');
   });
 });

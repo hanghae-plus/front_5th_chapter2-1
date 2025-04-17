@@ -6,7 +6,7 @@ import { cartState } from "../../store/state";
  * @param {HTMLElement} sum - 총액을 표시할 DOM 요소
  */
 
-export function displayPriceInfo(sum) {
+export const displayPriceInfo = (sum) => {
   const baseText = `총액: ${Math.round(cartState.finalTotal)}원`;
 
   if (cartState.discountRate > 0) {
@@ -15,4 +15,4 @@ export function displayPriceInfo(sum) {
   } else {
     sum.innerHTML = baseText;
   }
-}
+};

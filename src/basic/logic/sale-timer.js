@@ -1,4 +1,4 @@
-import { SALE_CONFIG } from "../config/sale-config";
+import { SALE_CONFIG } from "../constant/sale-config";
 import { cartState } from "../store/state";
 
 import { renderProductOptions } from "../ui/render-product-options";

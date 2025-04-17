@@ -1,7 +1,7 @@
 import { productSelectionTracker, productStore } from '../../stores/product';
 import { updateProductSelectOptions } from '../../utils/ui';
 
-export const useSuggestiveDiscount = (sel) => {
+export const useSuggestiveDiscount = (selectElement) => {
 	setTimeout(function () {
 		setInterval(function () {
 			const lastSelectedId = productSelectionTracker.getLastSelectedProductId();
@@ -20,7 +20,7 @@ export const useSuggestiveDiscount = (sel) => {
 
 					const discountRate = 0.05; // 5% 할인
 					productStore.applyDiscount(suggestProduct.id, discountRate);
-					updateProductSelectOptions(sel);
+					updateProductSelectOptions(selectElement);
 				}
 			}
 		}, 60000);

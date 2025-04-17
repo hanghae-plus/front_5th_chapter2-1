@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/advanced/*"]
+      "@/*": ["src/advanced/src/*"]
     },
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,

@@ -2,7 +2,7 @@ import { productStore } from '../../stores/product';
 import { updateProductSelectOptions } from '../../utils/ui';
 
 // * useRapidDiscount vs useRandomFlashDiscount
-export const useRandomFlashDiscount = (sel) => {
+export const useRandomFlashDiscount = (selectElement) => {
 	setTimeout(function () {
 		setInterval(function () {
 			const products = productStore.getAllProducts();
@@ -16,7 +16,7 @@ export const useRandomFlashDiscount = (sel) => {
 				alert(
 					'번개세일! ' + discountProduct.name + '이(가) 20% 할인 중입니다!',
 				);
-				updateProductSelectOptions(sel);
+				updateProductSelectOptions(selectElement);
 			}
 		}, 30000);
 	}, Math.random() * 10000);

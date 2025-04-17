@@ -2,12 +2,14 @@ import {state} from "./store/state.js";
 import {initCartDisplayEvents} from "./components/cartDisplay.js";
 import {initAddToCartHandler} from "./events/addToCartHandler.js";
 import {createElement} from "./utils/createElement.js";
+import {updateSelectedOptions} from "./components/productSelect.js";
 
 
 function main() {
 
     initCartDisplayEvents();
     initAddToCartHandler();
+    updateSelectedOptions();
 
     state.products = [
         {id: 'p1', name: '상품1', val: 10000, q: 50},
@@ -21,29 +23,22 @@ function main() {
     var wrap = document.createElement('div');
 
 
-    const addBtn = createElement('button',{
+    const addBtn = createElement('button', {
         className: 'bg-blue-500 text-white px-4 py-2 rounded',
         text: '추가',
         id: 'add-to-cart',
     })
 
 
-
     state.elements.totalDisplay = document.createElement('div');
-    state.elements.select = document.createElement('select');
     state.elements.stockInfo = document.createElement('div');
     state.elements.totalDisplay.id = 'cart-total';
-    state.elements.select.id = 'product-select';
     state.elements.stockInfo.id = 'stock-status';
     cont.className = 'bg-gray-100 p-8';
     wrap.className = 'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-
     state.elements.totalDisplay.className = 'text-xl font-bold my-4';
-    state.elements.select.className = 'border rounded p-2 mr-2';
     state.elements.stockInfo.className = 'text-sm text-gray-500 mt-2';
 
-    updateSelOpts();
-    wrap.appendChild(hTxt);
     wrap.appendChild(state.elements.cartDisplay);
     wrap.appendChild(state.elements.totalDisplay);
     wrap.appendChild(state.elements.select);
@@ -78,17 +73,6 @@ function main() {
         }, 60000);
     }, Math.random() * 20000);
 };
-
-function updateSelOpts() {
-    state.elements.select.innerHTML = '';
-    state.products.forEach(function (item) {
-        var opt = document.createElement('option');
-        opt.value = item.id;
-        opt.textContent = item.name + ' - ' + item.val + '원';
-        if (item.q === 0) opt.disabled = true;
-        state.elements.select.appendChild(opt);
-    });
-}
 
 
 const renderBonusPts = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Product } from './types/product';
 import { products } from './data/products';
 import { createDiscountEvent } from './utils/createDiscountEvent';
@@ -6,9 +6,8 @@ import { createNewCartItem } from './utils/createNewCartItem';
 import { updateCartTotal } from './utils/updateCartTotal';
 import { updateSelectBoxOptions } from './utils/updateSelectBoxOption';
 import { handleCartItemEvent } from './utils/cartItemEventHandler';
-import './styles/App.css';
 
-const App: React.FC = () => {
+const App = () => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const productSelectRef = useRef<HTMLSelectElement>(null);

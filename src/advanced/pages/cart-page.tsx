@@ -48,7 +48,7 @@ export function CartPage() {
         </div>
         <div id="cart-total" className="text-xl font-bold my-4">
           <PriceInfo finalTotal={finalTotal} discountRate={discountRate} />
-          <StockStatus />
+
           <BonusPoint finalTotal={finalTotal} />
         </div>
         <ProductSelect selectedId={selectedId} onChange={(id) => setSelectedId(id)} />
@@ -61,6 +61,7 @@ export function CartPage() {
         >
           추가
         </button>
+        <StockStatus />
       </div>
     </div>
   );

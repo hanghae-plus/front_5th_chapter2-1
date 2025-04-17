@@ -8,4 +8,5 @@ export const DISCOUNT_RATE = {
 
 export const THRESHOLD = {
   luck: 0.3,
+  bulkDiscount: 30,
 };

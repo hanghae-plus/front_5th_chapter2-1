@@ -5,6 +5,7 @@ export interface Product {
   stockQuantity: number;
   cartQuantity: number;
   discountRate: number;
+  discountThreshold: number;
 }
 
 export const INITIAL_PRODUCT_LIST = [
@@ -15,6 +16,7 @@ export const INITIAL_PRODUCT_LIST = [
     stockQuantity: 50,
     cartQuantity: 0,
     discountRate: 0.1,
+    discountThreshold: 10,
   },
   {
     id: 'p2',
@@ -23,6 +25,7 @@ export const INITIAL_PRODUCT_LIST = [
     stockQuantity: 30,
     cartQuantity: 0,
     discountRate: 0.15,
+    discountThreshold: 10,
   },
   {
     id: 'p3',
@@ -31,6 +34,7 @@ export const INITIAL_PRODUCT_LIST = [
     stockQuantity: 20,
     cartQuantity: 0,
     discountRate: 0.2,
+    discountThreshold: 10,
   },
   {
     id: 'p4',
@@ -39,6 +43,7 @@ export const INITIAL_PRODUCT_LIST = [
     stockQuantity: 0,
     cartQuantity: 0,
     discountRate: 0.05,
+    discountThreshold: 10,
   },
   {
     id: 'p5',
@@ -47,5 +52,6 @@ export const INITIAL_PRODUCT_LIST = [
     stockQuantity: 10,
     cartQuantity: 0,
     discountRate: 0.25,
+    discountThreshold: 10,
   },
 ];

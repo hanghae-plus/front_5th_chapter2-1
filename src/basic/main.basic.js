@@ -65,6 +65,7 @@ const addProductToCart = (selectedProduct) => {
   if (!$cartItem) {
     createNewCartItem(selectedProduct);
     updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
+
     return;
   }
 
@@ -97,6 +98,7 @@ const updateExistingCartItem = ($cartItem, product) => {
 
   if (updatedQuantity > quantity) {
     alert('재고가 부족합니다.');
+
     return;
   }
 
@@ -146,11 +148,13 @@ $cartList.addEventListener('click', (event) => {
       $cartItem.remove();
       selectedProduct.quantity -= qtyChange;
       updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
+
       return;
     }
 
     if (updatedQuantity > availableStock) {
       alert('재고가 부족합니다.');
+
       return;
     }
 
@@ -161,6 +165,7 @@ $cartList.addEventListener('click', (event) => {
 
   if (isRemoveItem) {
     const currentQuantity = parseInt($cartItem.querySelector('span').textContent.split('x ')[1]);
+
     selectedProduct.quantity += currentQuantity;
     $cartItem.remove();
   }

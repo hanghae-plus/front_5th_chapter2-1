@@ -38,16 +38,19 @@ const createDiscountEvent = (products) => {
 
   const runDiscountEvent = (eventType) => {
     const config = eventConfigs[eventType];
+
     if (!config) {
       return;
     }
 
     const availableProducts = getAvailableProducts(eventType, products);
+
     if (availableProducts.length === 0) {
       return;
     }
 
     const randomProduct = availableProducts[Math.floor(Math.random() * availableProducts.length)];
+
     if (randomProduct.quantity === 0) {
       return;
     }

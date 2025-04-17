@@ -32,6 +32,16 @@ export default [
           alphabetize: { order: 'asc', caseInsensitive: true },
         },
       ],
+      'padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+        { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+        { blankLine: 'always', prev: '*', next: 'return' },
+        { blankLine: 'always', prev: ['if', 'for', 'while'], next: '*' },
+        { blankLine: 'always', prev: '*', next: ['if', 'for', 'while'] },
+        { blankLine: 'always', prev: ['function', 'class'], next: '*' },
+        { blankLine: 'always', prev: '*', next: ['function', 'class'] },
+      ],
     },
   },
 ];

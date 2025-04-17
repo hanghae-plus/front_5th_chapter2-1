@@ -10,12 +10,15 @@ const calculateCartTotal = (cartList, products) => {
   let totalPriceBeforeDiscount = 0;
 
   const cartItems = cartList.children;
+
   for (let i = 0; i < cartItems.length; i++) {
     const currentProduct = products.find((p) => p.id === cartItems[i].id);
     const quantity = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
+
     totalProductCount += quantity;
 
     const productTotalPrice = currentProduct.price * quantity;
+
     totalPriceBeforeDiscount += productTotalPrice;
 
     totalPrice += calculateProductDiscount(currentProduct, quantity);
@@ -28,6 +31,7 @@ const calculateCartTotal = (cartList, products) => {
   );
 
   const tuesdayDiscount = calculateTuesdayDiscount(totalPrice, totalCartDiscountRate);
+
   totalPrice = tuesdayDiscount.price;
   totalCartDiscountRate = tuesdayDiscount.discountRate;
 
@@ -70,12 +74,14 @@ const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPoints) 
 
   if (discountRate > 0) {
     const $discountBadge = document.createElement('span');
+
     $discountBadge.className = 'text-green-500 ml-2';
     $discountBadge.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
     cartTotalPrice.appendChild($discountBadge);
   }
 
   const $rewardPoints = getOrCreateRewardPointsElement(cartTotalPrice);
+
   $rewardPoints.textContent = `(포인트: ${bonusPoints})`;
 };
 

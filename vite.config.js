@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import path from 'path';
 
 import { defineConfig } from 'vite';
@@ -7,8 +8,8 @@ export default defineConfig({
     build: {
         rollupOptions: {
             input: {
-                // eslint-disable-next-line no-undef
-                main: path.resolve(__dirname, 'index.basic.html'),
+                basic: path.resolve(__dirname, 'index.basic.html'),
+                main: path.resolve(__dirname, 'index.html'),
             },
         },
     },

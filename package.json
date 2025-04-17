@@ -14,7 +14,8 @@
         "test:basic": "vitest basic.test.js",
         "test:advanced": "vitest advanced.test.js",
         "test:ui": "vitest --ui",
-        "predeploy": "pnpm build",
+        "prepare-basic": "mkdir -p dist/basic && cp dist/index.basic.html dist/basic/index.html && cp -R src/basic dist/basic/src",
+        "predeploy": "npm run build && npm run prepare-basic",
         "deploy": "gh-pages -d dist"
     },
     "devDependencies": {

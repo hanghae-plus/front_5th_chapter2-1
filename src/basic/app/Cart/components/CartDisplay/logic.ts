@@ -7,68 +7,12 @@ import {
   updateProductList,
 } from '../../../../../shared/store/productList.js';
 import {
-  addExistingItemInCart,
   Cart,
   deleteItemFromCart,
   findItemIndex,
   getCart,
   updateCart,
 } from '../../../../../shared/store/cart.ts';
-
-type QuantityChangeResult = {
-  cart: Cart;
-  productList: Product[];
-  success: boolean;
-  message?: string;
-};
-
-const calculateNewQuantity = (
-  currentQuantity: number,
-  change: number,
-): number => currentQuantity + change;
-
-const handleQuantityChange = (
-  cart: Cart,
-  productList: Product[],
-  productId: string,
-  itemIndex: number,
-  quantityChange: number,
-): QuantityChangeResult => {
-  const product = findProduct(productList, productId);
-  if (!product) {
-    return {
-      cart,
-      productList,
-      success: false,
-      message: '상품을 찾을 수 없습니다.',
-    };
-  }
-
-  const item = cart[itemIndex];
-  const newQuantity = calculateNewQuantity(item.quantity, quantityChange);
-
-  if (newQuantity <= 0) {
-    const newCart = deleteItemFromCart(cart, itemIndex);
-    const newProductList = decreaseProductQuantity(
-      productList,
-      productId,
-      quantityChange,
-    );
-    return { cart: newCart, productList: newProductList, success: true };
-  }
-
-  if (newQuantity > product.q) {
-    return { cart, productList, success: false, message: '재고가 부족합니다.' };
-  }
-
-  const newCart = addExistingItemInCart(cart, productId, quantityChange);
-  const newProductList = decreaseProductQuantity(
-    productList,
-    productId,
-    quantityChange,
-  );
-  return { cart: newCart, productList: newProductList, success: true };
-};
 
 const handleRemoveItem = (
   cart: Cart,

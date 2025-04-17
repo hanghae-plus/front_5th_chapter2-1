@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
-  base: '/hanghae99-chap4/', // GitHub Pages에서의 배포 경로
+  base: '/hanghae99-chap4/basic', // GitHub Pages에서의 배포 경로
   build: {
     rollupOptions: {
       input: resolve(__dirname, 'basic/index.html'),  // index.html 경로 명시

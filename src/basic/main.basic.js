@@ -1,11 +1,8 @@
-import { mount } from "./helpers/views/render.js";
-import { updateProductSelector } from "./helpers/logic/selector.js";
-import { calculateCart } from "./helpers/logic/calculateCart.js";
-import {
-  scheduleFlashSale,
-  scheduleRecommendationSale,
-} from "./helpers/schedule/scheduleTask.js";
-import { bindCartEvents } from "./helpers/events/cart.js";
+import { mount } from './helpers/views/render.js';
+import { updateProductSelector } from './helpers/logic/selector.js';
+import { calculateCart } from './helpers/logic/calculateCart.js';
+import { scheduleFlashSale, scheduleRecommendationSale } from './helpers/schedule/scheduleTask.js';
+import { bindCartEvents } from './helpers/events/cart.js';
 
 const context = { lastSelectedProductId: null };
 let cartItemList, cartTotalEl, productSelector, addToCartButton, stockStatusEl;

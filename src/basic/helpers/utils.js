@@ -1,4 +1,4 @@
-import { products } from "../constants.js";
+import { products } from '../constants.js';
 
 export function getProductById(id) {
   if (!id) return null;

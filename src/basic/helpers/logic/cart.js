@@ -1,5 +1,5 @@
-import { cartItemTemplate } from "../views/templates.js";
-import { getQuantityFromElement } from "./calculateCart.js";
+import { cartItemTemplate } from '../views/templates.js';
+import { getQuantityFromElement } from './calculateCart.js';
 
 const INITIAL_QUANTITY = 1;
 const MIN_QUANTITY = 1;
@@ -7,7 +7,7 @@ const MIN_QUANTITY = 1;
 export function updateExistingCartItem(itemEl, product) {
   const currentQuantity = getQuantityFromElement(itemEl);
   if (!hasSufficientStock(product, INITIAL_QUANTITY)) {
-    alert("재고가 부족합니다.");
+    alert('재고가 부족합니다.');
     return;
   }
   const newQuantity = currentQuantity + INITIAL_QUANTITY;
@@ -20,12 +20,11 @@ function hasSufficientStock(product, requiredQuantity) {
 }
 
 function updateQuantityLabel(itemEl, product, quantity) {
-  itemEl.querySelector("span").textContent =
-    `${product.name} - ${product.price}원 x ${quantity}`;
+  itemEl.querySelector('span').textContent = `${product.name} - ${product.price}원 x ${quantity}`;
 }
 
 export function createNewCartItem(product) {
-  const wrapper = document.createElement("div");
+  const wrapper = document.createElement('div');
   wrapper.innerHTML = cartItemTemplate(product, INITIAL_QUANTITY);
   product.units -= INITIAL_QUANTITY;
   return wrapper.firstElementChild;
@@ -37,7 +36,7 @@ export function handleQuantityChange(product, itemEl, currentQuantity, change) {
   if (newQuantity < MIN_QUANTITY) {
     handleRemoveItem(product, itemEl, currentQuantity);
   } else if (change > 0 && !hasSufficientStock(product, change)) {
-    alert("재고가 부족합니다.");
+    alert('재고가 부족합니다.');
   } else {
     updateQuantityLabel(itemEl, product, newQuantity);
     product.units -= change;

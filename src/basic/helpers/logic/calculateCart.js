@@ -1,5 +1,5 @@
-import { products, discountRateMap } from "../../constants.js";
-import { getProductById } from "../utils.js";
+import { products, discountRateMap } from '../../constants.js';
+import { getProductById } from '../utils.js';
 
 const BULK_DISCOUNT_RATE = 0.25;
 const TUESDAY_EXTRA_DISCOUNT = 0.1;
@@ -23,11 +23,7 @@ export function calculateCart({ cartItemList, cartTotalEl, stockStatusEl }) {
     discountedTotal += lineAmount * (1 - itemDiscountRate);
   }
 
-  const bulkResult = applyBulkDiscount(
-    originalTotal,
-    discountedTotal,
-    totalQuantity,
-  );
+  const bulkResult = applyBulkDiscount(originalTotal, discountedTotal, totalQuantity);
   let finalTotal = bulkResult.discountedTotal;
   let discountRate = bulkResult.discountRate;
 
@@ -56,8 +52,7 @@ function getItemDiscountRate(quantity, productId) {
 /** 대량 구매 할인 적용 */
 function applyBulkDiscount(originalTotal, currentTotal, totalQuantity) {
   let discountedTotal = currentTotal;
-  let discountRate =
-    originalTotal > 0 ? (originalTotal - currentTotal) / originalTotal : 0;
+  let discountRate = originalTotal > 0 ? (originalTotal - currentTotal) / originalTotal : 0;
 
   if (totalQuantity >= 30) {
     const maxBulkDiscount = originalTotal * BULK_DISCOUNT_RATE;
@@ -77,8 +72,8 @@ function isTuesday() {
 function updateCartTotalTemplate(finalTotal, discountRate, cartTotalEl) {
   cartTotalEl.textContent = `총액: ${Math.round(finalTotal)}원`;
   if (discountRate > 0) {
-    const span = document.createElement("span");
-    span.className = "text-green-500 ml-2";
+    const span = document.createElement('span');
+    span.className = 'text-green-500 ml-2';
     span.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
     cartTotalEl.appendChild(span);
   }
@@ -86,22 +81,21 @@ function updateCartTotalTemplate(finalTotal, discountRate, cartTotalEl) {
 
 function updateLoyaltyPointsTemplate(cartTotalEl, finalTotal) {
   const points = Math.floor(finalTotal / 1000);
-  let el = document.getElementById("loyalty-points");
+  let el = document.getElementById('loyalty-points');
   if (!el) {
-    el = document.createElement("span");
-    el.id = "loyalty-points";
-    el.className = "text-blue-500 ml-2";
+    el = document.createElement('span');
+    el.id = 'loyalty-points';
+    el.className = 'text-blue-500 ml-2';
     cartTotalEl.appendChild(el);
   }
   el.textContent = `(포인트: ${points})`;
 }
 
 function updateStockStatusTemplate(stockStatusEl) {
-  let statusText = "";
+  let statusText = '';
   for (const product of products) {
     if (product.units < STOCK_WARNING_THRESHOLD) {
-      const msg =
-        product.units > 0 ? `재고 부족 (${product.units}개 남음)` : "품절";
+      const msg = product.units > 0 ? `재고 부족 (${product.units}개 남음)` : '품절';
       statusText += `${product.name}: ${msg}\n`;
     }
   }
@@ -111,10 +105,10 @@ function updateStockStatusTemplate(stockStatusEl) {
 export function getQuantityFromElement(itemEl) {
   if (!itemEl) return 0;
   try {
-    const quantityText = itemEl.querySelector("span").textContent;
-    return parseInt(quantityText.split("x ")[1]);
+    const quantityText = itemEl.querySelector('span').textContent;
+    return parseInt(quantityText.split('x ')[1]);
   } catch (error) {
-    console.error("Error parsing quantity:", error);
+    console.error('Error parsing quantity:', error);
     return 0;
   }
 }

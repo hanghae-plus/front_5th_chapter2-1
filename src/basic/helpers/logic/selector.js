@@ -1,5 +1,5 @@
-import { products } from "../../constants.js";
-import { getProductById } from "../utils.js";
+import { products } from '../../constants.js';
+import { getProductById } from '../utils.js';
 
 export function getSelectedProduct(selectEl) {
   const selectedId = selectEl.value;
@@ -7,12 +7,12 @@ export function getSelectedProduct(selectEl) {
 }
 
 export function updateProductSelector(selectEl) {
-  selectEl.innerHTML = "";
+  selectEl.innerHTML = '';
 
   const fragment = document.createDocumentFragment();
 
   for (const product of products) {
-    const option = document.createElement("option");
+    const option = document.createElement('option');
     option.value = product.id;
     option.textContent = `${product.name} - ${product.price}원`;
     option.disabled = product.units <= 0;

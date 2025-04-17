@@ -29,11 +29,14 @@ describe('basic test', () => {
     });
 
     beforeEach(() => {
-      vi.useRealTimers();
+      vi.useFakeTimers();
+      const mockDate = new Date('5831-12-15'); // 화요일이 아닌 다른 요일
+      vi.setSystemTime(mockDate);
       vi.spyOn(window, 'alert').mockImplementation(() => {});
     });
 
     afterEach(() => {
+      vi.useRealTimers();
       vi.restoreAllMocks();
     });
 

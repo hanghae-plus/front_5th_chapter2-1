@@ -7,9 +7,15 @@
     "strict": true,
     "skipLibCheck": true,
     "baseUrl": "./src",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": [
+        "./*"
+      ]
     },
     "allowJs": true,
     "noEmit": true,
@@ -24,6 +30,14 @@
     ],
     "esModuleInterop": true
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "src/constants/products.js"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

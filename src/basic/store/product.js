@@ -5,8 +5,8 @@ const productStore = (function () {
     return [...productList];
   }
 
-  function getProductItem(id) {
-    const productItem = productList.find((item) => item.id === id);
+  function getProductItem(productId) {
+    const productItem = productList.find((item) => item.id === productId);
     return { ...productItem };
   }
 

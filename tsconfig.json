@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": ["ES2020", "DOM", "DOM.Iterable"],
+        "module": "ESNext",
+        "skipLibCheck": true,
+
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+
+        /* Paths */
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
+    },
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+    // 컴파일에서 제외할 파일/폴더 (예: 의존성 모듈, 빌드 결과물)
+    "exclude": ["node_modules", "dist"]
+}

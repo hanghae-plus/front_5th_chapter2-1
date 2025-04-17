@@ -17,13 +17,15 @@ export const AddProductButton: React.FC<AddProductButtonProps> = (props) => {
         const productToAdd = stockList.find(
           (product) => product.id === selectedId,
         );
-        if (productToAdd) {
-          if (productToAdd.stockQuantity > 0) {
-            dispatch({ type: 'INCREMENT', id: productToAdd.id });
-            setLastAddedProductId(productToAdd.id);
-          } else {
-            alert('재고가 부족합니다.');
-          }
+        if (!productToAdd) {
+          return;
+        }
+
+        if (productToAdd.stockQuantity > 0) {
+          dispatch({ type: 'INCREMENT', id: productToAdd.id });
+          setLastAddedProductId(productToAdd.id);
+        } else {
+          alert('재고가 부족합니다.');
         }
       }}
     >

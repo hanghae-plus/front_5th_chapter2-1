@@ -1,5 +1,6 @@
 {
   "name": "front-5th-chapter2-1",
+  "homepage": "https://github.com/hanbeulYou/front_5th_chapter2-1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,14 +13,38 @@
     "test": "vitest",
     "test:basic": "vitest basic.test.js",
     "test:advanced": "vitest advanced.test.js",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "lint:advanced": "biome lint ./src/advanced",
+    "format:advanced": "biome format --write ./src/advanced",
+    "check:advanced": "biome check --apply ./src/advanced",
+    "lint:basic": "eslint ./src/basic",
+    "format:basic": "prettier --write ./src/basic",
+    "check:basic": "npm run lint:basic && npm run format:basic",
+    "deploy": "pnpm run build && gh-pages -d dist"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@eslint/js": "^9.24.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.14.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.0",
     "@vitest/ui": "^3.1.1",
+    "eslint": "^9.24.0",
+    "globals": "^16.0.0",
     "jsdom": "^26.0.0",
+    "typescript-eslint": "^8.29.1",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
+    "gh-pages": "^6.3.0",
+    "prettier": "^3.5.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }

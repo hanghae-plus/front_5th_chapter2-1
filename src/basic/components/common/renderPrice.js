@@ -1,4 +1,4 @@
-export function renderPrice({ totalPrice, discountRate }) {
+export default function renderPrice({ totalPrice, discountRate }) {
   const priceElement = document.createElement('div');
   priceElement.id = 'cart-total';
   priceElement.className = 'text-xl font-bold my-4';
@@ -11,4 +11,5 @@ export function renderPrice({ totalPrice, discountRate }) {
     spanElement.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
     priceElement.appendChild(spanElement);
   }
+  return priceElement;
 }

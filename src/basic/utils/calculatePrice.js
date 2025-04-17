@@ -1,6 +1,6 @@
 import { PRODUCT_LIST } from '../components/product/ProductList.constant.js';
 
-export function calculatePrice(cartItems) {
+export default function calculatePrice(cartItems) {
   let totalAfterDiscount = 0;
   let totalQuantity = 0;
   let totalBeforeDiscount = 0;

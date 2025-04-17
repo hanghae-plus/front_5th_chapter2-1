@@ -4,11 +4,6 @@ export default function renderStock() {
   const stockInfo = document.createElement('div');
   stockInfo.id = 'renderStock-status';
   stockInfo.className = 'text-sm text-gray-500 mt-2';
-  return stockInfo;
-}
-
-export function renderStockInfo() {
-  const stockInfo = document.getElementById('renderStock-status');
 
   let infoMsg = '';
 

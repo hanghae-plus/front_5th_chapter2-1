@@ -12,4 +12,6 @@ export default function renderPoint() {
     totalElement.appendChild(pointElement);
   }
   pointElement.textContent = '(포인트: ' + bonusPts + ')';
+
+  return totalElement;
 }

@@ -1,5 +1,5 @@
 import { PRODUCT_LIST } from './ProductList.constant.js';
-import calculatePrice from '../../utils/calculatePrice.js';
+import { calculatePrice } from '../../utils/index.js';
 
 export default function renderProductList() {
   const cartItems = document.createElement('div');

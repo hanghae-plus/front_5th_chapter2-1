@@ -9,7 +9,6 @@ import {
   renderProductSelect,
   renderStock,
 } from './components/product/index.js';
-import { renderStockInfo } from './components/product/renderStock.js';
 import {
   calculatePrice,
   luckySaleTimer,
@@ -24,7 +23,6 @@ function render() {
   wrap.appendChild(renderTitle('h1', '장바구니'));
   wrap.appendChild(renderProductSelect());
   wrap.appendChild(renderProductAddButton());
-  wrap.appendChild(renderStock());
   wrap.appendChild(renderProductList());
 
   const cont = document.createElement('div');
@@ -52,7 +50,7 @@ function main() {
 
     renderPrice(result);
     renderPoint();
-    renderStockInfo();
+    renderStock();
   });
 }
 

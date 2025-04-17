@@ -8,7 +8,7 @@
     "build": "vite build",
     "dev:basic": "vite --config src/basic/vite.config.js",
     "build:basic": "vite build --config src/basic/vite.config.js",
-    "copy:basic": "rmdir /S /Q docs\\basic && mkdir docs\\basic && xcopy /E /I /Y src\\basic\\dist\\* docs\\basic\\",
+    "copy:basic": "rmdir /S /Q docs\\basic && mkdir docs\\basic && xcopy /E /I /Y basic\\dist\\* docs\\basic\\",
     "deploy:basic": "pnpm build:basic && pnpm copy:basic && git add docs/basic && git commit -m \"deploy basic\" && git push",
     "dev:advanced": "vite --config ./advanced/vite.config.js",
     "build:advanced": "vite build --config ./advanced/vite.config.js",

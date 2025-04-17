@@ -13,7 +13,8 @@ export const STYLES = {
     SMALL: 'px-2 py-1 rounded mr-1',
   },
   TEXT: {
-    SUCCESS: 'text-blue-500 ml-2',
+    BONUS: 'text-blue-500 ml-2',
+    DISCOUNT: 'text-green-500 ml-2',
     INFO: 'text-sm text-gray-500 mt-2',
     STOCK: 'text-sm text-gray-500 mt-2',
     TOTAL: 'text-xl font-bold my-4',

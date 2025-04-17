@@ -4,7 +4,7 @@ import { createElement, formatPrice, formatDiscountRate } from '../utils';
 
 const createDiscountElement = (discountRate) => {
   return createElement('span', {
-    className: STYLES.TEXT.SUCCESS,
+    className: STYLES.TEXT.DISCOUNT,
     textContent: `(${formatDiscountRate(discountRate)} 할인 적용)`,
   });
 };
@@ -12,7 +12,7 @@ const createDiscountElement = (discountRate) => {
 export const renderCartTotal = (totalAmount, discountRate) => {
   const container = TotalAmountContainerDOM.get();
 
-  const existingDiscount = container.querySelector(`.${STYLES.TEXT.SUCCESS}`);
+  const existingDiscount = container.querySelector(`.${STYLES.TEXT.DISCOUNT}`);
   if (existingDiscount) {
     existingDiscount.remove();
   }

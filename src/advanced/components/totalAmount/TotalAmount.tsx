@@ -20,7 +20,7 @@ export const TotalAmount: React.FC = () => {
     <>
       총액: {formatPrice(totalAmount)}
       {hasDiscount && (
-        <span className={STYLES.TEXT.SUCCESS}>
+        <span className={STYLES.TEXT.DISCOUNT}>
           ({formatDiscountRate(discountRate)} 할인 적용)
         </span>
       )}

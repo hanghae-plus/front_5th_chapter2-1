@@ -1,8 +1,7 @@
-import { createContext, useEffect, useState } from "react";
-
-import { CartInfo, ProductInfo } from "../types/types";
-
+import { createContext, useEffect } from "react";
+import { CartInfo } from "../types/types";
 import { INITIAL_CART } from "../constant";
+import useCartStoreLogic from "../hooks/useCartStoreLogic";
 
 interface CartStoreContextProps extends CartInfo {
   changeProductListPrice: (productId: string) => void;
@@ -10,6 +9,7 @@ interface CartStoreContextProps extends CartInfo {
   handleQuantityChange: (productId: string, quantity: number) => void;
   handleRemove: (productId: string) => void;
 }
+
 export const CartStoreContext = createContext<CartStoreContextProps | null>(
   null,
 );
@@ -19,8 +19,15 @@ export const CartStoreProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [lastSaleItem, setLastSaleItem] = useState<string | null>(null);
-  const [productList, setProductList] = useState<ProductInfo[]>(INITIAL_CART);
+  const {
+    productList,
+    lastSaleItem,
+    addToCart,
+    handleQuantityChange,
+    handleRemove,
+    changeProductListPrice,
+    setProductList,
+  } = useCartStoreLogic(INITIAL_CART);
 
   useEffect(() => {
     const randomSaleTimer = setTimeout(() => {
@@ -36,7 +43,6 @@ export const CartStoreProvider = ({
                 : p,
             ),
           );
-          alert(`번개세일! ${randomProduct.name}이(가) 20% 할인 중입니다!`);
         }
       }, 30000);
 
@@ -58,9 +64,6 @@ export const CartStoreProvider = ({
                   : p,
               ),
             );
-            alert(
-              `${suggestedProduct.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`,
-            );
           }
         }
       }, 60000);
@@ -72,108 +75,7 @@ export const CartStoreProvider = ({
       clearTimeout(randomSaleTimer);
       clearTimeout(additionalSaleTimer);
     };
-  }, [lastSaleItem, productList]);
-
-  const addToCart = (productId: string) => {
-    const itemToAdd = productList.find((p) => p.id === productId);
-
-    if (!itemToAdd || itemToAdd.stock <= 0) {
-      alert("재고가 부족합니다.");
-
-      return;
-    }
-
-    const existingItem = productList.find((p) => p.id === productId);
-
-    if (existingItem) {
-      const newQuantity = (existingItem.quantity || 0) + 1;
-
-      if (newQuantity <= itemToAdd.stock) {
-        setProductList(
-          productList.map((p) =>
-            p.id === productId
-              ? {
-                  ...p,
-                  quantity: newQuantity,
-                  stock: p.stock - 1,
-                }
-              : p,
-          ),
-        );
-        setLastSaleItem(productId);
-      } else {
-        alert("재고가 부족합니다.");
-      }
-    } else {
-      setProductList([
-        ...productList,
-        {
-          ...itemToAdd,
-          quantity: 1,
-          stock: itemToAdd.stock - 1,
-        },
-      ]);
-      setLastSaleItem(productId);
-    }
-  };
-
-  const handleQuantityChange = (productId: string, quantity: number) => {
-    const item = productList.find((p) => p.id === productId);
-
-    if (!item) return;
-
-    const newQuantity = item.quantity + quantity;
-
-    if (newQuantity <= 0) {
-      handleRemove(productId);
-
-      return;
-    }
-
-    if (quantity > 0 && item.stock < quantity) {
-      alert("재고가 부족합니다.");
-
-      return;
-    }
-
-    setProductList(
-      productList.map((p) =>
-        p.id === productId
-          ? {
-              ...p,
-              quantity: newQuantity,
-              stock: p.stock - quantity,
-            }
-          : p,
-      ),
-    );
-  };
-
-  const handleRemove = (productId: string) => {
-    const item = productList.find((p) => p.id === productId);
-
-    if (!item) return;
-
-    setProductList(
-      productList.map((p) =>
-        p.id === productId
-          ? {
-              ...p,
-              quantity: 0,
-              stock: p.stock + item.quantity,
-            }
-          : p,
-      ),
-    );
-  };
-
-  const changeProductListPrice = (productId: string) => {
-    setProductList(
-      productList.map((p) =>
-        p.id === productId ? { ...p, price: Math.round(p.price * 0.8) } : p,
-      ),
-    );
-  };
+  }, [lastSaleItem, productList, setProductList]);
 
   return (
     <CartStoreContext.Provider

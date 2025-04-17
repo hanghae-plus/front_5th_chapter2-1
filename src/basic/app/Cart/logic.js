@@ -1,5 +1,5 @@
-import { ElementIds } from "../constants.js";
-import { findProduct, getProductList } from "./store/prodList.js";
+import { ElementIds } from "../../../constants.js";
+import { findProduct, getProductList } from "../../store/prodList.js";
 
 /** DATA */
 const discountRateById = {
@@ -112,7 +112,7 @@ export function getValueFromCardItem(item, type = "quantity") {
   return itemText.textContent.split("x ")[0];
 }
 
-export function calcCart() {
+export function logic() {
   const cartDisp = document.getElementById(ElementIds.CART_DISP);
   const cartItems = cartDisp?.children;
 

@@ -1,10 +1,6 @@
 import { ElementIds } from "../../../../../constants.js";
 import { findProduct, prodList } from "../../../../store/prodList.js";
-import {
-  calcCart,
-  getCartItemText,
-  getValueFromCardItem,
-} from "../../../../calcCart.js";
+import { logic, getCartItemText, getValueFromCardItem } from "../../logic.js";
 import { updateLastSelValue } from "../../../../store/lastSel.js";
 
 function isSoldOut(quantity) {
@@ -84,6 +80,6 @@ export function handleClickAddBtn() {
   }
 
   updateCartDisplay(itemToAdd);
-  calcCart();
+  logic();
   updateLastSelValue(selItem);
 }

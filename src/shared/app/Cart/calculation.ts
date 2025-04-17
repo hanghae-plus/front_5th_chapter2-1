@@ -1,4 +1,3 @@
-/** Types */
 interface DiscountRates {
   [key: string]: number;
 }
@@ -29,7 +28,11 @@ export function getDisc(quantity: number, currentItemId: string): number {
   return discountRateById[currentItemId] || 0;
 }
 
-export function getFinalAmounts(itemCnt: number, totalAmt: number, subTot: number): FinalAmounts {
+export function getFinalAmounts(
+  itemCnt: number,
+  totalAmt: number,
+  subTot: number,
+): FinalAmounts {
   let discRate = 0;
   if (itemCnt >= 30) {
     const bulkDisc = totalAmt * 0.25;
@@ -72,4 +75,4 @@ export function getProductQuantityMessage(prodList: Product[]): string {
   });
 
   return infoMsg;
-} 
+}

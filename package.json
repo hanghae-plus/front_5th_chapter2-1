@@ -1,11 +1,14 @@
 {
   "name": "front-5th-chapter2-1",
+  "homepage": "https://kumjungmin.github.io/front_5th_chapter2-1/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:test": "tsc -b && vite build --mode development",
+    "build:prod": "tsc -b && vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview",
     "start:basic": "vite serve --open ./index.basic.html",
@@ -13,9 +16,12 @@
     "test": "vitest",
     "test:basic": "vitest basic.test.js",
     "test:advanced": "vitest advanced.test.tsx",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "predeploy": "pnpm run build:prod",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "gh-pages": "^6.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -24,6 +30,7 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/node": "^22.14.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@typescript-eslint/eslint-plugin": "^8.30.1",

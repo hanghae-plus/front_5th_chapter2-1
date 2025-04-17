@@ -1,11 +1,30 @@
-export function mount() {
-  const root = document.getElementById("app");
-  const { container, wrapper } = createLayout();
-  const children = appendChildren(wrapper);
+const APP_ROOT_ID = "app";
+const TITLE_TEXT = "장바구니";
+const ADD_BUTTON_TEXT = "추가";
 
+export function mount() {
+  const root = document.getElementById(APP_ROOT_ID);
+  if (!root) {
+    throw new Error(`cannot find element with id ${APP_ROOT_ID}`);
+  }
+
+  const { container, wrapper } = createLayout();
+  const {
+    cartItemList,
+    cartTotalEl,
+    productSelector,
+    addToCartButton,
+    stockStatusEl,
+  } = initializeChildren(wrapper);
   root.appendChild(container);
 
-  return children;
+  return {
+    cartItemList,
+    cartTotalEl,
+    productSelector,
+    addToCartButton,
+    stockStatusEl,
+  };
 }
 
 function createLayout() {
@@ -20,10 +39,10 @@ function createLayout() {
   return { container, wrapper };
 }
 
-function appendChildren(wrapper) {
+function initializeChildren(wrapper) {
   const heading = document.createElement("h1");
   heading.className = "text-2xl font-bold mb-4";
-  heading.textContent = "장바구니";
+  heading.textContent = TITLE_TEXT;
 
   const cartItemList = document.createElement("div");
   cartItemList.id = "cart-items";
@@ -39,19 +58,24 @@ function appendChildren(wrapper) {
   const addToCartButton = document.createElement("button");
   addToCartButton.id = "add-to-cart";
   addToCartButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
-  addToCartButton.textContent = "추가";
+  addToCartButton.textContent = ADD_BUTTON_TEXT;
 
   const stockStatusEl = document.createElement("div");
   stockStatusEl.id = "stock-status";
   stockStatusEl.className = "text-sm text-gray-500 mt-2";
-  stockStatusEl.style.whiteSpace = "pre-wrap";
+  stockStatusEl.style.cssText = "white-space: pre-wrap";
 
-  wrapper.appendChild(heading);
-  wrapper.appendChild(cartItemList);
-  wrapper.appendChild(cartTotalEl);
-  wrapper.appendChild(productSelector);
-  wrapper.appendChild(addToCartButton);
-  wrapper.appendChild(stockStatusEl);
+  const fragment = document.createDocumentFragment();
+  const elements = [
+    heading,
+    cartItemList,
+    cartTotalEl,
+    productSelector,
+    addToCartButton,
+    stockStatusEl,
+  ];
+  elements.forEach((element) => fragment.appendChild(element));
+  wrapper.appendChild(fragment);
 
   return {
     cartItemList,

@@ -1,4 +1,3 @@
-// hooks/useCart.ts
 import { useMemo } from 'react';
 import { Product, CartItem } from '../types/product';
 

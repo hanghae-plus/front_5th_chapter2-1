@@ -7,8 +7,7 @@ import StockStatus from './components/StockStatus';
 
 import { Product, CartItem } from './types/product';
 import { INITIAL_PRODUCTS } from './constants/constants';
-// import { saleTimer } from '../utils/saleTimer';
-// import { calculateCart } from '../utils/cart';
+import { useSaleTimer } from './hooks/useSaleTimer';
 
 const App = () => {
     const [productList, setProductList] = useState<Product[]>(INITIAL_PRODUCTS);
@@ -22,12 +21,8 @@ const App = () => {
         setCartItems(updatedCart);
     };
 
-    useEffect(() => {
-        // 할인 타이머 (예시)
-        // saleTimer(productList, lastSelectedProduct, () => {
-        //     // 필요하면 옵션 업데이트 등
-        // });
-    }, [productList, lastSelectedProduct]);
+    // 번개세일 및 추천 할인 훅
+    useSaleTimer(productList, setProductList, lastSelectedProduct);
 
     return (
         <div className="max-w-4xl mx-auto">

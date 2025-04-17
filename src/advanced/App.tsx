@@ -4,7 +4,7 @@ import { CartPage } from "./pages/cart-page";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/index.advanced.html">
       <Routes>
         <Route path="/" element={<CartPage />} />
       </Routes>

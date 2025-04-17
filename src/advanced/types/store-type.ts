@@ -6,8 +6,16 @@ export type Product = {
   q: number;
 };
 
+type CartItem = {
+  id: string;
+  name: string;
+  val: number;
+  quantity: number;
+};
+
 export type CartStore = {
   products: Product[];
+  cart: CartItem[];
   lastSelected: string | null;
   finalTotal: number;
   originalTotal: number;
@@ -22,6 +30,8 @@ export type CartStore = {
     itemCount: number,
     discountRate: number,
   ) => void;
+
   updateProductPrice: (id: string, newPrice: number) => void;
+  addToCart: (productId: string) => void;
   resetCart: () => void;
 };

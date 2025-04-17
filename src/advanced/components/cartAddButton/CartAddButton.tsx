@@ -1,5 +1,6 @@
 import { MouseEvent } from 'react';
 import { useItem } from '../../context/ItemContext.js';
+import { textUtils } from '../../utils/textUtils.js';
 
 export default function CartAddButton() {
   const { itemList, lastSelectedItem, updateQuantity } = useItem();
@@ -13,8 +14,7 @@ export default function CartAddButton() {
     const stockQuantity =
       itemList.find((item) => item.id === itemId)?.quantity || 0;
     if (stockQuantity === 0) {
-      // TO-DO: 상수화하기
-      alert('재고가 없습니다.');
+      alert(textUtils.OUT_OF_STOCK);
       return;
     }
     updateQuantity(itemId, -1);

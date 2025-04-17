@@ -1,6 +1,7 @@
 import { ItemType } from 'src/advanced/types/ItemType.js';
 import CartItemRow from '../cartItemRow/CartItemRow.js';
 import { useItem } from '../../context/ItemContext.js';
+import { textUtils } from '../../utils/textUtils.js';
 
 export default function Cart() {
   const {
@@ -15,8 +16,7 @@ export default function Cart() {
     const stockQuantity =
       itemList.find((item) => item.id === id)?.quantity || 0;
     if (stockQuantity === 0) {
-      // TO-DO: 상수화하기
-      alert('재고가 없습니다.');
+      alert(textUtils.OUT_OF_STOCK);
       return;
     }
     increaseCartItem(id);

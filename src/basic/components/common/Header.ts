@@ -1,4 +1,4 @@
-import { HEADER } from "../../const";
+import { HEADER } from "../../constants";
 
 interface HeaderProps {
   target: HTMLElement;

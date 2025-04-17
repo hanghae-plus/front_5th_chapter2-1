@@ -1,4 +1,4 @@
-import { CART } from "../../const";
+import { CART } from "../../constants";
 import type { GlobalState } from "../../types";
 interface TotalPriceProps {
   target: HTMLElement;

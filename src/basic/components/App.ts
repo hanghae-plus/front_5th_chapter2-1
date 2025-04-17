@@ -1,4 +1,4 @@
-import { LAYOUT } from "../const";
+import { LAYOUT } from "../constants";
 import { handleAddButtonClick, handleCartItemRemove, handleCountChange } from "../handler";
 import { globalState } from "../state/globalState";
 import type { GlobalState } from "../types";

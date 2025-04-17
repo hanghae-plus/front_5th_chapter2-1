@@ -1,4 +1,4 @@
-export const useUpdateStockInfo = () => {
+export const useUpdateStockInfo = (stockInfo, productList) => {
   let infoMsg = "";
   productList.forEach(function (item) {
     if (item.quantity < 5) {

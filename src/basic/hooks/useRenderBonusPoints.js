@@ -1,4 +1,4 @@
-export const useRenderBonusPoints = () => {
+export const useRenderBonusPoints = (totalAmount, totalPrice) => {
   bonusPoints = Math.floor(totalAmount / 1000);
   let pointsTag = document.getElementById("loyalty-points");
   if (!pointsTag) {

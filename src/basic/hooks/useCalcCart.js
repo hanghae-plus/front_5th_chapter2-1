@@ -1,4 +1,11 @@
-export const useCalcCart = () => {
+export const useCalcCart = (
+  totalAmount,
+  itemCount,
+  cartContainer,
+  productList,
+  stockInfo,
+  totalPrice,
+) => {
   totalAmount = 0;
   itemCount = 0;
   let cartItems = cartContainer.children;
@@ -51,6 +58,6 @@ export const useCalcCart = () => {
     span.textContent = "(" + (discRate * 100).toFixed(1) + "% 할인 적용)";
     totalPrice.appendChild(span);
   }
-  updateStockInfo();
-  renderBonusPoints();
+  updateStockInfo(stockInfo, productList);
+  renderBonusPoints(totalAmount, totalPrice);
 };

@@ -1,4 +1,5 @@
-export const updateProductList = (productList) => {
+export const useUpdateProductList = (cartList, productList) => {
+  cartList.innerHTML = "";
   productList.forEach((product) => {
     let opt = document.createElement("option");
     opt.value = product.id;
@@ -6,5 +7,4 @@ export const updateProductList = (productList) => {
     if (product.quantity === 0) opt.disabled = true;
     cartList.appendChild(opt);
   });
-  return cartList
 };

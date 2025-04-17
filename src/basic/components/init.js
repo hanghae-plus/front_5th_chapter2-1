@@ -11,7 +11,9 @@ export function inIt(root) {
   const cont = root.firstElementChild;
   const wrap = cont.firstElementChild;
 
+  //태그, id 선언
   dom.cartDisp = document.createElement('div');
+
   dom.cartDisp.id = 'cart-items';
   wrap.appendChild(dom.cartDisp);
 

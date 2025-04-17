@@ -5,7 +5,7 @@ import { formatProductOption } from "@/advanced/utils";
 
 export const ProductSelect: React.FC = () => {
   const { 
-    products, 
+    productList, 
     selectedProductId, 
     setSelectedProductId 
   } = useShoppingContext();
@@ -17,7 +17,7 @@ export const ProductSelect: React.FC = () => {
       value={selectedProductId}
       onChange={(e) => setSelectedProductId(e.target.value)}
     >
-      {products.map((item) => (
+      {productList.map((item) => (
         <option
           key={item.id}
           value={item.id}

@@ -2,8 +2,8 @@ import { ADDITIONAL_DISCOUNT } from '@/basic/consts';
 import { alertSuggestedProduct } from '@/advanced/utils';
 import type { Product } from '@/advanced/types';
 
-const getSuggestedProduct = (products: Product[], lastId: string | null): Product | undefined => {
-  return products.find((item) => item.id !== lastId && item.quantity > 0);
+const getSuggestedProduct = (productList: Product[], lastId: string | null): Product | undefined => {
+  return productList.find((item) => item.id !== lastId && item.quantity > 0);
 };
 
 interface AdditionalDiscountParams {

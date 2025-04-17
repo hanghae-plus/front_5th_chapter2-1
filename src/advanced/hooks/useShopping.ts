@@ -6,10 +6,10 @@ import { useCartCalculations } from './useCartCalculation';
 import type { CartItem } from '@/advanced/types';
 
 export const useShopping = () => {
-  const { products, setProducts } = useProductState();
+  const { productList, setProductList } = useProductState();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  const { selectedProductId, setSelectedProductId } = useSelectedProduct(products[0].id);
+  const { selectedProductId, setSelectedProductId } = useSelectedProduct(productList[0].id);
   const {
     itemCount,
     subTotal,
@@ -17,17 +17,18 @@ export const useShopping = () => {
     discountRate,
   } = useCartCalculations(cartItems);
   const { addProductToCart, updateProductQuantity, removeProductFromCart } =
-    useCartActions(products, cartItems, setProducts, setCartItems);
+    useCartActions(productList, cartItems, setProductList, setCartItems);
 
 
   return {
-    products,
+    productList,
     cartItems,
     selectedProductId,
     itemCount,
     subTotal,
     totalAmount,
     discountRate,
+    setProductList,
     setSelectedProductId,
     addProductToCart,
     updateProductQuantity,

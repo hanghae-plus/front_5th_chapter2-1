@@ -3,20 +3,20 @@ import { alertOutOfStock } from '@/advanced/utils/alert';
 import type { Product, CartItem } from '@/advanced/types';
 
 export const useCartActions = (
-  products: Product[],
+  productList: Product[],
   cartItems: CartItem[],
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>,
+  setProductList: React.Dispatch<React.SetStateAction<Product[]>>,
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>,
 ) => {
   const addProductToCart = useCallback((productId: string) => {
-    const product = products.find((p) => p.id === productId);
+    const product = productList.find((p) => p.id === productId);
 
     if (!product || product.quantity <= 0) {
       alertOutOfStock();
       return;
     }
 
-    setProducts((prev) =>
+    setProductList((prev) =>
       prev.map((p) =>
         p.id === productId ? { ...p, quantity: p.quantity - 1 } : p,
       ),
@@ -33,10 +33,10 @@ export const useCartActions = (
       }
       return [...prev, { ...product, quantity: 1 }];
     });
-  }, [products, setProducts, setCartItems]);
+  }, [productList, setProductList, setCartItems]);
 
   const updateProductQuantity = useCallback((productId: string, change: number) => {
-    const product = products.find((p) => p.id === productId);
+    const product = productList.find((p) => p.id === productId);
     const cartItem = cartItems.find((item) => item.id === productId);
     if (!product || !cartItem) return;
 
@@ -53,7 +53,7 @@ export const useCartActions = (
       return;
     }
 
-    setProducts((prev) =>
+    setProductList((prev) =>
       prev.map((p) =>
         p.id === productId ? { ...p, quantity: p.quantity - change } : p,
       ),
@@ -64,20 +64,20 @@ export const useCartActions = (
         item.id === productId ? { ...item, quantity: newQuantity } : item,
       ),
     );
-  }, [products, cartItems, setProducts, setCartItems]);
+  }, [productList, cartItems, setProductList, setCartItems]);
 
   const removeProductFromCart = useCallback((productId: string) => {
     const cartItem = cartItems.find((item) => item.id === productId);
     if (!cartItem) return;
 
-    setProducts((prev) =>
+    setProductList((prev) =>
       prev.map((p) =>
         p.id === productId ? { ...p, quantity: p.quantity + cartItem.quantity } : p,
       ),
     );
 
     setCartItems((prev) => prev.filter((item) => item.id !== productId));
-  }, [cartItems, setProducts, setCartItems]);
+  }, [cartItems, setProductList, setCartItems]);
 
   return {
     addProductToCart,

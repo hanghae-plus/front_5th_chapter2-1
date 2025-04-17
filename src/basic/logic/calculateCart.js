@@ -34,7 +34,7 @@ export const calculateCart = (products, cartItems) => {
     if (!currentItem) continue;
 
     const quantity = parseInt(
-      cartItems[i].querySelector("span").textContent.split("x ")[1],
+      cartItems[i].querySelector("span").textContent.split("x ")[1]
     );
     const itemTotal = currentItem.cost * quantity;
     const discount =
@@ -48,18 +48,15 @@ export const calculateCart = (products, cartItems) => {
   }
 
   // 전체 수량 기준 할인율 계산
-  let discountRate = 0;
+  const itemDiscount = subTotal - totalCost;
+  let discountRate = itemDiscount / subTotal;
+
   if (itemCount >= TOTAL_BULK_DISCOUNT_LIMIT) {
     const bulkDiscount = totalCost * TOTAL_BULK_DISCOUNT_RATE;
-    const itemDiscount = subTotal - totalCost;
     if (bulkDiscount > itemDiscount) {
       totalCost = subTotal * (1 - TOTAL_BULK_DISCOUNT_RATE);
       discountRate = TOTAL_BULK_DISCOUNT_RATE;
-    } else {
-      discountRate = (subTotal - totalCost) / subTotal;
     }
-  } else {
-    discountRate = (subTotal - totalCost) / subTotal;
   }
 
   // 매주 화요일 특별 할인

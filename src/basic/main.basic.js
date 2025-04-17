@@ -64,9 +64,9 @@ const App = () => {
   root.innerHTML = template();
 
   const $addToCartBtn = document.querySelector('#add-cart-btn');
-  $addToCartBtn.addEventListener('click', handleAddCarts);
+  $addToCartBtn.addEventListener('click', handleAddCartItem);
   const $updatedQuantityBtn = document.querySelector('#carts');
-  $updatedQuantityBtn.addEventListener('click', handleUpdateCarts);
+  $updatedQuantityBtn.addEventListener('click', handleUpdateCartItem);
 
   calculateCartTotal();
 
@@ -217,7 +217,7 @@ function updatestocksWrapper() {
 }
 
 /** 상품 추가 이벤트 핸들러 */
-const handleAddCarts = (e) => {
+const handleAddCartItem = (e) => {
   e.preventDefault();
   if (e.target.id !== 'add-cart-btn') return;
   try {
@@ -245,8 +245,10 @@ const handleAddCarts = (e) => {
   }
 };
 
+const handleDeleteCartItem = (e) => {};
+
 /** 상품 수량 변경 이벤트 핸들러 */
-const handleUpdateCarts = (e) => {
+const handleUpdateCartItem = (e) => {
   e.preventDefault();
   if (e.target.nodeName !== 'BUTTON') return;
   if (!e.target.classList.contains('quantity-change')) return;

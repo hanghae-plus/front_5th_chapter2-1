@@ -1,10 +1,32 @@
 import updateSelectBoxOptions from './updateSelectBoxOption.js';
 
+/**
+ * 이벤트 타입
+ * @typedef {Object} EventType
+ * @property {string} FLASH - 번개 세일
+ * @property {string} SUGGEST - 추천 상품
+ */
+
+/** @type {EventType} */
 const EVENT_TYPE = {
   FLASH: 'flash',
   SUGGEST: 'suggest',
 };
 
+/**
+ * 이벤트 설정
+ * @typedef {Object} EventConfig
+ * @property {Function} delay - 이벤트 시작 지연 시간 (ms)
+ * @property {number} interval - 이벤트 반복 간격 (ms)
+ * @property {number} discountRate - 할인율
+ * @property {Function} messageTemplate - 알림 메시지 템플릿
+ * @property {Function|boolean} condition - 이벤트 실행 조건
+ */
+
+/**
+ * 이벤트 설정 목록
+ * @type {Object.<string, EventConfig>}
+ */
 const eventConfigs = {
   [EVENT_TYPE.FLASH]: {
     delay: () => Math.random() * 10000,
@@ -22,9 +44,19 @@ const eventConfigs = {
   },
 };
 
+/**
+ * 할인 이벤트를 생성하고 실행합니다.
+ * @param {Array} products - 상품 목록
+ */
 const createDiscountEvent = (products) => {
   let lastSelectedId = null;
 
+  /**
+   * 이벤트 타입에 따라 사용 가능한 상품을 필터링합니다.
+   * @param {string} eventType - 이벤트 타입
+   * @param {Array} products - 상품 목록
+   * @returns {Array} 사용 가능한 상품 목록
+   */
   const getAvailableProducts = (eventType, products) => {
     switch (eventType) {
       case EVENT_TYPE.FLASH:
@@ -36,6 +68,10 @@ const createDiscountEvent = (products) => {
     }
   };
 
+  /**
+   * 할인 이벤트를 실행합니다.
+   * @param {string} eventType - 이벤트 타입
+   */
   const runDiscountEvent = (eventType) => {
     const config = eventConfigs[eventType];
 

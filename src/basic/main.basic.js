@@ -1,73 +1,21 @@
-import {DISCOUNT_RATIO} from './fixture'
-import createState from './state'
-import App from './components/App';
-import {beginThunderDiscount, beginAdditionalDiscount} from './handler';
+import createState from "./state";
+import { App } from "./components";
+import { beginThunderDiscount, beginAdditionalDiscount } from "./handler";
+import { calcCart } from "./utils";
 
-export let {cartState, state} = createState(render)
-
-const isTuesDay = () => (new Date().getDay() === 2 ? true : false);
+export let { cartState, state } = createState(render);
 
 const $ = (query) => document.querySelector(query);
 
 function main() {
-  const root = $("#app");
-  root.replaceWith(App(root))
+  const $root = $("#app");
+  $root.replaceWith(App($root));
 
   render();
+  renderSelOpts();
 
   beginThunderDiscount();
   beginAdditionalDiscount();
-}
-
-function getDiscountRatioWhenProductOver10(quantity, id) {
-  if (quantity >= DISCOUNT_RATIO.EACH_PRODUCT.QUANTITY) {
-    if (id === "p1") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
-    else if (id === "p2") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
-    else if (id === "p3") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
-    else if (id === "p4") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
-    else if (id === "p5") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
-  }
-  return 0;
-}
-
-function calcCart() {
-  let itemCnt = Object.values(cartState).reduce((acc, count) => {
-    return acc + count;
-  }, 0);
-
-
-  let subTot = Object.entries(cartState).reduce((acc, [prodId, quantity]) => {
-    return acc + state.stock[prodId].price * quantity;
-  }, 0);
-
-  let totalAmount = Object.entries(cartState).reduce(
-    (acc, [prodId, quantity]) => {
-      const itemTot = state.stock[prodId].price * quantity;
-      let discount = getDiscountRatioWhenProductOver10(quantity, prodId);
-      return acc + itemTot * (1 - discount);
-    },
-    0
-  );
-
-  let discountRate = (subTot - totalAmount) / subTot; 
-  if (itemCnt >= DISCOUNT_RATIO.ALL_PRODUCT.QUANTITY) {
-    const bulkDiscount = totalAmount * DISCOUNT_RATIO.ALL_PRODUCT.RATIO; 
-    const itemDiscount = subTot - totalAmount; 
-    if (bulkDiscount > itemDiscount) {
-      totalAmount = subTot * (1 - DISCOUNT_RATIO.ALL_PRODUCT.RATIO);
-      discountRate = DISCOUNT_RATIO.ALL_PRODUCT.RATIO;
-    }
-  }
-
-  if (isTuesDay()) {
-    totalAmount *= 1 - 0.1;
-    discountRate = Math.max(discountRate, 0.1);
-  }
-
-  return {
-    totalAmount,
-    discountRate,
-  };
 }
 
 function render() {
@@ -78,26 +26,27 @@ function render() {
   renderStockInfo();
   renderLoyaltyPoints(totalAmount);
   renderCart();
-  renderSelOpts();
 }
 
 function getCartElement({ id, name, price, quantity }) {
-  return `
-    <div id="${id}" class="flex justify-between items-center mb-2">
-      <span>${name + " - " + price + "원 x " + quantity}</span>
-      <div>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="-1">-</button>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="1">+</button>
-        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${id}">삭제</button>
-      </div>
-    </div>
-  `;
+  const template = document.getElementById("cart-item");
+  const $element = template.content.firstElementChild.cloneNode(true);
+
+  $element.id = id;
+  $element.querySelector("span").textContent =
+    name + " - " + price + "원 x " + quantity;
+  Array.from($element.querySelectorAll("button")).forEach((btn) => {
+    btn.setAttribute("data-product-id", id);
+  });
+
+  return $element;
 }
 
 function renderCart() {
   const $cartItems = $("#cart-items");
+  $cartItems.innerHTML = "";
 
-  const cartElements = Object.entries(cartState)
+  Object.entries(cartState)
     .filter(([_, quantity]) => quantity > 0)
     .map(([prodId, quantity]) => {
       return getCartElement({
@@ -106,9 +55,10 @@ function renderCart() {
         quantity: quantity,
       });
     })
-    .join("");
-
-  $cartItems.innerHTML = cartElements;
+    .forEach(($element) => {
+      console.log($element);
+      $cartItems.appendChild($element);
+    });
 }
 
 function renderTotalAmount(totalAmount) {
@@ -167,6 +117,5 @@ export function renderSelOpts() {
     $productSelect.appendChild(opt);
   });
 }
-
 
 main();

@@ -36,6 +36,28 @@ describe("basic test", () => {
               </div>
             </div>
           </template>
+          <template id="cart-item">
+            <div class="flex justify-between items-center mb-2">
+              <span></span>
+              <div>
+                <button
+                  class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+                  data-change="-1"
+                >
+                  -
+                </button>
+                <button
+                  class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+                  data-change="1"
+                >
+                  +
+                </button>
+                <button class="remove-item bg-red-500 text-white px-2 py-1 rounded">
+                  삭제
+                </button>
+              </div>
+            </div>
+          </template>
           <div id="app"></div>
         `;
       await loadFile();

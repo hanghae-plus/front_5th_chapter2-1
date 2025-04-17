@@ -4,7 +4,11 @@ export const TotalAmountDisplay = () => {
   const { totalAmount, avgDiscountRate } = useProductList();
   const points = Math.floor(totalAmount / 10000);
   return (
-    <div id="cart-total" className="text-lg font-bold my-4">
+    <div
+      id="cart-total"
+      data-testid="cart-total"
+      className="text-lg font-bold my-4"
+    >
       총액: {totalAmount}원
       {avgDiscountRate > 0 && (
         <span className="text-red-500 ml-2">

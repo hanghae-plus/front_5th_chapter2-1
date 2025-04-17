@@ -4,7 +4,7 @@ export const CartItemContainer = () => {
   const { cartList, setProductList } = useProductList();
 
   return (
-    <div id="cart-items">
+    <div id="cart-items" data-testid="cart-items">
       {cartList.map((cart) => (
         <div
           key={cart.id}

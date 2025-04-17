@@ -13,6 +13,7 @@ export const ProductSelect = () => {
     <>
       <select
         id="product-select"
+        data-testid="product-select"
         className="border rounded p-2 mr-2"
         value={selectedProduct.id}
         onChange={(e) => {
@@ -37,6 +38,7 @@ export const ProductSelect = () => {
       </select>
       <button
         id="add-to-cart"
+        data-testid="add-to-cart"
         className="bg-blue-500 text-white px-4 py-2 rounded"
         onClick={() => {
           const productToAdd = productList.find(

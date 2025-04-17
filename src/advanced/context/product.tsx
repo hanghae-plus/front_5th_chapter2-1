@@ -52,7 +52,6 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
     },
   );
 
-  console.log(total);
   const totalItemDiscountRate =
     total.amountWithoutDiscount === 0
       ? 0

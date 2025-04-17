@@ -1,4 +1,5 @@
 import {state} from "../store/state.js";
+import {calcCart} from "./totalDisplay.js";
 
 export const handleQuantityChange = (target) => {
 

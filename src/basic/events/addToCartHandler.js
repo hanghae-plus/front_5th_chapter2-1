@@ -1,4 +1,5 @@
 import {state} from "../store/state.js";
+import {calcCart} from "../components/totalDisplay.js";
 
 const handleAddToCart = () => {
     const selectedId = state.elements.select.value;

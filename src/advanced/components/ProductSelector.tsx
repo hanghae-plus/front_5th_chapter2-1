@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Product } from "../types";
 import Button from "./Button";
@@ -6,22 +6,22 @@ import Button from "./Button";
 interface ProductSelectorProps {
     productList: Product[];
     onChange?: (productId: string) => void;
+    onAddToCart: () => void;
 }
 
 const ProductSelector: React.FC<ProductSelectorProps> = ({
     productList,
     onChange,
+    onAddToCart,
 }) => {
     console.log("productList: ", productList);
-
-    const handleAddButton = () => {};
 
     return (
         <>
             <select
                 id="product-select"
                 className="border rounded p-2 mr-2"
-                onChange={(e) => onChange && onChange(e.target.value)}
+                onChange={(e) => onChange && onChange(e.target.value)} // 여기서 App.tsx의 handleProductChange 호출
             >
                 {productList.map((item) => (
                     <option
@@ -34,10 +34,12 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
                 ))}
             </select>
             <Button
-                onClick={handleAddButton}
+                onClick={onAddToCart}
                 variant="primary"
                 size="large"
                 children="추가"
+                productId={""} // 그냥 추가 버튼은 Id값이 필요가 없음
+                dataChange={"-1"}
             />
         </>
     );

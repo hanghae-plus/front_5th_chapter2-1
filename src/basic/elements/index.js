@@ -25,34 +25,50 @@ export const DOM = {
     DOM.elements[name].appendChild(element);
   },
 
+  setElementId: (name, id) => {
+    DOM.elements[name].setAttribute('id', id);
+  },
+  setElementClass: (name, ...classes) => {
+    DOM.elements[name].classList.add(...classes);
+  },
+
   initializeElements: () => {
-    DOM.elements.cartItemContainer.id = 'cart-items';
-    DOM.elements.summary.id = 'cart-total';
-    DOM.elements.select.id = 'product-select';
-    DOM.elements.addProductButton.id = 'add-to-cart';
-    DOM.elements.stockInfo.id = 'stock-status';
+    DOM.setElementId('cartItemContainer', 'cart-items');
+    DOM.setElementId('summary', 'cart-total');
+    DOM.setElementId('select', 'product-select');
+    DOM.setElementId('addProductButton', 'add-to-cart');
+    DOM.setElementId('stockInfo', 'stock-status');
 
-    DOM.elements.container.className = 'bg-gray-100 p-8';
-    DOM.elements.wrapper.className = 'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
-    DOM.elements.header.className = 'text-2xl font-bold mb-4';
-    DOM.elements.summary.className = 'text-xl font-bold my-4';
-    DOM.elements.select.className = 'border rounded p-2 mr-2';
-    DOM.elements.addProductButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
-    DOM.elements.stockInfo.className = 'text-sm text-gray-500 mt-2';
+    DOM.setElementClass('container', 'bg-gray-100', 'p-8');
+    DOM.setElementClass(
+      'wrapper',
+      'max-w-md',
+      'mx-auto',
+      'bg-white',
+      'rounded-xl',
+      'shadow-md',
+      'overflow-hidden',
+      'md:max-w-2xl',
+      'p-8',
+    );
+    DOM.setElementClass('summary', 'text-xl', 'font-bold', 'my-4');
+    DOM.setElementClass('select', 'border', 'rounded', 'p-2', 'mr-2');
+    DOM.setElementClass('addProductButton', 'bg-blue-500', 'text-white', 'px-4', 'py-2', 'rounded');
+    DOM.setElementClass('stockInfo', 'text-sm', 'text-gray-500', 'mt-2');
 
-    DOM.elements.header.textContent = '장바구니';
-    DOM.elements.addProductButton.textContent = '추가';
+    DOM.getElement('header').textContent = '장바구니';
+    DOM.getElement('addProductButton').textContent = '추가';
   },
   buildDOMStructure: () => {
-    DOM.elements.wrapper.appendChild(DOM.elements.header);
-    DOM.elements.wrapper.appendChild(DOM.elements.cartItemContainer);
-    DOM.elements.wrapper.appendChild(DOM.elements.summary);
-    DOM.elements.wrapper.appendChild(DOM.elements.select);
-    DOM.elements.wrapper.appendChild(DOM.elements.addProductButton);
-    DOM.elements.wrapper.appendChild(DOM.elements.stockInfo);
+    DOM.getElement('wrapper').appendChild(DOM.getElement('header'));
+    DOM.getElement('wrapper').appendChild(DOM.getElement('cartItemContainer'));
+    DOM.getElement('wrapper').appendChild(DOM.getElement('summary'));
+    DOM.getElement('wrapper').appendChild(DOM.getElement('select'));
+    DOM.getElement('wrapper').appendChild(DOM.getElement('addProductButton'));
+    DOM.getElement('wrapper').appendChild(DOM.getElement('stockInfo'));
 
-    DOM.elements.container.appendChild(DOM.elements.wrapper);
+    DOM.getElement('container').appendChild(DOM.getElement('wrapper'));
 
-    return DOM.elements.container;
+    return DOM.getElement('container');
   },
 };

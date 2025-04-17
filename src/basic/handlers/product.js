@@ -9,10 +9,12 @@ const updateExistingCartItem = (item, product) => {
   const currentQuantity = parseInt(priceElement.textContent.split('x ')[1]);
   const newQuantity = currentQuantity + 1;
 
-  if (product.quantity > 0) {
-    priceElement.textContent = `${product.name} - ${product.price}원 x ${newQuantity}`;
+  const { id, name, price, quantity } = product;
 
-    PRODUCT.updateQuantity(product.id, -1);
+  if (quantity > 0) {
+    priceElement.textContent = `${name} - ${price}원 x ${newQuantity}`;
+
+    PRODUCT.updateQuantity(id, -1);
   }
 };
 
@@ -26,7 +28,7 @@ const createCartItemElement = (product) => {
   return newItem;
 };
 
-const addNewCartItem = (product) => {
+const updateNewCartItem = (product) => {
   const newItem = createCartItemElement(product);
 
   DOM.appendElement('cartItemContainer', newItem);
@@ -34,17 +36,11 @@ const addNewCartItem = (product) => {
   PRODUCT.updateQuantity(product.id, -1);
 };
 
-const createCartItemHTML = (product) =>
-  `<span>${product.name} - ${product.price}원 x 1</span><div>` +
-  `<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${
-    product.id
-  }" data-change="-1">-</button>` +
-  `<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${
-    product.id
-  }" data-change="1">+</button>` +
-  `<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${
-    product.id
-  }">삭제</button></div>`;
+const createCartItemHTML = ({ id, name, price }) =>
+  `<span>${name} - ${price}원 x 1</span><div>` +
+  `<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="-1">-</button>` +
+  `<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="1">+</button>` +
+  `<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${id}">삭제</button></div>`;
 
 export const handleAddProduct = () => {
   const selectedProductId = DOM.getElement('select').value;
@@ -61,7 +57,7 @@ export const handleAddProduct = () => {
   if (item) {
     updateExistingCartItem(item, selectedProduct);
   } else {
-    addNewCartItem(selectedProduct);
+    updateNewCartItem(selectedProduct);
   }
 
   calculateCart();

@@ -10,15 +10,15 @@ const isValidQuantity = ({ newQuantity, product, currentQuantity }) =>
 const getCurrentQuantity = (element) => parseInt(element.querySelector('span').textContent.split('x ')[1]);
 
 const updateElementQuantity = (element, newQuantity) => {
-  const spanElement = element.querySelector('span');
-  const textBeforeQuantity = spanElement.textContent.split('x ')[0];
+  const quantityElement = element.querySelector('span');
+  const quantityPrefix = `${quantityElement.textContent.split('x ')[0]}x `;
 
-  spanElement.textContent = `${textBeforeQuantity}x ${newQuantity}`;
+  quantityElement.textContent = `${quantityPrefix}${newQuantity}`;
 };
 
 const changeQuantity = ({ target, targetElement, targetProduct, productId, currentQuantity }) => {
-  const quantityChange = parseInt(target.dataset.change);
-  const newQuantity = currentQuantity + quantityChange;
+  const changingQuantity = parseInt(target.dataset.change);
+  const newQuantity = currentQuantity + changingQuantity;
 
   if (
     isValidQuantity({
@@ -29,11 +29,11 @@ const changeQuantity = ({ target, targetElement, targetProduct, productId, curre
   ) {
     updateElementQuantity(targetElement, newQuantity);
 
-    PRODUCT.updateQuantity(productId, -quantityChange);
+    PRODUCT.updateQuantity(productId, -changingQuantity);
   } else if (newQuantity <= 0) {
     targetElement.remove();
 
-    PRODUCT.updateQuantity(productId, -quantityChange);
+    PRODUCT.updateQuantity(productId, -changingQuantity);
   } else {
     alert('재고가 부족합니다.');
   }
@@ -51,21 +51,26 @@ export const handleCartItem = (event) => {
   if (!isCartActionButton(target)) return;
 
   const productId = target.dataset.productId;
-  const targetElementProduct = document.getElementById(productId);
+  const targetProductElement = document.getElementById(productId);
   const targetProduct = PRODUCT.getById(productId);
-  const currentQuantity = getCurrentQuantity(targetElementProduct);
+  const currentQuantity = getCurrentQuantity(targetProductElement);
 
-  if (target.classList.contains('quantity-change')) {
+  const isChangeQuantity = target.classList.contains('quantity-change');
+  const isRemoveItem = target.classList.contains('remove-item');
+
+  if (isChangeQuantity) {
     changeQuantity({
       target,
-      targetElement: targetElementProduct,
+      targetElement: targetProductElement,
       targetProduct,
       productId,
       currentQuantity,
     });
-  } else if (target.classList.contains('remove-item')) {
+  }
+
+  if (isRemoveItem) {
     removeItem({
-      targetElement: targetElementProduct,
+      targetElement: targetProductElement,
       productId,
       currentQuantity,
     });

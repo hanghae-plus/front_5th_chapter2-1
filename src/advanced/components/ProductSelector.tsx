@@ -96,7 +96,7 @@ const ProductSelector = ({
                 disabled={selectedId === null}
                 onClick={handleAddToCart}
             >
-                장바구니에 추가
+                추가
             </button>
         </div>
     );

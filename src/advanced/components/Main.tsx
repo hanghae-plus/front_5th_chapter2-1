@@ -38,12 +38,14 @@ export function Main() {
   };
 
   return (
-    <div className="product-8">
-      <h1 className="text-2xl font-bold mb-4">장바구니</h1>
-      <CartItems cart={cart} onQuantityChange={handleChange} onRemoveItem={handleRemove} />
-      <CartTotal cart={cart} products={products} />
-      <ProductSelect selectedId={selectedId} onSelect={setSelectedId} onAdd={handleAdd} />
-      <StockStatus products={products} />
+    <div className='bg-gray-100 p-8'>
+      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
+        <h1 className="text-2xl font-bold mb-4">장바구니</h1>
+        <CartItems cart={cart} onQuantityChange={handleChange} onRemoveItem={handleRemove} />
+        <CartTotal cart={cart} products={products} />
+        <ProductSelect selectedId={selectedId} onSelect={setSelectedId} onAdd={handleAdd} />
+        <StockStatus products={products} />
+      </div>
     </div>
   );
 }

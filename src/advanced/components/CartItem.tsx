@@ -33,13 +33,13 @@ export default function CartItem({ item, onChange, onRemove }: Props) {
         {product.name} - {product.price}원 x {item.quantity}
       </span>
       <div>
-        <button onClick={decreaseUnits} className="px-2">
+        <button onClick={decreaseUnits} className="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">
           -
         </button>
-        <button onClick={increaseUnits} className="px-2">
+        <button onClick={increaseUnits} className="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1">
           +
         </button>
-        <button onClick={handleRemove} className="px-2 text-red-500">
+        <button onClick={handleRemove} className="remove-item bg-red-500 text-white px-2 py-1 rounded">
           삭제
         </button>
       </div>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import CartItem from "../components/cart-item";
 import { useCartStore } from "../store/useCartStore";
 
 export function CartPage() {
@@ -11,11 +12,19 @@ export function CartPage() {
         <h1 className="text-2xl font-bold mb-4">장바구니</h1>
         <div id="cart-items">
           {cart.map((item) => (
-            <div key={item.id}>
-              <span>
-                {item.name} - {item.val}원 x {item.quantity}
-              </span>
-            </div>
+            <CartItem
+              key={item.id}
+              id={item.id}
+              name={item.name}
+              val={item.val}
+              quantity={item.quantity}
+              onChangeQuantity={(id, delta) => {
+                // 수량 증감 처리 함수
+              }}
+              onRemove={(id) => {
+                // 삭제 처리 함수
+              }}
+            />
           ))}
         </div>
         <div id="cart-total" className="text-xl font-bold my-4" />

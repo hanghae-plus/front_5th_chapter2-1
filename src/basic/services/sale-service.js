@@ -1,6 +1,5 @@
 import { state } from '../store/index.js';
 import { SALE_CONFIG } from '../constants/index.js';
-import { updateProductOption } from './product-service.js';
 
 /**
  * 세일 이벤트 설정
@@ -29,7 +28,6 @@ const handleSaleEvent = () => {
           randomProduct.price * (1 - SALE_CONFIG.FLASH_SALE.DISCOUNT),
         );
         alert('번개세일! ' + randomProduct.name + '이(가) 20% 할인 중입니다!');
-        updateProductOption();
       }
     },
     Math.random() * 10000,
@@ -40,7 +38,7 @@ const handleSaleEvent = () => {
     SALE_CONFIG.RECOMMENDATION_SALE.INTERVAL,
     () => {
       if (state.lastSelected) {
-        var recommendedProduct = state.products.find(function (item) {
+        const recommendedProduct = state.products.find(function (item) {
           return item.id !== state.lastSelected && item.stock > 0;
         });
         if (recommendedProduct) {
@@ -52,7 +50,6 @@ const handleSaleEvent = () => {
             recommendedProduct.price *
               (1 - SALE_CONFIG.RECOMMENDATION_SALE.DISCOUNT),
           );
-          updateProductOption();
         }
       }
     },

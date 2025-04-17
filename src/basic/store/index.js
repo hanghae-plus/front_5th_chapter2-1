@@ -7,8 +7,14 @@ export const state = {
   products: JSON.parse(JSON.stringify(initialProducts)), // 깊은 복사 수행
   totalAmount: 0,
   discountRate: 0,
+  cartCount: 0,
   cartList: [],
 
+  /**
+   * 상태 설정
+   * @param {string} key 상태 키
+   * @param {any} value 상태 값
+   */
   set(key, value) {
     this[key] = value;
     if (listeners[key]) {
@@ -16,6 +22,11 @@ export const state = {
     }
   },
 
+  /**
+   * 상태 구독
+   * @param {string} key 상태 키
+   * @param {Function} callback 구독 콜백
+   */
   subscribe(key, callback) {
     if (!listeners[key]) {
       listeners[key] = [];
@@ -23,10 +34,3 @@ export const state = {
     listeners[key].push(callback);
   },
 };
-
-// state.subscribe('totalPrice', (newTotalPrice) => {
-//   console.log(`Total price updated: ${newTotalPrice}`);
-// });
-
-// // 상태 변경
-// state.set('totalPrice', 50000);

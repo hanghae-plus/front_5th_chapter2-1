@@ -1,5 +1,5 @@
 import { products, discountRateMap } from "../../constants.js";
-import { getProductById } from "../utils.js";
+import { getProductById, getQuantity } from "../utils.js";
 
 let originalTotal = 0;
 let finalTotal = 0;
@@ -13,20 +13,17 @@ export function calculateCart({ cartItemList, cartTotalEl, stockStatusEl }) {
   bonusPoints = 0;
 
   const cartItems = getCartItems(cartItemList);
+  for (const item of cartItems) {
+    const product = getProductById(item.id);
+    const amount = product.price * item.quantity;
+    const discountRate = getItemDiscountRate(item.quantity, product.id);
 
-  cartItems.forEach(({ id, units }) => {
-    const product = getProductById(id);
-    const amount = product.price * units;
-    const discountRate = getItemDiscountRate(units, product.id);
-
-    totalItemsInCart += units;
+    totalItemsInCart += item.quantity;
     originalTotal += amount;
     finalTotal += amount * (1 - discountRate);
-  });
+  }
 
-  const discountRate = getDiscountRate();
-
-  updateCartTotal(finalTotal, discountRate, cartTotalEl);
+  updateCartTotal(finalTotal, getDiscountRate(), cartTotalEl);
   updateStockStatus(stockStatusEl);
   updateLoyaltyPoints(cartTotalEl);
 }
@@ -44,16 +41,16 @@ function updateCartTotal(finalTotal, discountRate, cartTotalEl) {
 function getCartItems(cartItemList) {
   const cartItems = Array.from(cartItemList.children);
 
-  return cartItems.map((el) => {
-    const id = el.id;
-    const units = parseInt(el.querySelector("span").textContent.split("x ")[1]);
+  return cartItems.map((itemEl) => {
+    const id = itemEl.id;
+    const quantity = getQuantity(itemEl);
 
-    return { id, units };
+    return { id, quantity };
   });
 }
 
-function getItemDiscountRate(units, productId) {
-  if (units < 10) return 0;
+function getItemDiscountRate(quantity, productId) {
+  if (quantity < 10) return 0;
 
   return discountRateMap[productId] ?? 0;
 }

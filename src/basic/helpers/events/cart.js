@@ -1,4 +1,4 @@
-import { getProductById } from "../utils.js";
+import { getProductById, getQuantity } from "../utils.js";
 import { getSelectedProduct } from "../logic/selector.js";
 import {
   updateExistingCartItem,
@@ -45,9 +45,7 @@ export function bindCartEvents({
 
     const product = getProductById(productId);
     const itemEl = document.getElementById(productId);
-    const currentQuantity = parseInt(
-      itemEl.querySelector("span").textContent.split("x ")[1],
-    );
+    const currentQuantity = getQuantity(itemEl);
 
     const isQuantityChange = target.classList.contains("quantity-change");
     const isRemoveItem = target.classList.contains("remove-item");

@@ -1,12 +1,12 @@
-import { PRODUCT_INVENTORY } from "../lib/configs/products";
+import { PRODUCT_INVENTORY } from "@advanced/lib/configs/product";
 import {
   generateCartInvoice,
   isProductSoldOut,
   isProductStockExists,
   removeItemFromAddedItems,
   updateAddedItems,
-} from "../lib/utils/cartUtils";
-import type { CartState, CartItem, Product } from "../lib/types/cart";
+} from "@advanced/lib/utils";
+import type { CartState, CartItem, Product } from "@advanced/lib/types";
 
 const CART_ACTIONS = {
   addToCart: "ADD_TO_CART",
@@ -24,27 +24,25 @@ export function cartReducer(state: CartState, action: CartAction) {
     case CART_ACTIONS.addToCart: {
       const { id } = action.payload;
 
-      const product = PRODUCT_INVENTORY.find((p) => {
-        return p.id === id;
-      });
+      const productToAdd = PRODUCT_INVENTORY.find((product) => product.id === id);
 
-      if (!product) {
+      if (!productToAdd) {
         return { ...state, error: "상품을 찾을 수 없습니다." };
       }
 
-      if (!isProductStockExists(product)) {
+      if (!isProductStockExists(productToAdd)) {
         return { ...state, error: "재고가 없습니다." };
       }
 
-      const itemInCart = state.addedItems.find((item) => item.id === product.id);
+      const itemInCart = state.addedItems.find((item) => item.id === productToAdd.id);
 
       const newQuantity = itemInCart ? itemInCart.quantity + 1 : 1;
 
-      if (isProductSoldOut(newQuantity, product.stock)) {
+      if (isProductSoldOut(newQuantity, productToAdd.stock)) {
         return { ...state, error: "재고가 부족합니다." };
       }
 
-      const itemToAdd = { ...product, quantity: newQuantity };
+      const itemToAdd = { ...productToAdd, quantity: newQuantity };
 
       const itemsAfterAdd = updateAddedItems(state.addedItems, itemToAdd);
       const newCartTotal = generateCartInvoice(itemsAfterAdd);
@@ -52,7 +50,7 @@ export function cartReducer(state: CartState, action: CartAction) {
       return {
         ...state,
         addedItems: itemsAfterAdd,
-        lastSelected: product.id,
+        lastSelected: productToAdd.id,
         error: null,
         ...newCartTotal,
       };

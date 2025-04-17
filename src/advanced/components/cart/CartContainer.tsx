@@ -2,25 +2,25 @@ import { CartItemList } from "./CartItemList";
 import { ProductSelector } from "./ProductSelector";
 import { OutOfStockIndicator } from "./OutOfStockIndicator";
 import { CartTotal } from "./CartTotal";
-import { useFlashSaleAlert } from "@advanced/lib/hooks/alert/useFlashSaleAlert";
+import { useSaleAlert } from "@advanced/lib/hooks/alert/useSaleAlert";
 import { useOutOfStockAlert } from "@advanced/lib/hooks/alert/useOutOfStockAlert";
 import { useEffect } from "react";
 
 export function CartContainer() {
   const { registerOutOfStockAlert } = useOutOfStockAlert();
-  const { registerFlashSale, registerSuggestFlashSale } = useFlashSaleAlert();
+  const { registerFlashSale, registerRecommendSale } = useSaleAlert();
 
   useEffect(() => {
     registerOutOfStockAlert();
     registerFlashSale();
-    registerSuggestFlashSale();
+    registerRecommendSale();
 
     return () => {
       registerOutOfStockAlert();
       registerFlashSale();
-      registerSuggestFlashSale();
+      registerRecommendSale();
     };
-  }, [registerOutOfStockAlert, registerFlashSale, registerSuggestFlashSale]);
+  }, [registerOutOfStockAlert, registerFlashSale, registerRecommendSale]);
 
   return (
     <div className="space-y-4">

@@ -1,6 +1,6 @@
-import { PRODUCT_INVENTORY } from "@advanced/lib/configs/products";
+import { PRODUCT_INVENTORY } from "@advanced/lib/configs";
 import { useCart } from "@advanced/lib/contexts/CartProvider";
-import type { Product } from "@advanced/lib/types/cart";
+import type { Product } from "@advanced/lib/types";
 import { useState } from "react";
 
 export function useProductSelector() {

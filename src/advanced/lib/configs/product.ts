@@ -1,4 +1,4 @@
-import type { Product } from "../types/cart";
+import type { Product } from "@advanced/lib/types";
 
 export const PRODUCT_INVENTORY: Product[] = [
   { id: "p1", name: "상품1", price: 10000, stock: 50 },

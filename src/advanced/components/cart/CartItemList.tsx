@@ -1,5 +1,5 @@
 import { useCart } from "@advanced/lib/contexts/CartProvider";
-import type { CartItem } from "@advanced/lib/types/cart";
+import type { CartItem } from "@advanced/lib/types";
 
 export function CartItemList() {
   const {

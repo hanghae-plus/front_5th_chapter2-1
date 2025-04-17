@@ -1,7 +1,7 @@
-import { PRODUCT_INVENTORY } from "@advanced/lib/configs/products";
+import { PRODUCT_INVENTORY } from "@advanced/lib/configs/product";
 import { useAvailableStock } from "@advanced/lib/hooks/cart/useAvailableStock";
 import { useProductSelector } from "@advanced/lib/hooks/cart/useProductSelector";
-import type { Product } from "@advanced/lib/types/cart";
+import type { Product } from "@advanced/lib/types";
 
 export function ProductSelector() {
   const { selectedProduct, handleProductSelect, handleAddToCart } = useProductSelector();

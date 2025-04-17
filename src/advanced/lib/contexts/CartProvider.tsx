@@ -1,6 +1,6 @@
 import { createContext, type Dispatch, useContext, useReducer } from "react";
-import { cartReducer, type CartAction } from "../../reducers/cartReducer";
-import type { CartState } from "../types/cart";
+import { cartReducer, type CartAction } from "@advanced/lib/reducers/cartReducer";
+import type { CartState } from "@advanced/lib/types";
 
 const initialCartState: CartState = {
   addedItems: [],

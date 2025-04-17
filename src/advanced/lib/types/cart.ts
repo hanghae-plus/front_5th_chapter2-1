@@ -1,10 +1,4 @@
-
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  stock: number;
-}
+import type { Product } from "./product";
 
 export interface CartItem extends Product {
   quantity: number;
@@ -14,8 +8,8 @@ export interface CartState {
   addedItems: CartItem[];
   lastSelected: string;
   totalAmount: number;
-  totalQuantity: number;
   totalAmountBeforeDiscount: number
+  totalQuantity: number;
   discountRate: number;
   bonusPoints: number;
   error?: string | null;

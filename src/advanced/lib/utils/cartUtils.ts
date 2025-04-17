@@ -1,7 +1,7 @@
-import { PRODUCT_INVENTORY } from "../configs/products";
-import type { CartItem, Product } from "../types/cart";
-import { calculateBonusPoints } from "./bonusPointUtils";
-import { applyDiscount, getDiscountRateByProduct } from "./discountUtils";
+import { PRODUCT_INVENTORY } from "@advanced/lib/configs";
+import type { CartItem, Product } from "@advanced/lib/types";
+import { calculateBonusPoints } from "@advanced/lib/utils/bonusPointUtils";
+import { applyDiscount, getDiscountRateByProduct } from "@advanced/lib/utils/discountUtils";
 
 interface CartInvoice {
   totalQuantity: number;

@@ -12,6 +12,8 @@
  *  - 총 할인률
  */
 
+import { addCart, getCarts, updateCartQuantity } from './service';
+
 let lastAddedItem = null;
 
 /** 등록된 상품 목록 - 정규화 */
@@ -56,7 +58,6 @@ function main() {
         ${Carts()}
         ${totalPrice()}
         ${Options()}
-        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
         <div id="stock-state" class="text-sm text-gray-500 mt-2">
       </div>
     </div>
@@ -110,9 +111,12 @@ function Options() {
   ).join('');
 
   return /* html */ `
+  <div id="products-wrapper">
     <select id="products-select-box" class="border rounded p-2 mr-2">
       ${options}
     </select>
+    <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
+  </div>
     `;
 }
 
@@ -153,8 +157,11 @@ function calculateCartTotal() {
 
   // 대량 구매 할인 적용 여부
   if (totalQuantity >= 30) {
+    /** 대량 구매 할인된 가격 */
     const bulkDiscountedPrice = rawTotal * (1 - 0.25); // 25% 할인
+    /** 대량 구매 할인 금액 */
     const bulkDiscountAmount = rawTotal - bulkDiscountedPrice;
+    /** 총 할인전 금액 - 할인된 금액 */
     const itemDiscountAmount = rawTotal - discountedTotal;
 
     if (bulkDiscountAmount > itemDiscountAmount) {
@@ -163,24 +170,25 @@ function calculateCartTotal() {
     }
   }
 
-  const bonusPoint = Math.floor(finalPrice / 1000);
+  /** 적립 예정 포인트 */
+  const rewardPoints = Math.floor(finalPrice / 1000);
 
   return {
     finalPrice: Math.round(finalPrice),
     appliedDiscountRate: appliedDiscountRate,
     rawTotal: rawTotal,
-    bonusPoint: bonusPoint,
+    rewardPoints: rewardPoints,
   };
 }
 
 /** 총액 컴포넌트 ui */
 function totalPrice() {
-  const { finalPrice, appliedDiscountRate, rawTotal, bonusPoint } = calculateCartTotal();
+  const { finalPrice, appliedDiscountRate, rewardPoints } = calculateCartTotal();
   return /* html */ `
   <div id="cart-total" class="text-xl font-bold my-4">
     총액: ${finalPrice}원
    ${appliedDiscountRate === 0 ? '' : `<span class="text-green-500 ml-2">( ${appliedDiscountRate}% 할인 적용 )</span>`}
-    <span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${bonusPoint})</span>
+    <span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${rewardPoints})</span>
   </div>
   `;
 }
@@ -217,7 +225,29 @@ function updatestocksWrapper() {
   $stocksWrapper.textContent = message;
 }
 
-main();
+/** 상품 추가 이벤트 핸들러 */
+const handleAddProduct = (e) => {
+  e.preventDefault();
+  if (e.target.id !== 'add-cart-btn') return;
+  try {
+    const wrapper = e.target.closest('#products-wrapper');
+    const selectBox = wrapper.querySelector('#products-select-box');
+    const id = selectBox.options[selectBox.selectedIndex].id;
+
+    const carts = getCarts();
+    const aleadyInclude = carts.find((v) => id === v.id);
+
+    if (aleadyInclude) {
+      updateCartQuantity(aleadyInclude);
+    } else {
+      addCart({ id });
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+App();
 
 // 장바구니 추가 버튼 클릭 이벤트
 $addCartBtn.addEventListener('click', () => {
@@ -345,3 +375,9 @@ $cartsWrapper.addEventListener('click', (e) => {
     calculateCartTotal();
   }
 });
+
+function App() {
+  main();
+  const $addToCartBtn = document.querySelector('#products-wrapper');
+  $addToCartBtn.addEventListener('click', handleAddProduct);
+}

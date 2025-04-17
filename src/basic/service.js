@@ -7,31 +7,37 @@ export const PRODUCTS = [
   { id: 'p5', name: '상품5', price: 25000, stock: 10, discount: 0.25 },
 ];
 
-/** 장바구니 목록 가져오기 */
+/** 장바구니 목록 ui 가져오기 */
 export const getCarts = () => {
   const carts = JSON.parse(localStorage.getItem('carts')) || [];
-  return carts.map(({ id, counts }) => {
+  return carts.map(({ id, quantity }) => {
     const product = PRODUCTS.find((p) => p.id === id);
     return {
       id,
       name: product?.name || '이름 없음',
       price: product?.price || 0,
-      counts,
+      quantity,
     };
   });
 };
 
 export const updateQuantitiyCarts = ({ id, action }) => {
-  let carts = getCarts();
-
+  const carts = JSON.parse(localStorage.getItem('carts')) || [];
   const product = carts.find((item) => item.id === id);
+
   if (!product) return;
 
   if (action === 'add') {
-    product.counts += 1;
+    product.quantity += 1;
   } else if (action === 'subtract') {
-    product.counts -= 1;
-    if (product.counts <= 0) {
+    if (product.quantity <= 1) {
+      updatedCarts = carts.filter((cart) => cart.id !== id);
+      console.log('-----삭제되고 업데이트-----');
+      console.log(updatedCarts);
+      console.log('-----삭제되고 업데이트-----');
+    }
+    product.quantity -= 1;
+    if (product.quantity <= 0) {
       carts = carts.filter((item) => item.id !== id);
     }
   }
@@ -39,13 +45,46 @@ export const updateQuantitiyCarts = ({ id, action }) => {
 };
 
 export const setCarts = ({ id, carts }) => {
-  const product = carts.find((v) => v.id === id);
+  const product = carts.find((cart) => cart.id === id);
 
   if (!product) {
-    const newCart = { id: id, counts: 1 };
+    const newCart = { id: id, quantity: 1 };
     carts.push(newCart);
   } else {
-    product.counts++;
+    product.quantity++;
   }
   localStorage.setItem('carts', JSON.stringify(carts));
+};
+
+/**
+ * 장바구니 목록 추가 함수
+ * @id 추가할 상품의 id
+ */
+export const addCart = ({ id }) => {
+  const carts = JSON.parse(localStorage.getItem('carts')) || [];
+  const addTarget = carts.find((cart) => cart.id === id);
+
+  if (!!addTarget) {
+    const updatedCarts = carts.map((cart) =>
+      cart.id === id ? { id: id, quantity: addTarget.quantity + 1 } : cart,
+    );
+    localStorage.setItem('carts', JSON.stringify(updatedCarts));
+
+    return { carts: updatedCarts };
+  } else {
+    const AddedCarts = [...carts, { id: id, quantity: 1 }];
+    localStorage.setItem('carts', JSON.stringify(AddedCarts));
+
+    return { carts: AddedCarts };
+  }
+};
+
+/** 장바구니 수량 업데이트 */
+export const updateCartQuantity = ({ id, quantity }) => {
+  const carts = JSON.parse(localStorage.getItem('carts')) || [];
+  const updatedCarts = carts.map((cart) =>
+    cart.id === id ? { id: id, quantity: quantity + 1 } : cart,
+  );
+
+  localStorage.setItem('carts', JSON.stringify(updatedCarts));
 };

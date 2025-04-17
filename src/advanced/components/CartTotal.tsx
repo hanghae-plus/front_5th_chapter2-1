@@ -18,10 +18,15 @@ const CartTotal = ({ cartItems, products }: CartTotalProps) => {
 
     cartItems.forEach((item) => {
       const product = products.find((p) => p.id === item.id);
-      if (!product) return;
+
+      if (!product) {
+        return;
+      }
 
       totalProductCount += item.quantity;
+
       const productTotalPrice = product.price * item.quantity;
+
       totalPriceBeforeDiscount += productTotalPrice;
       totalPrice += calculateProductDiscount(product, item.quantity);
     });
@@ -33,6 +38,7 @@ const CartTotal = ({ cartItems, products }: CartTotalProps) => {
     );
 
     const tuesdayDiscount = calculateTuesdayDiscount(totalPrice, totalCartDiscountRate);
+
     totalPrice = tuesdayDiscount.price;
     totalCartDiscountRate = tuesdayDiscount.discountRate;
 

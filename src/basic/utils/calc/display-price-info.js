@@ -11,7 +11,7 @@ export const displayPriceInfo = (sum) => {
 
   if (cartState.discountRate > 0) {
     const discountHTML = `<span class="text-green-500 ml-2">(${(cartState.discountRate * 100).toFixed(1)}% 할인 적용)</span>`;
-    sum.innerHTML = baseText + " " + discountHTML;
+    sum.innerHTML = discountHTML;
   } else {
     sum.innerHTML = baseText;
   }

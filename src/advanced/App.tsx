@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, MouseEvent, useState } from "react";
 import CartItem from "./component/CartItem";
 import { Product } from "./types";
 
@@ -74,6 +74,38 @@ function App() {
     setProdList(newProductList);
   };
 
+  const handleClickQtyChangeBtn = (event: MouseEvent<HTMLButtonElement>) => {
+    const { target } = event;
+    if (target instanceof HTMLElement) {
+      const classList = target.classList;
+      if (classList.contains("quantity-change")) {
+        const changeQty = parseInt(target.dataset.change || "0"); // 1 | -1
+        const prodId = target.dataset.productId;
+        const quantityChangeItem = prodList.find(
+          (prod) => prod.id === prodId
+        ) as Product;
+        if (changeQty > 0 && quantityChangeItem.quantity <= 0) {
+          alert("재고가 부족합니다.");
+          return;
+        }
+        // else if(changeQty < 0 && quantityChangeItem.quantity ) {
+
+        // }
+        const newProductList = prodList.map((prod) => {
+          if (prodId === prod.id) {
+            return {
+              ...quantityChangeItem,
+              quantity: prod.quantity + changeQty,
+              cart: prod.cart + changeQty,
+            };
+          }
+          return prod;
+        });
+      } else if (classList.contains("remove-item")) {
+      }
+    }
+  };
+
   return (
     <div className="bg-gray-100 p-8">
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
@@ -81,7 +113,7 @@ function App() {
         <div id="cart-items">
           {prodList.map((prod) => {
             if (prod.cart <= 0) return;
-            return CartItem(prod);
+            return CartItem(prod, handleClickQtyChangeBtn);
           })}
         </div>
         <div id="cart-total" className="text-xl font-bold my-4"></div>

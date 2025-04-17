@@ -1,19 +1,22 @@
+// vite.config.ts
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
-  plugins: [react()],
   base: '/front_5th_chapter2-1/',
+  plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      context: path.resolve(__dirname, './src/context'),
     },
   },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: 'src/setupTests.js',
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        advanced: path.resolve(__dirname, 'index.advanced.html'),
+      },
+    },
   },
 });

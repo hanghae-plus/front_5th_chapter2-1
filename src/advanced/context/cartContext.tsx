@@ -10,7 +10,7 @@ interface CartContextType {
   setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>;
 }
 
-interface CartItem extends Product {
+export interface CartItem extends Product {
   quantity: number;
 }
 
@@ -23,7 +23,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     totalAmount: 0,
   });
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  
+
   return (
     <CartContext.Provider value={{ cart, setCart, cartItems, setCartItems }}>
       {children}

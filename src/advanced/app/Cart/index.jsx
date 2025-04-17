@@ -1,7 +1,7 @@
 import { AddProduct } from './components/AddProduct/index.jsx';
 import React, { useState } from 'react';
 import { CartDisplay } from './components/CartDisplay/index.jsx';
-import { ElementIds } from '../../../shared/app/constants.js';
+import { ElementIds } from '../../../shared/app/constants.ts';
 import { defaultProductList } from './data.js';
 import { useProductList } from './logic.js';
 

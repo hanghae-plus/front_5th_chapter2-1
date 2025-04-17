@@ -1,5 +1,5 @@
 import { findProduct, getProductList } from '../../store/prodList.js';
-import { ElementIds } from '../../../shared/app/constants.js';
+import { ElementIds } from '../../../shared/app/constants.ts';
 import {
   getBonusPts,
   getDisc,

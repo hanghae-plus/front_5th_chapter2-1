@@ -1,7 +1,7 @@
-import { setSaleAlert, setSuggestionAlert } from './logic.js';
-import { createCart } from './Cart/index.js';
+import { setSaleAlert, setSuggestionAlert } from './logic';
+import { createCart } from './Cart/index';
 
-export function createRootChildren() {
+export function createRootChildren(): HTMLDivElement {
   const cont = document.createElement('div');
   cont.className = 'bg-gray-100 p-8';
 
@@ -11,7 +11,7 @@ export function createRootChildren() {
   return cont;
 }
 
-export function setUp() {
+export function setUp(): void {
   setSaleAlert();
   setSuggestionAlert();
-}
+} 

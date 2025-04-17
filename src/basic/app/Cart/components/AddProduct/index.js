@@ -1,5 +1,5 @@
-import { ElementIds } from '../../../../../shared/app/constants.js';
-import { handleClickAddBtn } from './logic.js';
+import { ElementIds } from '../../../../../shared/app/constants.ts';
+import { handleClickAddBtn } from './logic.ts';
 
 import { getProductQuantityMessage } from '../../../../../shared/app/Cart/calculation.js';
 import { getProductList } from '../../../../../shared/store/productList.js';

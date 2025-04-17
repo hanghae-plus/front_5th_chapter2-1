@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { findProduct, prodList } from '../../../../store/prodList.js';
 import { addItemToCart } from './logic.js';
-import { ElementIds } from '../../../../../shared/app/constants.js';
+import { ElementIds } from '../../../../../shared/app/constants.ts';
 
 export function AddProduct({ productList }) {
   const [selectedValue, setSelectedValue] = useState(null);

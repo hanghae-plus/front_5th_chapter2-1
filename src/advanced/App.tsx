@@ -2,7 +2,7 @@ import Container from './ui/Container';
 import CartItem from './ui/CartItem';
 import CartResult from './ui/CartResult';
 import { StockInfo } from './ui/StockInfo';
-import CartOptions from './ui/SelectBox';
+import CartOptions from './ui/CartOptions';
 import { useState } from 'react';
 import useProductManagement from './hooks/useProductManagement';
 import useTimeOutSale from './hooks/useTimeOutSale';

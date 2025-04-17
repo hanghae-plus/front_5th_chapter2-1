@@ -1,14 +1,14 @@
-import { timeOutSale } from './module/timeOutSale';
-import { useCart } from './module/useCart';
-import { cartAddBtn } from './ui/CartAddBtn';
-import { cartItem } from './ui/CartItem';
-import { cartResult } from './ui/CartResult';
-import { container } from './ui/Container';
-import { selectBox } from './ui/SelectBox';
-import { stockInfo } from './ui/StockInfo';
+import { timeOutSale } from './basic/module/timeOutSale';
+import { useCart } from './basic/module/useCart';
+import { cartAddBtn } from './basic/ui/CartAddBtn';
+import { cartItem } from './basic/ui/CartItem';
+import { cartResult } from './basic/ui/CartResult';
+import { container } from './basic/ui/Container';
+import { selectBox } from './basic/ui/SelectBox';
+import { stockInfo } from './basic/ui/StockInfo';
 
 function MainComponent() {
-  const root = document.getElementById('root');
+  const root = document.getElementById('app');
 
   // 훅 초기화
   const cart = useCart();
@@ -59,4 +59,4 @@ function MainComponent() {
   timeOutSale();
 }
 
-export { MainComponent };
+MainComponent();

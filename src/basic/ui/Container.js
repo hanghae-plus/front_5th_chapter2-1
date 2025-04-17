@@ -20,7 +20,6 @@ const container = () => {
 
   // 렌더링 함수
   const render = (targetEl) => {
-    console.log('jiwon targetEl', targetEl);
     targetEl.appendChild(containerEl);
   };
 

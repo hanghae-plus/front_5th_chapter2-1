@@ -1,4 +1,5 @@
 import createDiscountEvent from './createDiscountEvent';
+import createNewCartItem from './createNewCartItem';
 import updateCartTotal from './updateCartTotal';
 import updateSelectBoxOptions from './updateSelectBoxOption';
 
@@ -63,7 +64,7 @@ const addProductToCart = (selectedProduct) => {
   const $cartItem = document.getElementById(id);
 
   if (!$cartItem) {
-    createNewCartItem(selectedProduct);
+    createNewCartItem($cartList, selectedProduct);
     updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
 
     return;
@@ -73,41 +74,6 @@ const addProductToCart = (selectedProduct) => {
   updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
 };
 
-const createNewCartItem = (product) => {
-  const { id, name, price } = product;
-  const $newItem = document.createElement('div');
-
-  $newItem.id = id;
-  $newItem.className = 'flex justify-between items-center mb-2';
-  $newItem.innerHTML = `
-    <span>${name} - ${price}원 x 1</span>
-    <div>
-      <button 
-        class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" 
-        data-product-id="${id}" 
-        data-change="-1"
-      >
-        -
-      </button>
-      <button 
-        class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" 
-        data-product-id="${id}" 
-        data-change="1"
-      >
-        +
-      </button>
-      <button 
-        class="remove-item bg-red-500 text-white px-2 py-1 rounded" 
-        data-product-id="${id}"
-      >
-        삭제
-      </button>
-    </div>`;
-
-  $cartList.appendChild($newItem);
-  decreaseProductStock(product);
-};
-
 const updateExistingCartItem = ($cartItem, product) => {
   const { name, price, quantity } = product;
   const currentQuantity = parseInt($cartItem.querySelector('span').textContent.split('x ')[1]);
@@ -115,7 +81,7 @@ const updateExistingCartItem = ($cartItem, product) => {
 
   if (updatedQuantity > quantity) {
     alert('재고가 부족합니다.');
-    
+
     return;
   }
 

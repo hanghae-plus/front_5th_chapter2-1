@@ -16,7 +16,7 @@ export const calculateCart = () => {
   CartStore.set('subTotal', subTotal);
   CartStore.set('totalAmount', totalAmount);
 
-  const discountRate = getDiscountRate(subTotal);
+  const discountRate = getDiscountRate(itemCount, totalAmount, subTotal);
   renderCartTotal(totalAmount, discountRate);
 
   updateStockStatus();

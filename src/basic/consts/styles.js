@@ -15,8 +15,13 @@ export const STYLES = {
   TEXT: {
     SUCCESS: 'text-green-500 ml-2',
     INFO: 'text-sm text-gray-500 mt-2',
+    STOCK: 'text-sm text-gray-500 mt-2',
+    TOTAL: 'text-xl font-bold my-4',
   },
   LAYOUT: {
     FLEX: 'flex justify-between items-center mb-2',
+  },
+  FORM: {
+    SELECT: 'border rounded p-2 mr-2',
   },
 };

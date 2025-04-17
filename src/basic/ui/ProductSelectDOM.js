@@ -1,10 +1,12 @@
+import { STYLES, DOM_IDS } from '../consts';
+
 export const ProductSelectDOM = {
   _productSelect: null,
 
   init() {
     this._productSelect = document.createElement('select');
-    this._productSelect.id = 'product-select';
-    this._productSelect.className = 'border rounded p-2 mr-2';
+    this._productSelect.id = DOM_IDS.PRODUCT.SELECT;
+    this._productSelect.className = STYLES.FORM.SELECT;
   },
 
   get() {

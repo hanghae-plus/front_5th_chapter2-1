@@ -27,8 +27,7 @@ const applyTuesdayDiscount = (currentRate) => {
   return Math.max(currentRate, TUESDAY_DISCOUNT.DISCOUNT_RATE);
 };
 
-export const getDiscountRate = (subTotal) => {
-  const { itemCount, totalAmount } = CartStore.get();
+export const getDiscountRate = (itemCount, totalAmount, subTotal) => {
   const rate = calculateBulkDiscountRate(itemCount, totalAmount, subTotal);
 
   return applyTuesdayDiscount(rate);

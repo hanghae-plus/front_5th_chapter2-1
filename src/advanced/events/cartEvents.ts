@@ -5,11 +5,11 @@ export const cartEvents = {
     addToCart(
         product: Product,
         cartItems: CartItem[],
-        setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>
+        setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>,
+        products: Product[], // 추가
+        setProducts: React.Dispatch<React.SetStateAction<Product[]>> // 추가
         // setLastSelected?: (id: string) => void
     ): void {
-        console.log("cartEvent - addToCart");
-        console.log(product);
         // 재고 확인
         if (!product || product.q <= 0) {
             alert("해당 상품의 재고가 없습니다.");
@@ -42,14 +42,21 @@ export const cartEvents = {
             };
             setCartItems([...cartItems, newItem]);
         }
+
+        // 재고 업데이트 - 공통 함수 사용 (음수 전달하여 재고 증가)
+        this.updateStock(product.id, 1, products, setProducts);
     },
 
     updateQuantity(
         productId: string,
         change: number,
         cartItems: CartItem[],
-        setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>
+        setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>,
+        products: Product[], // 상품 목록 추가
+        setProducts: React.Dispatch<React.SetStateAction<Product[]>> // 상품 목록 업데이터 추가
     ): void {
+        const currentItem = cartItems.find((item) => item.id === productId);
+        if (!currentItem) return;
         const updatedItems = cartItems
             .map((item) => {
                 if (item.id === productId) {
@@ -73,6 +80,29 @@ export const cartEvents = {
             .filter(Boolean) as CartItem[]; // null 항목 필터링
 
         setCartItems(updatedItems);
+
+        // 재고 업데이트 - 공통 함수 사용 (음수 전달하여 재고 증가)
+        this.updateStock(productId, change, products, setProducts);
+    },
+
+    // 남는 재고 업데이트
+    updateStock(
+        productId: string,
+        change: number, // 양수: 재고 감소, 음수: 재고 증가
+        products: Product[],
+        setProducts: React.Dispatch<React.SetStateAction<Product[]>>
+    ): void {
+        setProducts(
+            products.map((product) => {
+                if (product.id === productId) {
+                    return {
+                        ...product,
+                        q: product.q - change, // change가 양수면 재고 감소, 음수면 재고 증가
+                    };
+                }
+                return product;
+            })
+        );
     },
 
     // 상품 제거 함수 추가

@@ -8,6 +8,7 @@ import ProductSelector from "./components/ProductSelector";
 import ProductStock from "./components/ProductStock";
 import { CartItem, Product } from "./types";
 import { cartEvents } from "./events/cartEvents";
+import { usePromotion } from "./services/promotion";
 
 // import "./App.css";
 
@@ -16,32 +17,30 @@ import { cartEvents } from "./events/cartEvents";
 // import { productList } from './data/productData';
 
 const App: React.FC = () => {
-    console.log(PRODUCT_LIST);
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [products, setProducts] = useState<Product[]>(PRODUCT_LIST);
+
     // 첫 번째 상품 ID로 초기화
     const [selectedProductId, setSelectedProductId] = useState<string>(
         products.length > 0 ? products[0].id : ""
     );
+    const [lastSelected, setLastSelected] = useState<string | null>(null);
+
+    // 커스텀 훅 사용
+    usePromotion(products, lastSelected, setProducts);
 
     const handleAddToCart = () => {
-        console.log("추가 버튼 클릭");
-        console.log("products: ", products);
-
         const selectedProduct = products.find(
             (p) => p.id === selectedProductId
         );
-        // if (selectedProduct) {
-        //     // 장바구니 추가 로직
-        //     setCartItems([...updatedCartItems]);
-        // }
-        console.log("selectedProduct: ", selectedProduct);
 
         if (selectedProduct) {
             cartEvents.addToCart(
                 selectedProduct,
                 cartItems,
-                setCartItems
+                setCartItems,
+                products,
+                setProducts
                 // setLastSelected
             );
         }
@@ -54,7 +53,16 @@ const App: React.FC = () => {
     // 수량 변경 핸들러
     const handleQuantityChange = (productId: string, change: number) => {
         console.log("handleQuantityChange");
-        cartEvents.updateQuantity(productId, change, cartItems, setCartItems);
+        console.log("products: ", products);
+
+        cartEvents.updateQuantity(
+            productId,
+            change,
+            cartItems,
+            setCartItems,
+            products,
+            setProducts
+        );
     };
 
     // 상품 제거 핸들러
@@ -71,13 +79,13 @@ const App: React.FC = () => {
                     handleQuantityChange={handleQuantityChange}
                     handleRemoveItem={handleRemoveItem}
                 />
-                <TotalAmount cartItems={cartItems} productList={PRODUCT_LIST} />
+                <TotalAmount cartItems={cartItems} productList={products} />
                 <ProductSelector
-                    productList={PRODUCT_LIST}
+                    productList={products}
                     onAddToCart={handleAddToCart}
                     onChange={handleProductChange}
                 />
-                <ProductStock productList={PRODUCT_LIST} />
+                <ProductStock productList={products} />
             </Wrapper>
         </Container>
     );

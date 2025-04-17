@@ -1,13 +1,17 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
+
 import { render, screen, fireEvent } from '@testing-library/react';
+
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
+
 import App from '../App';
+
+import '@testing-library/jest-dom';
 
 describe('advanced test', () => {
   beforeEach(() => {
     // 날짜별 행사에 대응하기 위해 날짜 고정
-    vi.useFakeTimers();
     const mockDate = new Date('2025-04-18');
     vi.setSystemTime(mockDate);
     vi.spyOn(window, 'alert').mockImplementation(() => {});
@@ -59,10 +63,13 @@ describe('advanced test', () => {
 
   it('상품을 장바구니에 추가하고, 수량을 추가 있는지 확인', async () => {
     render(<App />);
+
+    const user = userEvent.setup();
+
     const sel = screen.getByTestId('product-select') as HTMLSelectElement;
     const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
 
-    fireEvent.select(sel, { target: { value: 'p1' } });
+    await user.selectOptions(sel, 'p1');
     fireEvent.click(addBtn);
 
     const cartDisp = screen.getByTestId('cart-items');
@@ -83,10 +90,12 @@ describe('advanced test', () => {
 
   it('장바구니 추가된 상품을 삭제할 수 있는지 확인', async () => {
     render(<App />);
+    const user = userEvent.setup();
+
     const sel = screen.getByTestId('product-select') as HTMLSelectElement;
     const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
 
-    fireEvent.select(sel, { target: { value: 'p1' } });
+    await user.selectOptions(sel, 'p1');
     fireEvent.click(addBtn);
 
     const cartDisp = screen.getByTestId('cart-items');
@@ -106,13 +115,15 @@ describe('advanced test', () => {
     expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
   });
 
-  it('총액이 올바르게 계산되는지 확인', () => {
+  it('총액이 올바르게 계산되는지 확인', async () => {
     render(<App />);
+    const user = userEvent.setup();
+
     const sel = screen.getByTestId('product-select') as HTMLSelectElement;
     const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
     const sum = screen.getByTestId('cart-total');
 
-    fireEvent.select(sel, { target: { value: 'p1' } });
+    await user.selectOptions(sel, 'p1');
     fireEvent.click(addBtn);
     fireEvent.click(addBtn);
 
@@ -121,30 +132,22 @@ describe('advanced test', () => {
 
   it('할인이 올바르게 적용되고, 포인트가 올바르게 계산되는지 확인', async () => {
     render(<App />);
+
     const user = userEvent.setup();
-    const sel = screen.getByTestId('product-select') as HTMLSelectElement;
-    const addBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
-    const sum = screen.getByTestId('cart-total');
-    const cartDisp = screen.getByTestId('cart-items');
 
-    await user.selectOptions(sel, 'p2');
-    user.click(addBtn);
+    await user.selectOptions(screen.getByTestId('product-select'), 'p1');
 
-    Array.from({ length: 10 }).forEach(() => {
-      fireEvent.click(addBtn);
+    Array.from({ length: 12 }).forEach(() => {
+      fireEvent.click(screen.getByTestId('add-to-cart'));
     });
 
-    expect(sum.textContent).toContain('(10.0% 할인 적용)');
+    expect(screen.getByTestId('cart-total').textContent).toContain(
+      '(10.0% 할인 적용)',
+    );
 
     // p2 상품 선택 및 추가
-    user.selectOptions(screen.getByTestId('product-select'), 'p2');
-
-    const newAddBtn = screen.getByTestId('add-to-cart') as HTMLButtonElement;
-    user.click(newAddBtn);
-
-    console.log(sel.value);
-    console.log(sum.textContent);
-    console.log(cartDisp.innerHTML);
+    await user.selectOptions(screen.getByTestId('product-select'), 'p2');
+    fireEvent.click(screen.getByTestId('add-to-cart'));
 
     expect(document.getElementById('loyalty-points')?.textContent).toContain(
       '(포인트: 128)',

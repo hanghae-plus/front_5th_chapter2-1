@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        // 최신 ES 문법으로 트랜스파일 (예: async/await 등 최신 기능 사용 가능)
+        "target": "ESNext",
+
+        // ESNext 모듈 시스템 사용 (import/export 유지됨)
+        "module": "ESNext",
+
+        // JSX를 React 방식으로 처리 (React 17+에서 도입된 자동 JSX 변환 사용)
+        "jsx": "react-jsx",
+
+        // 번들러 기반의 모듈 해석 방식 사용 (예: Vite, Webpack 환경에 적합)
+        "moduleResolution": "bundler",
+
+        // 엄격한 타입 검사 활성화 (추천 설정, 타입 안정성↑)
+        "strict": true,
+
+        // CommonJS 방식 모듈도 ESModule처럼 import 가능하게 허용
+        "esModuleInterop": true,
+
+        // 타입 정의 파일 검사 건너뜀 (속도 향상, 하지만 일부 타입 누락 가능)
+        "skipLibCheck": true,
+
+        // 파일 이름의 대소문자 일치 강제 (운영체제 간 파일 이름 차이 방지)
+        "forceConsistentCasingInFileNames": true,
+
+        // 기본 export가 없는 모듈도 default import처럼 가져올 수 있게 허용
+        "allowSyntheticDefaultImports": true,
+
+        // JSON 파일도 import 가능하게 설정
+        "resolveJsonModule": true,
+
+        // 각 파일을 독립적인 모듈로 취급 (React + Vite 환경에서 추천)
+        "isolatedModules": true,
+
+        // 컴파일 결과물을 출력하지 않음 (Vite나 ts-node가 트랜스파일을 대신함)
+        "noEmit": true
+    },
+
+    // 컴파일에 포함할 파일들 (이 경로 안의 .ts, .tsx 파일)
+    "include": ["src"],
+
+    // 컴파일에서 제외할 파일/폴더 (예: 의존성 모듈, 빌드 결과물)
+    "exclude": ["node_modules", "dist"]
+}

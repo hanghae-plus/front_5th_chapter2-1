@@ -4,6 +4,7 @@ import CartItem from "../components/cart-item";
 import PriceInfo from "../components/price-info";
 import ProductSelect from "../components/product-select";
 import StockStatus from "../components/stock-info";
+import { useCalculationCart } from "../hooks/useCalculationCart";
 import { useLastSaleTimer } from "../hooks/useLastSaleTimer";
 import { useLuckySaleTimer } from "../hooks/useLuckySaleTimer";
 import { useCartStore } from "../store/useCartStore";
@@ -20,6 +21,9 @@ export function CartPage() {
     discountRate,
     lastSelected,
   } = useCartStore();
+
+  //계산 hook
+  useCalculationCart();
 
   /** 타이머 훅 */
   useLuckySaleTimer();

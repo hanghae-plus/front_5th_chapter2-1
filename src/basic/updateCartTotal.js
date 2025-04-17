@@ -52,6 +52,19 @@ const renderStockStatusMessage = (products, stockStatus) => {
   stockStatus.textContent = stockStatusMessage;
 };
 
+const getOrCreateRewardPointsElement = (cartTotalPrice) => {
+  let rewardPoints = document.getElementById('loyalty-points');
+
+  if (!rewardPoints) {
+    rewardPoints = document.createElement('span');
+    rewardPoints.id = 'loyalty-points';
+    rewardPoints.className = 'text-blue-500 ml-2';
+    cartTotalPrice.appendChild(rewardPoints);
+  }
+
+  return rewardPoints;
+};
+
 const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPoints) => {
   cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
 
@@ -62,14 +75,7 @@ const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPoints) 
     cartTotalPrice.appendChild(discountBadge);
   }
 
-  let rewardPoints = document.getElementById('loyalty-points');
-  if (!rewardPoints) {
-    rewardPoints = document.createElement('span');
-    rewardPoints.id = 'loyalty-points';
-    rewardPoints.className = 'text-blue-500 ml-2';
-    cartTotalPrice.appendChild(rewardPoints);
-  }
-
+  const rewardPoints = getOrCreateRewardPointsElement(cartTotalPrice);
   rewardPoints.textContent = `(포인트: ${bonusPoints})`;
 };
 

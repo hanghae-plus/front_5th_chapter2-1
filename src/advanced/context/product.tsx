@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { Product, productList as INITIAL_PRODUCT_LIST } from '../data/products';
+import { DISCOUNT_RATE } from '../config/constants';
 
 interface ProductContextType {
   productList: Product[];
@@ -14,9 +15,11 @@ interface ProductContextType {
   total: {
     count: number;
     amountWithDiscount: number;
-    amountWitoutDiscount: number;
+    amountWithoutDiscount: number;
   };
   lastSelectedOption: React.RefObject<Product | null>;
+  avgDiscountRate: number;
+  totalAmount: number;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -38,16 +41,32 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
         amountWithDiscount:
           prev.amountWithDiscount +
           product.price * product.cartQuantity * (1 - product.discountRate),
-        amountWitoutDiscount:
-          prev.amountWitoutDiscount + product.price * product.cartQuantity,
+        amountWithoutDiscount:
+          prev.amountWithoutDiscount + product.price * product.cartQuantity,
       };
     },
     {
       count: 0,
       amountWithDiscount: 0,
-      amountWitoutDiscount: 0,
+      amountWithoutDiscount: 0,
     },
   );
+
+  console.log(total);
+  const totalItemDiscountRate =
+    total.amountWithoutDiscount === 0
+      ? 0
+      : (total.amountWithoutDiscount - total.amountWithDiscount) /
+        total.amountWithoutDiscount;
+  const avgDiscountRate =
+    total.count > 30
+      ? Math.max(totalItemDiscountRate, DISCOUNT_RATE.bulk)
+      : totalItemDiscountRate;
+
+  const bulkDiscountAmount =
+    total.amountWithoutDiscount * (1 - DISCOUNT_RATE.bulk);
+  const totalAmount =
+    total.count > 30 ? bulkDiscountAmount : total.amountWithDiscount;
 
   return (
     <ProductContext.Provider
@@ -57,6 +76,8 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
         total,
         lastSelectedOption,
         cartList,
+        avgDiscountRate,
+        totalAmount,
       }}
     >
       {children}

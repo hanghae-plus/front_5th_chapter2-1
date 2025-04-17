@@ -7,7 +7,7 @@ import {
   getProductQuantityMessage,
 } from '../../../shared/app/Cart/calculation.js';
 
-function createPointTag() {
+export function createPointTag() {
   const ptsTag = document.createElement('span');
   ptsTag.id = ElementIds.LOYALTY_POINTS;
   ptsTag.className = 'text-blue-500 ml-2';

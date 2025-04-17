@@ -1,4 +1,3 @@
-import { logic } from './Cart/logic.js';
 import { setSaleAlert, setSuggestionAlert } from './logic.js';
 import { createCart } from './Cart/index.js';
 
@@ -13,7 +12,6 @@ export function createRootChildren() {
 }
 
 export function setUp() {
-  logic();
   setSaleAlert();
   setSuggestionAlert();
 }

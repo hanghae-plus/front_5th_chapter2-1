@@ -1,8 +1,8 @@
 import { ITEM_DISCOUNT_RATES, ITEM_DISCOUNT_START } from "./consts/discounts";
 import products from "./consts/products";
-import calculateCart from "./events/calculateCart";
-import updateRandomDiscount from "./events/updateRandomDiscount";
-import updateRecommendation from "./events/updateRecommendation";
+import calculateCart from "./events/calculate/calculateCart";
+import updateRandomDiscount from "./events/update/updateRandomDiscount";
+import updateRecommendation from "./events/update/updateRecommendation";
 
 var addItemBtn, select, cartDiv, sum, stockInfo;
 var totalPrice = 0,

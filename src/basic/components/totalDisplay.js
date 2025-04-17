@@ -1,4 +1,5 @@
 import {state} from "../store/state.js";
+import {updateStockInfo} from "./stockInfo.js";
 
 export const calcCart = () => {
     const cartItems = state.elements.cartDisplay.children;
@@ -54,7 +55,7 @@ export const calcCart = () => {
 
     renderTotal(discountRate);
     renderBonusPoints();
-    updateStockInfo();
+   updateStockInfo();
 };
 
 const renderTotal = (discountRate) => {

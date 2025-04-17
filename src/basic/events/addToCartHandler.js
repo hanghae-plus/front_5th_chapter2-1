@@ -23,16 +23,16 @@ const handleAddToCart = () => {
 
 const updateExistingCartItem = (itemElem, product) => {
 
-    const currentQty = parseInt(itemElem.querySelector('span').textContent.split('x ')[1], 10);
-    const newQty = currentQty + 1;
+    const currentQuantity = parseInt(itemElem.querySelector('span').textContent.split('x ')[1], 10);
+    const newQuantity = currentQuantity + 1;
 
-    if (newQty > product.q + currentQty) {
+    if (newQuantity > product.q + currentQuantity) {
         alert('재고가 부족합니다.');
         return;
     }
 
     itemElem.querySelector('span').textContent =
-        `${product.name} - ${product.val}원 x ${newQty}`;
+        `${product.name} - ${product.val}원 x ${newQuantity}`;
     product.q--;
 };
 

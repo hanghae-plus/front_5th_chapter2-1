@@ -1,7 +1,7 @@
 import { useStock } from '../context/stock';
 import { getProductStockStatusString } from '../utils/product';
 
-export const StockStatusDisplay = () => {
+export const StockStatus = () => {
   const { stockList } = useStock();
 
   // 재고가 5개 미만인 상품의 상태를 문자열로 변환

@@ -4,7 +4,7 @@ import { startRandomlyInMs } from '../utils/time';
 import { DISCOUNT_RATE, THRESHOLD } from '../config/constants';
 
 export const useLuckyDraw = () => {
-  const { stockList, setProductList } = useStock();
+  const { stockList, dispatch } = useStock();
 
   // productList를 최신화하기 위한 ref
   // useRef는 컴포넌트가 리렌더링 되어도 값이 유지됨 + 값이 변경되어도 리렌더링을 유발하지 않음
@@ -33,17 +33,11 @@ export const useLuckyDraw = () => {
           `번개세일! ${luckyItem.name}이(가) ${DISCOUNT_RATE.lucky * 100}% 할인 중입니다!`,
         );
 
-        const nextProductList = currentList.map((product) =>
-          product.id === luckyItem.id
-            ? {
-                ...product,
-                // 할인을 적용한 가격
-                price: Math.round(product.price * (1 - DISCOUNT_RATE.lucky)),
-              }
-            : product,
-        );
-
-        setProductList(nextProductList);
+        dispatch({
+          type: 'APPLY_DISCOUNT',
+          id: luckyItem.id,
+          discountRate: DISCOUNT_RATE.lucky,
+        });
       }
     };
 

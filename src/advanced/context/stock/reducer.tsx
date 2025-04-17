@@ -36,6 +36,16 @@ export const stockReducer = (
             }
           : product,
       );
+    case 'APPLY_DISCOUNT':
+      return state.map((product) =>
+        product.id === action.id
+          ? {
+              ...product,
+              price: Math.round(product.price * (1 - product.discountRate)),
+            }
+          : product,
+      );
+
     default:
       return state;
   }

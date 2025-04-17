@@ -5,7 +5,7 @@ import { DISCOUNT_RATE } from '../config/constants';
 import { startRandomlyInMs } from '../utils/time';
 
 export const useSuggestion = () => {
-  const { stockList, setProductList, lastAddedProductId } = useStock();
+  const { stockList, dispatch, lastAddedProductId } = useStock();
 
   // stockList, lastSelected를 최신화하기 위한 ref
   // useRef는 컴포넌트가 리렌더링 되어도 값이 유지됨 + 값이 변경되어도 리렌더링을 유발하지 않음
@@ -41,19 +41,11 @@ export const useSuggestion = () => {
           )}% 추가 할인!`,
         );
 
-        const nextProductList = list.map((product) =>
-          product.id === suggestion.id
-            ? {
-                ...product,
-                // 할인을 적용한 가격
-                price: Math.round(
-                  product.price * (1 - DISCOUNT_RATE.suggestion),
-                ),
-              }
-            : product,
-        );
-
-        setProductList(nextProductList);
+        dispatch({
+          type: 'APPLY_DISCOUNT',
+          id: suggestion.id,
+          discountRate: DISCOUNT_RATE.suggestion,
+        });
       }
     };
 

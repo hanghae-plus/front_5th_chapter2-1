@@ -1,6 +1,6 @@
 import { useStock } from '../context/stock';
 
-export const TotalAmountDisplay = () => {
+export const TotalAmount = () => {
   const { summary } = useStock();
   const { totalAmount, discountRate } = summary;
 

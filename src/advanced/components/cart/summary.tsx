@@ -1,4 +1,4 @@
-import { Product } from 'src/advanced/data/products';
+import { Product } from 'src/advanced/config/types';
 
 interface CartItemSummaryProps extends React.HTMLAttributes<HTMLSpanElement> {
   cart: Product;

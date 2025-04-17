@@ -22,7 +22,8 @@ export interface CartSummary extends CartTotal {
 export type StockAction =
   | { type: 'INCREMENT'; id: string }
   | { type: 'DECREMENT'; id: string }
-  | { type: 'REMOVE'; id: string };
+  | { type: 'REMOVE'; id: string }
+  | { type: 'APPLY_DISCOUNT'; id: string; discountRate: number };
 
 export interface StockContextType {
   stockList: Product[];

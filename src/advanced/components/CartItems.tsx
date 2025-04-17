@@ -24,7 +24,7 @@ const CartItems = () => {
     };
   }, []);
 
-  const handleQuantityChange = (change, productId) => {
+  const handleQuantityChange = (change: number, productId: string): void => {
     if (change === 1) {
       handleClickIncrease(productId);
     } else {
@@ -32,13 +32,13 @@ const CartItems = () => {
     }
   };
 
-  const handleRemove = (productId) => {
+  const handleRemove = (productId: string): void => {
     handleClickRemove(productId);
   };
 
   return (
     <div id="cart-items" className="my-4">
-      {cartList.map(({ id, name, quantity }) => {
+      {cartList.map(({ id, name, quantity }: { id: string; name: string; quantity: number }) => {
         const product = products.find((product) => product.id === id);
         const price = product?.price || 0;
 

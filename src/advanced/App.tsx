@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import CartItems from './components/CartItems';
-import CartTotal from './components/CartTotal';
-import ProductSelect from './components/ProductSelect';
-import StockStatus from './components/StockStatus';
-import CartAddButton from './components/CartAddButton';
-import { handleSaleEvent } from './utils/sale';
-const App = () => {
+import CartItems from './components/CartItems.tsx';
+import CartTotal from './components/CartTotal.tsx';
+import ProductSelect from './components/ProductSelect.tsx';
+import StockStatus from './components/StockStatus.tsx';
+import CartAddButton from './components/CartAddButton.tsx';
+import { handleSaleEvent } from './utils/sale.ts';
+const App = (): React.ReactElement => {
   useEffect(() => {
     handleSaleEvent();
   }, []);

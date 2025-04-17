@@ -1,7 +1,7 @@
 import React from 'react';
 import { handleClickAdd } from '../utils/cart-service';
 
-const CartAddButton = ({}) => {
+const CartAddButton = (): React.ReactElement => {
   return (
     <button
       id="add-to-cart"

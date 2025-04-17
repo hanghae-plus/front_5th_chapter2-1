@@ -1,8 +1,8 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 
-import { getState, setState } from '../store';
-import { initialProducts } from '../constants';
-import { cartCalculate } from '../utils/cart-calculate';
+import { getState, setState } from '../store/index.ts';
+import { initialProducts } from '../constants/index.ts';
+import { cartCalculate } from '../utils/cart-calculate.ts';
 
 // 테스트를 위한 스토어 초기화 함수
 const initializeStore = () => {

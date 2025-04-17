@@ -1,5 +1,5 @@
-import { getState, setState } from '../store/index.js';
-import { SALE_CONFIG } from '../constants/index.js';
+import { getState, setState } from '../store/index.ts';
+import { SALE_CONFIG } from '../constants/index.ts';
 
 /**
  * 세일 이벤트 설정
@@ -7,13 +7,17 @@ import { SALE_CONFIG } from '../constants/index.js';
  * @param {Function} callback 이벤트 콜백
  * @param {number} delay 이벤트 지연 시간
  */
-const setupSaleEvents = (interval, callback, delay) => {
+const setupSaleEvents = (
+  interval: number,
+  callback: () => void,
+  delay: number,
+) => {
   setTimeout(() => {
     setInterval(callback, interval);
   }, delay);
 };
 
-const handleSaleEvent = () => {
+const handleSaleEvent = (): void => {
   //번개 세일 이벤트 설정
   setupSaleEvents(
     SALE_CONFIG.FLASH_SALE.INTERVAL,

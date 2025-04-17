@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getState, subscribe } from '../store';
 
-const CartTotal = () => {
+const CartTotal = (): React.ReactElement => {
   const [totalAmount, setTotalAmount] = useState(getState().totalAmount || 0);
   const [discountRate, setDiscountRate] = useState(
     getState().discountRate || 0,

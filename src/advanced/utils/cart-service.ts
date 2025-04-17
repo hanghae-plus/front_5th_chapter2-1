@@ -1,12 +1,12 @@
-import { getState, setState } from '../store/index.js';
-import { cartCalculate } from './cart-calculate.js';
+import { getState, setState } from '../store/index.ts';
+import { cartCalculate } from './cart-calculate.ts';
 
 /**
  * 장바구니 상품 증가
  * @param {string} productId 상품 ID
  * @returns {void}
  */
-const increaseCartItem = (productId) => {
+const increaseCartItem = (productId: string): void => {
   const products = getState().products;
   const cartList = getState().cartList;
 
@@ -43,8 +43,15 @@ const increaseCartItem = (productId) => {
  * 장바구니 상품 추가
  * @returns {void}
  */
-const handleClickAdd = () => {
-  const productId = document.querySelector('#product-select').value;
+const handleClickAdd = (): void => {
+  const productId = document.querySelector<HTMLSelectElement>(
+    '#product-select',
+  )?.value;
+  if (!productId) {
+    alert('상품을 선택해주세요.');
+    return;
+  }
+
   increaseCartItem(productId);
 };
 
@@ -53,7 +60,7 @@ const handleClickAdd = () => {
  * @param {string} productId 상품 ID
  * @returns {void}
  */
-const handleClickIncrease = (productId) => {
+const handleClickIncrease = (productId: string): void => {
   increaseCartItem(productId);
 };
 
@@ -62,12 +69,17 @@ const handleClickIncrease = (productId) => {
  * @param {string} productId 상품 ID
  * @returns {void}
  */
-const handleClickDecrease = (productId) => {
+const handleClickDecrease = (productId: string): void => {
   const products = getState().products;
   const cartList = getState().cartList;
 
   const product = products.find(({ id }) => id === productId);
   const cartProduct = cartList.find(({ id }) => id === productId);
+
+  if (!cartProduct || !product) {
+    alert('상품을 선택해주세요.');
+    return;
+  }
 
   cartProduct.quantity--;
   product.stock++;
@@ -89,12 +101,17 @@ const handleClickDecrease = (productId) => {
  * @param {string} productId 상품 ID
  * @returns {void}
  */
-const handleClickRemove = (productId) => {
+const handleClickRemove = (productId: string): void => {
   const products = getState().products;
   const cartList = getState().cartList;
 
   const product = products.find(({ id }) => id === productId);
   const cartProduct = cartList.find(({ id }) => id === productId);
+
+  if (!product || !cartProduct) {
+    alert('상품을 선택해주세요.');
+    return;
+  }
 
   product.stock += cartProduct.quantity;
 

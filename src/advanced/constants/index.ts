@@ -1,4 +1,23 @@
-const SALE_CONFIG = {
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+}
+
+interface SaleConfig {
+  FLASH_SALE: {
+    INTERVAL: number;
+    CHANCE: number;
+    DISCOUNT: number;
+  };
+  RECOMMENDATION_SALE: {
+    INTERVAL: number;
+    DISCOUNT: number;
+  };
+}
+
+const SALE_CONFIG: SaleConfig = {
   FLASH_SALE: {
     INTERVAL: 30000,
     CHANCE: 0.3,
@@ -11,7 +30,13 @@ const SALE_CONFIG = {
 };
 
 // 상품 상수
-const PRODUCT_CONFIG = {
+interface ProductConfig {
+  DISCOUNT_RATE: {
+    [key: string]: number;
+  };
+}
+
+const PRODUCT_CONFIG: ProductConfig = {
   DISCOUNT_RATE: {
     p1: 0.1,
     p2: 0.15,
@@ -21,7 +46,7 @@ const PRODUCT_CONFIG = {
   },
 };
 
-const initialProducts = [
+const initialProducts: Product[] = [
   { id: 'p1', name: '상품1', price: 10000, stock: 50 },
   { id: 'p2', name: '상품2', price: 20000, stock: 30 },
   { id: 'p3', name: '상품3', price: 30000, stock: 20 },

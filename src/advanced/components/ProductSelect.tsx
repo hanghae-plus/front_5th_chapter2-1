@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { initialProducts } from '../constants';
 import { getState, subscribe } from '../store';
 
-const ProductSelect = ({}) => {
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  stock: number;
+}
+
+const ProductSelect = (): React.ReactElement => {
   const [products, setProducts] = useState(
     getState().products || initialProducts,
   );
@@ -17,7 +24,7 @@ const ProductSelect = ({}) => {
 
   return (
     <select id="product-select" className="border rounded p-2 mr-2">
-      {products.map((product) => (
+      {products.map((product: Product) => (
         <option
           key={product.id}
           value={product.id}

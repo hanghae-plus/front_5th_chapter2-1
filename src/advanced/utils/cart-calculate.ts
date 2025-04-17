@@ -1,5 +1,5 @@
-import { getState, setState } from '../store/index.js';
-import { PRODUCT_CONFIG } from '../constants/index.js';
+import { getState, setState } from '../store/index.ts';
+import { PRODUCT_CONFIG } from '../constants/index.ts';
 
 /**
  * 할인 적용 가능한 상품 할인율 반환
@@ -7,7 +7,7 @@ import { PRODUCT_CONFIG } from '../constants/index.js';
  * @param {number} quantity 상품 수량
  * @returns {number} 할인율
  */
-const getDiscountRate = (productId, quantity) => {
+const getDiscountRate = (productId: string, quantity: number) => {
   if (quantity >= 10 && PRODUCT_CONFIG.DISCOUNT_RATE[productId]) {
     return PRODUCT_CONFIG.DISCOUNT_RATE[productId];
   }
@@ -19,7 +19,7 @@ const getDiscountRate = (productId, quantity) => {
  * 장바구니 총액 계산
  * @returns {void}
  */
-const cartCalculate = () => {
+const cartCalculate = (): void => {
   let totalAmount = 0;
   let cartCount = 0;
   let points = 0;
@@ -29,7 +29,7 @@ const cartCalculate = () => {
   let totalAmountBeforeDiscount = 0;
   let discountRate = 0;
 
-  cartList.forEach((cartItem) => {
+  cartList.forEach((cartItem: { id: string; quantity: number }) => {
     const currentItem = products.find(({ id }) => id === cartItem.id);
     if (!currentItem) return;
 
@@ -71,10 +71,10 @@ const cartCalculate = () => {
  * @returns {object} 총액, 할인율
  */
 const bundleDiscount = (
-  totalAmount,
-  cartCount,
-  totalAmountBeforeDiscount,
-  discountRate,
+  totalAmount: number,
+  cartCount: number,
+  totalAmountBeforeDiscount: number,
+  discountRate: number,
 ) => {
   if (totalAmountBeforeDiscount === 0) {
     return { totalAmount, discountRate };
@@ -102,7 +102,10 @@ const bundleDiscount = (
  * @param {number} discountRate 할인율
  * @returns {object} 총액, 할인율
  */
-const tuesdayDiscount = (totalAmount, discountRate) => {
+const tuesdayDiscount = (
+  totalAmount: number,
+  discountRate: number,
+): { totalAmount: number; discountRate: number } => {
   const isTuesday = new Date().getDay() === 2;
 
   if (isTuesday) {

@@ -3,9 +3,9 @@ import {
   isSelectedCartAvailable,
   getSelecteItem,
   isQuantityChange,
+  updateQuanity,
   isRemoveButton,
   removeQuanity,
-  updateQuanity,
 } from './cartUtils';
 import updateCart from '../updater/updateCart';
 

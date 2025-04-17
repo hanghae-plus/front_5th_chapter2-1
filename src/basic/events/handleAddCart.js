@@ -18,7 +18,6 @@ const handleAddCart = () => {
     if (!isItemAvailable(selectedItem)) return;
 
     let item = document.getElementById(selectedItem.id);
-    console.log(item);
     item ? updateCartItem(item, selectedItem) : createCartItem(selectedItem, $cart);
 
     updateCart();

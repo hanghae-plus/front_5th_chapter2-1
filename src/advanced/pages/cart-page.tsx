@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import CartItem from "../components/cart-item";
+import { StockStatus } from "../components/stock-info";
 import { useCartStore } from "../store/useCartStore";
 
 export function CartPage() {
@@ -44,7 +45,7 @@ export function CartPage() {
         >
           추가
         </button>
-        <div id="stock-status" className="text-sm text-gray-500 mt-2" />
+        <StockStatus />
       </div>
     </div>
   );

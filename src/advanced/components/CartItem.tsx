@@ -10,7 +10,7 @@ type CartItemProps = {
 
 const CartItem = ({ id, quantity }: CartItemProps) => {
   const { products } = useProduct();
-  const { handleCartItem: handleAddToCart } = useCart();
+  const { handleCartItem, handleRemoveItem } = useCart();
   const product = products.find((p) => p.id === id);
   if (!product) return null;
   return (
@@ -19,17 +19,22 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
       <div>
         <button
           className={STYLES.QUANTITY_CHANGE}
-          onClick={() => handleAddToCart(id, PLUS_MINUS.PLUS)}
+          onClick={() => handleCartItem(id, PLUS_MINUS.PLUS)}
         >
           {"+"}
         </button>
         <button
           className={STYLES.QUANTITY_CHANGE}
-          onClick={() => handleAddToCart(id, PLUS_MINUS.MINUS)}
+          onClick={() => handleCartItem(id, PLUS_MINUS.MINUS)}
         >
           {"-"}
         </button>
-        <button className={STYLES.REMOVE_ITEM}>{"삭제"}</button>
+        <button
+          className={STYLES.REMOVE_ITEM}
+          onClick={() => handleRemoveItem(id)}
+        >
+          {"삭제"}
+        </button>
       </div>
     </div>
   );

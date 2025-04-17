@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "dev:basic": "vite --config vite.config.js",
-    "build:basic": "vite build --config vite.config.js",
+    "dev:basic": "vite",
+    "build:basic": "vite build",
     "deploy:basic": "pnpm build:basic && git add docs/basic && git commit -m \"deploy basic\" && git push",
     "dev:advanced": "vite --config ./advanced/vite.config.js",
     "build:advanced": "vite build --config ./advanced/vite.config.js",

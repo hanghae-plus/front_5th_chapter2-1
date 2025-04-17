@@ -1,6 +1,7 @@
 import React from "react";
 import { useCartStore } from "../store/useCartStore";
 
+/**재고 현황  */
 export const StockStatus = () => {
   const { products } = useCartStore();
 

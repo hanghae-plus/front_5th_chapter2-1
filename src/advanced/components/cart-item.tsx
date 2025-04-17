@@ -8,6 +8,9 @@ type CartItemProps = {
   onChangeQuantity: (id: string, delta: number) => void;
   onRemove: (id: string) => void;
 };
+/**
+ * 개별 장바구니 항목을 표시하고 수량 변경 및 삭제 기능을 제공하는 컴포넌트
+ */
 
 function CartItem({ id, name, val, quantity, onChangeQuantity, onRemove }: CartItemProps) {
   return (

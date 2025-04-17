@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import BonusPoint from "../components/bonus-points";
 import CartItem from "../components/cart-item";
 import PriceInfo from "../components/price-info";
+import ProductSelect from "../components/product-select";
 import { StockStatus } from "../components/stock-info";
+import { useLastSaleTimer } from "../hooks/useLastSaleTimer";
+import { useLuckySaleTimer } from "../hooks/useLuckySaleTimer";
 import { useCartStore } from "../store/useCartStore";
 
 export function CartPage() {
@@ -15,7 +18,12 @@ export function CartPage() {
     removeCartItem,
     finalTotal,
     discountRate,
+    lastSelected,
   } = useCartStore();
+
+  /** 타이머 훅 */
+  useLuckySaleTimer();
+  useLastSaleTimer(() => lastSelected);
 
   return (
     <div className="bg-gray-100 p-8">
@@ -39,17 +47,7 @@ export function CartPage() {
           <StockStatus />
           <BonusPoint finalTotal={finalTotal} />
         </div>
-        <select
-          className="border rounded p-2 mr-2"
-          value={selectedId ?? ""}
-          onChange={(e) => setSelectedId(e.target.value)}
-        >
-          {products.map((product) => (
-            <option key={product.id} value={product.id} disabled={product.q === 0}>
-              {product.name} - {product.val}원
-            </option>
-          ))}
-        </select>
+        <ProductSelect selectedId={selectedId} onChange={(id) => setSelectedId(id)} />
         <button
           id="add-to-cart"
           className="bg-blue-500 text-white px-4 py-2 rounded"

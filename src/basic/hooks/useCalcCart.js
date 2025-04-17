@@ -1,3 +1,6 @@
+import { useRenderBonusPoints } from "./useRenderBonusPoints";
+import { useUpdateStockInfo } from "./useUpdateStockInfo";
+
 export const useCalcCart = (
   totalAmount,
   itemCount,
@@ -58,6 +61,6 @@ export const useCalcCart = (
     span.textContent = "(" + (discRate * 100).toFixed(1) + "% 할인 적용)";
     totalPrice.appendChild(span);
   }
-  updateStockInfo(stockInfo, productList);
-  renderBonusPoints(totalAmount, totalPrice);
+  useUpdateStockInfo(stockInfo, productList);
+  useRenderBonusPoints(totalAmount, totalPrice);
 };

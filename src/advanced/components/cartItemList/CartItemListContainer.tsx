@@ -6,8 +6,6 @@ import { useShoppingContext } from "@/advanced/context";
 export const CartItemListContainer: React.FC = () => {
   const { cartItems } = useShoppingContext();
 
-  console.log('cartItems', cartItems);
-
   return (
     <div id={DOM_IDS.CART.CONTAINER}>
       {cartItems.map((item) => (

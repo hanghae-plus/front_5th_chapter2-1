@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useCartActions } from './useCartActions';
 import { useProductState } from './useProductState';
 import { useSelectedProduct } from './useSelectedProduct';
@@ -9,10 +9,6 @@ export const useShopping = () => {
   const { products, setProducts } = useProductState();
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  useEffect(() => {
-    console.log('cartItems', cartItems);
-  }, [cartItems]);
-  
   const { selectedProductId, setSelectedProductId } = useSelectedProduct(products[0].id);
   const {
     itemCount,

@@ -13,7 +13,6 @@ interface AdditionalDiscountParams {
 }
 
 export const additionalDiscount = ({ selectedProductId, productList, setProductList }: AdditionalDiscountParams): void => {
-  console.log('additionalDiscount');
   if (!selectedProductId) return;
 
   const suggest = getSuggestedProduct(productList, selectedProductId);

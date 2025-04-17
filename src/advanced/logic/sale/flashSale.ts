@@ -16,7 +16,6 @@ interface FlashSaleParams {
 }
 
 export const flashSale = ({ productList, setProductList }: FlashSaleParams): void => {
-  console.log('flashSale');
   const luckyItem = getRandomProduct(productList);
   if (!isEligibleForFlashSale(luckyItem)) return;
 

@@ -1,4 +1,3 @@
-// 📁 useCartCalculations.ts
 import { useMemo } from 'react';
 import { calculation } from '@/advanced/logic/cart';
 import { BULK_PURCHASE, TUESDAY_DISCOUNT } from '@/basic/consts';

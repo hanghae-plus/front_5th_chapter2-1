@@ -4,6 +4,10 @@ import { CartList } from "./components/CartList.js";
 import { HeaderTitle } from "./components/HeaderTitle.js";
 import { StockInformation } from "./components/StockInformation.js";
 import { TotalPrice } from "./components/TotalPrice.js";
+import handleAddProduct from "./handlers/handleAddProduct.js";
+import handleCartContainer from "./handlers/handleCartContainer.js";
+import { useCalcCart } from "./hooks/useCalcCart.js";
+import { useUpdateProductList } from "./hooks/useUpdateProductList.js";
 import { shoppingState } from "./store/state.js";
 
 function main() {
@@ -19,15 +23,41 @@ function main() {
   const stockInfo = StockInformation();
   const addProductBtn = AddProductBtn();
   const cartList = CartList();
-
-  updateProductList(cartList, shoppingState.productList);
+  useUpdateProductList(cartList, shoppingState.productList);
   useCalcCart(
     shoppingState.totalAmount,
     shoppingState.itemCount,
     cartContainer,
     shoppingState.productList,
     stockInfo,
-    totalPrice
+    totalPrice,
+  );
+  // 상품담기 버튼 이벤트 핸들러
+  addProductBtn.addEventListener(
+    "click",
+    handleAddProduct(
+      cartList,
+      shoppingState.productList,
+      cartContainer,
+      stockInfo,
+      shoppingState.totalAmount,
+      shoppingState.itemCount,
+      totalPrice,
+      shoppingState.lastSel,
+    ),
+  );
+
+  // 상품 선택 옵션 업데이트
+  cartContainer.addEventListener(
+    "click",
+    handleCartContainer(
+      shoppingState.totalAmount,
+      shoppingState.itemCount,
+      cartContainer,
+      shoppingState.productList,
+      stockInfo,
+      totalPrice,
+    ),
   );
 
   wrapper.appendChild(headerTitle);

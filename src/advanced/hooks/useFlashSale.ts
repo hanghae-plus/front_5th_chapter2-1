@@ -7,7 +7,6 @@ export function useFlashSale(
   onPriceUpdate: (updated:Product) => void
 ) {
   useEffect(() => {
-    console.log("useFlashSale");
     // 랜덤 초기 지연
     const startDelay = Math.random() * 20000;
     const alarmTimer = setTimeout(() => {

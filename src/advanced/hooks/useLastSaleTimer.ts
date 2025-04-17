@@ -21,7 +21,6 @@ export const useLastSaleTimer = (getLastSale: () => string | null) => {
           alert(`${suggest.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`);
           const newPrice = Math.round(suggest.val * SALE_CONFIG.LAST_SALE_DISCOUNT);
           updateProductPrice(suggest.id, newPrice); // 상태만 바꾸면 자동 렌더링
-          // updateSelectOptions();
         }
       }, SALE_CONFIG.LAST_SALE_INTERVAL);
 

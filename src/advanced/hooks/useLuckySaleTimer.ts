@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { SALE_CONFIG } from "../constants/sale-config";
 import { useCartStore } from "../store/useCartStore";
 
-//TODO updateSelectOptions어떻게할지 고민 필요
-
 /**
  * 일정 시간 후 일정 간격으로 번개 세일 20% 할인을 시작하는 타이머 함수 hook
  */

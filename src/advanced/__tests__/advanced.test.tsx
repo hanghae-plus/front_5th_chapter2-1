@@ -1,13 +1,10 @@
 import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 
-import { render, screen, fireEvent } from '@testing-library/react';
-
 import '@testing-library/jest-dom';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import App from '../App';
-
-import '@testing-library/jest-dom';
 
 describe('advanced test', () => {
   beforeEach(() => {

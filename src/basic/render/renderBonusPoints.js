@@ -8,7 +8,7 @@ const getBonusPointsTag = (container) => {
   if (!pointsTag) {
     pointsTag = createElement('span', {
       id: DOM_IDS.CART.POINTS,
-      className: STYLES.TEXT.SUCCESS,
+      className: STYLES.TEXT.BONUS,
     });
     container.appendChild(pointsTag);
   }

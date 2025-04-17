@@ -22,7 +22,7 @@ export default (render) => {
     get(target, prop) {
       return Reflect.get(target, prop);
     },
-    set: function (target, prop, value) {
+    set: (target, prop, value) => {
       state.stock[prop].quantity = state.stock[prop].originQty - value;
       target[prop] = value;
       render();

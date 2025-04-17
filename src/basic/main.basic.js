@@ -3,11 +3,21 @@ import { App } from "./components";
 import { beginThunderDiscount, beginAdditionalDiscount } from "./handler";
 import { calcCart } from "./utils";
 
+const render = () => {
+  const { totalAmount, discountRate } = calcCart();
+
+  renderTotalAmount(totalAmount);
+  renderDiscountInfo(discountRate);
+  renderStockInfo();
+  renderLoyaltyPoints(totalAmount);
+  renderCart();
+};
+
 export let { cartState, state } = createState(render);
 
 const $ = (query) => document.querySelector(query);
 
-function main() {
+const main = () => {
   const $root = $("#app");
   $root.replaceWith(App($root));
 
@@ -16,19 +26,9 @@ function main() {
 
   beginThunderDiscount();
   beginAdditionalDiscount();
-}
+};
 
-function render() {
-  const { totalAmount, discountRate } = calcCart();
-
-  renderTotalAmount(totalAmount);
-  renderDiscountInfo(discountRate);
-  renderStockInfo();
-  renderLoyaltyPoints(totalAmount);
-  renderCart();
-}
-
-function getCartElement({ id, name, price, quantity }) {
+const getCartElement = ({ id, name, price, quantity }) => {
   const template = document.getElementById("cart-item");
   const $element = template.content.firstElementChild.cloneNode(true);
 
@@ -40,9 +40,9 @@ function getCartElement({ id, name, price, quantity }) {
   });
 
   return $element;
-}
+};
 
-function renderCart() {
+const renderCart = () => {
   const $cartItems = $("#cart-items");
   $cartItems.innerHTML = "";
 
@@ -59,21 +59,21 @@ function renderCart() {
       console.log($element);
       $cartItems.appendChild($element);
     });
-}
+};
 
-function renderTotalAmount(totalAmount) {
+const renderTotalAmount = (totalAmount) => {
   const $cartTotal = $("#cart-total");
   $cartTotal.textContent = "총액: " + Math.round(totalAmount) + "원";
-}
+};
 
-function renderDiscountInfo(discountRate) {
+const renderDiscountInfo = (discountRate) => {
   if (isNaN(discountRate) || discountRate <= 0) return;
   const $cartTotal = $("#cart-total");
   let span = document.createElement("span");
   span.className = "text-green-500 ml-2";
   span.textContent = "(" + (discountRate * 100).toFixed(1) + "% 할인 적용)";
   $cartTotal.appendChild(span);
-}
+};
 
 const renderLoyaltyPoints = (totalAmount) => {
   const loyaltyPoints = Math.floor(totalAmount / 1000);
@@ -88,7 +88,7 @@ const renderLoyaltyPoints = (totalAmount) => {
   ptsTag.textContent = "(포인트: " + loyaltyPoints + ")";
 };
 
-function renderStockInfo() {
+const renderStockInfo = () => {
   const msg = Object.entries(state.stock)
     .filter(([_, prodInfo]) => {
       return prodInfo.quantity < 5;
@@ -104,9 +104,9 @@ function renderStockInfo() {
 
   const $stockStatus = $("#stock-status");
   $stockStatus.textContent = msg;
-}
+};
 
-export function renderSelOpts() {
+export const renderSelOpts = () => {
   const $productSelect = $("#product-select");
   $productSelect.innerHTML = "";
   Object.entries(state.stock).forEach(([prodId, prodInfo]) => {
@@ -116,6 +116,6 @@ export function renderSelOpts() {
     if (prodInfo.quantity === 0) opt.disabled = true;
     $productSelect.appendChild(opt);
   });
-}
+};
 
 main();

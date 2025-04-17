@@ -3,7 +3,7 @@ import { cartState, state } from "./main.basic";
 
 const isTuesDay = () => (new Date().getDay() === 2 ? true : false);
 
-function getDiscountRatioWhenProductOver10(quantity, id) {
+const getDiscountRatioWhenProductOver10 = (quantity, id) => {
   if (quantity >= DISCOUNT_RATIO.EACH_PRODUCT.QUANTITY) {
     if (id === "p1") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
     else if (id === "p2") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
@@ -12,9 +12,9 @@ function getDiscountRatioWhenProductOver10(quantity, id) {
     else if (id === "p5") return DISCOUNT_RATIO.EACH_PRODUCT.RATIO[id];
   }
   return 0;
-}
+};
 
-export function calcCart() {
+export const calcCart = () => {
   let itemCnt = Object.values(cartState).reduce((acc, count) => {
     return acc + count;
   }, 0);
@@ -51,4 +51,4 @@ export function calcCart() {
     totalAmount,
     discountRate,
   };
-}
+};

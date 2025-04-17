@@ -1,7 +1,7 @@
 import { state, renderSelOpts } from "./main.basic";
 import { DISCOUNT_RATIO } from "./fixture";
 
-function handleThunderDiscount() {
+const handleThunderDiscount = () => {
   const luckyItem =
     state.stock[
       "p" +
@@ -16,21 +16,21 @@ function handleThunderDiscount() {
     alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
     renderSelOpts();
   }
-}
+};
 
-export function beginThunderDiscount() {
-  setTimeout(function () {
+export const beginThunderDiscount = () => {
+  setTimeout(() => {
     setInterval(handleThunderDiscount, 30000);
   }, Math.random() * 10000);
-}
+};
 
-function handleAdditionalDiscount() {
+const handleAdditionalDiscount = () => {
   if (state.lastSelectedProduct) {
     const suggest = Object.entries(state.stock)
       .map(([prodId, prodInfo]) => {
         return { id: prodId, ...prodInfo };
       })
-      .find(function (item) {
+      .find((item) => {
         return item.id !== state.lastSelectedProduct && item.quantity > 0;
       });
     if (suggest) {
@@ -41,10 +41,10 @@ function handleAdditionalDiscount() {
       renderSelOpts();
     }
   }
-}
+};
 
-export function beginAdditionalDiscount() {
-  setTimeout(function () {
+export const beginAdditionalDiscount = () => {
+  setTimeout(() => {
     setInterval(handleAdditionalDiscount, 60000);
   }, Math.random() * 20000);
-}
+};

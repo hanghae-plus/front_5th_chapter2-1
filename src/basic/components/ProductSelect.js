@@ -1,3 +1,4 @@
+import { initFlashSaleTimer, initSuggestionTimer } from "../services/timerService.js";
 import { getStore, updateStore } from "../store/store.js";
 
 export const ProductSelect = () => {
@@ -57,40 +58,6 @@ export const initProductEvents = () => {
   });
 
   // 타이머 함수 설정: 번개세일
-  setTimeout(() => {
-    setInterval(() => {
-      const { products } = getStore();
-      const luckyItemIndex = Math.floor(Math.random() * products.length);
-      const luckyItem = products[luckyItemIndex];
-
-      if (Math.random() < 0.3 && luckyItem.q > 0) {
-        const updatedProducts = products.map((p, index) =>
-          index === luckyItemIndex ? { ...p, val: Math.round(p.val * 0.8) } : p
-        );
-
-        updateStore({ products: updatedProducts });
-        alert(`번개세일! ${luckyItem.name}이(가) 20% 할인 중입니다!`);
-      }
-    }, 30000);
-  }, Math.random() * 10000);
-
-  // 추천 상품 타이머
-  setTimeout(() => {
-    setInterval(() => {
-      const { products, lastSelected } = getStore();
-
-      if (lastSelected) {
-        const suggestedProduct = products.find((p) => p.id !== lastSelected && p.q > 0);
-
-        if (suggestedProduct) {
-          const updatedProducts = products.map((p) =>
-            p.id === suggestedProduct.id ? { ...p, val: Math.round(p.val * 0.95) } : p
-          );
-
-          updateStore({ products: updatedProducts });
-          alert(`${suggestedProduct.name}은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!`);
-        }
-      }
-    }, 60000);
-  }, Math.random() * 20000);
+  initFlashSaleTimer();
+  initSuggestionTimer();
 };

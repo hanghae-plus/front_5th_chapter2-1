@@ -27,21 +27,27 @@ export const calculateProductDiscount = (product, quantity) => {
   return product.price * quantity * (1 - discountRate);
 };
 
+const calculateBulkDiscount = (totalPrice) => {
+  return totalPrice * DISCOUNT_POLICIES.CART.BULK_RATE;
+};
+
+const calculateItemDiscount = (totalPriceBeforeDiscount, totalPrice) => {
+  return totalPriceBeforeDiscount - totalPrice;
+};
+
 export const calculateCartDiscount = (totalPrice, totalPriceBeforeDiscount, totalProductCount) => {
   if (totalProductCount < DISCOUNT_POLICIES.CART.BULK_THRESHOLD) {
     return (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
   }
 
-  const bulkDiscount = totalPrice * DISCOUNT_POLICIES.CART.BULK_RATE;
-  const itemDiscount = totalPriceBeforeDiscount - totalPrice;
+  const bulkDiscount = calculateBulkDiscount(totalPrice);
+  const itemDiscount = calculateItemDiscount(totalPriceBeforeDiscount, totalPrice);
 
   if (bulkDiscount > itemDiscount) {
-    totalPrice = totalPriceBeforeDiscount * (1 - DISCOUNT_POLICIES.CART.BULK_RATE);
-
     return DISCOUNT_POLICIES.CART.BULK_RATE;
   }
 
-  return (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
+  return itemDiscount / totalPriceBeforeDiscount;
 };
 
 export const calculateTuesdayDiscount = (price, currentDiscountRate) => {

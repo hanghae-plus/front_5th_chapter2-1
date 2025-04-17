@@ -1,0 +1,4 @@
+# src/test 폴더 무시
+src/basic/__tests__
+src/advanced/__tests__
+src/main.original.js

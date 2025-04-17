@@ -81,8 +81,12 @@ describe('basic test', () => {
       expect(cartDisp.children.length).toBe(0);
       expect(sum.textContent).toContain('총액: 0원(포인트: 0)');
     });
-
+    
+    
     it('총액이 올바르게 계산되는지 확인', () => {
+      const mockDate=new Date('2025-04-16');
+      vi.useFakeTimers()
+      vi.setSystemTime(mockDate);
       sel.value='p1';
       addBtn.click();
       addBtn.click();
@@ -90,6 +94,9 @@ describe('basic test', () => {
     });
 
     it('할인이 올바르게 적용되는지 확인', () => {
+      const mockDate=new Date('2025-04-16');
+      vi.useFakeTimers()
+      vi.setSystemTime(mockDate);
       sel.value='p1';
       for (let i=0; i < 10; i++) {
         addBtn.click();
@@ -98,11 +105,14 @@ describe('basic test', () => {
     });
 
     it('포인트가 올바르게 계산되는지 확인', () => {
+      const mockDate=new Date('2025-04-16');
+      vi.useFakeTimers()
+      vi.setSystemTime(mockDate);
       sel.value='p2';
       addBtn.click();
       expect(document.getElementById('loyalty-points').textContent).toContain('(포인트: 128)');
     });
-
+    
     it('번개세일 기능이 정상적으로 동작하는지 확인', () => {
       // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
     });
@@ -112,7 +122,7 @@ describe('basic test', () => {
     });
 
     it('화요일 할인이 적용되는지 확인', () => {
-      const mockDate=new Date('2024-10-15'); // 화요일
+      const mockDate=new Date('2024-10-15');
       vi.useFakeTimers()
       vi.setSystemTime(mockDate);
       sel.value='p1';

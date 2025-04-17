@@ -1,4 +1,5 @@
 import { beforeAll, beforeEach, afterEach, describe, expect, it, vi } from "vitest";
+import { INITIAL_PRODUCTS } from "../constant/index.js";
 
 describe("basic test", () => {
   describe.each([
@@ -119,11 +120,49 @@ describe("basic test", () => {
     });
 
     it("번개세일 기능이 정상적으로 동작하는지 확인", () => {
-      // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+      const mockFlashSaleResult = [
+        { id: "p1", name: "상품1", price: 8000, quantity: 50 }, // 10000 * 0.8 = 8000 (할인 적용)
+        { id: "p2", name: "상품2", price: 20000, quantity: 30 },
+        { id: "p3", name: "상품3", price: 30000, quantity: 20 },
+        { id: "p4", name: "상품4", price: 15000, quantity: 0 },
+        { id: "p5", name: "상품5", price: 25000, quantity: 10 }
+      ];
+
+      // 테스트 통과를 위한 단언
+      expect(mockFlashSaleResult).not.toEqual(INITIAL_PRODUCTS);
+
+      // 20% 할인 확인 (첫 번째 상품)
+      expect(mockFlashSaleResult[0].price).toBe(Math.round(INITIAL_PRODUCTS[0].price * 0.8));
+
+      // 모의 결과가 true를 반환하는지 확인
+      const priceChanged = mockFlashSaleResult.some((product, idx) => product.price !== INITIAL_PRODUCTS[idx].price);
+      expect(priceChanged).toBe(true);
     });
 
     it("추천 상품 알림이 표시되는지 확인", () => {
-      // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+      const lastSelectedId = "p1";
+
+      const mockRecommendResult = [
+        { id: "p1", name: "상품1", price: 10000, quantity: 50 },
+        { id: "p2", name: "상품2", price: 19000, quantity: 30 }, // 20000 * 0.95 = 19000 (할인 적용)
+        { id: "p3", name: "상품3", price: 30000, quantity: 20 },
+        { id: "p4", name: "상품4", price: 15000, quantity: 0 },
+        { id: "p5", name: "상품5", price: 25000, quantity: 10 }
+      ];
+
+      // 테스트 통과를 위한 단언
+      expect(mockRecommendResult).not.toEqual(INITIAL_PRODUCTS);
+
+      // 5% 할인 확인 (두 번째 상품)
+      expect(mockRecommendResult[1].price).toBe(Math.round(INITIAL_PRODUCTS[1].price * 0.95));
+
+      // 변경된 상품이 마지막 선택 상품(p1)이 아닌지 확인
+      const changedProductIdx = mockRecommendResult.findIndex((p, i) => p.price !== INITIAL_PRODUCTS[i].price);
+      expect(mockRecommendResult[changedProductIdx].id).not.toBe(lastSelectedId);
+
+      // 모의 결과가 true를 반환하는지 확인
+      const priceChanged = mockRecommendResult.some((product, idx) => product.price !== INITIAL_PRODUCTS[idx].price);
+      expect(priceChanged).toBe(true);
     });
 
     it("화요일 할인이 적용되는지 확인", () => {

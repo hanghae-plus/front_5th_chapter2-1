@@ -6,7 +6,7 @@ const products = [
   { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
 ];
 
-let select, addButton, cartList, cartTotal, stockInfo;
+let select, addButton, cartList, cartTotal, stockStauts;
 let lastSel,
   bonusPts = 0,
   totalAmt = 0,
@@ -44,9 +44,9 @@ function main() {
   addButton.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   addButton.textContent = '추가';
 
-  stockInfo = document.createElement('div');
-  stockInfo.id = 'stock-status';
-  stockInfo.className = 'text-sm text-gray-500 mt-2';
+  stockStauts = document.createElement('div');
+  stockStauts.id = 'stock-status';
+  stockStauts.className = 'text-sm text-gray-500 mt-2';
 
   updateSelOpts();
 
@@ -55,7 +55,7 @@ function main() {
   wrapper.appendChild(cartTotal);
   wrapper.appendChild(select);
   wrapper.appendChild(addButton);
-  wrapper.appendChild(stockInfo);
+  wrapper.appendChild(stockStauts);
   container.appendChild(wrapper);
   root.appendChild(container);
 
@@ -155,7 +155,7 @@ function calcCart() {
     span.textContent = '(' + (discRate * 100).toFixed(1) + '% 할인 적용)';
     cartTotal.appendChild(span);
   }
-  updateStockInfo();
+  updateStockStatus();
   renderBonusPts();
 }
 
@@ -171,20 +171,17 @@ function renderBonusPts() {
   ptsTag.textContent = '(포인트: ' + bonusPts + ')';
 }
 
-function updateStockInfo() {
-  let infoMsg = '';
+function updateStockStatus() {
+  let statusMessage = '';
   products.forEach(function (item) {
     if (item.quantity < 5) {
-      infoMsg +=
-        item.name +
-        ': ' +
-        (item.quantity > 0
-          ? '재고 부족 (' + item.quantity + '개 남음)'
-          : '품절') +
-        '\n';
+      statusMessage +=
+        item.quantity > 0
+          ? `${item.name}: 재고 부족 (${item.quantity}개 남음)\n`
+          : `${item.name}: 품절\n`;
     }
   });
-  stockInfo.textContent = infoMsg;
+  stockStauts.textContent = statusMessage;
 }
 
 addButton.addEventListener('click', function () {
@@ -230,6 +227,7 @@ addButton.addEventListener('click', function () {
     lastSel = selItem;
   }
 });
+
 cartList.addEventListener('click', function (event) {
   const tgt = event.target;
   if (

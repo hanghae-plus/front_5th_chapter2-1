@@ -2,7 +2,7 @@
  * todo
  * -[v] 초기 createElement된 요소들은 template으로 관리
  * -[v] 만들 수 있는 부분은 component로 만들기 -> 진행중
- * -[ ] 장바구니 같은 아이디값 여러개 렌더링 되는 문제
+ * -[v] 장바구니 같은 아이디값 여러개 렌더링 되는 문제
  * -[ ] 재고 확인하는 함수
  * -[ ] 재고 확인하고 재고량에 맞춰서 업데이트하기 -> 재고가 부족합니다.
  * -[ ] totalPrice 소수점 맞추기
@@ -27,7 +27,6 @@
  */
 
 import {
-  addCart,
   getCarts,
   getStorageItem,
   setStorageItem,
@@ -232,19 +231,22 @@ const handleAddCarts = (e) => {
   try {
     const wrapper = e.target.closest('#products-wrapper');
     const selectBox = wrapper.querySelector('#products-select-box');
-    const id = selectBox.options[selectBox.selectedIndex].id;
+    const selectedId = selectBox.options[selectBox.selectedIndex].id;
 
     const carts = getStorageItem('carts') || [];
 
-    const isAlreadyInclude = carts.find((cart) => id === cart.id);
+    const isAlreadyInclude = carts.find((cart) => selectedId === cart.id);
 
+    let newCarts = [];
     // 추가되는 로직 없으면 삼항연산자로 변경하기
     if (isAlreadyInclude) {
-      updateQuantity(isAlreadyInclude);
+      const { id, quantity } = isAlreadyInclude;
+      newCarts = carts.map((cart) => (cart.id === id ? { id: id, quantity: quantity + 1 } : cart));
     } else {
-      addCart({ id });
+      newCarts = [...carts, { id: selectedId, quantity: 1 }];
     }
 
+    localStorage.setItem('carts', JSON.stringify(newCarts));
     renderCarts();
   } catch (e) {
     console.error(e);
@@ -253,14 +255,17 @@ const handleAddCarts = (e) => {
 
 /** 상품 수량 변경 이벤트 핸들러 */
 const handleUpdateCarts = (e) => {
+  console.log('수량변경');
   e.preventDefault();
   if (e.target.nodeName !== 'BUTTON') return;
   if (e.target.classList.contains('quantity-change')) {
-    const target = {
-      id: e.target.closest('.cart').id,
-      action: e.target.dataset.action,
-    };
-    updateCarts(target);
+    const id = e.target.closest('.cart').id;
+    const carts = getStorageItem('carts') || [];
+    // const target = {
+    //   id: e.target.closest('.cart').id,
+    //   action: e.target.dataset.action,
+    // };
+    // updateCarts(target);
   }
 };
 

@@ -21,28 +21,34 @@ export const getCarts = () => {
   });
 };
 
+// + - 될때 변경되는거
 export const updateCarts = ({ id, action }) => {
   const carts = JSON.parse(localStorage.getItem('carts')) || [];
 
   const product = carts.find((cart) => cart.id === id);
-  if (!product) return;
+  const stockProduct = PRODUCTS.find((p) => p.id === id);
+  if (!product || stockProduct) return;
 
-  if (action === 'add') {
-    product.quantity += 1;
-  } else if (action === 'subtract') {
-    if (product.quantity <= 1) {
-      console.log('삭제');
-      deleteCart({ id });
-    }
+  let updateCarts = [];
 
-    product.quantity -= 1;
-
-    if (product.quantity <= 0) {
-      const updatedCarts = carts.filter((item) => item.id !== id);
-    }
+  switch (action) {
+    case 'add':
+      if (product.counts + 1 > stockProduct.stock) {
+        alert('재고가 부족합니다.');
+        return;
+      }
+      updateCarts = carts.map((item) =>
+        item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+      );
+    case 'subtract':
+      updateCarts = carts
+        .map((item) => (item.id === id ? { ...item, quantity: item.quantity - 1 } : item))
+        .filter((item) => item.counts > 0);
+    default:
+      return;
   }
-  const updatedCarts = [...carts, product];
-  localStorage.setItem('carts', JSON.stringify(updatedCarts));
+
+  localStorage.setItem('carts', JSON.stringify(updateCarts));
 };
 
 /**
@@ -55,34 +61,16 @@ export const deleteCart = ({ id }) => {
   return { carts: removedCarts };
 };
 
-/**
- * 장바구니 목록 추가 함수
- * @id 추가할 상품의 id
- */
-export const addCart = ({ id }) => {
-  const carts = JSON.parse(localStorage.getItem('carts')) || [];
-  const addTarget = carts.find((cart) => cart.id === id);
-
-  if (!!addTarget) {
-    const updatedCarts = carts.map((cart) =>
-      cart.id === id ? { id: id, quantity: addTarget.quantity + 1 } : cart,
-    );
-    localStorage.setItem('carts', JSON.stringify(updatedCarts));
-
-    return { carts: updatedCarts };
-  } else {
-    const AddedCarts = [...carts, { id: id, quantity: 1 }];
-    localStorage.setItem('carts', JSON.stringify(AddedCarts));
-
-    return { carts: AddedCarts };
-  }
-};
+// add -> delete -> update 객체의 수량만 변경해주는 역할
+// add () delte() update() setStogae
 
 /**
  * 장바구니 수량 업데이트
  * @id - 수량이 변경된 상품의 id
  * @quantity - 기존 수량
  */
+
+// 얘의 목적은 상품 추가를 눌렸을 때 이미 있는 애면 추가하는 로직
 export const updateQuantity = ({ id, quantity }) => {
   const carts = JSON.parse(localStorage.getItem('carts')) || [];
   const updatedCarts = carts.map((cart) =>

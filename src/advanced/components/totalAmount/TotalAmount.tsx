@@ -1,12 +1,18 @@
 import type React from "react";
 import { STYLES } from "@/basic/consts";
-import { formatPrice, formatDiscountRate } from "@/advanced/utils/format";
+import { formatPrice, formatDiscountRate } from "@/advanced/utils";
 import { useCart } from "@/advanced/context";
 import { getDiscountRate } from "@/advanced/logic";
+import { BonusPoints } from "./BonutPoints";
 
 export const TotalAmount: React.FC = () => {
-  const { cart } = useCart();
-  const discountRate = getDiscountRate(cart.itemCount, cart.totalAmount, cart.subTotal);
+  const { cart, setCart } = useCart();
+  const discountRate = getDiscountRate({
+    itemCount: cart.itemCount,
+    totalAmount: cart.totalAmount,
+    subTotal: cart.subTotal,
+    setCart: setCart
+  });
 
   return (
     <>
@@ -16,6 +22,7 @@ export const TotalAmount: React.FC = () => {
           ({formatDiscountRate(discountRate)} 할인 적용)
         </span>
       )}
+      <BonusPoints totalAmount={cart.totalAmount} />
     </>
   );
 };

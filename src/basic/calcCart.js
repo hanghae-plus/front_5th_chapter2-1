@@ -1,4 +1,4 @@
-import { getProductList, prodList } from "./main.basic.js";
+import { findProduct, getProductList } from "./main.basic.js";
 import { ElementIds } from "../constants.js";
 
 /** DATA */
@@ -64,20 +64,26 @@ function getProductQuantityMessage(prodList) {
 }
 
 /** ACTIONS **/
-const renderBonusPts = (totalAmt) => {
+
+function createPointTag() {
+  const ptsTag = document.createElement("span");
+  ptsTag.id = ElementIds.LOYALTY_POINTS;
+  ptsTag.className = "text-blue-500 ml-2";
+  return ptsTag;
+}
+
+function renderBonusPts(totalAmt) {
   const sum = document.getElementById(ElementIds.SUM);
   let ptsTag = document.getElementById(ElementIds.LOYALTY_POINTS);
 
   if (!ptsTag) {
-    ptsTag = document.createElement("span");
-    ptsTag.id = ElementIds.LOYALTY_POINTS;
-    ptsTag.className = "text-blue-500 ml-2";
+    ptsTag = createPointTag();
     sum?.appendChild(ptsTag);
   }
 
   const bonusPts = getBonusPts(totalAmt);
   ptsTag.textContent = "(포인트: " + bonusPts + ")";
-};
+}
 
 function updateStockInfo() {
   const stockInfo = document.getElementById(ElementIds.STOCK_INFO);
@@ -94,6 +100,10 @@ function createDiscountRateMessage(discRate) {
   return span;
 }
 
+function getQuantityFromCardItem(item) {
+  return parseInt(item.querySelector("span").textContent.split("x ")[1]);
+}
+
 export function calcCart() {
   const cartDisp = document.getElementById(ElementIds.CART_DISP);
   const cartItems = cartDisp?.children;
@@ -103,25 +113,15 @@ export function calcCart() {
   let itemCnt = 0;
 
   for (let i = 0; i < cartItems.length; i++) {
-    (function () {
-      let curItem;
-      for (let j = 0; j < prodList.length; j++) {
-        if (prodList[j].id === cartItems[i].id) {
-          curItem = prodList[j];
-          break;
-        }
-      }
-      const q = parseInt(
-        cartItems[i].querySelector("span").textContent.split("x ")[1],
-      );
+    let curItem = findProduct(cartItems[i].id);
 
-      const itemTot = curItem.val * q;
-      itemCnt += q;
-      subTot += itemTot;
+    const quantity = getQuantityFromCardItem(cartItems[i]);
+    const itemTot = curItem.val * quantity;
+    itemCnt += quantity;
+    subTot += itemTot;
 
-      const disc = getDisc(q, curItem.id);
-      totalAmt += itemTot * (1 - disc);
-    })();
+    const disc = getDisc(quantity, curItem.id);
+    totalAmt += itemTot * (1 - disc);
   }
 
   const finalAmounts = getFinalAmounts(itemCnt, totalAmt, subTot);
@@ -134,9 +134,9 @@ export function calcCart() {
 
   if (finalAmounts.discRate > 0) {
     const discountRateSpan = createDiscountRateMessage(finalAmounts.discRate);
-
     sum?.appendChild(discountRateSpan);
   }
+
   updateStockInfo();
   renderBonusPts(totalAmt);
 }

@@ -20,6 +20,10 @@ export const prodList = [
 export function getProductList() {
   return prodList;
 }
+export function findProduct(id) {
+  return prodList.find((prod) => prod.id === id);
+}
+
 function main() {
   const root = document.getElementById("app");
   const cont = createRootChildren();

@@ -6,6 +6,6 @@ export default defineConfig({
     rollupOptions: {
       input: 'src/basic/index.basic.html', // 진입점
     },
-    outDir: 'src/basic/dist',
+    outDir: 'docs/basic',
   }
 });

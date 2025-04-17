@@ -50,7 +50,7 @@ importers:
         version: 6.2.6
       vitest:
         specifier: ^3.1.1
-        version: 3.1.1(@vitest/ui@3.1.1)(jsdom@26.0.0)
+        version: 3.1.1(@edge-runtime/vm@3.2.0)(@vitest/ui@3.1.1)(jsdom@26.0.0)
 
 packages:
 
@@ -99,6 +99,14 @@ packages:
   '@csstools/css-tokenizer@3.0.3':
     resolution: {integrity: sha512-UJnjoFsmxfKUdNYdWgOB0mWUypuLvAfQPH1+pyvRJs6euowbFkFC6P13w1l8mJyi3vxYMxc9kld5jZEGRQs6bw==}
     engines: {node: '>=18'}
+
+  '@edge-runtime/primitives@4.1.0':
+    resolution: {integrity: sha512-Vw0lbJ2lvRUqc7/soqygUX216Xb8T3WBZ987oywz6aJqRxcwSVWwr9e+Nqo2m9bxobA9mdbWNNoRY6S9eko1EQ==}
+    engines: {node: '>=16'}
+
+  '@edge-runtime/vm@3.2.0':
+    resolution: {integrity: sha512-0dEVyRLM/lG4gp1R/Ik5bfPl/1wX00xFwd5KcNH602tzBa09oF7pbTKETEhR1GjZ75K6OJnYFu8II2dyMhONMw==}
+    engines: {node: '>=16'}
 
   '@esbuild/aix-ppc64@0.25.2':
     resolution: {integrity: sha512-wCIboOL2yXZym2cgm6mlA742s9QeJ8DjGVaL39dLN4rRwrOgOyYSnOaFPhKZGLb2ngj4EyfAFjsNJwPXZvseag==}
@@ -1733,6 +1741,14 @@ snapshots:
 
   '@csstools/css-tokenizer@3.0.3': {}
 
+  '@edge-runtime/primitives@4.1.0':
+    optional: true
+
+  '@edge-runtime/vm@3.2.0':
+    dependencies:
+      '@edge-runtime/primitives': 4.1.0
+    optional: true
+
   '@esbuild/aix-ppc64@0.25.2':
     optional: true
 
@@ -2015,7 +2031,7 @@ snapshots:
       sirv: 3.0.1
       tinyglobby: 0.2.12
       tinyrainbow: 2.0.0
-      vitest: 3.1.1(@vitest/ui@3.1.1)(jsdom@26.0.0)
+      vitest: 3.1.1(@edge-runtime/vm@3.2.0)(@vitest/ui@3.1.1)(jsdom@26.0.0)
 
   '@vitest/utils@3.1.1':
     dependencies:
@@ -3288,7 +3304,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  vitest@3.1.1(@vitest/ui@3.1.1)(jsdom@26.0.0):
+  vitest@3.1.1(@edge-runtime/vm@3.2.0)(@vitest/ui@3.1.1)(jsdom@26.0.0):
     dependencies:
       '@vitest/expect': 3.1.1
       '@vitest/mocker': 3.1.1(vite@6.2.6)
@@ -3311,6 +3327,7 @@ snapshots:
       vite-node: 3.1.1
       why-is-node-running: 2.3.0
     optionalDependencies:
+      '@edge-runtime/vm': 3.2.0
       '@vitest/ui': 3.1.1(vitest@3.1.1)
       jsdom: 26.0.0
     transitivePeerDependencies:

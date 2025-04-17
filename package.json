@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "prepare-basic": "mkdir -p dist/basic && cp dist/index.basic.html dist/basic/index.html && cp -R src/basic dist/basic/src",
+    "predeploy": "npm run build && npm run prepare-basic",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview",
     "start:basic": "vite serve --open ./index.basic.html",
     "start:advanced": "vite serve --open ./index.advanced.html",
@@ -18,7 +21,11 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
     "@vitest/ui": "^3.1.1",
+    "eslint": "8.56.0",
+    "eslint-config-prettier": "^10.1.2",
+    "gh-pages": "^6.3.0",
     "jsdom": "^26.0.0",
+    "prettier": "^3.5.3",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
   }

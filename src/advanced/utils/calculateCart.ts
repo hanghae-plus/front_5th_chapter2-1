@@ -11,12 +11,6 @@ export interface CartTotalResult {
   bonusPoints: number;
 }
 
-export interface StockStatus {
-  name: string;
-  quantity: number;
-  status: 'normal' | 'low' | 'soldOut';
-}
-
 export const calculateCartTotal = (products: Product[]): CartTotalResult => {
   let totalPrice = 0;
   let totalProductCount = 0;
@@ -24,7 +18,9 @@ export const calculateCartTotal = (products: Product[]): CartTotalResult => {
 
   products.forEach((product) => {
     totalProductCount += product.quantity;
+
     const productTotalPrice = product.price * product.quantity;
+
     totalPriceBeforeDiscount += productTotalPrice;
     totalPrice += calculateProductDiscount(product, product.quantity);
   });
@@ -47,12 +43,4 @@ export const calculateCartTotal = (products: Product[]): CartTotalResult => {
     discountRate: totalCartDiscountRate,
     bonusPoints,
   };
-};
-
-export const getStockStatus = (products: Product[]): StockStatus[] => {
-  return products.map(({ name, quantity }) => ({
-    name,
-    quantity,
-    status: quantity === 0 ? 'soldOut' : quantity < 5 ? 'low' : 'normal',
-  }));
 };

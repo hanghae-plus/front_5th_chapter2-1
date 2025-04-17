@@ -43,7 +43,6 @@ export const cartReducer = (state: CartState, action: CartAction): CartState => 
             item.id === action.payload.id ? { ...item, quantity: item.quantity + 1 } : item,
           )
         : [...state.items, { ...action.payload, quantity: 1 }];
-
       const { totalPrice, discountRate, bonusPoints } = calculateTotal(newItems);
 
       return { ...state, items: newItems, totalPrice, discountRate, bonusPoints };

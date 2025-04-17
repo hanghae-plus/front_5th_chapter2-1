@@ -11,19 +11,19 @@ export const calculateProductDiscount = (product: Product, quantity: number): nu
   return product.price * quantity * (1 - discountRate);
 };
 
-const calculateBulkDiscount = (totalPrice: number): number => {
-  return totalPrice * DISCOUNT_POLICIES.CART.BULK_RATE;
-};
-
-const calculateItemDiscount = (totalPriceBeforeDiscount: number, totalPrice: number): number => {
-  return totalPriceBeforeDiscount - totalPrice;
-};
-
 export const calculateCartDiscount = (
   totalPrice: number,
   totalPriceBeforeDiscount: number,
   totalProductCount: number,
 ): number => {
+  const calculateBulkDiscount = (totalPrice: number): number => {
+    return totalPrice * DISCOUNT_POLICIES.CART.BULK_RATE;
+  };
+
+  const calculateItemDiscount = (totalPriceBeforeDiscount: number, totalPrice: number): number => {
+    return totalPriceBeforeDiscount - totalPrice;
+  };
+
   if (totalProductCount < DISCOUNT_POLICIES.CART.BULK_THRESHOLD) {
     return (totalPriceBeforeDiscount - totalPrice) / totalPriceBeforeDiscount;
   }

@@ -1,5 +1,6 @@
-import { Product } from '../types/product';
 import { useState } from 'react';
+
+import { Product } from '../types/product';
 
 interface CartItemCreatorProps {
   product: Product;
@@ -9,10 +10,12 @@ interface CartItemCreatorProps {
 
 export const CartItemCreator = ({ product, onQuantityChange, onRemove }: CartItemCreatorProps) => {
   const { id, name, price } = product;
+
   const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (change: number) => {
     const newQuantity = Math.max(1, quantity + change);
+
     setQuantity(newQuantity);
     onQuantityChange(id, change);
   };

@@ -9,7 +9,9 @@ export const createDiscountEvent = (
   setAvailableProducts: Dispatch<SetStateAction<Product[]>>,
 ): void => {
   let lastSelectedId: string | null = null;
+
   const originalPrices = new Map<string, number>();
+
   let flashTimer: number | null = null;
   let suggestTimer: number | null = null;
 
@@ -64,16 +66,23 @@ export const createDiscountEvent = (
     lastSelectedId = randomProduct.id;
   };
 
-  if (flashTimer) clearTimeout(flashTimer);
-  if (suggestTimer) clearTimeout(suggestTimer);
+  if (flashTimer) {
+    clearTimeout(flashTimer);
+  }
+
+  if (suggestTimer) {
+    clearTimeout(suggestTimer);
+  }
 
   const flashDelay = eventConfigs[EventType.FLASH].delay();
+
   flashTimer = setTimeout(() => {
     runDiscountEvent(EventType.FLASH);
     setInterval(() => runDiscountEvent(EventType.FLASH), eventConfigs[EventType.FLASH].interval);
   }, flashDelay);
 
   const suggestDelay = eventConfigs[EventType.SUGGEST].delay();
+
   suggestTimer = setTimeout(() => {
     runDiscountEvent(EventType.SUGGEST);
     setInterval(

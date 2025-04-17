@@ -10,6 +10,7 @@ export const useCartActions = (
 ) => {
   const addProductToCart = useCallback((productId: string) => {
     const product = products.find((p) => p.id === productId);
+
     if (!product || product.quantity <= 0) {
       alertOutOfStock();
       return;

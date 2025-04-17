@@ -2,14 +2,14 @@ import type React from "react";
 import { STYLES, DOM_CLASSES } from "@/basic/consts";
 import { formatPrice } from "@/advanced/utils/format";
 import type { Product } from "@/advanced/types/product";
-import { useShopping } from "@/advanced/hooks/useShopping";
+import { useShoppingContext } from "@/advanced/context";
 
 interface CartItemProps {
   item: Product;
 }
 
 export const CartItem: React.FC<CartItemProps> = ({ item }) => {
-  const { updateProductQuantity, removeProductFromCart } = useShopping();
+  const { updateProductQuantity, removeProductFromCart } = useShoppingContext();
   
   return (
     <div id={item.id} className={STYLES.LAYOUT.FLEX}>

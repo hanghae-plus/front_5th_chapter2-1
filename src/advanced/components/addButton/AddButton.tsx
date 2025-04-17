@@ -1,10 +1,10 @@
 import type React from "react";
 import { STYLES } from "@/basic/consts/styles";
 import { DOM_IDS } from "@/basic/consts/dom";
-import { useShopping } from "@/advanced/hooks/useShopping";
+import { useShoppingContext } from "@/advanced/context";
 
 export const AddButton: React.FC = () => {
-  const { selectedProductId, addProductToCart } = useShopping();
+  const { selectedProductId, addProductToCart } = useShoppingContext();
 
   return (
     <button

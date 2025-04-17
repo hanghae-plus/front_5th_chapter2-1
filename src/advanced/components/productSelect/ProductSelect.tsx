@@ -1,6 +1,6 @@
 import type React from "react";
 import { DOM_IDS, STYLES } from "@/basic/consts";
-import { useShopping } from "@/advanced/hooks/useShopping";
+import { useShoppingContext } from "@/advanced/context";
 import { formatProductOption } from "@/advanced/utils";
 
 export const ProductSelect: React.FC = () => {
@@ -8,7 +8,7 @@ export const ProductSelect: React.FC = () => {
     products, 
     selectedProductId, 
     setSelectedProductId 
-  } = useShopping();
+  } = useShoppingContext();
 
   return (
     <select 

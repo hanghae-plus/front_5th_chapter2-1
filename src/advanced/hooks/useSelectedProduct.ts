@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const useSelectedProduct = () => {
-  const [selectedProductId, setSelectedProductId] = useState('');
+export const useSelectedProduct = (initialProductId: string) => {
+  const [selectedProductId, setSelectedProductId] = useState(initialProductId);
   return { selectedProductId, setSelectedProductId };
 };

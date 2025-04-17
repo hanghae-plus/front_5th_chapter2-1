@@ -1,10 +1,12 @@
 import type React from "react";
 import { DOM_IDS } from "@/basic/consts/dom";
 import { CartItem } from "./CartItem";
-import { useShopping } from "@/advanced/hooks/useShopping";
+import { useShoppingContext } from "@/advanced/context";
 
 export const CartItemListContainer: React.FC = () => {
-  const { cartItems } = useShopping();
+  const { cartItems } = useShoppingContext();
+
+  console.log('cartItems', cartItems);
 
   return (
     <div id={DOM_IDS.CART.CONTAINER}>

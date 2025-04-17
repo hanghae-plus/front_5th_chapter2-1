@@ -1,12 +1,12 @@
 import type React from "react";
 import { STYLES } from "@/basic/consts";
 import { BonusPoints } from "./BonusPoints";
-import { useShopping } from "@/advanced/hooks/useShopping";
+import { useShoppingContext } from "@/advanced/context";
 import { formatPrice, formatDiscountRate } from "@/advanced/utils";
 import { getDiscountRate } from "@/advanced/logic/discount";
 
 export const TotalAmount: React.FC = () => {
-  const { cartItems, totalAmount } = useShopping();
+  const { cartItems, totalAmount } = useShoppingContext();
   
   const discountRate = getDiscountRate({
     itemCount: cartItems.length,

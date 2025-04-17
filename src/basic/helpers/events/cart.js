@@ -1,4 +1,4 @@
-import { getProductById, getQuantity } from "../utils.js";
+import { getProductById } from "../utils.js";
 import { getSelectedProduct } from "../logic/selector.js";
 import {
   updateExistingCartItem,

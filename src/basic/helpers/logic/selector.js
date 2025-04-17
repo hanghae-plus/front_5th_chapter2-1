@@ -1,22 +1,22 @@
 import { products } from "../../constants.js";
 import { getProductById } from "../utils.js";
 
-export function getSelectedProduct(productSelector) {
-  const selectedId = productSelector.value;
-
+export function getSelectedProduct(selectEl) {
+  const selectedId = selectEl.value;
   return getProductById(selectedId);
 }
 
-export function updateProductSelector(productSelector) {
-  productSelector.innerHTML = "";
+export function updateProductSelector(selectEl) {
+  selectEl.innerHTML = "";
 
-  for (const item of products) {
+  const fragment = document.createDocumentFragment();
+
+  for (const product of products) {
     const option = document.createElement("option");
-
-    option.value = item.id;
-    option.textContent = `${item.name} - ${item.price}원`;
-    option.disabled = item.units === 0;
-
-    productSelector.appendChild(option);
+    option.value = product.id;
+    option.textContent = `${product.name} - ${product.price}원`;
+    option.disabled = product.units <= 0;
+    fragment.appendChild(option);
   }
+  selectEl.appendChild(fragment);
 }

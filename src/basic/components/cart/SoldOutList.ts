@@ -1,5 +1,5 @@
+import { CART } from "../../const";
 import type { GlobalState } from "../../types";
-
 interface SoldOutListProps {
   target: HTMLElement;
   initialState: GlobalState;
@@ -7,8 +7,8 @@ interface SoldOutListProps {
 
 export function SoldOutList({ target, initialState }: SoldOutListProps) {
   this.element = document.createElement("div");
-  this.element.id = "stock-status";
-  this.element.className = "text-sm text-gray-500 mt-2";
+  this.element.id = CART.SOLD_OUT_LIST.ID;
+  this.element.className = CART.SOLD_OUT_LIST.STYLE;
   target.appendChild(this.element);
 
   this.state = initialState;

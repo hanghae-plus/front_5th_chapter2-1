@@ -1,3 +1,4 @@
+import { CART } from "../../const";
 import type { CartItem, GlobalState } from "../../types";
 
 interface ProductSelectorProps {
@@ -15,12 +16,12 @@ export function ProductSelector({ target, initialState, handleButtonClick }: Pro
 
   this.state = initialState;
 
-  this.select.id = "product-select";
-  this.select.className = "border rounded p-2 mr-2";
+  this.select.id = CART.PRODUCT_SELECTOR.ID;
+  this.select.className = CART.PRODUCT_SELECTOR.STYLE;
 
-  this.addButton.id = "add-to-cart";
-  this.addButton.className = "bg-blue-500 text-white px-4 py-2 rounded";
-  this.addButton.textContent = "추가";
+  this.addButton.id = CART.ADD_BUTTON.ID;
+  this.addButton.className = CART.ADD_BUTTON.STYLE;
+  this.addButton.textContent = CART.ADD_BUTTON.TEXT;
 
   this.setState = (newState: GlobalState) => {
     const isChanged = JSON.stringify(this.state) !== JSON.stringify(newState);

@@ -1,3 +1,4 @@
+import { CART } from "../../const";
 import type { GlobalState } from "../../types";
 
 interface CartListProps {
@@ -11,7 +12,7 @@ export function CartList({ target, initialState, handleCountChange, handleCartIt
   this.element = document.createElement("div");
   target.appendChild(this.element);
 
-  this.element.id = "cart-items";
+  this.element.id = CART.CART_LIST.ID;
 
   this.state = initialState;
   // setState: 이전 state와 비교해서 render 함수를 호출
@@ -43,14 +44,14 @@ export function CartList({ target, initialState, handleCountChange, handleCartIt
         // 없으면 새 요소 생성
         const newItemEl = document.createElement("div");
         newItemEl.id = item.id;
-        newItemEl.className = "flex justify-between items-center mb-2";
+        newItemEl.className = CART.CART_LIST.STYLE;
 
         newItemEl.innerHTML = `
             <span>${item.name} - ${item.price}원 x ${item.count}</span>
             <div>
-              <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${item.id}" data-change="-1">-</button>
-              <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${item.id}" data-change="1">+</button>
-              <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${item.id}">삭제</button>
+              <button class="quantity-change ${CART.CART_QUANTITY_CHANGE.STYLE}" data-product-id="${item.id}" data-change="-1">-</button>
+              <button class="quantity-change ${CART.CART_QUANTITY_CHANGE.STYLE}" data-product-id="${item.id}" data-change="1">+</button>
+              <button class="remove-item ${CART.CART_REMOVE_ITEM.STYLE}" data-product-id="${item.id}">삭제</button>
             </div>
           `;
         this.element.appendChild(newItemEl);

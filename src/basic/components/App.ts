@@ -1,3 +1,4 @@
+import { LAYOUT } from "../const";
 import { handleAddButtonClick, handleCartItemRemove, handleCountChange } from "../handler";
 import { globalState } from "../state/globalState";
 import type { GlobalState } from "../types";
@@ -23,8 +24,8 @@ export function App() {
   };
 
   this.init = () => {
-    container.className = "bg-gray-100 p-8";
-    wrapper.className = "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
+    container.className = LAYOUT.CONTAINER.STYLE;
+    wrapper.className = LAYOUT.WRAPPER.STYLE;
     container.appendChild(wrapper);
     app?.appendChild(container);
   };

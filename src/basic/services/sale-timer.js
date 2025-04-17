@@ -30,6 +30,9 @@ const startLuckySaleTimer = () => {
 
 /**
  * 최근 선택된 상품을 기반으로 추천 상품에 5% 할인을 적용하는 타이머 함수
+ *
+ * @param getLastSale - 현재 마지막으로 선택된 상품의 ID를 반환하는 함수
+ *
  */
 const startLastSaleTimer = (getLastSale) => {
   setTimeout(function () {

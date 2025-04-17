@@ -1,10 +1,16 @@
 import { ElementIds } from '../../../../../shared/app/constants.ts';
 import { handleClickAddBtn } from './logic.ts';
-
 import { getProductQuantityMessage } from '../../../../../shared/app/Cart/calculation.ts';
-import { getProductList } from '../../../../../shared/store/productList.js';
+import { getProductList } from '../../../../../shared/store/productList.ts';
 
-function createItemOptionDom(item) {
+interface Product {
+  id: string;
+  name: string;
+  val: number;
+  q: number;
+}
+
+function createItemOptionDom(item: Product): HTMLOptionElement {
   const opt = document.createElement('option');
 
   const isSoldOut = item.q === 0;
@@ -16,7 +22,7 @@ function createItemOptionDom(item) {
   return opt;
 }
 
-function createSelectOptions(selElem) {
+function createSelectOptions(selElem: HTMLSelectElement): void {
   const prodList = getProductList();
 
   prodList.forEach((item) => {
@@ -25,7 +31,7 @@ function createSelectOptions(selElem) {
   });
 }
 
-function createSel() {
+function createSel(): HTMLSelectElement {
   const sel = document.createElement('select');
   sel.id = ElementIds.SEL;
 
@@ -35,7 +41,7 @@ function createSel() {
   return sel;
 }
 
-function createAddBtn() {
+function createAddBtn(): HTMLButtonElement {
   const addBtn = document.createElement('button');
   addBtn.className = 'bg-blue-500 text-white px-4 py-2 rounded';
   addBtn.id = ElementIds.ADD_BTN;
@@ -46,7 +52,7 @@ function createAddBtn() {
   return addBtn;
 }
 
-function createStockInfo() {
+function createStockInfo(): HTMLDivElement {
   const stockInfo = document.createElement('div');
   stockInfo.id = ElementIds.STOCK_INFO;
   stockInfo.className = 'text-sm text-gray-500 mt-2';
@@ -56,6 +62,6 @@ function createStockInfo() {
   return stockInfo;
 }
 
-export function createAddProduct() {
+export function createAddProduct(): [HTMLSelectElement, HTMLButtonElement, HTMLDivElement] {
   return [createSel(), createAddBtn(), createStockInfo()];
-}
+} 

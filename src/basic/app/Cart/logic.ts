@@ -5,7 +5,7 @@ import {
   getDisc,
   getFinalAmounts,
   getProductQuantityMessage,
-} from '../../../shared/app/Cart/calculation.js';
+} from '../../../shared/app/Cart/calculation.ts';
 import { createPointTag } from './index';
 import {
   findProduct,

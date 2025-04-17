@@ -1,7 +1,6 @@
 import { logic, getCartItemText, getValueFromCardItem } from '../../logic.js';
 import { updateLastSelValue } from '../../../../store/lastSel.js';
 import { ElementIds } from '../../../../../shared/app/constants.ts';
-import { createCartItemText } from '../../../../../shared/app/Cart/components/AddProduct/calculation.js';
 
 function createNewCartItem(itemToAdd) {
   const newItem = document.createElement('div');

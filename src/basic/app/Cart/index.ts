@@ -1,7 +1,7 @@
 import { ElementIds } from '../../../shared/app/constants.ts';
 import { createCartDisplay } from './components/CartDisplay/index.js';
-import { createAddProduct } from './components/AddProduct/index.js';
-import { getBonusPts } from '../../../shared/app/Cart/calculation.js';
+import { createAddProduct } from './components/AddProduct/index.ts';
+import { getBonusPts } from '../../../shared/app/Cart/calculation.ts';
 
 function createHeaderTxt() {
   const $hTxt = document.createElement('h1');

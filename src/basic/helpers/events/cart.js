@@ -6,7 +6,10 @@ import {
   handleQuantityChange,
   handleRemoveItem,
 } from "../logic/cart.js";
-import { calculateCart } from "../logic/calculateCart.js";
+import {
+  calculateCart,
+  getQuantityFromElement,
+} from "../logic/calculateCart.js";
 
 export function bindCartEvents({
   cartItemList,
@@ -45,7 +48,7 @@ export function bindCartEvents({
 
     const product = getProductById(productId);
     const itemEl = document.getElementById(productId);
-    const currentQuantity = getQuantity(itemEl);
+    const currentQuantity = getQuantityFromElement(itemEl);
 
     const isQuantityChange = target.classList.contains("quantity-change");
     const isRemoveItem = target.classList.contains("remove-item");

@@ -1,5 +1,5 @@
 import { products, discountRateMap } from "../../constants.js";
-import { getProductById, getQuantity } from "../utils.js";
+import { getProductById } from "../utils.js";
 
 const BULK_DISCOUNT_RATE = 0.25;
 const TUESDAY_EXTRA_DISCOUNT = 0.1;
@@ -44,7 +44,7 @@ export function calculateCart({ cartItemList, cartTotalEl, stockStatusEl }) {
 function getCartItems(cartItemList) {
   return Array.from(cartItemList.children).map((itemEl) => {
     const id = itemEl.id;
-    const quantity = getQuantity(itemEl);
+    const quantity = getQuantityFromElement(itemEl);
     return { id, quantity };
   });
 }
@@ -106,4 +106,15 @@ function updateStockStatusTemplate(stockStatusEl) {
     }
   }
   stockStatusEl.textContent = statusText;
+}
+
+export function getQuantityFromElement(itemEl) {
+  if (!itemEl) return 0;
+  try {
+    const quantityText = itemEl.querySelector("span").textContent;
+    return parseInt(quantityText.split("x ")[1]);
+  } catch (error) {
+    console.error("Error parsing quantity:", error);
+    return 0;
+  }
 }

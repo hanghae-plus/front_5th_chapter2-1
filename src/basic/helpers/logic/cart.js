@@ -1,64 +1,50 @@
-export function updateExistingCartItem(element, product) {
-  const currentQuantity = getCurrentQuantity(element);
-  const updatedQuantity = currentQuantity + 1;
+import { cartItemTemplate } from "../views/templates.js";
+import { getQuantityFromElement } from "./calculateCart.js";
 
-  if (updatedQuantity <= product.units + currentQuantity) {
-    element.querySelector("span").textContent =
-      `${product.name} - ${product.price}원 x ${updatedQuantity}`;
-    product.units--;
-  } else {
+const INITIAL_QUANTITY = 1;
+const MIN_QUANTITY = 1;
+
+export function updateExistingCartItem(itemEl, product) {
+  const currentQuantity = getQuantityFromElement(itemEl);
+  if (!hasSufficientStock(product, INITIAL_QUANTITY)) {
     alert("재고가 부족합니다.");
+    return;
+  }
+  const newQuantity = currentQuantity + INITIAL_QUANTITY;
+  updateQuantityLabel(itemEl, product, newQuantity);
+  product.units -= INITIAL_QUANTITY;
+}
+
+function hasSufficientStock(product, requiredQuantity) {
+  return product.units >= requiredQuantity;
+}
+
+function updateQuantityLabel(itemEl, product, quantity) {
+  itemEl.querySelector("span").textContent =
+    `${product.name} - ${product.price}원 x ${quantity}`;
+}
+
+export function createNewCartItem(product) {
+  const wrapper = document.createElement("div");
+  wrapper.innerHTML = cartItemTemplate(product, INITIAL_QUANTITY);
+  product.units -= INITIAL_QUANTITY;
+  return wrapper.firstElementChild;
+}
+
+export function handleQuantityChange(product, itemEl, currentQuantity, change) {
+  const newQuantity = currentQuantity + change;
+
+  if (newQuantity < MIN_QUANTITY) {
+    handleRemoveItem(product, itemEl, currentQuantity);
+  } else if (change > 0 && !hasSufficientStock(product, change)) {
+    alert("재고가 부족합니다.");
+  } else {
+    updateQuantityLabel(itemEl, product, newQuantity);
+    product.units -= change;
   }
 }
 
-export function createNewCartItem(product, cartItemList) {
-  const newItem = document.createElement("div");
-  newItem.id = product.id;
-  newItem.className = "flex justify-between items-center mb-2";
-
-  newItem.innerHTML = `
-    <span>${product.name} - ${product.price}원 x 1</span>
-    <div>
-      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${product.id}" data-change="-1">-</button>
-      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${product.id}" data-change="1">+</button>
-      <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${product.id}">삭제</button>
-    </div>
-  `;
-
-  cartItemList.appendChild(newItem);
-  product.units--;
-
-  return newItem;
-}
-
-export function handleQuantityChange(
-  product,
-  element,
-  currentQuantity,
-  change,
-) {
-  const updatedQuantity = currentQuantity + change;
-  const availableStock = product.units + currentQuantity;
-
-  if (updatedQuantity > 0 && updatedQuantity <= availableStock) {
-    const label = element.querySelector("span").textContent.split("x ")[0];
-    element.querySelector("span").textContent = `${label}x ${updatedQuantity}`;
-    product.units -= change;
-  } else if (updatedQuantity <= 0) {
-    element.remove();
-    product.units -= change;
-  } else {
-    alert("재고가 부족합니다.");
-  }
-}
-
-export function handleRemoveItem(product, element, currentQuantity) {
+export function handleRemoveItem(product, itemEl, currentQuantity) {
   product.units += currentQuantity;
-  element.remove();
-}
-
-export function getCurrentQuantity(element) {
-  const text = element.querySelector("span").textContent;
-
-  return parseInt(text.split("x ")[1]);
+  itemEl.remove();
 }

@@ -38,7 +38,7 @@ export const calculateCartItem = (cartItems) => {
 
   return {
     total: Math.round(total),
-    discountRate: (discountRate * 100).toFixed(1),
+    discountRate,
     bonusPoint: Math.floor(total / 1000),
   };
 };

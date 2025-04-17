@@ -53,7 +53,7 @@ const Products = () => {
           .filter((product) => isShortageOfStock(product.stock))
           .map((product) => (
             <>
-              {product.name}: {isOutOfStock(product.stock) ? '품절' : `재고 부족 ({product.stock}개 남음)`}
+              {product.name}: {isOutOfStock(product.stock) ? '품절' : `재고 부족 (${product.stock}개 남음)`}
               <br />
             </>
           ))}

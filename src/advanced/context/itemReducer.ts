@@ -7,6 +7,10 @@ export const ACTION_TYPE = {
   INCREASE_CART_ITEM: 'INCREASE_CART_ITEM',
   DECREASE_CART_ITEM: 'DECREASE_CART_ITEM',
   REMOVE_CART_ITEM: 'REMOVE_CART_ITEM',
+  // 세일
+  UPDATE_PRICE: 'UPDATE_PRICE',
+  BUNGAE_SALE: 'BUNGAE_SALE',
+  SUGGEST_SALE: 'SUGGEST_SALE',
 } as const;
 
 export interface ItemState {
@@ -38,6 +42,18 @@ type ItemActionType =
   | {
       type: typeof ACTION_TYPE.REMOVE_CART_ITEM;
       payload: { itemId: string };
+    }
+  | {
+      type: typeof ACTION_TYPE.UPDATE_PRICE;
+      payload: { itemId: string; price: number };
+    }
+  | {
+      type: typeof ACTION_TYPE.BUNGAE_SALE;
+      payload: { itemId: string; price: number };
+    }
+  | {
+      type: typeof ACTION_TYPE.SUGGEST_SALE;
+      payload: { itemId: string; price: number };
     };
 
 // 상품 상태 관련 Reducer
@@ -124,6 +140,33 @@ export default function itemReducer(state: ItemState, action: ItemActionType) {
                 initialItemList.find((it) => it.id === item.id)?.quantity || 0,
             }
           : item,
+      ),
+    };
+  }
+
+  // TO-DO: 세일 관련 Reducer 분리하기
+  if (action.type === ACTION_TYPE.UPDATE_PRICE) {
+    return {
+      ...state,
+      itemList: state.itemList.map((item) =>
+        item.id === action.payload.itemId
+          ? { ...item, price: action.payload.price }
+          : item,
+      ),
+    };
+  }
+  if (
+    action.type === ACTION_TYPE.BUNGAE_SALE ||
+    action.type === ACTION_TYPE.SUGGEST_SALE
+  ) {
+    const { itemId, price } = action.payload;
+    return {
+      ...state,
+      itemList: state.itemList.map((item) =>
+        item.id === itemId ? { ...item, price } : item,
+      ),
+      cartItemList: state.cartItemList.map((item) =>
+        item.id === itemId ? { ...item, price } : item,
       ),
     };
   }

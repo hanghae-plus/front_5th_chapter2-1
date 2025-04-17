@@ -3,11 +3,18 @@ import {
   useCallback,
   useContext,
   useReducer,
+  useEffect,
   PropsWithChildren,
 } from 'react';
 import { initialItemList } from '../data/initialItemList.js';
 import { ItemListType, ItemType } from '../types/ItemType.js';
 import itemReducer, { ACTION_TYPE, ItemState } from './itemReducer.js';
+import {
+  DISCOUNT_RATES,
+  BUNGAE_SALE,
+  SUGGEST_SALE,
+} from '../constants/index.js';
+import { textUtils } from '../utils/textUtils.js';
 
 const initialState = {
   itemList: initialItemList,
@@ -23,6 +30,10 @@ interface ItemContextType extends ItemState {
   increaseCartItem: (itemId: string) => void;
   decreaseCartItem: (itemId: string) => void;
   removeCartItem: (itemId: string) => void;
+  // 세일
+  updateItemPrice: (itemId: string, price: number) => void;
+  bungaeSale: () => void;
+  suggestSale: () => void;
 }
 const ItemContext = createContext<ItemContextType | null>(null);
 
@@ -73,6 +84,78 @@ export function ItemProvider({ children }: PropsWithChildren) {
     });
   }, []);
 
+  // 상품 가격 업데이트 (추천 세일 시)
+  const updateItemPrice = useCallback((itemId: string, price: number) => {
+    dispatch({
+      type: ACTION_TYPE.UPDATE_PRICE,
+      payload: { itemId, price },
+    });
+  }, []);
+
+  // 번개 세일 실행
+  const bungaeSale = useCallback(() => {
+    const saleItem =
+      state.itemList[Math.floor(Math.random() * state.itemList.length)];
+    const isOnSale =
+      Math.random() < DISCOUNT_RATES.RANDOM && saleItem.quantity > 0;
+    if (isOnSale) {
+      alert(textUtils.getBungaeSaleText(saleItem.name));
+
+      const updatedPrice = Math.round(saleItem.price * BUNGAE_SALE.RATE);
+
+      dispatch({
+        type: ACTION_TYPE.BUNGAE_SALE,
+        payload: { itemId: saleItem.id, price: updatedPrice },
+      });
+    }
+  }, [state.itemList]);
+
+  // 추천 세일 실행
+  const suggestSale = useCallback(() => {
+    if (!state.lastSelectedItem) return;
+
+    const suggestItem = state.itemList.find(
+      (item) => item.id !== state.lastSelectedItem && item.quantity > 0,
+    );
+
+    if (suggestItem) {
+      const updatedPrice = Math.round(suggestItem.price * SUGGEST_SALE.RATE);
+      alert(textUtils.getSuggestSaleText(suggestItem.name));
+      dispatch({
+        type: ACTION_TYPE.SUGGEST_SALE,
+        payload: { itemId: suggestItem.id, price: updatedPrice },
+      });
+
+      dispatch({
+        type: ACTION_TYPE.SET_LAST_ITEM,
+        payload: { itemId: suggestItem.id },
+      });
+    }
+  }, [state.lastSelectedItem, state.itemList]);
+
+  // 번개 세일, 추천 세일 실행
+  useEffect(() => {
+    const bungaeDelay = Math.random() * BUNGAE_SALE.DELAY;
+    const suggestDelay = Math.random() * SUGGEST_SALE.DELAY;
+
+    const bungaeTimeout = setTimeout(() => {
+      bungaeSale();
+      const bungaeInterval = setInterval(bungaeSale, BUNGAE_SALE.INTERVAL);
+      return () => clearInterval(bungaeInterval);
+    }, bungaeDelay);
+
+    const suggestTimeout = setTimeout(() => {
+      suggestSale();
+      const suggestInterval = setInterval(suggestSale, SUGGEST_SALE.INTERVAL);
+      return () => clearInterval(suggestInterval);
+    }, suggestDelay);
+
+    return () => {
+      clearTimeout(bungaeTimeout);
+      clearTimeout(suggestTimeout);
+    };
+  }, [bungaeSale, suggestSale]);
+
   const value: ItemContextType = {
     cartItemList: state.cartItemList,
     itemList: state.itemList,
@@ -84,6 +167,10 @@ export function ItemProvider({ children }: PropsWithChildren) {
     increaseCartItem,
     decreaseCartItem,
     removeCartItem,
+    // TO-DO: 세일 context 분리하기
+    updateItemPrice,
+    bungaeSale,
+    suggestSale,
   };
 
   return <ItemContext.Provider value={value}>{children}</ItemContext.Provider>;

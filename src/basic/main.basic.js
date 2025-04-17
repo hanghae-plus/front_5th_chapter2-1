@@ -43,12 +43,17 @@ const App = () => {
 
   const carts = getCarts();
 
+  const { finalPrice, appliedDiscountRate, rewardPoints } = calculateCartTotal();
+
   const template = () => /* html */ `
     <div id="container" class="bg-gray-100 p-8">
       <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
         <div id="carts"> 
         ${carts.map(CartItem).join('')}
+        </div>
+        <div id="total-price-wrapper">
+        ${totalPrice({ finalPrice, appliedDiscountRate, rewardPoints })}
         </div>
         <div id="products-wrapper" >
           <select id="products-select-box" class="border rounded p-2 mr-2">
@@ -74,8 +79,6 @@ const App = () => {
       handleDeleteCartItem(e);
     }
   });
-
-  calculateCartTotal();
 
   // // 광고 alert
   // setTimeout(() => {
@@ -112,8 +115,8 @@ const App = () => {
   // }, Math.random() * 20000);
 };
 
-const Options = ({ id, name, price, quantity }) => `
-  <option id="${id}" ${quantity === 0 ? 'disable' : ''}>${name} - ${price}원</option>
+const Options = ({ id, name, price, stock }) => `
+  <option id="${id}" ${stock === 0 ? 'disabled' : ''}>${name} - ${price}원</option>
 `;
 
 /** 장바구니에 담긴 총 가격 계산 함수 */
@@ -173,19 +176,18 @@ function calculateCartTotal() {
 
   return {
     finalPrice: Math.round(finalPrice),
-    appliedDiscountRate: appliedDiscountRate,
+    appliedDiscountRate: isNaN(appliedDiscountRate) ? 0 : appliedDiscountRate,
     rawTotal: rawTotal,
     rewardPoints: rewardPoints,
   };
 }
 
 /** 총액 컴포넌트 ui */
-function totalPrice() {
-  const { finalPrice, appliedDiscountRate, rewardPoints } = calculateCartTotal();
+function totalPrice({ finalPrice, appliedDiscountRate, rewardPoints }) {
   return /* html */ `
   <div id="cart-total" class="text-xl font-bold my-4">
     총액: ${finalPrice}원
-   ${appliedDiscountRate === 0 ? '' : `<span class="text-green-500 ml-2">( ${appliedDiscountRate}% 할인 적용 )</span>`}
+   ${appliedDiscountRate === 0 ? '' : `<span class="text-green-500 ml-2">( ${(appliedDiscountRate * 100).toFixed(1)}% 할인 적용 )</span>`}
     <span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${rewardPoints})</span>
   </div>
   `;
@@ -230,37 +232,43 @@ const handleAddCartItem = (e) => {
   try {
     const wrapper = e.target.closest('#products-wrapper');
     const selectBox = wrapper.querySelector('#products-select-box');
-    const selectedId = selectBox.options[selectBox.selectedIndex].id;
+    const targetId = selectBox.options[selectBox.selectedIndex].id;
 
     const carts = getStorageItem('carts') || [];
 
-    const isAlreadyInclude = carts.find((cart) => selectedId === cart.id);
+    const isAlreadyInclude = carts.find((cart) => targetId === cart.id);
+    const stockProduct = PRODUCTS.find((p) => p.id === targetId);
 
     let updateCarts = [];
     // 추가되는 로직 없으면 삼항연산자로 변경하기
     if (isAlreadyInclude) {
+      if (isAlreadyInclude.quantity + 1 > stockProduct.stock) {
+        alert('재고가 부족합니다.');
+        return;
+      }
       const { id, quantity } = isAlreadyInclude;
       updateCarts = carts.map((cart) =>
         cart.id === id ? { id: id, quantity: quantity + 1 } : cart,
       );
     } else {
-      updateCarts = [...carts, { id: selectedId, quantity: 1 }];
+      updateCarts = [...carts, { id: targetId, quantity: 1 }];
     }
 
     setStorageItem('carts', JSON.stringify(updateCarts));
-    renderCarts();
+    reRender();
   } catch (e) {
     console.error(e);
   }
 };
 
+/** 상품 삭제 이벤트 핸들러 */
 const handleDeleteCartItem = (e) => {
   e.preventDefault();
   const targetId = e.target.closest('.cart').id;
   const carts = getStorageItem('carts') || [];
   const updateCarts = carts.filter((item) => item.id !== targetId);
   setStorageItem('carts', JSON.stringify(updateCarts));
-  renderCarts();
+  reRender();
 };
 
 /** 상품 수량 변경 이벤트 핸들러 */
@@ -306,8 +314,39 @@ const handleUpdateCartItem = (e) => {
   }
 
   setStorageItem('carts', JSON.stringify(updateCarts));
-  renderCarts();
+  reRender();
 };
+
+/** 장바구니 아이템 */
+const CartItem = ({ id, name, price, quantity }) => `
+  <div id="${id}" class="cart flex justify-between items-center mb-2"} >
+      <span>${name} - ${price}원 x ${quantity}</span>
+      <div>
+        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="subtract">-</button>
+        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="add">+</button>
+        <button class="delete-cart-btn bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
+      </div>
+  </div>
+`;
+
+const renderCarts = () => {
+  const $carts = document.querySelector('#carts');
+  const carts = getCarts();
+  $carts.innerHTML = carts.map(CartItem).join('');
+};
+
+const renderTotalPrice = () => {
+  const $totalPriceWrapper = document.querySelector('#total-price-wrapper');
+  const { finalPrice, appliedDiscountRate, rewardPoints } = calculateCartTotal();
+  $totalPriceWrapper.innerHTML = totalPrice({ finalPrice, appliedDiscountRate, rewardPoints });
+};
+
+const reRender = () => {
+  renderCarts();
+  renderTotalPrice();
+};
+
+App();
 
 // 장바구니 추가 버튼 클릭 이벤트
 // $addCartBtn.addEventListener('click', () => {
@@ -365,24 +404,6 @@ const handleUpdateCartItem = (e) => {
 //   }
 // });
 
-// 장바구니 아이템
-const CartItem = ({ id, name, price, quantity }) => `
-  <div id="${id}" class="cart flex justify-between items-center mb-2"}>
-      <span>${name} - ${price}원 x ${quantity}</span>
-      <div>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="subtract">-</button>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="add">+</button>
-        <button class="delete-cart-btn bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
-      </div>
-  </div>
-`;
-
-const renderCarts = () => {
-  const $carts = document.querySelector('#carts');
-  const carts = getCarts();
-  $carts.innerHTML = carts.map(CartItem).join('');
-};
-
 // 장바구니 수량 변경 및 삭제 클릭 이벤트
 // $cartsWrapper.addEventListener('click', (e) => {
 //   const target = e.target;
@@ -429,5 +450,3 @@ const renderCarts = () => {
 //     calculateCartTotal();
 //   }
 // });
-
-App();

@@ -4,7 +4,7 @@ import { useCartStore } from "../store/useCartStore";
 
 export function CartPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { products, cart, addToCart } = useCartStore();
+  const { products, cart, addToCart, changeCartItemQuantity, removeCartItem } = useCartStore();
 
   return (
     <div className="bg-gray-100 p-8">
@@ -18,12 +18,8 @@ export function CartPage() {
               name={item.name}
               val={item.val}
               quantity={item.quantity}
-              onChangeQuantity={(id, delta) => {
-                // 수량 증감 처리 함수
-              }}
-              onRemove={(id) => {
-                // 삭제 처리 함수
-              }}
+              onChangeQuantity={(id, delta) => changeCartItemQuantity(id, delta)}
+              onRemove={(id) => removeCartItem(id)}
             />
           ))}
         </div>

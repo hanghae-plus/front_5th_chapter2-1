@@ -3,7 +3,7 @@ import { products } from "../data/products";
 import { CartStore } from "../types/store-type";
 import { cloneProducts } from "../utils/product/products";
 
-export const useCartStore = create<CartStore>((set) => ({
+export const useCartStore = create<CartStore>((set, get) => ({
   products: cloneProducts(products),
   lastSelected: null,
   finalTotal: 0,
@@ -53,6 +53,7 @@ export const useCartStore = create<CartStore>((set) => ({
       };
     }),
 
+  //장바구니 초기화
   resetCart: () =>
     set({
       products: cloneProducts(products),
@@ -62,4 +63,40 @@ export const useCartStore = create<CartStore>((set) => ({
       itemCount: 0,
       discountRate: 0,
     }),
+
+  // 장바구니 담긴 제품 수량 변경
+  changeCartItemQuantity: (productId, delta) => {
+    const { cart, products } = get();
+    const item = cart.find((c) => c.id === productId);
+    const product = products.find((p) => p.id === productId);
+    if (!item || !product) return;
+
+    const newQuantity = item.quantity + delta;
+
+    if (newQuantity <= 0) {
+      set({
+        cart: cart.filter((c) => c.id !== productId),
+        products: products.map((p) => (p.id === productId ? { ...p, q: p.q + item.quantity } : p)),
+      });
+    } else if (newQuantity <= product.q + item.quantity) {
+      set({
+        cart: cart.map((c) => (c.id === productId ? { ...c, quantity: newQuantity } : c)),
+        products: products.map((p) => (p.id === productId ? { ...p, q: p.q - delta } : p)),
+      });
+    } else {
+      alert("재고가 부족합니다.");
+    }
+  },
+
+  // 장바구니 담긴 제품 제거
+  removeCartItem: (productId) => {
+    const { cart, products } = get();
+    const item = cart.find((c) => c.id === productId);
+    if (!item) return;
+
+    set({
+      cart: cart.filter((c) => c.id !== productId),
+      products: products.map((p) => (p.id === productId ? { ...p, q: p.q + item.quantity } : p)),
+    });
+  },
 }));

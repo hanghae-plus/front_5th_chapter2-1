@@ -19,7 +19,7 @@ export const CartItem: React.FC<CartItemProps> = ({ cart, ...props }) => {
       <div>
         <CartQuantityButton step={-1} label="-" product={cart} />
         <CartQuantityButton step={1} label="+" product={cart} />
-        <CartRemoveButton cart={cart} />
+        <CartRemoveButton product={cart} />
       </div>
     </div>
   );

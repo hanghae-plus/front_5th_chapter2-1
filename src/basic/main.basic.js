@@ -42,11 +42,11 @@ let totalItemCount = 0;
 * @param {string}
 * @return {HTMLElement}
 * */
-function createElementFromTemplate(template, children = '') {
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = template;
-  return tempDiv.firstChild;
-}
+// function createElementFromTemplate(template, children = '') {
+//   const tempDiv = document.createElement('div');
+//   tempDiv.innerHTML = template;
+//   return tempDiv.firstChild;
+// }
 
 /*
 * 태그 함수를 사용한 HTML 요소 생성
@@ -127,17 +127,14 @@ function initApp() {
   // 요소 조합
   const wrapper = html`<div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8"></div>`;
   appendChildren(wrapper, title, cartList, totalDisplay, productSelect, addButton, stockInfoDisplay);
-  console.log('wrapper', wrapper);
 
   const container = html`<div class="bg-gray-100 p-8"></div>`;
   appendChildren(container, wrapper);
 
   container.appendChild(wrapper);
-  console.log('container', container);
 
 //   루트에 추가
   root.appendChild(container);
-  console.log('root', root);
 
 //   초기 상태 계산
   updateCart();
@@ -212,10 +209,6 @@ function updateCart() {
 
 /*
 * 할인율 계산 함수
-* @param {number}
-* @param {number}
-* @param {number}
-* @return {number}
 * */
 function calcDiscountRate(subtotal, totalWithItemDiscount, itemCount) {
   let discountRate = 0;
@@ -244,7 +237,6 @@ function calcDiscountRate(subtotal, totalWithItemDiscount, itemCount) {
 
 /*
 * 화요일인지 확인하는 함수
-* @return {boolean}
 * */
 function isTuesday() {
   return new Date().getDay() === 2;
@@ -252,16 +244,15 @@ function isTuesday() {
 
 /*
 * 총액 표시 업데이트 함수
-* @param {number}
 * */
 function updateTotalDisplay(discountRate) {
   totalDisplay.textContent = `총액: ${Math.round(totalAmount)}원`;
 
 //   할인율 표시
   if (discountRate > 0) {
-    const discountSpan = document.createElement('span');
-    discountSpan.className = 'text-green-500 ml-2';
-    discountSpan.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
+    const discountSpan = html`
+      <span class="text-green-500 ml-2">(${(discountRate * 100).toFixed(1)}% 할인 적용)</span>
+    `;
     totalDisplay.appendChild(discountSpan);
   }
 }
@@ -274,9 +265,9 @@ function updateLoyaltyPoints() {
 
   let pointsTag = document.getElementById('loyalty-points');
   if (!pointsTag) {
-    pointsTag = document.createElement('span');
-    pointsTag.id = 'loyalty-points';
-    pointsTag.className = 'text-blue-500 ml-2';
+    pointsTag = html`
+      <span id="loyalty-points" class="text-blue-500 ml-2"></span>
+    `;
     totalDisplay.appendChild(pointsTag);
   }
 
@@ -304,8 +295,6 @@ function updateStockInfo() {
 
 /*
 * ID로 상품 찾기
-* @param {string}
-* @return {Object|null}
 * */
 function findProductById(id) {
   return PRODUCTS.find(product => product.id === id);
@@ -324,10 +313,6 @@ function addProductToCart() {
   const existingItem = document.getElementById(product.id);
 
   if (existingItem) {
-    const currQuantityText = existingItem.querySelector('span').textContent;
-    console.log();
-    console.log('cartItemText', currQuantityText);
-    console.log(currQuantityText.split('x '));
     const currQuantity = parseInt(existingItem.querySelector('span').textContent.split('x ')[1]);
     const newQuantity = currQuantity + 1;
 
@@ -339,18 +324,16 @@ function addProductToCart() {
     }
   } else {
     //   새 아이템 추가
-    const newItem = document.createElement('li');
-    newItem.id = product.id;
-    newItem.className = 'flex justify-between items-center mb-2';
-    newItem.innerHTML = `
-      <span>${product.name} - ${product.price}원 x 1</span>
-      <div>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${product.id}" data-change="-1">-</button>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${product.id}" data-change="1">+</button>
-        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${product.id}">삭제</button>
-      </div>
+    const newItem = html`
+      <li id="${product.id}" class="flex justify-between items-center mb-2">
+        <span>${product.name} - ${product.price}원 x 1</span>
+        <div>
+          <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${product.id}" data-change="-1">-</button>
+          <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${product.id}" data-change="1">+</button>
+          <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${product.id}">삭제</button>
+        </div>
+      </li>
     `;
-
     cartList.appendChild(newItem);
     product.stock--;
   }
@@ -362,8 +345,6 @@ function addProductToCart() {
 
 /*
 * 수랑 변경 처리 함수
-* @param {string}
-* @return {number}
 * */
 function changeQuantity(productId, changeAmount) {
   const itemElement = document.getElementById(productId);
@@ -399,7 +380,6 @@ function changeQuantity(productId, changeAmount) {
 
 /*
 * 장바구니에서 상품 제거 함수
-* @param {string}
 * */
 function removeCartItem(productId) {
   const itemElement = document.getElementById(productId);
@@ -422,7 +402,6 @@ function removeCartItem(productId) {
 
 /*
 * 장바구니 이벤트 처리 함수
-* @param {Event}
 * */
 function handleCartAction(event) {
   const target = event.target;

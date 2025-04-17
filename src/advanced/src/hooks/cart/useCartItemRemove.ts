@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { cartAtom } from "../../state";
-import { calculateDiscountRate } from "../../utils";
+import { calculateDiscountRate, calculateTotalPrice } from "../../utils";
 
 export const useCartItemRemove = () => {
   const [cart, setCart] = useAtom(cartAtom);
@@ -26,7 +26,7 @@ export const useCartItemRemove = () => {
     // cartList에서 해당 상품을 필터링하여 제거합니다.
     const updatedCartList = cart.cartList.filter((item) => item.id !== productId);
 
-    const newTotalPrice = updatedCartList.reduce((acc: number, item) => acc + item.price * (item.count || 1), 0);
+    const newTotalPrice = calculateTotalPrice(updatedCartList);
 
     // 제거된 상품의 count만큼 상품의 재고를 증가시킵니다.
     const updatedProductList = cart.productList.map((item) =>

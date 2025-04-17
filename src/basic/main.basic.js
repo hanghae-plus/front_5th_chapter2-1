@@ -11,11 +11,9 @@ addBtn.addEventListener("click", () => {
 
 const cartDisp = document.getElementById("cart-items");
 cartDisp.addEventListener("click", (event) => {
-  console.log("cartDisp click", event);
   const tgt = event.target;
 
   if (tgt.classList.contains("quantity-change")) {
-    console.log("CHANGE_QUANTITY", tgt);
     cartStore.dispatch({ type: "CHANGE_QUANTITY", payload: tgt });
   }
 

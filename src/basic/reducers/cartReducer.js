@@ -57,7 +57,6 @@ export function cartReducer(state, action) {
       const newQuantity = currentQuantity + quantifyChange;
 
       if (isProductSoldOut(newQuantity, selectedItem.stock)) {
-        console.log("재고가 부족합니다.");
         return { ...state, error: "재고가 부족합니다." };
       }
 

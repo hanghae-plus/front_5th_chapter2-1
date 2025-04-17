@@ -1,4 +1,4 @@
-import { BULK_DISCOUNT_THRESHOLD, DISCOUNT_RATES } from "@advanced/lib/configs";
+import { BULK_DISCOUNT_THRESHOLD, DISCOUNT_RATES, DISCOUNT_RATES_BY_PRODUCT } from "@advanced/lib/configs";
 
 interface DiscountResult {
   discountRate: number;
@@ -55,15 +55,11 @@ export function calculateBulkDiscount(totalPrice: number, originalTotalPrice: nu
 export function getDiscountRateByProduct(productId: string) {
   switch (productId) {
     case "p1":
-      return 0.1;
+      return DISCOUNT_RATES_BY_PRODUCT.p1;
     case "p2":
-      return 0.15;
+      return DISCOUNT_RATES_BY_PRODUCT.p2;
     case "p3":
-      return 0.2;
-    case "p4":
-      return 0.05;
-    case "p5":
-      return 0.25;
+      return DISCOUNT_RATES_BY_PRODUCT.p3;
     default:
       return 0;
   }

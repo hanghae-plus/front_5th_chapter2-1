@@ -1,4 +1,4 @@
-import { PRODUCT_INVENTORY } from "@advanced/lib/configs/product";
+import { PRODUCT_INVENTORY } from "@advanced/lib/configs";
 import type { CartItem, CartState, Product } from "@advanced/lib/types";
 import {
   generateCartInvoice,

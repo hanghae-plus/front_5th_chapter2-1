@@ -1,13 +1,14 @@
 import React from "react";
 
-import type { IProduct } from "#advanced/pages/main/_types";
+import type { ICartProduct, IProduct } from "#advanced/pages/main/_types";
 
 interface IProps {
   products: IProduct[];
-  handleAddCart: (product: IProduct) => void;
+  cartProducts: ICartProduct[];
+  handleAddProductToCart: (product: IProduct) => void;
 }
 
-const ProductSelectForm: React.FC<IProps> = ({ products, handleAddCart }) => {
+const ProductSelectForm: React.FC<IProps> = ({ products, cartProducts, handleAddProductToCart }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -20,17 +21,22 @@ const ProductSelectForm: React.FC<IProps> = ({ products, handleAddCart }) => {
     const selectedProduct = products.find((product) => product.id === productId);
     if (!selectedProduct) return;
 
-    handleAddCart(selectedProduct);
+    handleAddProductToCart(selectedProduct);
   };
 
   return (
     <form className="flex justify-between" onSubmit={handleSubmit}>
       <select name="product-select" className="rounded border-2 px-1 py-2 focus:outline-none">
-        {products.map((product) => (
-          <option key={product.id} value={product.id} disabled={product.stock === 0}>
-            ({product.stock}개) {product.name} - {product.price.toLocaleString()}원
-          </option>
-        ))}
+        {products.map((product) => {
+          const targetProduct = cartProducts.find((cartProduct) => cartProduct.id === product.id);
+          const stock = product.stock - (targetProduct?.count ?? 0);
+
+          return (
+            <option key={product.id} value={product.id} disabled={product.stock === 0}>
+              ({stock}개) {product.name} - {product.price.toLocaleString()}원
+            </option>
+          );
+        })}
       </select>
       <button
         type="submit"

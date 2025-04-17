@@ -1,10 +1,10 @@
-import { CartItemList } from "./CartItemList";
-import { ProductSelector } from "./ProductSelector";
-import { OutOfStockIndicator } from "./OutOfStockIndicator";
-import { CartTotal } from "./CartTotal";
-import { useSaleAlert } from "@advanced/lib/hooks/alert/useSaleAlert";
 import { useOutOfStockAlert } from "@advanced/lib/hooks/alert/useOutOfStockAlert";
+import { useSaleAlert } from "@advanced/lib/hooks/alert/useSaleAlert";
 import { useEffect } from "react";
+import { CartItemList } from "./CartItemList";
+import { CartTotal } from "./CartTotal";
+import { OutOfStockIndicator } from "./OutOfStockIndicator";
+import { ProductSelector } from "./ProductSelector";
 
 export function CartContainer() {
   const { registerOutOfStockAlert } = useOutOfStockAlert();

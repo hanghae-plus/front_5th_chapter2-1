@@ -1,7 +1,5 @@
 import { beforeAll, beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
 
-export const flushPromises = () => new Promise((resolve) => setImmediate(resolve));
-
 describe('basic test', () => {
   describe.each([
     { type: 'origin', loadFile: () => import('../../main.original.js') },
@@ -138,19 +136,21 @@ describe('basic test', () => {
 
       // p5 상품이 장바구니에 추가되었는지 확인
       const p5InCart = Array.from(cartDisp.children).some((item) => item.id === 'p5');
-      console.log(cartDisp.children);
       expect(p5InCart).toBe(true);
 
+      /* !! 테스트 방식 변경 */
       // 수량 증가 버튼 찾기
-      const increaseBtn = cartDisp.querySelector('#p5 .quantity-change[data-change="1"]');
+      let increaseBtn = cartDisp.querySelector('#p5 .quantity-change[data-change="1"]');
       expect(increaseBtn).not.toBeNull();
 
       // 수량을 10번 증가시키기
       for (let i = 0; i < 10; i++) {
+        const increaseBtn = cartDisp.querySelector('#p5 .quantity-change[data-change="1"]');
         increaseBtn.click();
       }
 
       // 11번째 클릭 시 재고 부족 알림이 표시되어야 함
+      increaseBtn = cartDisp.querySelector('#p5 .quantity-change[data-change="1"]');
       increaseBtn.click();
 
       // 재고 부족 알림이 표시되었는지 확인

@@ -1,4 +1,3 @@
-import { cartItemStore } from '../store/cartItemStore';
 import { cartState } from '../store/cartState';
 import { ProductStore } from '../store/productState';
 
@@ -7,8 +6,8 @@ export const useCart = () => {
   let lastSelected = null;
 
   // 장바구니 담기
-  const addToCart = ($selectBox) => {
-    const selectedId = $selectBox.value; // 이 부분을 바꿀 수 있는 방법이 있을까
+  const addToCart = ($selectBox, $cartItem) => {
+    const selectedId = $selectBox.value;
     const selectedProduct = ProductStore.getProduct(selectedId);
 
     // 선택된 상품 + 재고 존재 확인
@@ -33,9 +32,17 @@ export const useCart = () => {
         }
       } else {
         // 장바구니에 없는 경우 새로 추가
-        const { items } = cartItemStore.getState();
-        const updatedItems = [...items, { ...selectedProduct, quantity: 1 }];
-        cartItemStore.setState({ items: updatedItems });
+        const $newCartItem = document.createElement('div');
+        $newCartItem.id = selectedId;
+        $newCartItem.className = 'flex justify-between items-center mb-2';
+        $newCartItem.innerHTML = `
+          <span>${selectedProduct.name} - ${selectedProduct.price}원 x 1</span>
+          <div>
+            <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${selectedId}" data-change="-1">-</button>
+            <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${selectedId}" data-change="1">+</button>
+            <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${selectedId}">삭제</button>
+          </div>`;
+        $cartItem.appendChild($newCartItem);
 
         // 재고 감소
         ProductStore.decreaseStock(selectedId);
@@ -55,8 +62,8 @@ export const useCart = () => {
 
     // 자주 사용하는 메서드 참조 저장
     const getItemCount = cartState.getItemCount;
-    const getTotalAmount = cartState.getTotalAmount; // 지역변수로 한 후에 -> 마지막에 set
-    const getDiscountRate = cartState.getDiscountRate; // 얘도될듯
+    const getTotalAmount = cartState.getTotalAmount;
+    const getDiscountRate = cartState.getDiscountRate;
     const setItemCount = cartState.setItemCount;
     const setTotalAmount = cartState.setTotalAmount;
     const setDiscountRate = cartState.setDiscountRate;
@@ -122,8 +129,6 @@ export const useCart = () => {
     // 보너스 포인트 계산 (1,000원당 1점)
     setBonusPoints(Math.floor(getTotalAmount() / 1000));
 
-    // UI 업데이트 부분을 이렇게하지 않아도 될 것 같다 생각이 듭니다
-
     // 결과값 업데이트
     if (cartResultC) {
       cartResultC.updateTotal(getTotalAmount(), getDiscountRate());
@@ -141,7 +146,7 @@ export const useCart = () => {
     }
   };
 
-  // 아이템 수량 변경 또는 삭제 핸들러 -> 수량을 들고있는 observer가 있으면 이렇게 할 필요 없었을 것 같습니다.
+  // 아이템 수량 변경 또는 삭제 핸들러
   const handleCartItemChange = (event) => {
     const target = event.target;
 

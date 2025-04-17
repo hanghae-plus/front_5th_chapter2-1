@@ -9,6 +9,7 @@ export function SoldOutList({ target, initialState }: SoldOutListProps) {
   this.element = document.createElement("div");
   this.element.id = CART.SOLD_OUT_LIST.ID;
   this.element.className = CART.SOLD_OUT_LIST.STYLE;
+
   target.appendChild(this.element);
 
   this.state = initialState;

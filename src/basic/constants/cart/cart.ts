@@ -28,9 +28,11 @@ export const CART = {
     STYLE: "flex justify-between items-center mb-2",
   },
   CART_QUANTITY_CHANGE: {
+    CLASS_SELECTOR: "quantity-change",
     STYLE: "bg-blue-500 text-white px-2 py-1 rounded mr-1",
   },
   CART_REMOVE_ITEM: {
+    CLASS_SELECTOR: "remove-item",
     STYLE: "bg-red-500 text-white px-2 py-1 rounded",
   },
 } as const;

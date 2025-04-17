@@ -49,9 +49,9 @@ export function CartList({ target, initialState, handleCountChange, handleCartIt
         newItemEl.innerHTML = `
             <span>${item.name} - ${item.price}원 x ${item.count}</span>
             <div>
-              <button class="quantity-change ${CART.CART_QUANTITY_CHANGE.STYLE}" data-product-id="${item.id}" data-change="-1">-</button>
-              <button class="quantity-change ${CART.CART_QUANTITY_CHANGE.STYLE}" data-product-id="${item.id}" data-change="1">+</button>
-              <button class="remove-item ${CART.CART_REMOVE_ITEM.STYLE}" data-product-id="${item.id}">삭제</button>
+              <button class="${CART.CART_QUANTITY_CHANGE.CLASS_SELECTOR} ${CART.CART_QUANTITY_CHANGE.STYLE}" data-product-id="${item.id}" data-change="-1">-</button>
+              <button class="${CART.CART_QUANTITY_CHANGE.CLASS_SELECTOR} ${CART.CART_QUANTITY_CHANGE.STYLE}" data-product-id="${item.id}" data-change="1">+</button>
+              <button class="${CART.CART_REMOVE_ITEM.CLASS_SELECTOR} ${CART.CART_REMOVE_ITEM.STYLE}" data-product-id="${item.id}">삭제</button>
             </div>
           `;
         this.element.appendChild(newItemEl);
@@ -70,7 +70,7 @@ export function CartList({ target, initialState, handleCountChange, handleCartIt
 
   this.element.addEventListener("click", (event: MouseEvent) => {
     const target = event.target;
-    if (target instanceof HTMLElement && target.classList.contains("quantity-change")) {
+    if (target instanceof HTMLElement && target.classList.contains(CART.CART_QUANTITY_CHANGE.CLASS_SELECTOR)) {
       const change = target.dataset.change;
       const productId = target.dataset.productId ?? "";
 
@@ -80,7 +80,7 @@ export function CartList({ target, initialState, handleCountChange, handleCartIt
 
   this.element.addEventListener("click", (event: MouseEvent) => {
     const target = event.target;
-    if (target instanceof HTMLElement && target.classList.contains("remove-item")) {
+    if (target instanceof HTMLElement && target.classList.contains(CART.CART_REMOVE_ITEM.CLASS_SELECTOR)) {
       const productId = target.dataset.productId ?? "";
       handleCartItemRemove(productId);
     }

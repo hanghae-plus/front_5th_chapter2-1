@@ -1,15 +1,16 @@
 import { products } from "../../constants.js";
+import { getProductById } from "../utils.js";
 
 export function getSelectedProduct(productSelector) {
   const selectedId = productSelector.value;
 
-  return products.find((p) => p.id === selectedId);
+  return getProductById(selectedId);
 }
 
 export function updateProductSelector(productSelector) {
   productSelector.innerHTML = "";
 
-  products.forEach(function (item) {
+  for (const item of products) {
     const option = document.createElement("option");
 
     option.value = item.id;
@@ -17,5 +18,5 @@ export function updateProductSelector(productSelector) {
     option.disabled = item.units === 0;
 
     productSelector.appendChild(option);
-  });
+  }
 }

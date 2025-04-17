@@ -1,4 +1,5 @@
 import { products, discountRateMap } from "../../constants.js";
+import { getProductById } from "../utils.js";
 
 let originalTotal = 0;
 let finalTotal = 0;
@@ -49,10 +50,6 @@ function getCartItems(cartItemList) {
 
     return { id, units };
   });
-}
-
-function getProductById(id) {
-  return products.find((p) => p.id === id);
 }
 
 function getItemDiscountRate(units, productId) {

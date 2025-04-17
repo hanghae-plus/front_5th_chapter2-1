@@ -1,5 +1,4 @@
-import { products } from "../../constants.js";
-
+import { getProductById } from "../utils.js";
 import { getSelectedProduct } from "../logic/selector.js";
 import {
   updateExistingCartItem,
@@ -18,7 +17,6 @@ export function bindCartEvents({
   context,
 }) {
   addToCartButton.addEventListener("click", handleAddToCart);
-
   cartItemList.addEventListener("click", handleCartItemClick);
 
   function handleAddToCart() {
@@ -45,7 +43,7 @@ export function bindCartEvents({
     const productId = target.dataset.productId;
     if (!productId) return;
 
-    const product = products.find((p) => p.id === productId);
+    const product = getProductById(productId);
     const itemEl = document.getElementById(productId);
     const currentQuantity = parseInt(
       itemEl.querySelector("span").textContent.split("x ")[1],

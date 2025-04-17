@@ -1,8 +1,8 @@
 import { getStore, updateStore } from "../store/store.js";
 import { changeCartItemQuantity, removeCartItem } from "../services/cartService.js";
-import { renderCartItems, renderCartTotal } from "../renderers/cartRenderer.js";
 import { renderStockInfo } from "../renderers/stockRenderer.js";
 import { renderProductOptions } from "../renderers/productRenderer.js";
+import { renderCartItems } from "../renderers/cartRenderer.js";
 
 /**
  * 장바구니 이벤트 핸들러 설정

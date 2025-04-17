@@ -18,7 +18,7 @@ export const handleAddButtonClick = (selectedProductId: string, state: GlobalSta
   }
 
   const updatedProductList = updateProductList(state.productList, selectedProductId, -1);
-  const updatedCartList = updateCartList(state.cartList, selectedProduct as Product);
+  const updatedCartList = updateCartList(state.cartList, selectedProduct as Product, 1);
   const newTotalPrice = calculateTotalPrice(updatedCartList);
 
   return {

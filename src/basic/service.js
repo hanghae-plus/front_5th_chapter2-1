@@ -81,7 +81,8 @@ export const updateQuantity = ({ id, quantity }) => {
 };
 
 export const getStorageItem = (key) => {
-  return JSON.parse(localStorage.getItem(key));
+  const value = localStorage.getItem(key);
+  return value ? JSON.parse(value) : null;
 };
 
 export const setStorageItem = (key, value) => localStorage.setItem(key, value);

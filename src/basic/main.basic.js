@@ -5,8 +5,8 @@
  * -[v] 장바구니 같은 아이디값 여러개 렌더링 되는 문제
  * -[v] 재고 확인하는 함수
  * -[v] 재고 확인하고 재고량에 맞춰서 업데이트하기 -> 재고가 부족합니다.
- * -[ ] totalPrice 소수점 맞추기
- * -[ ] 재고 상태 ( = stocksState ) 확인하는 ui 컴포넌트 만들기
+ * -[v] totalPrice 소수점 맞추기
+ * -[v] 재고 상태 ( = stocksState ) 확인하는 ui 컴포넌트 만들기
  * -[ ] 시간별 랜덤 상품 할인 alert
  * -[ ] 최근 장바구니에 담은 상품 할인 alert
  * -[ ] alert뜬 값 기반으로 options에 products 가격도 업데이트 되어야함.
@@ -15,7 +15,7 @@
  *
  * -[ ] Store 필요
  *
- * - 내가 가장 부족한 부분 : 함수 실행 후 재렌더링을 못함. = SPA에서 가장 중요한 것이라고 생각..
+ * - 내가 가장 부족한 부분 : 함수 실행 후 재렌더링을 못함. = SPA에서 가장 중요한 것이라고 생각
  *
  * - 필요한 상태값
  *  - 최근 담긴 상품 : lastAddedItem? lastAddedItemected?
@@ -44,38 +44,40 @@ const App = () => {
   const carts = getCarts();
 
   const { finalPrice, appliedDiscountRate, rewardPoints } = calculateCartTotal();
+  const outOfStocks = PRODUCTS.filter((v) => v.stock === 0 || v.stock < 5);
 
   const template = () => /* html */ `
     <div id="container" class="bg-gray-100 p-8">
       <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
-        <div id="carts"> 
+        <div id="cart-items"> 
         ${carts.map(CartItem).join('')}
         </div>
         <div id="total-price-wrapper">
         ${totalPrice({ finalPrice, appliedDiscountRate, rewardPoints })}
         </div>
         <div id="products-wrapper" >
-          <select id="products-select-box" class="border rounded p-2 mr-2">
+          <select id="product-select" class="border rounded p-2 mr-2">
           ${PRODUCTS.map(Options).join('')}
           </select>
-        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
+        <button id="add-to-cart" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
         </div>
-        <div id="stock-state" class="text-sm text-gray-500 mt-2">
-      </div>
+        <div id="stock-state" class="flex flex-col text-sm text-gray-500 mt-2 fx">
+        ${outOfStocks.map(StockList).join('')}
+        </div>
     </div>
   `;
 
   root.innerHTML = template();
 
-  const $addToCartBtn = document.querySelector('#add-cart-btn');
+  const $addToCartBtn = document.querySelector('#add-to-cart');
   $addToCartBtn.addEventListener('click', handleAddCartItem);
-  const $updatedQuantityBtn = document.querySelector('#carts');
+  const $updatedQuantityBtn = document.querySelector('#cart-items');
   $updatedQuantityBtn.addEventListener('click', handleUpdateCartItem);
 
-  const $cartsWrapper = document.querySelector('#carts');
+  const $cartsWrapper = document.querySelector('#cart-items');
   $cartsWrapper.addEventListener('click', (e) => {
-    if (e.target.classList.contains('delete-cart-btn')) {
+    if (e.target.classList.contains('remove-item')) {
       handleDeleteCartItem(e);
     }
   });
@@ -116,7 +118,7 @@ const App = () => {
 };
 
 const Options = ({ id, name, price, stock }) => `
-  <option id="${id}" ${stock === 0 ? 'disabled' : ''}>${name} - ${price}원</option>
+  <option id="${id}" ${stock === 0 ? 'disabled' : ''} value="${id}">${name} - ${price}원</option>
 `;
 
 /** 장바구니에 담긴 총 가격 계산 함수 */
@@ -185,12 +187,11 @@ function calculateCartTotal() {
 /** 총액 컴포넌트 ui */
 function totalPrice({ finalPrice, appliedDiscountRate, rewardPoints }) {
   return /* html */ `
-  <div id="cart-total" class="text-xl font-bold my-4">
-    총액: ${finalPrice}원
-   ${appliedDiscountRate === 0 ? '' : `<span class="text-green-500 ml-2">( ${(appliedDiscountRate * 100).toFixed(1)}% 할인 적용 )</span>`}
-    <span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${rewardPoints})</span>
-  </div>
-  `;
+  <div id="cart-total" class="text-xl font-bold my-4">총액: ${finalPrice}원${
+    appliedDiscountRate === 0
+      ? ''
+      : `<span class="text-green-500 ml-2">( ${(appliedDiscountRate * 100).toFixed(1)}% 할인 적용 )</span>`
+  }<span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${rewardPoints})</span></div>`;
 }
 // // todo troubleshooting : 화요일일때 에러 발생
 // // 화요일 할인 적용함수
@@ -225,14 +226,20 @@ function updatestocksWrapper() {
   $stocksWrapper.textContent = message;
 }
 
+/** 재고 확인 */
+const StockList = ({ id, name, stock }) =>
+  `<span id="${id}">
+  ${name}: ${stock === 0 ? '품절' : `재고 부족 (${stock}개 남음)`}
+</span>`;
+
 /** 상품 추가 이벤트 핸들러 */
 const handleAddCartItem = (e) => {
   e.preventDefault();
-  if (e.target.id !== 'add-cart-btn') return;
+  if (e.target.id !== 'add-to-cart') return;
   try {
     const wrapper = e.target.closest('#products-wrapper');
-    const selectBox = wrapper.querySelector('#products-select-box');
-    const targetId = selectBox.options[selectBox.selectedIndex].id;
+    const selectBox = wrapper.querySelector('#product-select');
+    const targetId = selectBox.value;
 
     const carts = getStorageItem('carts') || [];
 
@@ -283,7 +290,6 @@ const handleUpdateCartItem = (e) => {
   const product = carts.find((cart) => cart.id === targetId);
   const stockProduct = PRODUCTS.find((p) => p.id === targetId);
 
-  console.log(stockProduct);
   if (!product || !stockProduct) return;
 
   let updateCarts = [];
@@ -296,7 +302,6 @@ const handleUpdateCartItem = (e) => {
         alert('재고가 부족합니다.');
         return;
       }
-      console.log('add');
       updateCarts = carts.map((item) =>
         item.id === targetId ? { ...item, quantity: item.quantity + 1 } : item,
       );
@@ -319,18 +324,18 @@ const handleUpdateCartItem = (e) => {
 
 /** 장바구니 아이템 */
 const CartItem = ({ id, name, price, quantity }) => `
-  <div id="${id}" class="cart flex justify-between items-center mb-2"} >
+  <div id="${id}" class="cart flex justify-between items-center mb-2" >
       <span>${name} - ${price}원 x ${quantity}</span>
       <div>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="subtract">-</button>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="add">+</button>
-        <button class="delete-cart-btn bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
+        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="subtract" data-change="-1">-</button>
+        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="add" data-change="1">+</button>
+        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
       </div>
   </div>
 `;
 
 const renderCarts = () => {
-  const $carts = document.querySelector('#carts');
+  const $carts = document.querySelector('#cart-items');
   const carts = getCarts();
   $carts.innerHTML = carts.map(CartItem).join('');
 };

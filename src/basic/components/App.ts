@@ -39,8 +39,6 @@ export function App() {
           ...this.state,
           productList: updatedProductList,
         });
-        console.log(updatedProductList);
-        console.log(this.state.productList);
       }, 30000);
     }, Math.random() * 10000);
 

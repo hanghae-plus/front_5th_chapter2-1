@@ -1,4 +1,5 @@
 import type { GlobalState } from "../../types";
+import { calculateTotalPrice } from "../../utils";
 
 export const handleCountChange = (productId: string, change: number, state: GlobalState) => {
   const cartList = state.cartList;
@@ -30,7 +31,7 @@ export const handleCountChange = (productId: string, change: number, state: Glob
     .map((item) => (item.id === productId ? { ...item, count: item.count + change } : item))
     .filter((item) => item.count > 0);
 
-  const newTotalPrice = updatedCartList.reduce((acc: number, item) => acc + item.price * (item.count || 1), 0);
+  const newTotalPrice = calculateTotalPrice(updatedCartList);
 
   return {
     updatedProductList,

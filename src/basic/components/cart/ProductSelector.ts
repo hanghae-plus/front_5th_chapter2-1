@@ -32,7 +32,6 @@ export function ProductSelector({ target, initialState, handleButtonClick }: Pro
   };
 
   this.render = () => {
-    console.log("productList", this.state.productList);
     this.select.innerHTML = this.state.productList
       .map(
         (product: CartItem) =>

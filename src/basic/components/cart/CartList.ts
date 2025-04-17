@@ -27,11 +27,11 @@ export function CartList({ target, initialState, handleCountChange, handleCartIt
   // 전체 렌더링 대신 차이(diff)를 반영하는 방식의 render 함수
   this.render = () => {
     // 새 state의 item id 목록
-    const newItemIds = new Set(this.state.cartList.map((item) => item.id));
+    const newItemIds = new Set(this.state.cartList?.map((item) => item.id));
 
     // 1. 새 항목 추가 및 기존 항목 업데이트
     // 1. 새 항목 추가 및 기존 항목 업데이트 (forEach -> for...of)
-    for (const item of this.state.cartList) {
+    for (const item of this.state.cartList ?? []) {
       // 각 item 요소의 id는 item.id로 설정되어 있음
       const itemElement = this.element.querySelector(`#${item.id}`);
       if (itemElement) {

@@ -68,6 +68,13 @@ const App = () => {
   const $updatedQuantityBtn = document.querySelector('#carts');
   $updatedQuantityBtn.addEventListener('click', handleUpdateCartItem);
 
+  const $cartsWrapper = document.querySelector('#carts');
+  $cartsWrapper.addEventListener('click', (e) => {
+    if (e.target.classList.contains('delete-cart-btn')) {
+      handleDeleteCartItem(e);
+    }
+  });
+
   calculateCartTotal();
 
   // // 광고 alert
@@ -229,23 +236,32 @@ const handleAddCartItem = (e) => {
 
     const isAlreadyInclude = carts.find((cart) => selectedId === cart.id);
 
-    let newCarts = [];
+    let updateCarts = [];
     // 추가되는 로직 없으면 삼항연산자로 변경하기
     if (isAlreadyInclude) {
       const { id, quantity } = isAlreadyInclude;
-      newCarts = carts.map((cart) => (cart.id === id ? { id: id, quantity: quantity + 1 } : cart));
+      updateCarts = carts.map((cart) =>
+        cart.id === id ? { id: id, quantity: quantity + 1 } : cart,
+      );
     } else {
-      newCarts = [...carts, { id: selectedId, quantity: 1 }];
+      updateCarts = [...carts, { id: selectedId, quantity: 1 }];
     }
 
-    localStorage.setItem('carts', JSON.stringify(newCarts));
+    setStorageItem('carts', JSON.stringify(updateCarts));
     renderCarts();
   } catch (e) {
     console.error(e);
   }
 };
 
-const handleDeleteCartItem = (e) => {};
+const handleDeleteCartItem = (e) => {
+  e.preventDefault();
+  const targetId = e.target.closest('.cart').id;
+  const carts = getStorageItem('carts') || [];
+  const updateCarts = carts.filter((item) => item.id !== targetId);
+  setStorageItem('carts', JSON.stringify(updateCarts));
+  renderCarts();
+};
 
 /** 상품 수량 변경 이벤트 핸들러 */
 const handleUpdateCartItem = (e) => {
@@ -289,7 +305,7 @@ const handleUpdateCartItem = (e) => {
       return;
   }
 
-  localStorage.setItem('carts', JSON.stringify(updateCarts));
+  setStorageItem('carts', JSON.stringify(updateCarts));
   renderCarts();
 };
 
@@ -356,7 +372,7 @@ const CartItem = ({ id, name, price, quantity }) => `
       <div>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="subtract">-</button>
         <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-action="add">+</button>
-        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
+        <button class="delete-cart-btn bg-red-500 text-white px-2 py-1 rounded mr-1">삭제</button>
       </div>
   </div>
 `;

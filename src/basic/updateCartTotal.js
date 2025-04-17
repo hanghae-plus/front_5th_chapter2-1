@@ -74,7 +74,7 @@ const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPoints) 
 
   if (discountRate > 0) {
     const $discountBadge = document.createElement('span');
-
+    
     $discountBadge.className = 'text-green-500 ml-2';
     $discountBadge.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
     cartTotalPrice.appendChild($discountBadge);

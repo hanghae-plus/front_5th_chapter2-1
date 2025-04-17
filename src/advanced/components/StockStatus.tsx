@@ -10,7 +10,7 @@ const StockStatus = ({ products }: StockStatusProps) => {
 
   return (
     <div className="text-sm text-gray-500 mt-2">
-      품절: {outOfStockProducts.map((p) => p.name).join(', ')}
+      {outOfStockProducts.map((p) => p.name).join(', ')}: 품절
     </div>
   );
 };

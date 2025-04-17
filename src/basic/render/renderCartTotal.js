@@ -30,7 +30,7 @@ export const renderCartTotal = (products) => {
   const $cartItems = $("#cart-items");
   const { totalCost, discountRate } = calculateCart(
     products,
-    $cartItems.children,
+    $cartItems.children
   );
   // 총액 및 할인 랜더링
   $cartTotal.innerHTML = "";

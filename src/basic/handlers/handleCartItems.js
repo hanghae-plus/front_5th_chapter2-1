@@ -24,7 +24,7 @@ export const handleCartItems = (target, products) => {
   // 수량 변경, 상품 삭제 이벤트 처리
   // const target = event.target;
   const isQuantityChange = target.classList.contains(
-    EVENT_FRAGMENT.QUANTITY_CHANGE,
+    EVENT_FRAGMENT.QUANTITY_CHANGE
   );
   const isRemoveItem = target.classList.contains(EVENT_FRAGMENT.REMOVE_ITEM);
   if (!isQuantityChange && !isRemoveItem) return;

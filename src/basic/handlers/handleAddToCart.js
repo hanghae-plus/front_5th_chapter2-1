@@ -21,7 +21,10 @@ export const handleAddToCart = (products) => {
   const selectedItemId = $productSelect.value;
   const itemToAdd = products.find((p) => p.id === selectedItemId);
 
-  if (!itemToAdd || itemToAdd.quantity <= 0) return null;
+  if (!itemToAdd || itemToAdd.quantity <= 0) {
+    alert(STOCK_ALERT_TEXT);
+    return null;
+  }
 
   const currentItem = $("#" + itemToAdd.id);
   if (currentItem) {
@@ -29,7 +32,8 @@ export const handleAddToCart = (products) => {
     const newQuantity =
       parseInt(currentItem.querySelector("span").textContent.split("x ")[1]) +
       1;
-    if (newQuantity <= itemToAdd.quantity) {
+
+    if (0 <= itemToAdd.quantity) {
       currentItem.querySelector("span").textContent =
         itemToAdd.name + " - " + itemToAdd.cost + "원 x " + newQuantity;
       itemToAdd.quantity -= 1;

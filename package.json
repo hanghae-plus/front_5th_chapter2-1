@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "lint:fix": "eslint \"./src/{basic,advanced}/**/*.js\" --fix",
+    "prettier:write": "prettier --write \"./src/{basic,advanced}/**/*.js\" --ignore-path .prettierignore",
     "preview": "vite preview",
     "start:basic": "vite serve --open ./index.basic.html",
     "start:advanced": "vite serve --open ./index.advanced.html",
@@ -15,10 +17,15 @@
     "test:ui": "vitest --ui"
   },
   "devDependencies": {
+    "@eslint/js": "^9.24.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
     "@vitest/ui": "^3.1.1",
+    "eslint": "^9.24.0",
+    "eslint-config-prettier": "^10.1.2",
+    "globals": "^16.0.0",
     "jsdom": "^26.0.0",
+    "prettier": "3.5.3",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
   }

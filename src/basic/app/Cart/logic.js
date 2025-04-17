@@ -6,13 +6,7 @@ import {
   getFinalAmounts,
   getProductQuantityMessage,
 } from '../../../shared/app/Cart/calculation.js';
-
-export function createPointTag() {
-  const ptsTag = document.createElement('span');
-  ptsTag.id = ElementIds.LOYALTY_POINTS;
-  ptsTag.className = 'text-blue-500 ml-2';
-  return ptsTag;
-}
+import { createPointTag } from './index.js';
 
 function updateBonusPointDom(totalAmt) {
   const sum = document.getElementById(ElementIds.SUM);
@@ -93,6 +87,7 @@ function updateSumDom(totalAmt, discRate) {
 
 /**
  * 장바구니에서 확인한 총액과 할인율로 관련 DOM 업데이트
+ * - 장바구니 내용이 바뀔때마다 호출되어야 하는 특징이 있을 것으로 예상
  */
 export function logic() {
   // 장바구니 에 담긴 상품들을 확인해서 총액과 할인율을 계산

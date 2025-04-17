@@ -1,7 +1,6 @@
 import { ElementIds } from '../../../shared/app/constants.js';
 import { createCartDisplay } from './components/CartDisplay/index.js';
 import { createAddProduct } from './components/AddProduct/index.js';
-import { createPointTag } from './logic.js';
 import { getBonusPts } from '../../../shared/app/Cart/calculation.js';
 
 function createHeaderTxt() {
@@ -10,6 +9,13 @@ function createHeaderTxt() {
   hTxt.textContent = '장바구니';
 
   return hTxt;
+}
+
+export function createPointTag() {
+  const ptsTag = document.createElement('span');
+  ptsTag.id = ElementIds.LOYALTY_POINTS;
+  ptsTag.className = 'text-blue-500 ml-2';
+  return ptsTag;
 }
 
 function createSum() {

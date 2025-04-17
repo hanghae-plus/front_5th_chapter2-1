@@ -1,14 +1,36 @@
 import { ElementIds } from '../../../../../shared/app/constants.js';
-import { handleClickAddBtn, updateSelectOptionsDom } from './logic.js';
-import { getProductList } from '../../../../store/prodList.js';
+import { handleClickAddBtn } from './logic.js';
+
 import { getProductQuantityMessage } from '../../../../../shared/app/Cart/calculation.js';
+import { getProductList } from '../../../../../shared/store/productList.js';
+
+function createItemOptionDom(item) {
+  const opt = document.createElement('option');
+
+  const isSoldOut = item.q === 0;
+
+  opt.value = item.id;
+  opt.textContent = item.name + ' - ' + item.val + '원';
+  opt.disabled = isSoldOut;
+
+  return opt;
+}
+
+function createSelectOptions(selElem) {
+  const prodList = getProductList();
+
+  prodList.forEach((item) => {
+    const opt = createItemOptionDom(item);
+    selElem.appendChild(opt);
+  });
+}
 
 function createSel() {
   const sel = document.createElement('select');
   sel.id = ElementIds.SEL;
 
   sel.className = 'border rounded p-2 mr-2';
-  updateSelectOptionsDom(sel);
+  createSelectOptions(sel);
 
   return sel;
 }

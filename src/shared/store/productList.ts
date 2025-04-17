@@ -19,10 +19,15 @@ function deepCopyProdList(prodList: Product[]): Product[] {
   }));
 }
 
-export const prodList: Product[] = deepCopyProdList(defaultProdList);
+let prodList: Product[] = deepCopyProdList(defaultProdList);
 
 export function getProductList() {
   return prodList;
+}
+export function updateProductList(newProdList: Product[]) {
+  // 불변성 유지 (원본 데이터 변경 없음)
+  const updatedProdList = deepCopyProdList(newProdList);
+  prodList = updatedProdList;
 }
 
 export function findProductWithCondition(

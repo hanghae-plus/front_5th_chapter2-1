@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useProductList } from '../context/product';
 
 export const ProductSelect = () => {
-  const { productList, setProductList, lastSelectedOption } = useProductList();
+  const { productList, setProductList, setLastAddedProductId } =
+    useProductList();
 
   const [selectedProductId, setSelectedProductId] = useState(productList[0].id);
 
@@ -49,7 +50,7 @@ export const ProductSelect = () => {
                     : product,
                 ),
               );
-              lastSelectedOption.current = productToAdd;
+              setLastAddedProductId(productToAdd.id);
             } else {
               alert('재고가 부족합니다.');
             }

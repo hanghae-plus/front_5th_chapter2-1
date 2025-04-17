@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useRef,
-} from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Product, productList as INITIAL_PRODUCT_LIST } from '../data/products';
 import { DISCOUNT_RATE } from '../config/constants';
 
@@ -17,9 +11,13 @@ interface ProductContextType {
     amountWithDiscount: number;
     amountWithoutDiscount: number;
   };
-  lastSelectedOption: React.RefObject<Product | null>;
+
   avgDiscountRate: number;
   totalAmount: number;
+  lastAddedProductId: string | undefined;
+  setLastAddedProductId: React.Dispatch<
+    React.SetStateAction<string | undefined>
+  >;
 }
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
@@ -29,8 +27,9 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [productList, setProductList] =
     useState<Product[]>(INITIAL_PRODUCT_LIST);
-
-  const lastSelectedOption = useRef<Product | null>(null);
+  const [lastAddedProductId, setLastAddedProductId] = useState<
+    string | undefined
+  >();
 
   const cartList = productList.filter((product) => product.cartQuantity > 0);
 
@@ -75,7 +74,8 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
         productList,
         setProductList,
         total,
-        lastSelectedOption,
+        lastAddedProductId,
+        setLastAddedProductId,
         cartList,
         avgDiscountRate,
         totalAmount,

@@ -30,15 +30,6 @@ import { addCart, getCarts, updateQuantity, updateCarts, deleteCart } from './se
 
 let lastAddedItem = null;
 
-/** 등록된 상품 목록 - 정규화 */
-const PRODUCTS_BY_ID = {
-  p1: { id: 'p1', name: '상품1', price: 10000, quantity: 50, discount: 0.1 },
-  p2: { id: 'p2', name: '상품2', price: 20000, quantity: 30, disconnt: 0.15 },
-  p3: { id: 'p3', name: '상품3', price: 30000, quantity: 20, disconnt: 0.2 },
-  p4: { id: 'p4', name: '상품4', price: 15000, quantity: 0, disconnt: 0.05 },
-  p5: { id: 'p5', name: '상품5', price: 25000, quantity: 10, disconnt: 0.25 },
-};
-
 /** 등록된 상품 목록 */
 const PRODUCTS = [
   { id: 'p1', name: '상품1', price: 10000, quantity: 50, discount: 0.1 },
@@ -47,20 +38,6 @@ const PRODUCTS = [
   { id: 'p4', name: '상품4', price: 15000, quantity: 0, disconnt: 0.05 },
   { id: 'p5', name: '상품5', price: 25000, quantity: 2, disconnt: 0.25 },
 ];
-
-const MOCKCARTS = [
-  { id: 'p1', quantity: 4 },
-  { id: 'p2', quantity: 1 },
-];
-
-// 장바구니 렌더링 데이터
-const carts = MOCKCARTS.map((cartItem) => {
-  const product = PRODUCTS.find((p) => p.id === cartItem.id);
-  return {
-    ...product,
-    quantity: cartItem.quantity,
-  };
-});
 
 function main() {
   const root = document.getElementById('app');
@@ -338,7 +315,7 @@ const handleUpdateCarts = (e) => {
 //   }
 // });
 
-/** 장바구니 목록 ui 컴포넌트 */
+// 장바구니 아이템
 const CartItem = ({ id, name, price, quantity }) => `
   <div id="${id}" class="cart flex justify-between items-center mb-2"}>
       <span>${name} - ${price}원 x ${quantity}</span>

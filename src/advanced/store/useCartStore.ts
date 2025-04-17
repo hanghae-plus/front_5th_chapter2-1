@@ -21,6 +21,11 @@ export const useCartStore = create<CartStore>((set) => ({
       discountRate,
     }),
 
+  updateProductPrice: (id: string, newPrice: number) =>
+    set((state) => ({
+      products: state.products.map((p) => (p.id === id ? { ...p, val: newPrice } : p)),
+    })),
+
   resetCart: () =>
     set({
       products: cloneProducts(products),

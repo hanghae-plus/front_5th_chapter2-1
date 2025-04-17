@@ -22,5 +22,6 @@ export type CartStore = {
     itemCount: number,
     discountRate: number,
   ) => void;
+  updateProductPrice: (id: string, newPrice: number) => void;
   resetCart: () => void;
 };

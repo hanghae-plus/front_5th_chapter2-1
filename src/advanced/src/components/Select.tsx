@@ -14,7 +14,9 @@ interface SelectProps {
 }
 
 function Select({ products, onClick }: SelectProps) {
-  const [selectedProduct, setSelectedProduct] = useState<string>('');
+  const [selectedProduct, setSelectedProduct] = useState<string>(() => {
+    return products[0].id;
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedProduct(e.target.value);
@@ -46,8 +48,7 @@ function Select({ products, onClick }: SelectProps) {
       <Button
         id='add-to-cart'
         className='bg-blue-500 text-white px-4 py-2 rounded'
-        type='submit'
-        disabled={!selectedProduct}>
+        type='submit'>
         추가
       </Button>
     </form>

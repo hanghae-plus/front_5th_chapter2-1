@@ -59,8 +59,8 @@ function main() {
     cartItemsContainer.addEventListener('click', handleCartItemClick);
 
     // 이벤트 프로모션
-    setTimeout(function () {
-        setInterval(function () {
+    setTimeout(() => {
+        setInterval(() => {
             const luckyItem = productList[Math.floor(Math.random() * productList.length)];
             if (Math.random() < 0.3 && luckyItem.q > 0) {
                 luckyItem.val = Math.round(luckyItem.val * 0.8);
@@ -70,8 +70,8 @@ function main() {
         }, 30000);
     }, Math.random() * 10000);
 
-    setTimeout(function () {
-        setInterval(function () {
+    setTimeout(() => {
+        setInterval(() => {
             if (lastSelectedProductId) {
                 const suggestedItem = productList.find((item) => item.id !== lastSelectedProductId && item.q > 0);
                 if (suggestedItem) {
@@ -86,7 +86,7 @@ function main() {
 
 function updateSelectOptions() {
     productSelectElement.innerHTML = '';
-    productList.forEach(function (item) {
+    productList.forEach((item) => {
         const optionElement = document.createElement('option');
         optionElement.value = item.id;
         optionElement.textContent = `${item.name} - ${item.val}원`;
@@ -168,7 +168,7 @@ function renderBonusPoints() {
 
 function updateStockStatus() {
     let stockMessage = '';
-    productList.forEach(function (item) {
+    productList.forEach((item) => {
         if (item.q < 5) {
             stockMessage += `${item.name}: ${item.q > 0 ? `재고 부족 (${item.q}개 남음)` : '품절'}\n`;
         }
@@ -178,9 +178,7 @@ function updateStockStatus() {
 
 function handleAddToCart() {
     const selectedProductId = productSelectElement.value;
-    const productToAdd = productList.find(function (p) {
-        return p.id === selectedProductId;
-    });
+    const productToAdd = productList.find((p) => p.id === selectedProductId);
     if (productToAdd && productToAdd.q > 0) {
         const existingCartItem = document.getElementById(productToAdd.id);
         if (existingCartItem) {
@@ -224,9 +222,7 @@ function handleCartItemClick(event) {
     if (targetElement.classList.contains('quantity-change') || targetElement.classList.contains('remove-item')) {
         const productId = targetElement.dataset.productId;
         const cartItemElement = document.getElementById(productId);
-        const product = productList.find(function (p) {
-            return p.id === productId;
-        });
+        const product = productList.find((p) => p.id === productId);
         if (targetElement.classList.contains('quantity-change')) {
             const quantityChange = parseInt(targetElement.dataset.change);
             const newQuantity =

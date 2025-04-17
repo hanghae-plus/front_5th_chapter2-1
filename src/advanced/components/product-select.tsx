@@ -7,7 +7,7 @@ type Props = {
   onChange: (id: string) => void;
 };
 
-const ProductSelect = ({ selectedId, onChange }: Props) => {
+function ProductSelect({ selectedId, onChange }: Props) {
   const { products } = useCartStore();
 
   return (
@@ -19,6 +19,6 @@ const ProductSelect = ({ selectedId, onChange }: Props) => {
       ))}
     </select>
   );
-};
+}
 
 export default ProductSelect;

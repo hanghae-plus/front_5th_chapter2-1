@@ -1,5 +1,5 @@
 import ITEMS from '../../constants/items';
-import { Items } from '../../types/items';
+import { Item } from '../../types/items';
 import { SUGGEST_DISCOUNT_RATE } from './constants';
 
 // let recentSelectedId = new RecentSelectedId().get();
@@ -9,7 +9,7 @@ const getSuggestItem = () => {
   return ITEMS.find((item) => item.id !== recentSelectedId && item.stock > 0);
 };
 
-const calculateSuggestItemPrice = (suggestItem: Items) => {
+const calculateSuggestItemPrice = (suggestItem: Item) => {
   return Math.round(suggestItem.price * SUGGEST_DISCOUNT_RATE);
 };
 

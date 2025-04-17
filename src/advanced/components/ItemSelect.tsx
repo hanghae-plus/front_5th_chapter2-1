@@ -1,5 +1,5 @@
 import ITEMS from '../constants/items';
-import { Items } from '../types/items';
+import { Item } from '../types/items';
 
 const ItemSelect = ({
   selectedItemId,
@@ -18,7 +18,7 @@ const ItemSelect = ({
       <option value="" disabled>
         상품을 선택하세요
       </option>
-      {ITEMS.map((item: Items) => (
+      {ITEMS.map((item: Item) => (
         <option key={item.id} value={item.id} disabled={item.stock === 0}>
           {item.name} - {item.price}원
         </option>

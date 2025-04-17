@@ -1,15 +1,14 @@
-import { container } from './ui/Container';
-import { cartItem } from './ui/CartItem';
-import { cartResult } from './ui/CartTotal';
-import { selectBox } from './ui/selectBox';
-import { cartAddBtn } from './ui/cartAddBtn';
-import { stockInfo } from './ui/StockInfo';
-import { useCart } from './module/useCart';
 import { timeOutSale } from './module/timeOutSale';
+import { useCart } from './module/useCart';
+import { cartAddBtn } from './ui/CartAddBtn';
+import { cartItem } from './ui/CartItem';
+import { cartResult } from './ui/CartResult';
+import { container } from './ui/Container';
+import { selectBox } from './ui/SelectBox';
+import { stockInfo } from './ui/StockInfo';
 
-function main() {
-  // 루트 요소
-  const root = document.getElementById('app');
+function MainComponent() {
+  const root = document.getElementById('root');
 
   // 훅 초기화
   const cart = useCart();
@@ -60,5 +59,4 @@ function main() {
   timeOutSale();
 }
 
-// 앱 초기화
-main();
+export { MainComponent };

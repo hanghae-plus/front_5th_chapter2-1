@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { cartAtom } from "../../state";
-import { calculateDiscountRate, calculateTotalPrice } from "../../utils";
+import { calculateDiscountRate, calculateTotalPrice, updateProductList } from "../../utils";
 
 export const useQuantityChange = () => {
   const [cart, setCart] = useAtom(cartAtom);
@@ -18,8 +18,8 @@ export const useQuantityChange = () => {
       alert("재고가 부족합니다. ");
       return;
     }
-    const updatedProduct = { ...product, count: product.count - change };
-    const updatedProductList = cart.productList.map((item) => (item.id === productId ? updatedProduct : item));
+
+    const updatedProductList = updateProductList(cart.productList, productId, -change);
 
     const updatedCartList = cartList
       .map((item) => (item.id === productId ? { ...item, count: item.count + change } : item))

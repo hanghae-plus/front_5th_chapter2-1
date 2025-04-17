@@ -1,5 +1,5 @@
 import type { GlobalState } from "../../types";
-import { calculateTotalPrice } from "../../utils";
+import { calculateTotalPrice, updateProductList } from "../../utils";
 
 export const handleCountChange = (productId: string, change: number, state: GlobalState) => {
   const cartList = state.cartList;
@@ -24,8 +24,7 @@ export const handleCountChange = (productId: string, change: number, state: Glob
       newTotalPrice: state.totalPrice,
     };
   }
-  const updatedProduct = { ...product, count: product.count - change };
-  const updatedProductList = state.productList.map((item) => (item.id === productId ? updatedProduct : item));
+  const updatedProductList = updateProductList(state.productList, productId, -change);
 
   const updatedCartList = cartList
     .map((item) => (item.id === productId ? { ...item, count: item.count + change } : item))

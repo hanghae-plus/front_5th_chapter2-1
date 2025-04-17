@@ -1,7 +1,8 @@
 import { useAtom } from "jotai";
 import { cartAtom } from "../../state";
 import type { CartItem } from "../../types";
-import { calculateDiscountRate, calculateTotalPrice } from "../../utils";
+import { calculateDiscountRate, calculateTotalPrice, updateProductList } from "../../utils";
+
 export const useAddToCart = () => {
   const [cart, setCart] = useAtom(cartAtom);
 
@@ -23,9 +24,7 @@ export const useAddToCart = () => {
       ...selectedProduct,
       count: selectedProduct.count - 1,
     };
-    const updatedProductList = cart.productList.map((product) =>
-      product.id === selectedProductId ? updatedProduct : product,
-    );
+    const updatedProductList = updateProductList(cart.productList, selectedProductId, -1);
 
     let updatedCartList: CartItem[];
     const existingCartItem = cart.cartList.find((item: CartItem) => item.id === selectedProductId);

@@ -2,9 +2,11 @@ import type React from "react";
 import { STYLES } from "@/basic/consts/styles";
 import { DOM_IDS } from "@/basic/consts/dom";
 import { useCart, useProduct } from "@/advanced/context";
+import { getCartCalculation } from "@/advanced/logic";
+
 export const AddButton: React.FC = () => {
 
-  const { cartItems, setCartItems } = useCart();
+  const { cartItems, setCartItems, setCart } = useCart();
   const { selectedProductId, productList, setProductList } = useProduct();
 
   const handleClick = () => {
@@ -24,8 +26,10 @@ export const AddButton: React.FC = () => {
       const newCartItems = [...cartItems];
       newCartItems[existingItemIndex].quantity += 1;
       setCartItems(newCartItems);
+      getCartCalculation(newCartItems, setCart);
     } else {
       setCartItems([...cartItems, { ...itemToAdd, quantity: 1 }]);
+      getCartCalculation([...cartItems, { ...itemToAdd, quantity: 1 }], setCart);
     }
 
     setProductList(productList.map(product => 
@@ -33,6 +37,7 @@ export const AddButton: React.FC = () => {
         ? { ...product, quantity: product.quantity - 1 }
         : product
     ));
+
   };
 
   return (

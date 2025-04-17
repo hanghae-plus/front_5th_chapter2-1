@@ -4,13 +4,14 @@ import { formatPrice } from "@/advanced/utils/format";
 import type { Product } from "@/advanced/types/product";
 import { useCart, useProduct } from "@/advanced/context";
 import { alertOutOfStock } from "@/advanced/utils/alert";
+import { getCartCalculation } from "@/advanced/logic";
 
 interface CartItemProps {
   item: Product;
 }
 
 export const CartItem: React.FC<CartItemProps> = ({ item }) => {
-  const { cartItems, setCartItems } = useCart();
+  const { cartItems, setCartItems, setCart } = useCart();
   const { productList, setProductList } = useProduct();
 
   const handleQuantityChange = (change: number) => {
@@ -29,6 +30,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
           ? { ...product, quantity: product.quantity + currentQuantity }
           : product
       ));
+      getCartCalculation(cartItems.filter(cartItem => cartItem.id !== item.id), setCart);
       return;
     }
 
@@ -42,6 +44,11 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
         ? { ...cartItem, quantity: newQuantity }
         : cartItem
     ));
+    getCartCalculation(cartItems.map(cartItem => 
+      cartItem.id === item.id 
+        ? { ...cartItem, quantity: newQuantity }
+        : cartItem
+    ), setCart);
 
     setProductList(productList.map(product => 
       product.id === item.id 
@@ -57,6 +64,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item }) => {
         ? { ...product, quantity: product.quantity + item.quantity }
         : product
     ));
+    getCartCalculation(cartItems.filter(cartItem => cartItem.id !== item.id), setCart);
   };
 
   return (

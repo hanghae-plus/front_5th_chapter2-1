@@ -1,7 +1,7 @@
 import CartItem from "../components/CartItem.js";
 import CartTotal from "../components/CartTotal.js";
 import ProductSelect from "../components/ProductSelect.js";
-import StockInfo from "../components/StockInfo.js";
+import StockStatus from "../components/StockStatus.js";
 
 /**
  * 특정 요소의 내용을 새 HTML로 대체
@@ -67,11 +67,18 @@ export const renderProductSelect = (element, products) => {
 };
 
 /**
+ * 상품 옵션 목록 렌더링 (기존 코드와의 호환성 유지)
+ * @param {Element} element - 상품 선택기 요소
+ * @param {Array|null} products - 상품 목록 (null이면 스토어에서 가져옴)
+ */
+export const renderProductOptions = renderProductSelect;
+
+/**
  * 재고 정보 렌더링
  * @param {Element} element - 재고 정보 요소
  * @param {Array} products - 상품 목록
  * @param {number} threshold - 재고 부족 기준값 (기본값: 5)
  */
-export const renderStockInfo = (element, products, threshold = 5) => {
-  render(element, StockInfo(products, threshold));
+export const renderStockStatus = (element, products, threshold = 5) => {
+  render(element, StockStatus(products, threshold));
 };

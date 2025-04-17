@@ -24,8 +24,9 @@ import {
   removeCartItem,
   renderCartTotal,
   renderProductSelect,
-  renderStockInfo
+  renderStockStatus
 } from "./utils/renderUtils.js";
+import { startAllPromotions } from "./services/promotion.js";
 
 /**
  * 앱 초기 렌더링
@@ -55,7 +56,7 @@ const updateUI = () => {
   // 컴포넌트 기반 UI 업데이트
   renderProductSelect(productSelectEl, products);
   renderCartTotal(cartTotalEl, state.totalAmount, state.discountRate, bonusPoints);
-  renderStockInfo(stockStatusEl, products);
+  renderStockStatus(stockStatusEl, products);
 };
 
 /**
@@ -205,6 +206,9 @@ const initApp = () => {
 
   // 이벤트 핸들러 설정
   setupEventHandlers();
+
+  // 프로모션 기능 시작
+  startAllPromotions();
 
   // 스토어 구독 설정 - 상태 변경 시 UI 업데이트
   store.subscribe(() => {

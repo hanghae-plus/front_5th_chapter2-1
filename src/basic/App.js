@@ -1,4 +1,4 @@
-import { CartTotal, ProductSelect, StockInfo } from "./components/index.js";
+import { CartTotal, ProductSelect, StockStatus } from "./components/index.js";
 /**
  * 최상위 컨테이너 컴포넌트
  */
@@ -11,7 +11,7 @@ const App = ({ products = [], totalAmount = 0, discountRate = 0, bonusPoints = 0
         ${CartTotal(totalAmount, discountRate, bonusPoints)}
         ${ProductSelect(products)}
         <button id="add-to-cart" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
-        ${StockInfo(products)}
+        ${StockStatus(products)}
       </div>
     </div>
   `.replace(/\n\s*/g, "");

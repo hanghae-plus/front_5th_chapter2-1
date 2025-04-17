@@ -1,4 +1,4 @@
-import { SALE_CONFIG } from "../config/sale-config";
+import { SALE_CONFIG } from "../constants/sale-config";
 import { cartState } from "../store/state";
 
 import { renderProductOptions } from "../ui/render-product-options";
@@ -30,13 +30,18 @@ const startLuckySaleTimer = () => {
 
 /**
  * 최근 선택된 상품을 기반으로 추천 상품에 5% 할인을 적용하는 타이머 함수
+ *
+ * @param getLastSale - 현재 마지막으로 선택된 상품의 ID를 반환하는 함수
+ *
  */
 const startLastSaleTimer = (getLastSale) => {
   setTimeout(function () {
     setInterval(function () {
       const lastSale = getLastSale();
       if (lastSale) {
-        const suggest = cartState.products.find((item) => item.id !== lastSel && item.q > 0);
+        const suggest = cartState.products.find(
+          (item) => item.id !== cartState.lastSelected && item.q > 0,
+        );
 
         if (suggest) {
           alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");

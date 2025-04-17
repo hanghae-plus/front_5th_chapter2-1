@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   env: {
     browser: true,
     es2021: true,
@@ -11,11 +11,7 @@ module.exports = {
     },
   },
   plugins: ["react", "react-hooks", "prettier"],
-  extends: [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "plugin:prettier/recommended", 
-  ],
+  extends: ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
   settings: {
     react: {
       version: "detect",
@@ -24,5 +20,5 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
     "react/react-in-jsx-scope": "off",
-}
-}
+  },
+};

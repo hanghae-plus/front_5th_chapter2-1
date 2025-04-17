@@ -18,7 +18,6 @@ const createLoyaltyTag = (parent) => {
 const renderBonusPoints = (sum) => {
   const bonusPoints = Math.floor(cartState.finalTotal / 1000);
   const pointsTag = document.getElementById("loyalty-points") ?? createLoyaltyTag(sum);
-
   pointsTag.innerHTML = `(포인트: <span>${bonusPoints}</span>)`;
 };
 
@@ -43,9 +42,14 @@ const updateStockInfo = () => {
 /** 장바구니 항목을 기반으로 금액 및 할인 정보를 계산하고 화면에 렌더링하는 함수 */
 function calculateCart() {
   const $sum = document.getElementById("cart-total");
+
+  //1.장바구니 전체 금액 계산
   calculateCartTotals();
+
+  // 2.할인 계산
   calculateDiscount();
 
+  // 3. UI 반영
   displayPriceInfo($sum);
   updateStockInfo();
   renderBonusPoints($sum);

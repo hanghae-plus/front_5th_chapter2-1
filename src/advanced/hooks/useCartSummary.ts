@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { CartItem } from '../types'
 import { DISCOUNT } from '../constants';
 
-
 interface CartSummary {
   discountRate: number
   finalTotal: number

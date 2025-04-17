@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
       setupFiles: ['/src/setupTests.js'],
       include: [
         'src/basic/**/*.test.js',
-        'src/advanced/**/*.{test,spec}.{ts,tsx}',
+        'src/advanced/**/*.test.js',
       ],
       coverage: {
         provider: 'v8',

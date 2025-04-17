@@ -6,16 +6,19 @@ export function useFlashSale(
   products: Product[],
   onPriceUpdate: (updated:Product) => void
 ) {
+  function shouldApplyDiscount(item: Product): boolean {
+    return Math.random() < DISCOUNT.SALE_PROBABILITY && item.quantity > 0;
+  }
+
   useEffect(() => {
     // 랜덤 초기 지연
-    const startDelay = Math.random() * 20000;
+    const startDelay = Math.random() * 10000;
     const alarmTimer = setTimeout(() => {
       const saleInterval = setInterval(() => {
         const luckyItem =
           products[Math.floor(Math.random() * products.length)];
         if (
-          Math.random() < DISCOUNT.SALE_PROBABILITY &&
-          luckyItem.quantity > 0
+          shouldApplyDiscount(luckyItem)
         ) {
           alert(
             `번개세일! ${luckyItem.name}이(가) ${
@@ -32,6 +35,6 @@ export function useFlashSale(
       return () => clearInterval(saleInterval);
     }, startDelay);
     return () => clearTimeout(alarmTimer);
-  }, []);
+  }, [products]);
 
 }

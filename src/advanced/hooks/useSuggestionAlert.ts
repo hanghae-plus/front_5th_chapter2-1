@@ -7,14 +7,19 @@ export function useSuggestionAlert(
   products: Product[],
   lastSelectedId: string | null
 ) {
+
+  function findAlternativeProduct() {
+    return products.find(
+      (item) => item.id !== lastSelectedId && item.quantity > 0
+    );
+  }
+
   useEffect(() => {
     const startDelay = Math.random() * 20000;
     const alarmTimer = setTimeout(() => {
       const suggestionInterval = setInterval(() => {
         if (!lastSelectedId) return;
-        const alternativeProduct = products.find(
-          (p) => p.id !== lastSelectedId && p.quantity > 0
-        );
+        const alternativeProduct = findAlternativeProduct();
         if (alternativeProduct) {
           alert(
             ` ${alternativeProduct.name}은(는) 어떠세요? 지금 구매하시면 ${
@@ -26,5 +31,5 @@ export function useSuggestionAlert(
       return () => clearInterval(suggestionInterval);
     }, startDelay);
     return () => clearTimeout(alarmTimer);
-  }, []);
+  }, [products]);
 }

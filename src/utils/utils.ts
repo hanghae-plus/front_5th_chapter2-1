@@ -1,14 +1,18 @@
 export const scheduleRepeatingAlert = ({
-  delayRange = 10000,
-  interval = 30000,
+  delayRange,
+  interval,
   condition,
   onTrigger,
+}: {
+  delayRange: number;
+  interval: number;
+  condition: () => boolean;
+  onTrigger: () => void;
 }) => {
-  setTimeout(() => {
-    setInterval(() => {
-      if (condition()) {
-        onTrigger();
-      }
-    }, interval);
-  }, Math.random() * delayRange);
+  setTimeout(function loop() {
+    if (condition()) {
+      onTrigger();
+    }
+    setTimeout(loop, interval);
+  }, delayRange || 0);
 };

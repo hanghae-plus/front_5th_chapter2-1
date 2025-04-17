@@ -5,9 +5,11 @@ import {
   TotalAmountDisplay,
 } from './components';
 import { useLuckyDraw } from './hooks/use-lucky-draw';
+import { useSuggestion } from './hooks/use-suggestion';
 
 export const Main = () => {
   useLuckyDraw();
+  useSuggestion();
 
   return (
     <div className="bg-gray-100 p-8">

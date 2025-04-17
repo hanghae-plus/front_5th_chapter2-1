@@ -1,0 +1,10 @@
+// 상품 액션 타입
+export const INITIALIZE_PRODUCTS = "INITIALIZE_PRODUCTS";
+export const UPDATE_PRODUCT_STOCK = "UPDATE_PRODUCT_STOCK";
+
+// 장바구니 액션 타입
+export const ADD_TO_CART = "ADD_TO_CART";
+export const UPDATE_CART_ITEM = "UPDATE_CART_ITEM";
+export const REMOVE_FROM_CART = "REMOVE_FROM_CART";
+export const SET_LAST_SELECTED = "SET_LAST_SELECTED";
+export const UPDATE_CART_TOTALS = "UPDATE_CART_TOTALS";

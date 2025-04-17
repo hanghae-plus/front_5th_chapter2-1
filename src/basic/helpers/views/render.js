@@ -1,23 +1,29 @@
 export function mount() {
   const root = document.getElementById("app");
-  const wrap = document.createElement("div");
-  wrap.className =
-    "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
-  const children = addChildren(wrap);
-
-  const container = document.createElement("div");
-  container.className = "bg-gray-100 p-8";
-  container.appendChild(wrap);
+  const { container, wrapper } = createLayout();
+  const children = initChildren(wrapper);
 
   root.appendChild(container);
 
   return children;
 }
 
-function addChildren(wrap) {
-  const head = document.createElement("h1");
-  head.className = "text-2xl font-bold mb-4";
-  head.textContent = "장바구니";
+function createLayout() {
+  const container = document.createElement("div");
+  container.className = "bg-gray-100 p-8";
+
+  const wrapper = document.createElement("div");
+  wrapper.className =
+    "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
+
+  container.appendChild(wrapper);
+  return { container, wrapper };
+}
+
+function initChildren(wrapper) {
+  const heading = document.createElement("h1");
+  heading.className = "text-2xl font-bold mb-4";
+  heading.textContent = "장바구니";
 
   const cartItemList = document.createElement("div");
   cartItemList.id = "cart-items";
@@ -38,13 +44,14 @@ function addChildren(wrap) {
   const stockStatusEl = document.createElement("div");
   stockStatusEl.id = "stock-status";
   stockStatusEl.className = "text-sm text-gray-500 mt-2";
+  stockStatusEl.style.whiteSpace = "pre-wrap";
 
-  wrap.appendChild(head);
-  wrap.appendChild(cartItemList);
-  wrap.appendChild(cartTotalEl);
-  wrap.appendChild(productSelector);
-  wrap.appendChild(addToCartButton);
-  wrap.appendChild(stockStatusEl);
+  wrapper.appendChild(heading);
+  wrapper.appendChild(cartItemList);
+  wrapper.appendChild(cartTotalEl);
+  wrapper.appendChild(productSelector);
+  wrapper.appendChild(addToCartButton);
+  wrapper.appendChild(stockStatusEl);
 
   return [
     cartItemList,

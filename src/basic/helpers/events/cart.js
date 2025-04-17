@@ -1,13 +1,13 @@
-import { products } from "../constants.js";
+import { products } from "../../constants.js";
 
-import { getSelectedProduct } from "./logic/selector.js";
+import { getSelectedProduct } from "../logic/selector.js";
 import {
   updateExistingCartItem,
   createNewCartItem,
   handleQuantityChange,
   handleRemoveItem,
-} from "./logic/cart.js";
-import { calculateCart } from "./logic/calculateCart.js";
+} from "../logic/cart.js";
+import { calculateCart } from "../logic/calculateCart.js";
 
 export function bindCartEvents({
   cartItemList,

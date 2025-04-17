@@ -16,6 +16,7 @@ import {
 } from './utils/index.js';
 
 function render() {
+  const cartItems = document.getElementById('cart-items').children;
   const wrap = document.createElement('div');
   wrap.className =
     'max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8';
@@ -24,17 +25,16 @@ function render() {
   wrap.appendChild(renderProductSelect());
   wrap.appendChild(renderProductAddButton());
   wrap.appendChild(renderProductList());
+  calculatePrice(cartItems);
 
-  const cont = document.createElement('div');
-  cont.className = 'bg-gray-100 p-8';
-  cont.appendChild(wrap);
+  const contents = document.createElement('div');
+  contents.className = 'bg-gray-100 p-8';
+  contents.appendChild(wrap);
 
   const root = document.getElementById('app');
-  root.appendChild(cont);
+  root.appendChild(contents);
 
-  calculatePrice();
-
-  return cont;
+  return contents;
 }
 
 function main() {

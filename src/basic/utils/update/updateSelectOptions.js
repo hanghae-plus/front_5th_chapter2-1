@@ -4,7 +4,7 @@
 // const updateSelectOptions = () => {
 
 //   products.forEach(function (item) {
-//     var opt = document.createElement("option");
+//     let opt = document.createElement("option");
 //     opt.value = item.id;
 //     opt.textContent = `${item.name} - ${item.price}원`;
 

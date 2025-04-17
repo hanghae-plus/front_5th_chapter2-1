@@ -35,7 +35,6 @@ const CartItems = () => {
       )
       .join('')}`;
 
-    // 이벤트 리스너 등록
     addEventListeners('button[data-change="1"]', 'click', handleClickIncrease);
     addEventListeners('button[data-change="-1"]', 'click', handleClickDecrease);
     addEventListeners('.remove-item', 'click', handleClickRemove);

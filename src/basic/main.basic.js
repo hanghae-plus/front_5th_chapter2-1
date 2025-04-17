@@ -3,8 +3,8 @@
  * -[v] 초기 createElement된 요소들은 template으로 관리
  * -[v] 만들 수 있는 부분은 component로 만들기 -> 진행중
  * -[v] 장바구니 같은 아이디값 여러개 렌더링 되는 문제
- * -[ ] 재고 확인하는 함수
- * -[ ] 재고 확인하고 재고량에 맞춰서 업데이트하기 -> 재고가 부족합니다.
+ * -[v] 재고 확인하는 함수
+ * -[v] 재고 확인하고 재고량에 맞춰서 업데이트하기 -> 재고가 부족합니다.
  * -[ ] totalPrice 소수점 맞추기
  * -[ ] 재고 상태 ( = stocksState ) 확인하는 ui 컴포넌트 만들기
  * -[ ] 시간별 랜덤 상품 할인 alert
@@ -33,18 +33,10 @@ import {
   updateQuantity,
   updateCarts,
   deleteCart,
+  PRODUCTS,
 } from './service';
 
 let lastAddedItem = null;
-
-/** 등록된 상품 목록 */
-const PRODUCTS = [
-  { id: 'p1', name: '상품1', price: 10000, quantity: 50, discount: 0.1 },
-  { id: 'p2', name: '상품2', price: 20000, quantity: 3, disconnt: 0.15 },
-  { id: 'p3', name: '상품3', price: 30000, quantity: 20, disconnt: 0.2 },
-  { id: 'p4', name: '상품4', price: 15000, quantity: 0, disconnt: 0.05 },
-  { id: 'p5', name: '상품5', price: 25000, quantity: 2, disconnt: 0.25 },
-];
 
 const App = () => {
   const root = document.getElementById('app');
@@ -255,18 +247,48 @@ const handleAddCarts = (e) => {
 
 /** 상품 수량 변경 이벤트 핸들러 */
 const handleUpdateCarts = (e) => {
-  console.log('수량변경');
   e.preventDefault();
   if (e.target.nodeName !== 'BUTTON') return;
-  if (e.target.classList.contains('quantity-change')) {
-    const id = e.target.closest('.cart').id;
-    const carts = getStorageItem('carts') || [];
-    // const target = {
-    //   id: e.target.closest('.cart').id,
-    //   action: e.target.dataset.action,
-    // };
-    // updateCarts(target);
+  if (!e.target.classList.contains('quantity-change')) return;
+
+  const carts = getStorageItem('carts') || [];
+  const targetId = e.target.closest('.cart').id;
+
+  const product = carts.find((cart) => cart.id === targetId);
+  const stockProduct = PRODUCTS.find((p) => p.id === targetId);
+
+  console.log(stockProduct);
+  if (!product || !stockProduct) return;
+
+  let updateCarts = [];
+
+  const action = e.target.dataset.action;
+
+  switch (action) {
+    case 'add':
+      if (product.quantity + 1 > stockProduct.stock) {
+        alert('재고가 부족합니다.');
+        return;
+      }
+      console.log('add');
+      updateCarts = carts.map((item) =>
+        item.id === targetId ? { ...item, quantity: item.quantity + 1 } : item,
+      );
+      break;
+    case 'subtract':
+      updateCarts = carts
+        .map((item) => (item.id === targetId ? { ...item, quantity: item.quantity - 1 } : item))
+        .filter((item) => item.quantity > 0);
+
+      console.log(updateCarts);
+      break;
+    default:
+      console.log('not found action');
+      return;
   }
+
+  localStorage.setItem('carts', JSON.stringify(updateCarts));
+  renderCarts();
 };
 
 // 장바구니 추가 버튼 클릭 이벤트

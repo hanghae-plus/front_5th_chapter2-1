@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import { useProductList } from '../context/product';
+import { useStock } from '../context/stock';
 
 export const ProductSelect = () => {
-  const { productList, setProductList, setLastAddedProductId } =
-    useProductList();
+  const { stockList, setProductList, setLastAddedProductId } = useStock();
 
-  const [selectedProductId, setSelectedProductId] = useState(productList[0].id);
+  const [selectedProductId, setSelectedProductId] = useState(stockList[0].id);
 
   return (
     <>
@@ -19,7 +18,7 @@ export const ProductSelect = () => {
           setSelectedProductId(selectedId);
         }}
       >
-        {productList.map((product) => (
+        {stockList.map((product) => (
           <option
             key={product.id}
             disabled={product.stockQuantity === 0}
@@ -34,7 +33,7 @@ export const ProductSelect = () => {
         data-testid="add-to-cart"
         className="bg-blue-500 text-white px-4 py-2 rounded"
         onClick={() => {
-          const productToAdd = productList.find(
+          const productToAdd = stockList.find(
             (product) => product.id === selectedProductId,
           );
           if (productToAdd) {

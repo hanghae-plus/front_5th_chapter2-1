@@ -1,7 +1,7 @@
-import { useProductList } from '../context/product';
+import { useStock } from '../context/stock';
 
 export const TotalAmountDisplay = () => {
-  const { totalAmount, avgDiscountRate } = useProductList();
+  const { totalAmount, avgDiscountRate } = useStock();
   const points = Math.floor(totalAmount / 1000);
 
   return (

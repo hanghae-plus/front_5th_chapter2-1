@@ -1,22 +1,22 @@
 import { useEffect, useRef } from 'react';
-import { useProductList } from '../context/product';
+import { useStock } from '../context/stock';
 
 import { DISCOUNT_RATE } from '../config/constants';
 import { startRandomlyInMs } from '../utils/time';
 
 export const useSuggestion = () => {
-  const { productList, setProductList, lastAddedProductId } = useProductList();
+  const { stockList, setProductList, lastAddedProductId } = useStock();
 
-  // productList, lastSelected를 최신화하기 위한 ref
+  // stockList, lastSelected를 최신화하기 위한 ref
   // useRef는 컴포넌트가 리렌더링 되어도 값이 유지됨 + 값이 변경되어도 리렌더링을 유발하지 않음
-  const productListRef = useRef(productList);
+  const productListRef = useRef(stockList);
   const lastAddedProductIdRef = useRef(lastAddedProductId);
 
   // productList와 lastSelectedId가 변경될 때마다 최신화
   useEffect(() => {
-    productListRef.current = productList;
+    productListRef.current = stockList;
     lastAddedProductIdRef.current = lastAddedProductId;
-  }, [productList, lastAddedProductIdRef]);
+  }, [stockList, lastAddedProductIdRef]);
 
   useEffect(() => {
     const startSuggestion = () => {

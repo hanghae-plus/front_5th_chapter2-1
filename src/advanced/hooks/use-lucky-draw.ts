@@ -1,19 +1,19 @@
 import { useEffect, useRef } from 'react';
-import { useProductList } from '../context/product';
+import { useStock } from '../context/stock';
 import { startRandomlyInMs } from '../utils/time';
 import { DISCOUNT_RATE, THRESHOLD } from '../config/constants';
 
 export const useLuckyDraw = () => {
-  const { productList, setProductList } = useProductList();
+  const { stockList, setProductList } = useStock();
 
   // productList를 최신화하기 위한 ref
   // useRef는 컴포넌트가 리렌더링 되어도 값이 유지됨 + 값이 변경되어도 리렌더링을 유발하지 않음
-  const productListRef = useRef(productList);
+  const productListRef = useRef(stockList);
 
-  // productList 최신화
+  // stockList 최신화
   useEffect(() => {
-    productListRef.current = productList;
-  }, [productList]);
+    productListRef.current = stockList;
+  }, [stockList]);
 
   useEffect(() => {
     const startLuckyDraw = () => {

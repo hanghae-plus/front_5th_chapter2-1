@@ -1,11 +1,11 @@
-import { ProductProvider } from './context/product';
+import { StockProvider } from './context/stock';
 import { Main } from './Main';
 
 const App = () => {
   return (
-    <ProductProvider>
+    <StockProvider>
       <Main />
-    </ProductProvider>
+    </StockProvider>
   );
 };
 

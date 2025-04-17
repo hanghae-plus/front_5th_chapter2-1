@@ -1,4 +1,4 @@
-import { useProductList } from '../../context/product';
+import { useStock } from '../../context/stock';
 import { Product } from 'src/advanced/data/products';
 
 interface CartQuantityButtonProps
@@ -14,7 +14,7 @@ export const CartQuantityButton: React.FC<CartQuantityButtonProps> = ({
   label,
   ...props
 }) => {
-  const { cartList, setProductList } = useProductList();
+  const { cartList, setProductList } = useStock();
 
   return (
     <button

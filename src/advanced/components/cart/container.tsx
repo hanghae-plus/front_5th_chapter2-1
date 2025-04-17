@@ -1,8 +1,8 @@
-import { useProductList } from '../../context/product';
+import { useStock } from '../../context/stock';
 import { CartItem } from './item';
 
 export const CartItemContainer = () => {
-  const { cartList } = useProductList();
+  const { cartList } = useStock();
 
   return (
     <div id="cart-items" data-testid="cart-items">

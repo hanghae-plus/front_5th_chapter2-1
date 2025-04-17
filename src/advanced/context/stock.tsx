@@ -1,9 +1,9 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { Product, productList as INITIAL_PRODUCT_LIST } from '../data/products';
+import { Product, INITIAL_PRODUCT_LIST } from '../data/products';
 import { DISCOUNT_RATE } from '../config/constants';
 
-interface ProductContextType {
-  productList: Product[];
+interface StockContextType {
+  stockList: Product[];
   setProductList: React.Dispatch<React.SetStateAction<Product[]>>;
   cartList: Product[];
   total: {
@@ -20,18 +20,17 @@ interface ProductContextType {
   >;
 }
 
-const ProductContext = createContext<ProductContextType | undefined>(undefined);
+const StockContext = createContext<StockContextType | undefined>(undefined);
 
-export const ProductProvider: React.FC<{ children: ReactNode }> = ({
+export const StockProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [productList, setProductList] =
-    useState<Product[]>(INITIAL_PRODUCT_LIST);
+  const [stockList, setProductList] = useState<Product[]>(INITIAL_PRODUCT_LIST);
   const [lastAddedProductId, setLastAddedProductId] = useState<
     string | undefined
   >();
 
-  const cartList = productList.filter((product) => product.cartQuantity > 0);
+  const cartList = stockList.filter((product) => product.cartQuantity > 0);
 
   const total = cartList.reduce(
     (prev, product) => {
@@ -69,9 +68,9 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
     total.count > 30 ? bulkDiscountAmount : total.amountWithDiscount;
 
   return (
-    <ProductContext.Provider
+    <StockContext.Provider
       value={{
-        productList,
+        stockList,
         setProductList,
         total,
         lastAddedProductId,
@@ -82,14 +81,14 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
       }}
     >
       {children}
-    </ProductContext.Provider>
+    </StockContext.Provider>
   );
 };
 
-export const useProductList = (): ProductContextType => {
-  const context = useContext(ProductContext);
+export const useStock = (): StockContextType => {
+  const context = useContext(StockContext);
   if (!context) {
-    throw new Error('useProducts must be used within a ProductProvider');
+    throw new Error('useStock must be used within a StockProvider');
   }
   return context;
 };

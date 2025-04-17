@@ -1,13 +1,13 @@
-import { useProductList } from '../context/product';
+import { useStock } from '../context/stock';
 import { getProductStockStatusString } from '../utils/product';
 
 export const StockStatusDisplay = () => {
-  const { productList } = useProductList();
+  const { stockList } = useStock();
 
   // 재고가 5개 미만인 상품의 상태를 문자열로 변환
-  const infoMsg = productList
+  const infoMsg = stockList
     // 재고가 5개 미만인 상품만 필터링
-    .filter((p) => p.stockQuantity < 5)
+    .filter((stock) => stock.stockQuantity < 5)
     // 각 재고별 상태 문자열로 변환
     .map(getProductStockStatusString)
     // 줄바꿈 문자로 연결

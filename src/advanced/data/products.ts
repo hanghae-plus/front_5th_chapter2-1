@@ -7,7 +7,7 @@ export interface Product {
   discountRate: number;
 }
 
-export const productList = [
+export const INITIAL_PRODUCT_LIST = [
   {
     id: 'p1',
     name: '상품1',

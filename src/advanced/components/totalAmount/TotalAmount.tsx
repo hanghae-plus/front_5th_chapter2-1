@@ -12,7 +12,6 @@ export const TotalAmount: React.FC = () => {
     itemCount: cartItems.length,
     totalAmount,
     subTotal: cartItems.reduce((acc, item) => acc + item.value * item.quantity, 0),
-    setCart: () => {}
   });
 
   const hasDiscount = discountRate > 0;

@@ -4,7 +4,7 @@ import { CartList } from "./components/CartList.js";
 import { HeaderTitle } from "./components/HeaderTitle.js";
 import { StockInformation } from "./components/StockInformation.js";
 import { TotalPrice } from "./components/TotalPrice.js";
-import PRODUCT_LIST from "./lib/constants/constant.js";
+import { shoppingState } from "./store/state.js";
 
 function main() {
   let root = document.getElementById("app");
@@ -13,23 +13,35 @@ function main() {
   let wrapper = document.createElement("div");
   wrapper.className =
     "max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8";
+  const headerTitle = HeaderTitle();
+  const cartContainer = CartContainer();
+  const totalPrice = TotalPrice();
+  const stockInfo = StockInformation();
+  const addProductBtn = AddProductBtn();
+  const cartList = CartList();
 
-  let productList = PRODUCT_LIST;
-  let lastSel = 0;
+  updateProductList(cartList, shoppingState.productList);
+  useCalcCart(
+    shoppingState.totalAmount,
+    shoppingState.itemCount,
+    cartContainer,
+    shoppingState.productList,
+    stockInfo,
+    totalPrice
+  );
 
-  // updateProductList();
-  wrapper.appendChild(HeaderTitle());
-  wrapper.appendChild(CartContainer());
-  wrapper.appendChild(TotalPrice());
-  wrapper.appendChild(CartList());
-  wrapper.appendChild(AddProductBtn());
-  wrapper.appendChild(StockInformation());
+  wrapper.appendChild(headerTitle);
+  wrapper.appendChild(cartContainer);
+  wrapper.appendChild(totalPrice);
+  wrapper.appendChild(cartList);
+  wrapper.appendChild(addProductBtn);
+  wrapper.appendChild(stockInfo);
   mainContainer.appendChild(wrapper);
   root.appendChild(mainContainer);
-  // calcCart();
   setTimeout(function () {
     setInterval(function () {
-      let luckyItem = productList[Math.floor(Math.random() * productList.length)];
+      let luckyItem =
+        shoppingState.productList[Math.floor(Math.random() * shoppingState.productList.length)];
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert("번개세일! " + luckyItem.name + "이(가) 20% 할인 중입니다!");
@@ -39,9 +51,9 @@ function main() {
   }, Math.random() * 10000);
   setTimeout(function () {
     setInterval(function () {
-      if (lastSel) {
-        let suggest = productList.find(function (item) {
-          return item.id !== lastSel && item.quantity > 0;
+      if (shoppingState.lastSel) {
+        let suggest = shoppingState.productList.find(function (item) {
+          return item.id !== shoppingState.lastSel && item.quantity > 0;
         });
         if (suggest) {
           alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");

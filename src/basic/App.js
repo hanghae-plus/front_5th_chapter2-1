@@ -1,5 +1,4 @@
 import { CartTotal, ProductSelect, StockInfo } from "./components/index.js";
-
 /**
  * 최상위 컨테이너 컴포넌트
  */

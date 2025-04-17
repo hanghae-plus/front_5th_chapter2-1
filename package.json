@@ -1,5 +1,6 @@
 {
   "name": "front-5th-chapter2-1",
+  "homepage": "https://github.com/hanbeulYou/front_5th_chapter2-1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -18,7 +19,8 @@
     "check:advanced": "biome check --apply ./src/advanced",
     "lint:basic": "eslint ./src/basic",
     "format:basic": "prettier --write ./src/basic",
-    "check:basic": "npm run lint:basic && npm run format:basic"
+    "check:basic": "npm run lint:basic && npm run format:basic",
+    "deploy": "pnpm run build && gh-pages -d dist"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
@@ -40,6 +42,7 @@
   "dependencies": {
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
+    "gh-pages": "^6.3.0",
     "prettier": "^3.5.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"

@@ -1,3 +1,5 @@
+import React from "react";
+
 const CartHeader: React.FC = () => {
   return (
     <section className="flex flex-col items-center justify-center gap-2">
@@ -7,4 +9,4 @@ const CartHeader: React.FC = () => {
   );
 };
 
-export default CartHeader;
+export default React.memo(CartHeader, () => false);

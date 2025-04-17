@@ -1,21 +1,13 @@
 import React from "react";
 
-import type { ICartProduct, IProduct } from "#advanced/pages/main/_types";
 import { cn } from "#advanced/libs";
+import type { IProduct } from "#advanced/pages/main/_types";
+import useCart from "#advanced/pages/main/_hooks/useCart";
 
-interface IProps {
-  cartProducts: ICartProduct[];
-  handleRemoveProductFromCart: (productId: ICartProduct["id"]) => void;
-  handleIncreaseProductCount: (productId: ICartProduct["id"]) => void;
-  handleDecreaseProductCount: (productId: ICartProduct["id"]) => void;
-}
+const CartTable: React.FC = () => {
+  const { cartProducts, handleRemoveProductFromCart, handleIncreaseProductCount, handleDecreaseProductCount } =
+    useCart();
 
-const CartTable: React.FC<IProps> = ({
-  cartProducts,
-  handleRemoveProductFromCart,
-  handleIncreaseProductCount,
-  handleDecreaseProductCount,
-}) => {
   const handleClickRemoveButton = (productId: IProduct["id"]) => {
     handleRemoveProductFromCart(productId);
   };

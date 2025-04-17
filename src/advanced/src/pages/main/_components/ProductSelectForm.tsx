@@ -1,14 +1,12 @@
 import React from "react";
 
-import type { ICartProduct, IProduct } from "#advanced/pages/main/_types";
+import useProducts from "#advanced/pages/main/_hooks/useProducts";
+import useCart from "#advanced/pages/main/_hooks/useCart";
 
-interface IProps {
-  products: IProduct[];
-  cartProducts: ICartProduct[];
-  handleAddProductToCart: (product: IProduct) => void;
-}
+const ProductSelectForm: React.FC = () => {
+  const { products } = useProducts();
+  const { cartProducts, handleAddProductToCart } = useCart();
 
-const ProductSelectForm: React.FC<IProps> = ({ products, cartProducts, handleAddProductToCart }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

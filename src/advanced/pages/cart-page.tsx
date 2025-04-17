@@ -1,11 +1,21 @@
 import React, { useState } from "react";
+import BonusPoint from "../components/bonus-points";
 import CartItem from "../components/cart-item";
+import PriceInfo from "../components/price-info";
 import { StockStatus } from "../components/stock-info";
 import { useCartStore } from "../store/useCartStore";
 
 export function CartPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const { products, cart, addToCart, changeCartItemQuantity, removeCartItem } = useCartStore();
+  const {
+    products,
+    cart,
+    addToCart,
+    changeCartItemQuantity,
+    removeCartItem,
+    finalTotal,
+    discountRate,
+  } = useCartStore();
 
   return (
     <div className="bg-gray-100 p-8">
@@ -24,7 +34,11 @@ export function CartPage() {
             />
           ))}
         </div>
-        <div id="cart-total" className="text-xl font-bold my-4" />
+        <div id="cart-total" className="text-xl font-bold my-4">
+          <PriceInfo finalTotal={finalTotal} discountRate={discountRate} />
+          <StockStatus />
+          <BonusPoint finalTotal={finalTotal} />
+        </div>
         <select
           className="border rounded p-2 mr-2"
           value={selectedId ?? ""}
@@ -45,7 +59,6 @@ export function CartPage() {
         >
           추가
         </button>
-        <StockStatus />
       </div>
     </div>
   );

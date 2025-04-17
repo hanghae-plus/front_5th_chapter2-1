@@ -29,12 +29,12 @@ export function bindCartEvents({
       return;
     }
 
-    const productEl = document.getElementById(product.id);
-    if (productEl) {
-      updateExistingCartItem(productEl, product);
+    const cartItemEl = document.getElementById(product.id);
+    if (cartItemEl) {
+      updateExistingCartItem(cartItemEl, product);
     } else {
-      const newCartItem = createNewCartItem(product, cartItemList);
-      cartItemList.appendChild(newCartItem);
+      const newCartItemEl = createNewCartItem(product);
+      cartItemList.appendChild(newCartItemEl);
     }
 
     calculateCart({ cartItemList, cartTotalEl, stockStatusEl });
@@ -47,18 +47,18 @@ export function bindCartEvents({
     if (!productId) return;
 
     const product = getProductById(productId);
-    const itemEl = document.getElementById(productId);
-    const currentQuantity = getQuantityFromElement(itemEl);
+    const cartItemEl = document.getElementById(productId);
+    const currentQuantity = getQuantityFromElement(cartItemEl);
 
     const isQuantityChange = target.classList.contains("quantity-change");
     const isRemoveItem = target.classList.contains("remove-item");
 
     if (isQuantityChange) {
       const change = Number(target.dataset.change);
-      handleQuantityChange(product, itemEl, currentQuantity, change);
+      handleQuantityChange(product, cartItemEl, currentQuantity, change);
     }
     if (isRemoveItem) {
-      handleRemoveItem(product, itemEl, currentQuantity);
+      handleRemoveItem(product, cartItemEl, currentQuantity);
     }
 
     calculateCart({ cartItemList, cartTotalEl, stockStatusEl });

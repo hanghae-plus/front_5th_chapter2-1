@@ -10,6 +10,7 @@ import { Product, productList as INITIAL_PRODUCT_LIST } from '../data/products';
 interface ProductContextType {
   productList: Product[];
   setProductList: React.Dispatch<React.SetStateAction<Product[]>>;
+  cartList: Product[];
   total: {
     count: number;
     amountWithDiscount: number;
@@ -50,7 +51,13 @@ export const ProductProvider: React.FC<{ children: ReactNode }> = ({
 
   return (
     <ProductContext.Provider
-      value={{ productList, setProductList, total, lastSelectedOption }}
+      value={{
+        productList,
+        setProductList,
+        total,
+        lastSelectedOption,
+        cartList,
+      }}
     >
       {children}
     </ProductContext.Provider>

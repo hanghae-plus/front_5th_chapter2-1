@@ -10,10 +10,10 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'basic/index.html'),
+        main: resolve(__dirname, '/index.basic.html'),
       },
     },
-    outDir: 'dist', // 기본값이지만 명시적으로 써도 좋아
+    outDir: 'dist',
     emptyOutDir: true,
   },
   test: {

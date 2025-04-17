@@ -84,24 +84,36 @@ function App() {
         const quantityChangeItem = prodList.find(
           (prod) => prod.id === prodId
         ) as Product;
-        if (changeQty > 0 && quantityChangeItem.quantity <= 0) {
-          alert("재고가 부족합니다.");
-          return;
+        if (changeQty > 0 ) {
+          if(quantityChangeItem.quantity <= 0) {
+            alert("재고가 부족합니다.");
+            return;
+          }
         }
-        // else if(changeQty < 0 && quantityChangeItem.quantity ) {
-
-        // }
         const newProductList = prodList.map((prod) => {
           if (prodId === prod.id) {
             return {
               ...quantityChangeItem,
-              quantity: prod.quantity + changeQty,
+              quantity: prod.quantity - changeQty,
               cart: prod.cart + changeQty,
             };
           }
           return prod;
         });
+        setProdList(newProductList);
       } else if (classList.contains("remove-item")) {
+        const prodId = target.dataset.productId;
+        const newProductList = prodList.map((prod) => {
+          if (prodId === prod.id) {
+            return {
+              ...prod,
+              quantity: prod.originalQuantity,
+              cart: 0,
+            };
+          }
+          return prod;
+        });
+        setProdList(newProductList);
       }
     }
   };

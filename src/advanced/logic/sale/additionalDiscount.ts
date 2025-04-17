@@ -8,22 +8,23 @@ const getSuggestedProduct = (products: Product[], lastId: string | null): Produc
 
 interface AdditionalDiscountParams {
   selectedProductId: string | null;
-  products: Product[];
-  setProducts: React.Dispatch<React.SetStateAction<Product[]>>;
+  productList: Product[];
+  setProductList: React.Dispatch<React.SetStateAction<Product[]>>;
 }
 
-export const additionalDiscount = ({ selectedProductId, products, setProducts }: AdditionalDiscountParams): void => {
+export const additionalDiscount = ({ selectedProductId, productList, setProductList }: AdditionalDiscountParams): void => {
+  console.log('additionalDiscount');
   if (!selectedProductId) return;
 
-  const suggest = getSuggestedProduct(products, selectedProductId);
+  const suggest = getSuggestedProduct(productList, selectedProductId);
   if (!suggest) return;
 
   alertSuggestedProduct(suggest);
   
   const discountedValue = Math.round(suggest.value * (1 - ADDITIONAL_DISCOUNT.RATE));
   
-  setProducts(currentProducts => 
-    currentProducts.map(product => 
+  setProductList(currentProductList => 
+    currentProductList.map(product => 
       product.id === suggest.id 
         ? { ...product, value: discountedValue }
         : product

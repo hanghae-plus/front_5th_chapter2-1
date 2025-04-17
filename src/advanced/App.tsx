@@ -1,5 +1,5 @@
-import { MainPage } from './pages';
-import { CartProvider, ProductProvider } from './context';
+import { MainPage } from "./pages";
+import { CartProvider, ProductProvider } from "./context";
 
 function App() {
   return (

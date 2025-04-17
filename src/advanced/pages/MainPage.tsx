@@ -1,13 +1,26 @@
-import { Layout, ProductSelect, AddButton, StockStatusContainer, CartItemListContainer, TotalAmountContainer } from "@/advanced/components";
+import { useEffect } from 'react';
+import { Layout, ProductSelect, AddButton, StockStatusContainer, CartItemListContainer, TotalAmountContainer } from '@/advanced/components';
+import { useProduct } from '@/advanced/context';
+import { RandomSale } from '@/advanced/logic/sale';
 
 export const MainPage = () => {
+    const { productList, setProductList, selectedProductId } = useProduct();
+
+    useEffect(() => {
+    RandomSale({
+      selectedProductId,
+      productList,
+      setProductList
+    });
+  }, [productList, selectedProductId, setProductList]);
+
   return (
     <Layout>
-      <CartItemListContainer><div>장바구니</div></CartItemListContainer>
-      <TotalAmountContainer><div>총 금액</div></TotalAmountContainer>
+      <CartItemListContainer />
+      <TotalAmountContainer />
       <ProductSelect/>
       <AddButton />
-      <StockStatusContainer><div>재고</div></StockStatusContainer>
+      <StockStatusContainer />
     </Layout>
   );
 };

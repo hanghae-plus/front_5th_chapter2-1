@@ -303,4 +303,4 @@ export default App;
 - 총액 랜더 추가
 - 그 과정에서 끔찍한 일들
 - state가 다 따로 놀아서, 각 액션마다 setState를 해줘야 함
-- 그리고 hook이 아닌 그냥 함수로 처리하는 중이라서, 리액트 생명주기에 민감
+- 그리고 hook이 아닌 그냥 함수로 처리하는 중이라서, context API를 못사용하고 props로 내려줘야 함

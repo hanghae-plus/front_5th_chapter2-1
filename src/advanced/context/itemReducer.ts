@@ -1,5 +1,5 @@
 import { initialItemList } from '../data/initialItemList.js';
-import { ItemListType } from '../types/ItemType.js';
+import { ItemListType, ItemType } from '../types/ItemType.js';
 
 export const ACTION_TYPE = {
   UPDATE_QUANTITY: 'UPDATE_QUANTITY',
@@ -9,7 +9,7 @@ export const ACTION_TYPE = {
   REMOVE_CART_ITEM: 'REMOVE_CART_ITEM',
 } as const;
 
-interface ItemState {
+export interface ItemState {
   itemList: ItemListType;
   cartItemList: ItemListType;
   lastSelectedItem: string | null;
@@ -25,7 +25,7 @@ type ItemActionType =
     }
   | {
       type: typeof ACTION_TYPE.SET_LAST_ITEM;
-      payload: { itemId: string | null };
+      payload: { itemId: string };
     }
   | {
       type: typeof ACTION_TYPE.INCREASE_CART_ITEM;
@@ -50,6 +50,26 @@ export default function itemReducer(state: ItemState, action: ItemActionType) {
           ? { ...item, quantity: item.quantity + action.payload.quantityDiff }
           : item,
       ),
+      cartItemList: state.cartItemList.some(
+        (item) => item.id === action.payload.itemId,
+      )
+        ? state.cartItemList.map((item) =>
+            item.id === action.payload.itemId
+              ? {
+                  ...item,
+                  quantity: item.quantity - action.payload.quantityDiff,
+                }
+              : item,
+          )
+        : [
+            ...state.cartItemList,
+            {
+              ...state.itemList.find(
+                (item) => item.id === action.payload.itemId,
+              ),
+              quantity: 1,
+            } as ItemType,
+          ],
     };
   }
   if (action.type === ACTION_TYPE.SET_LAST_ITEM) {
@@ -63,6 +83,11 @@ export default function itemReducer(state: ItemState, action: ItemActionType) {
   if (action.type === ACTION_TYPE.INCREASE_CART_ITEM) {
     return {
       ...state,
+      itemList: state.itemList.map((item) =>
+        item.id === action.payload.itemId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      ),
       cartItemList: state.cartItemList.map((item) =>
         item.id === action.payload.itemId
           ? { ...item, quantity: item.quantity + 1 }
@@ -73,6 +98,11 @@ export default function itemReducer(state: ItemState, action: ItemActionType) {
   if (action.type === ACTION_TYPE.DECREASE_CART_ITEM) {
     return {
       ...state,
+      itemList: state.itemList.map((item) =>
+        item.id === action.payload.itemId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
+      ),
       cartItemList: state.cartItemList.map((item) =>
         item.id === action.payload.itemId
           ? { ...item, quantity: item.quantity - 1 }

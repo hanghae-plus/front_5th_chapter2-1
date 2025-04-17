@@ -1,12 +1,9 @@
 import { ChangeEvent } from 'react';
-import { useItem } from 'src/advanced/context/ItemContext.js';
+import { useItem } from '../../context/ItemContext.js';
 import ItemSelectOption from './ItemSelectOption.js';
 
 export default function ItemSelect() {
-  const {
-    state: { itemList },
-    setLastSelectedItem,
-  } = useItem();
+  const { itemList, setLastSelectedItem } = useItem();
   const handleSelect = (e: ChangeEvent<HTMLSelectElement>) => {
     const itemId = e.target.value;
     setLastSelectedItem(itemId);

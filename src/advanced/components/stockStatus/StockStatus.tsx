@@ -2,7 +2,7 @@ import { useItem } from '../../context/ItemContext.js';
 import { getInfoText } from './getInfoText.js';
 
 export default function StockStatus() {
-  const { itemList } = useItem().state;
+  const { itemList } = useItem();
   const text = getInfoText(itemList);
 
   return (

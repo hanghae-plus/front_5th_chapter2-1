@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { initialItemList } from '../data/initialItemList.js';
 import { ItemListType, ItemType } from '../types/ItemType.js';
-import itemReducer, { ACTION_TYPE } from './itemReducer.js';
+import itemReducer, { ACTION_TYPE, ItemState } from './itemReducer.js';
 
 const initialState = {
   itemList: initialItemList,
@@ -15,12 +15,7 @@ const initialState = {
   lastSelectedItem: initialItemList[0].id,
 } as const;
 
-interface ItemContextType {
-  state: {
-    itemList: ItemListType;
-    lastSelectedItem: string | null;
-    cartItemList: ItemListType;
-  };
+interface ItemContextType extends ItemState {
   findItem: (itemId: string) => ItemType | undefined;
   updateQuantity: (itemId: string, quantityDiff: number) => void;
   setLastSelectedItem: (itemId: string) => void;
@@ -50,7 +45,7 @@ export function ItemProvider({ children }: PropsWithChildren) {
   }, []);
 
   // 마지막으로 선택한 상품 설정
-  const setLastSelectedItem = useCallback((itemId: string | null) => {
+  const setLastSelectedItem = useCallback((itemId: string) => {
     dispatch({ type: ACTION_TYPE.SET_LAST_ITEM, payload: { itemId } });
   }, []);
 
@@ -79,7 +74,9 @@ export function ItemProvider({ children }: PropsWithChildren) {
   }, []);
 
   const value: ItemContextType = {
-    state,
+    cartItemList: state.cartItemList,
+    itemList: state.itemList,
+    lastSelectedItem: state.lastSelectedItem,
     findItem,
     updateQuantity,
     setLastSelectedItem,

@@ -1,4 +1,3 @@
-import { products } from "./constants.js";
 import { calculateCart } from "./helpers/logic/calculateCart.js";
 import { mount } from "./helpers/render.js";
 import {
@@ -6,6 +5,7 @@ import {
   scheduleRecommendationSale,
 } from "./helpers/scheduleTask.js";
 import { bindCartEvents } from "./helpers/events.js";
+import { updateProductSelector } from "./helpers/logic/selector.js";
 
 const context = { lastSelectedProductId: null };
 
@@ -17,15 +17,15 @@ let [
   stockStatusEl,
 ] = mount();
 
-updateProductSelector();
+updateProductSelector(productSelector);
 calculateCart({ cartItemList, cartTotalEl, stockStatusEl });
 triggerRandomSales();
 
 function triggerRandomSales() {
-  scheduleFlashSale({ onSale: updateProductSelector });
+  scheduleFlashSale({ onSale: () => updateProductSelector(productSelector) });
   scheduleRecommendationSale({
     productId: context.lastSelectedProductId,
-    onSale: updateProductSelector,
+    onSale: () => updateProductSelector(productSelector),
   });
 }
 
@@ -37,17 +37,3 @@ bindCartEvents({
   stockStatusEl,
   context,
 });
-
-function updateProductSelector() {
-  productSelector.innerHTML = "";
-
-  products.forEach(function (item) {
-    const option = document.createElement("option");
-
-    option.value = item.id;
-    option.textContent = `${item.name} - ${item.price}원`;
-    option.disabled = item.units === 0;
-
-    productSelector.appendChild(option);
-  });
-}

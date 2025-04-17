@@ -21,39 +21,38 @@ export const getCarts = () => {
   });
 };
 
-export const updateQuantitiyCarts = ({ id, action }) => {
+export const updateCarts = ({ id, action }) => {
   const carts = JSON.parse(localStorage.getItem('carts')) || [];
-  const product = carts.find((item) => item.id === id);
 
+  const product = carts.find((cart) => cart.id === id);
   if (!product) return;
 
   if (action === 'add') {
     product.quantity += 1;
   } else if (action === 'subtract') {
     if (product.quantity <= 1) {
-      updatedCarts = carts.filter((cart) => cart.id !== id);
-      console.log('-----삭제되고 업데이트-----');
-      console.log(updatedCarts);
-      console.log('-----삭제되고 업데이트-----');
+      console.log('삭제');
+      deleteCart({ id });
     }
+
     product.quantity -= 1;
+
     if (product.quantity <= 0) {
-      carts = carts.filter((item) => item.id !== id);
+      const updatedCarts = carts.filter((item) => item.id !== id);
     }
   }
-  localStorage.setItem('carts', JSON.stringify(carts));
+  const updatedCarts = [...carts, product];
+  localStorage.setItem('carts', JSON.stringify(updatedCarts));
 };
 
-export const setCarts = ({ id, carts }) => {
-  const product = carts.find((cart) => cart.id === id);
-
-  if (!product) {
-    const newCart = { id: id, quantity: 1 };
-    carts.push(newCart);
-  } else {
-    product.quantity++;
-  }
-  localStorage.setItem('carts', JSON.stringify(carts));
+/**
+ * 장바구니에서 제거
+ *  @id 삭제될 상품의 id
+ */
+export const deleteCart = ({ id }) => {
+  const removedCarts = carts.filter((cart) => cart.id !== id);
+  localStorage.setItem('carts', removedCarts);
+  return { carts: removedCarts };
 };
 
 /**
@@ -79,8 +78,12 @@ export const addCart = ({ id }) => {
   }
 };
 
-/** 장바구니 수량 업데이트 */
-export const updateCartQuantity = ({ id, quantity }) => {
+/**
+ * 장바구니 수량 업데이트
+ * @id - 수량이 변경된 상품의 id
+ * @quantity - 기존 수량
+ */
+export const updateQuantity = ({ id, quantity }) => {
   const carts = JSON.parse(localStorage.getItem('carts')) || [];
   const updatedCarts = carts.map((cart) =>
     cart.id === id ? { id: id, quantity: quantity + 1 } : cart,

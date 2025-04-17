@@ -5,6 +5,7 @@ import CartList from './components/CartList';
 import CartTotal from './components/CartTotal';
 import StockStatus from './components/StockStatus';
 import ProductSelect from './components/ProductSelect';
+import { createDiscountEvent } from './utils/createDiscountEvent';
 
 const App = () => {
   const [cartItems, setCartItems] = useState<Product[]>([]);
@@ -17,6 +18,10 @@ const App = () => {
       setSelectedProductId(firstAvailableProduct.id);
     }
   }, [availableProducts]);
+
+  useEffect(() => {
+    createDiscountEvent(availableProducts, setAvailableProducts);
+  }, []);
 
   const handleAddToCart = () => {
     const selectedProduct = availableProducts.find(({ id }) => id === selectedProductId);

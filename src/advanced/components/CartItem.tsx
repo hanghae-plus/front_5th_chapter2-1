@@ -19,15 +19,15 @@ const CartItem = ({ id, quantity }: CartItemProps) => {
       <div>
         <button
           className={STYLES.QUANTITY_CHANGE}
-          onClick={() => handleCartItem(id, PLUS_MINUS.PLUS)}
-        >
-          {"+"}
-        </button>
-        <button
-          className={STYLES.QUANTITY_CHANGE}
           onClick={() => handleCartItem(id, PLUS_MINUS.MINUS)}
         >
           {"-"}
+        </button>
+        <button
+          className={STYLES.QUANTITY_CHANGE}
+          onClick={() => handleCartItem(id, PLUS_MINUS.PLUS)}
+        >
+          {"+"}
         </button>
         <button
           className={STYLES.REMOVE_ITEM}

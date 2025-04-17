@@ -13,7 +13,7 @@
 /*
 * 태그 함수를 사용한 HTML 요소 생성
 * */
-function html(strings, ...values) {
+export function html(strings, ...values) {
   const template = strings.reduce((result, string, i) => {
     return result + string + (values[i] || '');
   }, '');
@@ -24,7 +24,7 @@ function html(strings, ...values) {
 }
 
 // 자식 요소 추가 헬퍼 함수
-function appendChildren(parent, ...children) {
+export function appendChildren(parent, ...children) {
   children.forEach(child => {
     if (child) parent.appendChild(child);
   });

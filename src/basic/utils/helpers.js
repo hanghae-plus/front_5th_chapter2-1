@@ -12,7 +12,7 @@ export function isTuesday() {
 
 // 금액 포맷팅 함수
 export function formatPrice(amount) {
-  return Math.round(amount).toLocaleString() + '원';
+  return Math.round(amount) + '원';
 }
 
 // 퍼센트 포맷팅 함수

@@ -1,5 +1,2 @@
-export {
-  CartContext as LastSelectedContext,
-  CartProvider as LastSelectedProvider,
-} from "./last-selected-provider";
+export { CartContext, CartProvider } from "./cart-provider";
 export { ProductContext, ProductProvider } from "./product-provider";

@@ -1,18 +1,22 @@
 import {
   createContext,
+  Dispatch,
   ReactNode,
+  SetStateAction,
   useCallback,
   useMemo,
   useState,
 } from "react";
-import { STOCK_WARNING_LIMIT } from "../config/constants";
+import { STOCK_ALERT_TEXT } from "../config/messages";
 import { useProduct } from "../hooks/use-product";
 import { Cart, PLUS_MINUS, PlusMinus, Product } from "../types";
 
 export const CartContext = createContext<{
-  lastSelected: string | undefined;
+  lastSelected: string;
+  setLastSelected: Dispatch<SetStateAction<string>>;
   cart: Cart;
-  handleAddToCart: (id: Product["id"], mode: PlusMinus) => void;
+  handleCartItem: (id: Product["id"], mode: PlusMinus) => void;
+  handleRemoveItem: (id: Product["id"]) => void;
 } | null>(null);
 
 type CartProviderProps = {
@@ -21,19 +25,19 @@ type CartProviderProps = {
 
 export const CartProvider = ({ children }: CartProviderProps) => {
   const { products, setProducts } = useProduct();
-  const [lastSelected, setLastSelected] = useState<string | undefined>();
+  const [lastSelected, setLastSelected] = useState<string>(
+    products?.[0].id || ""
+  );
   const [cart, setCart] = useState<Cart>({});
 
-  const handleAddToCart = useCallback(
+  const handleCartItem = useCallback(
     (id: Product["id"], mode: PlusMinus) => {
       const targetIdx = products.findIndex((product) => product.id === id);
       if (targetIdx === -1) return;
 
-      setLastSelected(id);
-
       if (mode === PLUS_MINUS.PLUS) {
         if (!products[targetIdx].quantity) {
-          alert(STOCK_WARNING_LIMIT);
+          alert(STOCK_ALERT_TEXT);
           return;
         }
         setCart((prev) => {
@@ -70,9 +74,35 @@ export const CartProvider = ({ children }: CartProviderProps) => {
     [products]
   );
 
+  const handleRemoveItem = (id: Product["id"]) => {
+    if (!cart[id]) return;
+    const targetIdx = products.findIndex((product) => product.id === id);
+    if (targetIdx === -1) return;
+    const quantity = cart[id];
+    setCart((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    setProducts((prev) => {
+      const next = [...prev];
+      next[targetIdx] = {
+        ...next[targetIdx],
+        quantity: next[targetIdx].quantity + quantity,
+      };
+      return next;
+    });
+  };
+
   const value = useMemo(
-    () => ({ lastSelected, cart, handleAddToCart }),
-    [lastSelected, cart, handleAddToCart]
+    () => ({
+      lastSelected,
+      setLastSelected,
+      cart,
+      handleCartItem,
+      handleRemoveItem,
+    }),
+    [lastSelected, setLastSelected, cart, handleCartItem, handleRemoveItem]
   );
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

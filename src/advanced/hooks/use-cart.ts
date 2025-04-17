@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { LastSelectedContext } from "../providers";
+import { CartContext } from "../providers";
 
 export const useCart = () => {
-  const context = useContext(LastSelectedContext);
+  const context = useContext(CartContext);
   if (!context) throw new Error("context is null");
   return context;
 };

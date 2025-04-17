@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { Container } from "./components";
-import { LastSelectedProvider, ProductProvider } from "./providers";
+import { CartProvider, ProductProvider } from "./providers";
 import { Product } from "./types";
 
 const initialProductState: Product[] = [
@@ -15,9 +15,9 @@ const initialProductState: Product[] = [
 const App = () => {
   return (
     <ProductProvider products={initialProductState}>
-      <LastSelectedProvider>
+      <CartProvider>
         <Container />
-      </LastSelectedProvider>
+      </CartProvider>
     </ProductProvider>
   );
 };

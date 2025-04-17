@@ -7,16 +7,13 @@ import {
   updateProductList,
 } from '../../../../../shared/store/productList.js';
 import {
+  addExistingItemInCart,
   Cart,
-  CartItem,
   deleteItemFromCart,
   findItemIndex,
   getCart,
   updateCart,
-  addExistingItemInCart,
 } from '../../../../../shared/store/cart.ts';
-import { renderCartDomFromCart } from '../AddProduct/logic.ts';
-import { ElementIds } from '../../../../../shared/app/constants.ts';
 
 type QuantityChangeResult = {
   cart: Cart;
@@ -25,8 +22,10 @@ type QuantityChangeResult = {
   message?: string;
 };
 
-const calculateNewQuantity = (currentQuantity: number, change: number): number =>
-  currentQuantity + change;
+const calculateNewQuantity = (
+  currentQuantity: number,
+  change: number,
+): number => currentQuantity + change;
 
 const handleQuantityChange = (
   cart: Cart,
@@ -37,7 +36,12 @@ const handleQuantityChange = (
 ): QuantityChangeResult => {
   const product = findProduct(productList, productId);
   if (!product) {
-    return { cart, productList, success: false, message: '상품을 찾을 수 없습니다.' };
+    return {
+      cart,
+      productList,
+      success: false,
+      message: '상품을 찾을 수 없습니다.',
+    };
   }
 
   const item = cart[itemIndex];
@@ -45,7 +49,11 @@ const handleQuantityChange = (
 
   if (newQuantity <= 0) {
     const newCart = deleteItemFromCart(cart, itemIndex);
-    const newProductList = decreaseProductQuantity(productList, productId, quantityChange);
+    const newProductList = decreaseProductQuantity(
+      productList,
+      productId,
+      quantityChange,
+    );
     return { cart: newCart, productList: newProductList, success: true };
   }
 
@@ -54,7 +62,11 @@ const handleQuantityChange = (
   }
 
   const newCart = addExistingItemInCart(cart, productId, quantityChange);
-  const newProductList = decreaseProductQuantity(productList, productId, quantityChange);
+  const newProductList = decreaseProductQuantity(
+    productList,
+    productId,
+    quantityChange,
+  );
   return { cart: newCart, productList: newProductList, success: true };
 };
 
@@ -67,7 +79,11 @@ const handleRemoveItem = (
   const item = cart[itemIndex];
   const newCart = deleteItemFromCart(cart, itemIndex);
   // 삭제된 아이템의 수량만큼 재고를 되돌림
-  const newProductList = decreaseProductQuantity(productList, productId, -item.quantity);
+  const newProductList = decreaseProductQuantity(
+    productList,
+    productId,
+    -item.quantity,
+  );
   return { cart: newCart, productList: newProductList };
 };
 
@@ -79,10 +95,10 @@ const isValidTarget = (target: HTMLElement): boolean =>
 export function updateCartItemQuantity(productId: string, quantity: number) {
   const item = document.getElementById(productId);
   if (!item) return;
-  
+
   const product = findProduct(getProductList(), productId);
   if (!product) return;
-  
+
   const span = item.querySelector('span');
   if (span) {
     span.textContent = `${product.name} - ${product.val}원 x ${quantity}`;
@@ -108,7 +124,7 @@ export const handleClickCartDisp = (event: MouseEvent): void => {
   const cart = getCart();
   const productList = getProductList();
   const itemIndex = findItemIndex(cart, productId);
-  
+
   if (itemIndex === -1) return;
 
   let result;
@@ -117,14 +133,13 @@ export const handleClickCartDisp = (event: MouseEvent): void => {
     const product = findProduct(productList, productId);
 
     if (!product) return;
-    
 
     // 현재 수량과 증가할 수량의 합이 재고를 초과하는지 확인
     if (quantityChange > product.q) {
       alert('재고가 부족합니다.');
       return;
     }
-    
+
     // 직접 수량을 증가시키고 상태를 업데이트
     const newCart = cart.map((item, i) => {
       if (i === itemIndex) {
@@ -135,9 +150,13 @@ export const handleClickCartDisp = (event: MouseEvent): void => {
       }
       return item;
     });
-    
-    const newProductList = decreaseProductQuantity(productList, productId, quantityChange);
-    
+
+    const newProductList = decreaseProductQuantity(
+      productList,
+      productId,
+      quantityChange,
+    );
+
     updateCart(newCart);
     updateProductList(newProductList);
   } else {

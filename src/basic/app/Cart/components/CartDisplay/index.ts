@@ -7,4 +7,4 @@ export const createCartDisplay = (): HTMLDivElement => {
   $cartDisplay.addEventListener('click', handleClickCartDisp);
 
   return $cartDisplay;
-}; 
+};

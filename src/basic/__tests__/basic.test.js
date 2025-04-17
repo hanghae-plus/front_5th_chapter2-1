@@ -1,7 +1,7 @@
 import {
+  afterEach,
   beforeAll,
   beforeEach,
-  afterEach,
   describe,
   expect,
   it,

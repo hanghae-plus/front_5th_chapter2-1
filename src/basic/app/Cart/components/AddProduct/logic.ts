@@ -59,7 +59,9 @@ function addNewItemToCart(cart: Cart, itemToAdd: Product) {
   updateCart(newCart);
 
   // 새 아이템만 추가
-  const $cartDisplay = document.getElementById(ElementIds.CART_DISP) as HTMLElement;
+  const $cartDisplay = document.getElementById(
+    ElementIds.CART_DISP,
+  ) as HTMLElement;
   const $newItem = createNewCartItem(itemToAdd, 1);
   $cartDisplay.appendChild($newItem);
 

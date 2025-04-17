@@ -7,11 +7,11 @@ export function createRootChildren(): HTMLDivElement {
 
   const cart = createCart();
   cont.appendChild(cart);
-  
+
   return cont;
 }
 
 export function setUp(): void {
   setSaleAlert();
   setSuggestionAlert();
-} 
+}

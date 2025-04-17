@@ -1,0 +1,4 @@
+{
+  "words": ["teo", "anveloper"],
+  "ignorePaths": ["dist", "node_modules"]
+}

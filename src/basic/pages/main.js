@@ -20,9 +20,6 @@ function main() {
 
   const $wrap = $root.querySelector('#wrap');
 
-  /**
-   * DOM 요소 생성
-   */
   const createElements = () => {
     $wrap.append(
       CartItems(),

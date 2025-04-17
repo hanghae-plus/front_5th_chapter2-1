@@ -1,13 +1,12 @@
-// 세일 이벤트 상수
 const SALE_CONFIG = {
   FLASH_SALE: {
-    INTERVAL: 30000, // 30초
-    CHANCE: 0.3, // 30% 확률
-    DISCOUNT: 0.2, // 20% 할인
+    INTERVAL: 30000,
+    CHANCE: 0.3,
+    DISCOUNT: 0.2,
   },
   RECOMMENDATION_SALE: {
-    INTERVAL: 60000, // 60초
-    DISCOUNT: 0.05, // 5% 할인
+    INTERVAL: 60000,
+    DISCOUNT: 0.05,
   },
 };
 
@@ -30,10 +29,4 @@ const initialProducts = [
   { id: 'p5', name: '상품5', price: 25000, stock: 10 },
 ];
 
-// 최대 재고 상수 추가
-const MAXIMUM_STOCKS = initialProducts.map((product) => ({
-  id: product.id,
-  stock: product.stock,
-}));
-
-export { SALE_CONFIG, PRODUCT_CONFIG, initialProducts, MAXIMUM_STOCKS };
+export { SALE_CONFIG, PRODUCT_CONFIG, initialProducts };

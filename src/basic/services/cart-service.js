@@ -76,18 +76,14 @@ const handleClickDecrease = (event) => {
   product.stock++;
 
   if (cartProduct.quantity === 0) {
-    // 장바구니 상품이 0개면 장바구니에서 제거
     const filteredCartList = cartList.filter(({ id }) => id !== productId);
     state.set('cartList', filteredCartList);
   } else {
-    // 장바구니 상품이 0개가 아니면 장바구니 상품 수량 감소
     state.set('cartList', [...cartList]);
   }
 
-  // 상품 상태 업데이트
   state.set('products', [...products]);
 
-  // 장바구니 총액 계산
   cartCalculate();
 };
 
@@ -104,17 +100,13 @@ const handleClickRemove = (event) => {
   const product = products.find(({ id }) => id === productId);
   const cartProduct = cartList.find(({ id }) => id === productId);
 
-  // 상품 재고 증가
   product.stock += cartProduct.quantity;
 
-  // 장바구니 상품 제거
   const filteredCartList = cartList.filter(({ id }) => id !== productId);
   state.set('cartList', filteredCartList);
 
-  // 상품 상태 업데이트
   state.set('products', [...products]);
 
-  // 장바구니 총액 계산
   cartCalculate();
 };
 

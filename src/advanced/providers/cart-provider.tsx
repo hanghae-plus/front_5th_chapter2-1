@@ -1,8 +1,6 @@
 import {
   createContext,
-  Dispatch,
   ReactNode,
-  SetStateAction,
   useCallback,
   useMemo,
   useState,
@@ -19,8 +17,6 @@ import { useProduct } from "../hooks/use-product";
 import { Cart, PLUS_MINUS, PlusMinus, Product } from "../types";
 
 export const CartContext = createContext<{
-  lastSelected: string;
-  setLastSelected: Dispatch<SetStateAction<string>>;
   cart: Cart;
   handleCartItem: (id: Product["id"], mode: PlusMinus) => void;
   handleRemoveItem: (id: Product["id"]) => void;
@@ -33,9 +29,7 @@ type CartProviderProps = {
 
 export const CartProvider = ({ children }: CartProviderProps) => {
   const { products, setProducts } = useProduct();
-  const [lastSelected, setLastSelected] = useState<string>(
-    products?.[0].id || ""
-  );
+
   const [cart, setCart] = useState<Cart>({});
 
   const handleCartItem = useCallback(
@@ -147,22 +141,8 @@ export const CartProvider = ({ children }: CartProviderProps) => {
   }, [products, cart]);
 
   const value = useMemo(
-    () => ({
-      lastSelected,
-      setLastSelected,
-      cart,
-      handleCartItem,
-      handleRemoveItem,
-      getTotalCost,
-    }),
-    [
-      lastSelected,
-      setLastSelected,
-      cart,
-      handleCartItem,
-      handleRemoveItem,
-      getTotalCost,
-    ]
+    () => ({ cart, handleCartItem, handleRemoveItem, getTotalCost }),
+    [cart, handleCartItem, handleRemoveItem, getTotalCost]
   );
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

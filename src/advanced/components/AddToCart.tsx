@@ -1,9 +1,11 @@
 import { useCart } from "../hooks/use-cart";
+import { useProduct } from "../hooks/use-product";
 import { STYLES } from "../lib/styles";
 import { PLUS_MINUS } from "../types";
 
 const AddToCart = () => {
-  const { lastSelected, handleCartItem } = useCart();
+  const { lastSelected } = useProduct();
+  const { handleCartItem } = useCart();
 
   const handleClick = () => {
     if (!lastSelected) return;

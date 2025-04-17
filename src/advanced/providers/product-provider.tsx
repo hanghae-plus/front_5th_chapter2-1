@@ -11,9 +11,11 @@ import { Product } from "../types";
 export const ProductContext = createContext<{
   products: Product[];
   setProducts: Dispatch<SetStateAction<Product[]>>;
+  lastSelected: string;
+  setLastSelected: Dispatch<SetStateAction<string>>;
 } | null>(null);
 
-type BasketProviderProps = {
+type ProductProviderProps = {
   products: Product[];
   children: ReactNode;
 };
@@ -21,12 +23,15 @@ type BasketProviderProps = {
 export const ProductProvider = ({
   products: origin = [],
   children,
-}: BasketProviderProps) => {
+}: ProductProviderProps) => {
   const [products, setProducts] = useState(origin);
+  const [lastSelected, setLastSelected] = useState<string>(
+    origin?.[0].id || ""
+  );
 
   const value = useMemo(
-    () => ({ products, setProducts }),
-    [products, setProducts]
+    () => ({ products, setProducts, lastSelected, setLastSelected }),
+    [products, setProducts, lastSelected, setLastSelected]
   );
   return (
     <ProductContext.Provider value={value}>{children}</ProductContext.Provider>

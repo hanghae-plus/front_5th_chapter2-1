@@ -1,10 +1,8 @@
-import { useCart } from "../hooks/use-cart";
 import { useProduct } from "../hooks/use-product";
 import { STYLES } from "../lib/styles";
 
 const ProductSelect = () => {
-  const { products } = useProduct();
-  const { lastSelected, setLastSelected } = useCart();
+  const { products, lastSelected, setLastSelected } = useProduct();
 
   return (
     <select

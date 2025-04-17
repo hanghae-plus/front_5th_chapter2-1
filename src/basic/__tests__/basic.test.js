@@ -46,6 +46,7 @@ describe("basic test", () => {
 
     it("초기 상태: 상품 목록이 올바르게 그려졌는지 확인", () => {
       expect(sel).toBeDefined();
+      console.log('sel', sel);
       expect(sel.tagName.toLowerCase()).toBe("select");
       expect(sel.children.length).toBe(5);
 

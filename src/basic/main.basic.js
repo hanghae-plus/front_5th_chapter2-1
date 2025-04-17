@@ -1,27 +1,32 @@
-// 상수 정의
-const DISCOUNT_RATES = {
-  p1: 0.1,    // 상품1 10% 할인
-  p2: 0.15,   // 상품2 15% 할인
-  p3: 0.2,    // 상품3 20% 할인
-  p4: 0.05,   // 상품4 5% 할인
-  p5: 0.25,   // 상품5 25% 할인
-};
+import { initPromotionService, on, off } from './services/promotion-service.js';
+import { updateProductOptions, handleFlashSale, handleRecommendedProduct } from './components/product.js';
 
-const BULK_DISCOUNT_RATE = 0.25;
-const BULK_QUANTITY_THRESHOLD = 30;
-const TUESDAY_DISCOUNT_RATE = 0.1;
-const FLASH_SALE_DISCOUNT_RATE = 0.2;
-const RECOMMENDED_DISCOUNT_RATE = 0.05;
-const POINT_PER_1000_WON = 1;
+// 프로모션 이벤트 초기화 함수
+function initPromotions(products, lastSelectedPromotionRef) {
+//   이벤트 핸들러 등록 - 번개세일
+  on('flashSale', (event) => {
+    handleFlashSale(event, () => updateProductOptions(productSelect, products));
+  });
 
-// 상품 데이터
-const PRODUCTS = [
-  { id: 'p1', name: '상품1', price: 10000, stock: 50 },
-  { id: 'p2', name: '상품2', price: 20000, stock: 30 },
-  { id: 'p3', name: '상품3', price: 30000, stock: 20 },
-  { id: 'p4', name: '상품4', price: 15000, stock: 0 },
-  { id: 'p5', name: '상품5', price: 25000, stock: 10 }
-];
+//   이벤트 핸들러 등록 - 추천 상품
+  on('recommendedProduct', (event) => {
+    handleRecommendedProduct(event, () => updateProductOptions(productSelect, products));
+  });
+
+//   프로모션 서비스 초기화
+  const cleanupPromotion = initPromotionService(products, lastSelectedProductRef);
+
+//   정리 함수 반환
+  return () => {
+  //   이벤트 리스너 해제
+    off('flashSale', handleFlashSale);
+    off('recommendedProduct', handleRecommendedProduct);
+
+  //   서비스 정리
+    cleanupPromotion();
+  };
+}
+
 
 // DOM 관련 상태
 let productSelect;
@@ -36,38 +41,7 @@ let loyaltyPoints = 0;
 let totalAmount = 0;
 let totalItemCount = 0;
 
-/*
-* 문자열 템플릿을 DOM 요소로 변환하는 함수
-* @param {string}
-* @param {string}
-* @return {HTMLElement}
-* */
-// function createElementFromTemplate(template, children = '') {
-//   const tempDiv = document.createElement('div');
-//   tempDiv.innerHTML = template;
-//   return tempDiv.firstChild;
-// }
 
-/*
-* 태그 함수를 사용한 HTML 요소 생성
-* */
-function html(strings, ...values) {
-  const template = strings.reduce((result, string, i) => {
-    return result + string + (values[i] || '');
-  }, '');
-
-  const tempDiv = document.createElement('div');
-  tempDiv.innerHTML = template.trim();
-  return tempDiv.firstChild;
-}
-
-// 자식 요소 추가 헬퍼 함수
-function appendChildren(parent, ...children) {
-  children.forEach(child => {
-    if (child) parent.appendChild(child);
-  });
-  return parent;
-}
 
 
 /*
@@ -261,7 +235,7 @@ function updateTotalDisplay(discountRate) {
 * 포인트 업데이트 함수
 * */
 function updateLoyaltyPoints() {
-  loyaltyPoints = Math.floor((totalAmount / 1000) * POINT_PER_1000_WON);
+  loyaltyPoints = Math.floor(totalAmount * POINT_PER_1000_WON);
 
   let pointsTag = document.getElementById('loyalty-points');
   if (!pointsTag) {

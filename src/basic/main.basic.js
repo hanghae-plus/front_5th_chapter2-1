@@ -3,6 +3,7 @@ import {initCartDisplayEvents} from "./components/cartDisplay.js";
 import {initAddToCartHandler} from "./events/addToCartHandler.js";
 import {createElement} from "./utils/createElement.js";
 import {updateSelectedOptions} from "./components/productSelect.js";
+import {updateStockInfo} from "./components/stockInfo.js";
 
 
 function main() {
@@ -10,6 +11,7 @@ function main() {
     initCartDisplayEvents();
     initAddToCartHandler();
     updateSelectedOptions();
+    updateStockInfo();
 
     state.products = [
         {id: 'p1', name: '상품1', val: 10000, q: 50},
@@ -18,17 +20,10 @@ function main() {
         {id: 'p4', name: '상품4', val: 15000, q: 0},
         {id: 'p5', name: '상품5', val: 25000, q: 10}
     ];
+
     var root = document.getElementById('app');
     let cont = document.createElement('div');
     var wrap = document.createElement('div');
-
-
-    const addBtn = createElement('button', {
-        className: 'bg-blue-500 text-white px-4 py-2 rounded',
-        text: '추가',
-        id: 'add-to-cart',
-    })
-
 
     state.elements.totalDisplay = document.createElement('div');
     state.elements.stockInfo = document.createElement('div');
@@ -87,14 +82,5 @@ const renderBonusPts = () => {
     ptsTag.textContent = '(포인트: ' + state.bonusPoints + ')';
 };
 
-function updateStockInfo() {
-    var infoMsg = '';
-    state.products.forEach(function (item) {
-        if (item.q < 5) {
-            infoMsg += item.name + ': ' + (item.q > 0 ? '재고 부족 (' + item.q + '개 남음)' : '품절') + '\n';
-        }
-    });
-    state.elements.stockInfo.textContent = infoMsg;
-}
 
 main();

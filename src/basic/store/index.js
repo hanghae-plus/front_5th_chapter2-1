@@ -23,3 +23,10 @@ export const state = {
     listeners[key].push(callback);
   },
 };
+
+// state.subscribe('totalPrice', (newTotalPrice) => {
+//   console.log(`Total price updated: ${newTotalPrice}`);
+// });
+
+// // 상태 변경
+// state.set('totalPrice', 50000);

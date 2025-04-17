@@ -13,7 +13,7 @@ const calculateTotalAmount = (products = state.products) => {
   let cartItemCount = 0;
   let subTotalAmount = 0;
 
-  const cartItems = [...state.cartList.values()];
+  const cartItems = [...state.cartList];
 
   for (const item of cartItems) {
     const currentProduct = products.find((product) => product.id === item.id);
@@ -57,6 +57,7 @@ const calculateTotalAmount = (products = state.products) => {
     totalAmount = getDiscountPrice(totalAmount, 0.1);
     discountRate = Math.max(discountRate, 0.1);
   }
+
   return { totalAmount, discountRate };
 };
 

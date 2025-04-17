@@ -3,6 +3,7 @@ import { MAXIMUM_STOCKS } from '../constants/index.js';
 import { calculateCartQuantity } from './cart-calculate.js';
 import { updateStockStatus } from './product-service.js';
 import { $cartItem } from '../components/index.js';
+import { calculateTotalAmount } from './cart-calculate.js';
 
 /**
  * 장바구니 수량 업데이트
@@ -74,6 +75,8 @@ const handleCartAction = (event) => {
     if (!cartItemElement) {
       handleAdd();
     } else {
+      console.log(calculateTotalAmount());
+
       handleQuantityChange();
     }
   }

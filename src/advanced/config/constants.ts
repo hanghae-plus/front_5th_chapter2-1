@@ -6,4 +6,6 @@ export const DISCOUNT_RATE = {
   suggestion: 0.05,
 };
 
-export const LUCK_THRESHOLD = 0.3;
+export const THRESHOLD = {
+  luck: 0.3,
+};

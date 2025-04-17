@@ -69,3 +69,39 @@ export function addItemToCart(cart: Cart, productId: string): Cart {
 export function hasSameItemInCart(cart: Cart, productId: string): boolean {
   return findItemIndex(cart, productId) > -1;
 }
+
+export function addToCart(productId: string, quantity: number = 1): void {
+  const currentCart = getCart();
+  const index = findItemIndex(currentCart, productId);
+  
+  let newCart: Cart;
+  if (index >= 0) {
+    newCart = addExistingItemInCart(currentCart, productId, quantity);
+  } else {
+    newCart = [...currentCart, { productId, quantity }];
+  }
+  
+  updateCart(newCart);
+}
+
+export function removeFromCart(productId: string): void {
+  const currentCart = getCart();
+  const index = findItemIndex(currentCart, productId);
+  
+  if (index >= 0) {
+    const newCart = deleteItemFromCart(currentCart, index);
+    updateCart(newCart);
+  }
+}
+
+export function updateCartItemQuantity(productId: string, newQuantity: number): void {
+  const currentCart = getCart();
+  const index = findItemIndex(currentCart, productId);
+  
+  if (index >= 0) {
+    const newCart = currentCart.map((item, i) => 
+      i === index ? { ...item, quantity: newQuantity } : item
+    );
+    updateCart(newCart);
+  }
+}

@@ -21,3 +21,12 @@ export const getCartSummary = (cartList: Product[]) => {
 
   return summary;
 };
+
+export const getProductStockStatusString = (product: Product) => {
+  const hasStock = product.stockQuantity > 0;
+  const status = hasStock
+    ? `재고 부족 (${product.stockQuantity}개 남음)`
+    : '품절';
+
+  return `${product.name}: ${status}`;
+};

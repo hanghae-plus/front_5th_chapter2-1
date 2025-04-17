@@ -3,6 +3,7 @@ import { useProductList } from '../context/product';
 export const TotalAmountDisplay = () => {
   const { totalAmount, avgDiscountRate } = useProductList();
   const points = Math.floor(totalAmount / 1000);
+
   return (
     <div
       id="cart-total"

@@ -22,7 +22,9 @@ export default defineConfig({
     },
   },
   plugins: [react()],
+  base: '/front_5th_chapter2-1/',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'], // 파일 확장자 지원
   },
+  outDir: 'dist',
 });

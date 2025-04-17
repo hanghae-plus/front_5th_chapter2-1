@@ -8,7 +8,6 @@ import { applyBulkDiscount, applyTuesdayDiscount, calculateDiscountRate } from "
 
 export const calculateDiscount = () => {
   let { originalTotal, itemCount, discountRate, finalTotal } = cartState;
-  // let finalTotal = cartState.finalTotal ?? originalTotal;
 
   //finalTotal이 없으면 originalTotal을 사용
   if (finalTotal === undefined) {
@@ -16,10 +15,12 @@ export const calculateDiscount = () => {
   }
 
   //대량 구매 할인 적용
-  finalTotal = applyBulkDiscount(finalTotal, originalTotal, itemCount);
+  const bulkResult = applyBulkDiscount(finalTotal, originalTotal, itemCount);
+  finalTotal = bulkResult.finalTotal;
 
   //  화요일 할인 적용
-  finalTotal = applyTuesdayDiscount(finalTotal);
+  const tuesdayResult = applyTuesdayDiscount(finalTotal);
+  finalTotal = tuesdayResult.finalTotal;
 
   // 최종 할인율 계산
   const finalDiscountRate = calculateDiscountRate(finalTotal, originalTotal, discountRate);

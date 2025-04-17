@@ -1,4 +1,4 @@
-import { BULK_DISCOUNT_RATE, BULK_DISCOUNT_THRESHOLD } from "../../constant/discount-constant";
+import { BULK_DISCOUNT_RATE, BULK_DISCOUNT_THRESHOLD } from "../../constants/discount-constant";
 
 /**
  * 대량 구매 할인을 계산하고 적용하는 함수

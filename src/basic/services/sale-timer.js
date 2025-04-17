@@ -1,4 +1,4 @@
-import { SALE_CONFIG } from "../constant/sale-config";
+import { SALE_CONFIG } from "../constants/sale-config";
 import { cartState } from "../store/state";
 
 import { renderProductOptions } from "../ui/render-product-options";
@@ -36,7 +36,9 @@ const startLastSaleTimer = (getLastSale) => {
     setInterval(function () {
       const lastSale = getLastSale();
       if (lastSale) {
-        const suggest = cartState.products.find((item) => item.id !== lastSel && item.q > 0);
+        const suggest = cartState.products.find(
+          (item) => item.id !== cartState.lastSelected && item.q > 0,
+        );
 
         if (suggest) {
           alert(suggest.name + "은(는) 어떠세요? 지금 구매하시면 5% 추가 할인!");

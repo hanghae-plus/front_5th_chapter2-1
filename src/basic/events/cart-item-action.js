@@ -1,4 +1,4 @@
-import { calculateCart } from "../logic/calculate-cart";
+import { calculateCart } from "../services/calculate-cart";
 import { cartState } from "../store/state";
 
 /**

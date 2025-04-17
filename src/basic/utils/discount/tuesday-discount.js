@@ -1,4 +1,4 @@
-import { TUESDAY, TUESDAY_DISCOUNT_RATE } from "../../constant/discount-constant";
+import { TUESDAY, TUESDAY_DISCOUNT_RATE } from "../../constants/discount-constant";
 
 /**
  * 화요일 할인을 적용하는 함수

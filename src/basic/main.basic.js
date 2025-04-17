@@ -1,7 +1,7 @@
 import { handleAddToCart } from "./events/add-to-cart";
 import { handleCartItemAction } from "./events/cart-item-action";
-import { calculateCart } from "./logic/calculate-cart";
-import { startLastSaleTimer, startLuckySaleTimer } from "./logic/sale-timer";
+import { calculateCart } from "./services/calculate-cart";
+import { startLastSaleTimer, startLuckySaleTimer } from "./services/sale-timer";
 import { resetCartState } from "./store/reset-state";
 import { cartState } from "./store/state";
 import { renderCartTemplate } from "./ui/render-cart-template";

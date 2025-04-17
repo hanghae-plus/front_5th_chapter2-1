@@ -25,17 +25,26 @@ const PRODUCTS_BY_ID = {
 
 /** 등록된 상품 목록 */
 const PRODUCTS = [
-  { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
-  { id: 'p2', name: '상품2', price: 20000, quantity: 3 },
-  { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
-  { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
-  { id: 'p5', name: '상품5', price: 25000, quantity: 2 },
+  { id: 'p1', name: '상품1', price: 10000, quantity: 50, discount: 0.1 },
+  { id: 'p2', name: '상품2', price: 20000, quantity: 3, disconnt: 0.15 },
+  { id: 'p3', name: '상품3', price: 30000, quantity: 20, disconnt: 0.2 },
+  { id: 'p4', name: '상품4', price: 15000, quantity: 0, disconnt: 0.05 },
+  { id: 'p5', name: '상품5', price: 25000, quantity: 2, disconnt: 0.25 },
 ];
 
 const MOCKCARTS = [
   { id: 'p1', quantity: 4 },
   { id: 'p2', quantity: 1 },
 ];
+
+// 장바구니 렌더링 데이터
+const carts = MOCKCARTS.map((cartItem) => {
+  const product = PRODUCTS.find((p) => p.id === cartItem.id);
+  return {
+    ...product,
+    quantity: cartItem.quantity,
+  };
+});
 
 function main() {
   const root = document.getElementById('app');
@@ -45,10 +54,9 @@ function main() {
       <div id="wrapper" class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
         ${Carts()}
-        <div id="cart-total" class="text-xl font-bold my-4">
-        </div>
+        ${totalPrice()}
         ${Options()}
-        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가ddd</button>
+        <button id="add-cart-btn" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
         <div id="stock-state" class="text-sm text-gray-500 mt-2">
       </div>
     </div>
@@ -56,7 +64,7 @@ function main() {
 
   root.innerHTML = template();
 
-  calcCart();
+  calculateCartTotal();
 
   // 광고 alert
   setTimeout(() => {
@@ -109,112 +117,93 @@ function Options() {
 }
 
 /** 장바구니에 담긴 총 가격 계산 함수 */
-function calcCart() {
-  /** 장바구니 상품들의 총 가격 */
-  let price = 0;
-  /** 장바구니에 담긴 상품 총 개수 */
-  let quantity = 0;
+function calculateCartTotal() {
+  let totalQuantity = 0;
+  /** 할인 전 총합 */
+  let rawTotal = 0;
+  /** 상품별 할인 적용 후 총합 */
+  let discountedTotal = 0;
 
-  /** 장바구니 상품 목록 todo - carts로 수정하기 */
-  const cartItems = $cartsWrapper.children;
-  console.log(cartItems);
+  for (const cartItem of carts) {
+    const product = PRODUCTS.find((p) => p.id === cartItem.id);
+    if (!product) continue;
 
-  /** 할인전 가격 */
-  const totalPrice = 0;
+    const { price, discount = 0 } = product;
+    const quantity = cartItem.quantity;
 
-  // for문으로 cartItems( = carts )에 있는 상품들 가격 더하기
-  for (let i = 0; i < cartItems.length; i++) {
-    (function () {
-      let currentProduct;
+    const itemTotal = price * quantity;
+    let itemDiscountRate = 0;
 
-      for (let j = 0; j < PRODUCTS.length; j++) {
-        if (PRODUCTS[j].id === cartItems[i].id) {
-          currentProduct = PRODUCTS[j];
-          break;
-        }
-      }
-
-      /** 개수 */
-      const q = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
-
-      /** 상품 * 개수의 가격 originalPrice? basePrice? */
-      const itemTot = currentProduct.val * q;
-
-      /** 할인율 todo - 상수변수로 분리 */
-      let disc = 0;
-
-      // 장바구니에 담긴 상품 총 개수
-      quantity += q;
-      // 총 상품의 가격 ( 할인전 )
-      totalPrice += itemTot;
-
-      // 상품별 10개이상일 경우 할인률 조건문
-      if (q >= 10) {
-        if (currentProduct.id === 'p1') disc = 0.1;
-        else if (currentProduct.id === 'p2') disc = 0.15;
-        else if (currentProduct.id === 'p3') disc = 0.2;
-        else if (currentProduct.id === 'p4') disc = 0.05;
-        else if (currentProduct.id === 'p5') disc = 0.25;
-      }
-      // 상품별 할인 적용된 가격
-      price += itemTot * (1 - disc);
-    })();
-  }
-  let discountRate = 0;
-
-  // todo : early return으로 수정
-  // 장바구니 추가 30개 이상일 경우 적용할인가
-  if (quantity >= 30) {
-    /** 대량 구매시 할인률 */
-    const bulkDiscount = price * 0.25;
-
-    /**  */
-    const productDiscount = totalPrice - price;
-
-    if (bulkDiscount > productDiscount) {
-      price = totalPrice * (1 - 0.25);
-      discountRate = 0.25;
-    } else {
-      discountRate = (totalPrice - price) / totalPrice;
+    // 상품 개별 할인 (10개 이상일 경우)
+    if (quantity >= 10) {
+      itemDiscountRate = discount;
     }
-  } else {
-    discountRate = (totalPrice - price) / totalPrice;
+
+    const itemFinal = itemTotal * (1 - itemDiscountRate);
+
+    totalQuantity += quantity;
+    rawTotal += itemTotal;
+    discountedTotal += itemFinal;
   }
 
-  // todo troubleshooting : 화요일일때 에러 발생
-  // 화요일 할인 적용함수
-  if (new Date().getDay() === 2) {
-    price *= 1 - 0.1;
-    discountRate = Math.max(discountRate, 0.1);
+  /** 계산된 총액 */
+  let finalPrice = discountedTotal;
+  /** 적용된 할인율 */
+  let appliedDiscountRate = (rawTotal - discountedTotal) / rawTotal;
+
+  // 대량 구매 할인 적용 여부
+  if (totalQuantity >= 30) {
+    const bulkDiscountedPrice = rawTotal * (1 - 0.25); // 25% 할인
+    const bulkDiscountAmount = rawTotal - bulkDiscountedPrice;
+    const itemDiscountAmount = rawTotal - discountedTotal;
+
+    if (bulkDiscountAmount > itemDiscountAmount) {
+      finalPrice = bulkDiscountedPrice;
+      appliedDiscountRate = 0.25;
+    }
   }
-  // 총 할인가 적용된 금액 출력
-  sum.textContent = '총액: ' + Math.round(price) + '원';
 
-  // 할인가 ui
-  if (discountRate > 0) {
-    const span = document.createElement('span');
-    span.className = 'text-green-500 ml-2';
-    span.textContent = '(' + (discountRate * 100).toFixed(1) + '% 할인 적용)';
+  const bonusPoint = Math.floor(finalPrice / 1000);
 
-    sum.appendChild(span);
-  }
-
-  updatestocksWrapper();
-  expectedPointsComponent();
+  return {
+    finalPrice: Math.round(finalPrice),
+    appliedDiscountRate: appliedDiscountRate,
+    rawTotal: rawTotal,
+    bonusPoint: bonusPoint,
+  };
 }
 
-/** 보너스 포인트 함수 */
-const expectedPointsComponent = () => {
-  const bonusPoint = Math.floor(price / 1000);
-  const $expectedPoints = document.getElementById('loyalty-points');
-  if (!$expectedPoints) {
-    $expectedPoints = document.createElement('span');
-    $expectedPoints.id = 'loyalty-points';
-    $expectedPoints.className = 'text-blue-500 ml-2';
-    sum.appendChild($expectedPoints);
-  }
-  $expectedPoints.textContent = '(포인트: ' + bonusPoint + ')';
-};
+/** 총액 컴포넌트 ui */
+function totalPrice() {
+  const { finalPrice, appliedDiscountRate, rawTotal, bonusPoint } = calculateCartTotal();
+  return /* html */ `
+  <div id="cart-total" class="text-xl font-bold my-4">
+    총액: ${finalPrice}원
+   ${appliedDiscountRate === 0 ? '' : `<span class="text-green-500 ml-2">( ${appliedDiscountRate}% 할인 적용 )</span>`}
+    <span id="loyalty-points" class="text-blue-500 ml-2">(포인트: ${bonusPoint})</span>
+  </div>
+  `;
+}
+// // todo troubleshooting : 화요일일때 에러 발생
+// // 화요일 할인 적용함수
+// if (new Date().getDay() === 2) {
+//   price *= 1 - 0.1;
+//   discountRate = Math.max(discountRate, 0.1);
+// }
+// // 총 할인가 적용된 금액 출력
+// // sum.textContent = '총액: ' + Math.round(price) + '원';
+
+// // 할인가 ui
+// if (discountRate > 0) {
+//   const span = document.createElement('span');
+//   span.className = 'text-green-500 ml-2';
+//   span.textContent = '(' + (discountRate * 100).toFixed(1) + '% 할인 적용)';
+
+//   sum.appendChild(span);
+// }
+
+// updatestocksWrapper();
+// expectedPointsComponent();
 
 /** 재고 업데이트 함수 */
 function updatestocksWrapper() {
@@ -280,7 +269,7 @@ $addCartBtn.addEventListener('click', () => {
     }
 
     // 총 가격 계산
-    calcCart();
+    calculateCartTotal();
     // 마지막 담은 상품 업데이트
     lastAddedItem = selectedItem;
   }
@@ -288,15 +277,6 @@ $addCartBtn.addEventListener('click', () => {
 
 /** 장바구니 목록 ui 컴포넌트 */
 function Carts() {
-  // todo
-  const carts = MOCKCARTS.map((cartItem) => {
-    const product = PRODUCTS.find((p) => p.id === cartItem.id);
-    return {
-      ...product,
-      quantity: cartItem.quantity,
-    };
-  });
-
   const cartsProducts = carts
     .map(
       ({ id, name, price, quantity }) => /* html */ `
@@ -362,6 +342,6 @@ $cartsWrapper.addEventListener('click', (e) => {
       product.quantity += remQty;
       $tagetItem.remove();
     }
-    calcCart();
+    calculateCartTotal();
   }
 });

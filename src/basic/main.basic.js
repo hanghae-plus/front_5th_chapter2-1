@@ -1,18 +1,11 @@
-import {
-  createRootChildren,
-  setSaleAlert,
-  setSuggestionAlert,
-} from "./logic.js";
-import { calcCart } from "./calcCart.js";
+import { createRootChildren, setUp } from "./app/index.js";
 
 function main() {
   const root = document.getElementById("app");
   const cont = createRootChildren();
   root.appendChild(cont);
 
-  calcCart();
-  setSaleAlert();
-  setSuggestionAlert();
+  setUp();
 }
 
 main();

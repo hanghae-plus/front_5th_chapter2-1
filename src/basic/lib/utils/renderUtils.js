@@ -1,8 +1,8 @@
-import { PRODUCT_INVENTORY } from "../configs/products";
 import { CartItem } from "../../components/CartItem";
 import { ProductSelectItem } from "../../components/ProductSelectItem";
 import { StockInfo } from "../../components/StockInfo";
 import { cartStore } from "../../stores/cartStore";
+import { PRODUCT_INVENTORY } from "../configs/products";
 
 export function renderTotalPrice(totalPrice) {
   const cartTotalElem = document.getElementById("cart-total");

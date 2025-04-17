@@ -6,6 +6,10 @@ export type Cart = CartItem[];
 
 let cart: Cart = [];
 
+export function initializeCart(): void {
+  cart = [];
+}
+
 function deepCopyCart(cart: Cart): Cart {
   return cart.map((item) => ({
     ...item,

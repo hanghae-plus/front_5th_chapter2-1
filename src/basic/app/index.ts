@@ -7,7 +7,7 @@ export function createRootChildren(): HTMLDivElement {
 
   const cart = createCart();
   cont.appendChild(cart);
-
+  
   return cont;
 }
 

@@ -17,6 +17,7 @@ import {
   getCart,
   updateCart,
 } from '../../../../../shared/store/cart';
+import { updateCartItemQuantity } from '../CartDisplay/logic.ts';
 
 function createNewCartItem(itemToAdd: Product, quantity?: number) {
   const $newItem = document.createElement('div');
@@ -41,8 +42,8 @@ function addExistingItem(cart: Cart, itemIndex: number, itemToAdd: Product) {
     const newCart = addExistingItemInCart(cart, productId);
     updateCart(newCart);
 
-    // getCartItemText(item).textContent = `${name} - ${val}원 x ${newQty}`;
-    // cartdisp 하위 자식들은 cart 정보를 보고 그려줄 수 있도록 수정 필요
+    // DOM 업데이트
+    updateCartItemQuantity(productId, newQty);
 
     //재고(productList) 에서는 수량 down
     const productList = getProductList();
@@ -57,7 +58,10 @@ function addNewItemToCart(cart: Cart, itemToAdd: Product) {
   const newCart = addNewItemInCart(cart, itemToAdd.id);
   updateCart(newCart);
 
-  renderCartDomFromCart();
+  // 새 아이템만 추가
+  const $cartDisplay = document.getElementById(ElementIds.CART_DISP) as HTMLElement;
+  const $newItem = createNewCartItem(itemToAdd, 1);
+  $cartDisplay.appendChild($newItem);
 
   const productList = getProductList();
   const newProductList = decreaseProductQuantity(productList, itemToAdd.id);
@@ -105,7 +109,6 @@ export function renderCartDomFromCart() {
     ElementIds.CART_DISP,
   ) as HTMLElement;
 
-  // 기존 내용을 모두 지웁니다
   $cartDisplay.innerHTML = '';
 
   const cart = getCart();

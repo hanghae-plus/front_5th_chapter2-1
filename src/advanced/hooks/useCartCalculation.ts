@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useCartStore } from "../store/useCartStore";
 
 const MIN_DISCOUNT_QUANTITY = 10;
@@ -27,19 +26,19 @@ const getDiscountRate = (productId: string, quantity: number): number => {
 export const useCartCalculation = () => {
   const { cart, updateCartTotals } = useCartStore();
 
-  useEffect(() => {
-    let originalTotal = 0;
-    let finalTotal = 0;
-    let itemCount = 0;
+  // useEffect(() => {
+  //   let originalTotal = 0;
+  //   let finalTotal = 0;
+  //   let itemCount = 0;
 
-    cart.forEach((item) => {
-      const itemTotal = item.val * item.quantity;
-      const discount = getDiscountRate(item.id, item.quantity);
-      originalTotal += itemTotal;
-      finalTotal += itemTotal * (1 - discount);
-      itemCount += item.quantity;
-    });
+  //   cart.forEach((item) => {
+  //     const itemTotal = item.val * item.quantity;
+  //     const discount = getDiscountRate(item.id, item.quantity);
+  //     originalTotal += itemTotal;
+  //     finalTotal += itemTotal * (1 - discount);
+  //     itemCount += item.quantity;
+  //   });
 
-    updateCartTotals(originalTotal, finalTotal, itemCount, discountRate);
-  }, [cart, updateCartTotals]);
+  //   updateCartTotals(originalTotal, finalTotal, itemCount, discountRate);
+  // }, [cart, updateCartTotals]);
 };

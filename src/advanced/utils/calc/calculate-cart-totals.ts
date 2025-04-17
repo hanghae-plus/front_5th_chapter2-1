@@ -35,6 +35,10 @@ const findProductById = (id: string, products: Product[]): Product | undefined =
   return products.find((product) => product.id === id);
 };
 
+/**
+ * 장바구니 항목과 전체 상품 목록을 기반으로 총 금액, 수량, 할인 적용 금액을 계산
+ */
+
 export const calculateCartTotals = (cartItems: CartItem[], products: Product[]) => {
   let originalTotal = 0;
   let finalTotal = 0;

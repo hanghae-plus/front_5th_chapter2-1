@@ -2,6 +2,10 @@ import { TUESDAY, TUESDAY_DISCOUNT_RATE } from "../../constants/discount-constan
 
 /**
  * 할인율을 계산하는 함수
+ *
+ * @param finalTotal - 할인 적용 후 금액
+ * @param originalTotal - 할인 전 원래 금액
+ * @returns 최종 할인율 (0.1 = 10%)
  */
 export const calculateDiscountRate = (finalTotal, originalTotal) => {
   // 기본 할인율 계산

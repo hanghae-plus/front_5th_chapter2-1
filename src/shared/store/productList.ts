@@ -22,7 +22,15 @@ function deepCopyProdList(prodList: Product[]): Product[] {
 export const prodList: Product[] = deepCopyProdList(defaultProdList);
 
 export function getProductList() {
-  return deepCopyProdList(prodList);
+  return prodList;
+}
+
+export function findProductWithCondition(
+  prodList: Product[],
+  condition: (prod: Product) => boolean,
+) {
+  const product = prodList.find(condition);
+  return product ? { ...product } : undefined;
 }
 
 export function findProduct(

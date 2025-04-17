@@ -53,30 +53,30 @@ const renderStockStatusMessage = (products, stockStatus) => {
 };
 
 const getOrCreateRewardPointsElement = (cartTotalPrice) => {
-  let rewardPoints = document.getElementById('loyalty-points');
+  let $rewardPoints = document.getElementById('loyalty-points');
 
-  if (!rewardPoints) {
-    rewardPoints = document.createElement('span');
-    rewardPoints.id = 'loyalty-points';
-    rewardPoints.className = 'text-blue-500 ml-2';
-    cartTotalPrice.appendChild(rewardPoints);
+  if (!$rewardPoints) {
+    $rewardPoints = document.createElement('span');
+    $rewardPoints.id = 'loyalty-points';
+    $rewardPoints.className = 'text-blue-500 ml-2';
+    cartTotalPrice.appendChild($rewardPoints);
   }
 
-  return rewardPoints;
+  return $rewardPoints;
 };
 
 const renderCartTotal = (cartTotalPrice, totalPrice, discountRate, bonusPoints) => {
   cartTotalPrice.textContent = `총액: ${Math.round(totalPrice)}원`;
 
   if (discountRate > 0) {
-    const discountBadge = document.createElement('span');
-    discountBadge.className = 'text-green-500 ml-2';
-    discountBadge.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
-    cartTotalPrice.appendChild(discountBadge);
+    const $discountBadge = document.createElement('span');
+    $discountBadge.className = 'text-green-500 ml-2';
+    $discountBadge.textContent = `(${(discountRate * 100).toFixed(1)}% 할인 적용)`;
+    cartTotalPrice.appendChild($discountBadge);
   }
 
-  const rewardPoints = getOrCreateRewardPointsElement(cartTotalPrice);
-  rewardPoints.textContent = `(포인트: ${bonusPoints})`;
+  const $rewardPoints = getOrCreateRewardPointsElement(cartTotalPrice);
+  $rewardPoints.textContent = `(포인트: ${bonusPoints})`;
 };
 
 const updateCartTotal = (cartList, products, cartTotalPrice, stockStatus) => {

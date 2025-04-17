@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useCart, useProduct } from "@/advanced/context";
 import { getCartCalculation } from "@/advanced/logic";
+import { alertOutOfStock } from "@/advanced/utils";
 
 interface UseAddCartItemReturn {
   handleAddButtonClick: () => void;
@@ -19,7 +20,14 @@ export const useAddCartItem = (): UseAddCartItemReturn => {
 
     const existingItemIndex = cartItems.findIndex((item) => item.id === itemToAdd.id);
 
+
     if (existingItemIndex > -1) {
+      // 재고 체크
+      if (itemToAdd.quantity < 1) {
+        alertOutOfStock();
+        return;
+      }
+
       const newCartItems = [...cartItems];
       newCartItems[existingItemIndex].quantity += 1;
       setCartItems(newCartItems);
@@ -28,6 +36,7 @@ export const useAddCartItem = (): UseAddCartItemReturn => {
       setCartItems([...cartItems, { ...itemToAdd, quantity: 1 }]);
       getCartCalculation([...cartItems, { ...itemToAdd, quantity: 1 }], setCart);
     }
+
 
     setProductList(
       productList.map((product) =>

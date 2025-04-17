@@ -1,8 +1,7 @@
-import { useCallback } from 'react';
-import { useCart, useProduct } from '@/advanced/context';
-import { alertOutOfStock } from '@/advanced/utils/alert';
-import { getCartCalculation } from '@/advanced/logic';
-import type { Product } from '@/advanced/types/product';
+import { useCallback } from "react";
+import { useCart, useProduct } from "@/advanced/context";
+import { getCartCalculation, removeCartItem, updateCartItemQuantity, updateProductStock, canChangeQuantity } from "@/advanced/logic";
+import type { Product } from "@/advanced/types";
 
 interface UseCartItemReturn {
   changeQuantity: (change: number) => void;
@@ -13,58 +12,36 @@ export const useCartItem = (item: Product): UseCartItemReturn => {
   const { cartItems, setCartItems, setCart } = useCart();
   const { productList, setProductList } = useProduct();
 
-  const changeQuantity = useCallback((change: number) => {
-    const currentQuantity = item.quantity;
-    const newQuantity = currentQuantity + change;
-    const product = productList.find(p => p.id === item.id);
-
-    if (!product) return;
-    
-    const maxAllowed = product.quantity + currentQuantity;
-
-    if (newQuantity <= 0) {
-      const newCartItems = cartItems.filter(cartItem => cartItem.id !== item.id);
-      setCartItems(newCartItems);
-      setProductList(productList.map(product => 
-        product.id === item.id 
-          ? { ...product, quantity: product.quantity + currentQuantity }
-          : product
-      ));
-      getCartCalculation(newCartItems, setCart);
-      return;
-    }
-
-    if (newQuantity > maxAllowed) {
-      alertOutOfStock();
-      return;
-    }
-
-    const newCartItems = cartItems.map(cartItem => 
-      cartItem.id === item.id 
-        ? { ...cartItem, quantity: newQuantity }
-        : cartItem
-    );
-
+  const updateCartAndRecalculate = useCallback((newCartItems: Product[]) => {
     setCartItems(newCartItems);
     getCartCalculation(newCartItems, setCart);
+  }, [setCartItems, setCart]);
 
-    setProductList(productList.map(product => 
-      product.id === item.id 
-        ? { ...product, quantity: product.quantity - change }
-        : product
-    ));
-  }, [cartItems, item, productList, setCart, setCartItems, setProductList]);
+  const changeQuantity = useCallback((change: number) => {
+    const product = productList.find(p => p.id === item.id);
+    if (!product) return;
+
+    if (item.quantity + change <= 0) {
+      const newCartItems = removeCartItem(cartItems, item.id);
+      updateCartAndRecalculate(newCartItems);
+      setProductList(updateProductStock(productList, item.id, item.quantity));
+      return;
+    }
+
+    if (!canChangeQuantity(item.quantity, change, product.quantity)) {
+      return;
+    }
+
+    const newCartItems = updateCartItemQuantity(cartItems, item.id, change);
+    updateCartAndRecalculate(newCartItems);
+    setProductList(updateProductStock(productList, item.id, -change));
+  }, [cartItems, item, productList, setProductList, updateCartAndRecalculate]);
 
   const removeItem = useCallback(() => {
-    const newCartItems = cartItems.filter(cartItem => cartItem.id !== item.id);
-    setCartItems(newCartItems);
-    setProductList(productList.map(product => 
-      product.id === item.id 
-        ? { ...product, quantity: product.quantity + item.quantity }
-        : product
-    ));
-    getCartCalculation(newCartItems, setCart);
-  }, [cartItems, item, productList, setCart, setCartItems, setProductList]);
+    const newCartItems = removeCartItem(cartItems, item.id);
+    updateCartAndRecalculate(newCartItems);
+    setProductList(updateProductStock(productList, item.id, item.quantity));
+  }, [cartItems, item, productList, setProductList, updateCartAndRecalculate]);
 
   return { changeQuantity, removeItem };
 };

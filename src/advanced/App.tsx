@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useReducer, useState, useEffect } from 'react';
 import { Product } from './types/product';
 import { products } from './data/products';
 import CartList from './components/CartList';
@@ -6,9 +6,18 @@ import CartTotal from './components/CartTotal';
 import StockStatus from './components/StockStatus';
 import ProductSelect from './components/ProductSelect';
 import { createDiscountEvent } from './utils/createDiscountEvent';
+import { cartReducer } from './reducers/cartReducer';
+import { CartState } from './types/cart';
+
+const initialCartState: CartState = {
+  items: [],
+  totalPrice: 0,
+  discountRate: 0,
+  bonusPoints: 0,
+};
 
 const App = () => {
-  const [cartItems, setCartItems] = useState<Product[]>([]);
+  const [cartState, dispatch] = useReducer(cartReducer, initialCartState);
   const [selectedProductId, setSelectedProductId] = useState<string>('');
   const [availableProducts, setAvailableProducts] = useState<Product[]>([...products]);
 
@@ -36,17 +45,7 @@ const App = () => {
       return;
     }
 
-    const existingCartItem = cartItems.find(({ id }) => id === selectedProductId);
-
-    if (!existingCartItem) {
-      setCartItems([...cartItems, { ...selectedProduct, quantity: 1 }]);
-    } else {
-      const updatedCartItems = cartItems.map((item) =>
-        item.id === selectedProductId ? { ...item, quantity: item.quantity + 1 } : item,
-      );
-      setCartItems(updatedCartItems);
-    }
-
+    dispatch({ type: 'ADD_ITEM', payload: selectedProduct });
     setAvailableProducts((prevProducts) =>
       prevProducts.map((product) =>
         product.id === selectedProductId ? { ...product, quantity: product.quantity - 1 } : product,
@@ -54,86 +53,58 @@ const App = () => {
     );
   };
 
-  const handleCartItemClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    const target = event.target as HTMLElement;
-    const productId = target.dataset.productId;
+  const handleQuantityChange = (id: string, change: number) => {
+    const product = availableProducts.find((p) => p.id === id);
+    if (!product) return;
 
-    if (!productId) return;
-
-    if (target.classList.contains('remove-item')) {
-      const removedItem = cartItems.find((item) => item.id === productId);
-      if (removedItem) {
-        setAvailableProducts((prevProducts) =>
-          prevProducts.map((product) =>
-            product.id === productId
-              ? { ...product, quantity: product.quantity + removedItem.quantity }
-              : product,
-          ),
-        );
-      }
-      setCartItems(cartItems.filter((item) => item.id !== productId));
+    if (change > 0 && product.quantity <= 0) {
+      alert('재고가 부족합니다.');
       return;
     }
 
-    if (target.classList.contains('quantity-change')) {
-      const change = parseInt(target.dataset.change || '0');
-      const product = availableProducts.find((p) => p.id === productId);
+    dispatch({ type: 'UPDATE_QUANTITY', payload: { id, change } });
+    setAvailableProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.id === id ? { ...product, quantity: product.quantity - change } : product,
+      ),
+    );
+  };
 
-      if (!product) return;
-
-      if (change > 0 && product.quantity <= 0) {
-        alert('재고가 부족합니다.');
-        return;
-      }
-
-      const updatedCartItems = cartItems
-        .map((item) => {
-          if (item.id === productId) {
-            const newQuantity = item.quantity + change;
-            if (newQuantity <= 0) {
-              setAvailableProducts((prevProducts) =>
-                prevProducts.map((product) =>
-                  product.id === productId
-                    ? { ...product, quantity: product.quantity + item.quantity }
-                    : product,
-                ),
-              );
-              return null;
-            }
-            setAvailableProducts((prevProducts) =>
-              prevProducts.map((product) =>
-                product.id === productId
-                  ? { ...product, quantity: product.quantity - change }
-                  : product,
-              ),
-            );
-            return { ...item, quantity: newQuantity };
-          }
-          return item;
-        })
-        .filter(Boolean) as Product[];
-
-      setCartItems(updatedCartItems);
+  const handleRemoveItem = (id: string) => {
+    const removedItem = cartState.items.find((item) => item.id === id);
+    if (removedItem) {
+      setAvailableProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === id
+            ? { ...product, quantity: product.quantity + removedItem.quantity }
+            : product,
+        ),
+      );
     }
+    dispatch({ type: 'REMOVE_ITEM', payload: id });
   };
 
   return (
     <div className="bg-gray-100 p-8">
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 className="text-2xl font-bold mb-4">장바구니</h1>
-        <CartList cartItems={cartItems} onCartItemClick={handleCartItemClick} />
-        <CartTotal cartItems={cartItems} products={availableProducts} />
+        <CartList
+          items={cartState.items}
+          onQuantityChange={handleQuantityChange}
+          onRemove={handleRemoveItem}
+        />
+        <CartTotal
+          totalPrice={cartState.totalPrice}
+          discountRate={cartState.discountRate}
+          bonusPoints={cartState.bonusPoints}
+        />
         <div className="flex items-center">
           <ProductSelect
             products={availableProducts}
             selectedProductId={selectedProductId}
             onProductSelect={setSelectedProductId}
           />
-          <button
-            id="add-to-cart"
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={handleAddToCart}
-          >
+          <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleAddToCart}>
             추가
           </button>
         </div>

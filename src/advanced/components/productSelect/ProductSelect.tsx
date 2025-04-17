@@ -1,24 +1,29 @@
 import type React from "react";
 import { DOM_IDS, STYLES } from "@/basic/consts";
-import { useProductSelect } from "@/advanced/hooks/useProductSelect";
+import { useShopping } from "@/advanced/hooks/useShopping";
+import { formatProductOption } from "@/advanced/utils";
 
 export const ProductSelect: React.FC = () => {
-  const { options, handleSelectChange, selectedProductId } = useProductSelect();
+  const { 
+    products, 
+    selectedProductId, 
+    setSelectedProductId 
+  } = useShopping();
 
   return (
     <select 
       id={DOM_IDS.PRODUCT.SELECT} 
       className={STYLES.FORM.SELECT}
       value={selectedProductId}
-      onChange={(e) => handleSelectChange(e.target.value)}
+      onChange={(e) => setSelectedProductId(e.target.value)}
     >
-      {options.map(({ id, label, disabled }) => (
+      {products.map((item) => (
         <option
-          key={id}
-          value={id}
-          disabled={disabled}
+          key={item.id}
+          value={item.id}
+          disabled={item.quantity === 0}
         >
-          {label}
+          {formatProductOption(item)}
         </option>
       ))}
     </select>

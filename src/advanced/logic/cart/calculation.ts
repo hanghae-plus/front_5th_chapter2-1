@@ -1,7 +1,7 @@
 import type { CartItem, CartState } from "@/advanced/context";
 import { PRODUCT_DISCOUNT_RATES } from "@/basic/consts";
 
-const calculateCartAmounts = (cartItems: CartItem[]): CartState => {
+export const calculation = (cartItems: CartItem[]): CartState => {
   return cartItems.reduce(
     (acc, item) => {
       const itemTotal = item.value * item.quantity;
@@ -17,8 +17,3 @@ const calculateCartAmounts = (cartItems: CartItem[]): CartState => {
     { itemCount: 0, subTotal: 0, totalAmount: 0 }
   );
 };
-
-export const getCartCalculation = (cartItems: CartItem[], setCart: React.Dispatch<React.SetStateAction<CartState>>) => {
-  const { itemCount, subTotal, totalAmount } = calculateCartAmounts(cartItems);
-  setCart({itemCount, subTotal, totalAmount})
-}

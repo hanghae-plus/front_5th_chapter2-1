@@ -1,7 +1,13 @@
 import type React from "react";
-import { useStockStatus } from "@/advanced/hooks";
+import { useShopping } from "@/advanced/hooks/useShopping";
+import { formatStockStatusMessage } from "@/advanced/utils";
 
 export const StockStatus: React.FC = () => {
-  const { stockMessage } = useStockStatus();
+  const { products } = useShopping();
+  
+  const stockMessage = products.reduce((acc, item) => 
+    acc + formatStockStatusMessage(item)
+  , '');
+
   return <>{stockMessage}</>;
 };

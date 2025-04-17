@@ -1,24 +1,27 @@
-import { useEffect } from 'react';
-import { Layout, ProductSelect, AddButton, StockStatusContainer, CartItemListContainer, TotalAmountContainer } from '@/advanced/components';
-import { useProduct } from '@/advanced/context';
-import { RandomSale } from '@/advanced/logic/sale';
+import { useEffect } from "react";
+import {
+  Layout,
+  ProductSelect,
+  AddButton,
+  StockStatusContainer,
+  CartItemListContainer,
+  TotalAmountContainer,
+} from "@/advanced/components";
 
 export const MainPage = () => {
-    const { productList, setProductList, selectedProductId } = useProduct();
-
-    useEffect(() => {
-    RandomSale({
-      selectedProductId,
-      productList,
-      setProductList
-    });
-  }, [productList, selectedProductId, setProductList]);
+  useEffect(() => {
+    // RandomSale({
+    //   selectedProductId,
+    //   productList,
+    //   setProductList
+    // });
+  }, []);
 
   return (
     <Layout>
       <CartItemListContainer />
       <TotalAmountContainer />
-      <ProductSelect/>
+      <ProductSelect />
       <AddButton />
       <StockStatusContainer />
     </Layout>

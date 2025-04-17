@@ -7,7 +7,7 @@ export const PRODUCTS = [
   { id: 'p5', name: '상품5', price: 25000, stock: 10, discount: 0.25 },
 ];
 
-/** 장바구니 목록 ui 가져오기 */
+/** 장바구니 목록 ui 배열 가져오기 */
 export const getCarts = () => {
   const carts = JSON.parse(localStorage.getItem('carts')) || [];
   return carts.map(({ id, quantity }) => {
@@ -91,3 +91,9 @@ export const updateQuantity = ({ id, quantity }) => {
 
   localStorage.setItem('carts', JSON.stringify(updatedCarts));
 };
+
+export const getStorageItem = (key) => {
+  return JSON.parse(localStorage.getItem(key));
+};
+
+export const setStorageItem = (key, value) => localStorage.setItem(key, value);

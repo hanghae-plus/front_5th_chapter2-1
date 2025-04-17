@@ -1,23 +1,24 @@
+import type React from "react";
 import { DOM_IDS, STYLES } from "@/basic/consts";
-import { formatProductOption } from "@/advanced/utils";
-import { useProduct } from "@/advanced/context";
+import { useProductSelect } from "@/advanced/hooks/useProductSelect";
 
 export const ProductSelect: React.FC = () => {
-  const { productList, setSelectedProductId } = useProduct();
+  const { options, handleSelectChange, selectedProductId } = useProductSelect();
 
   return (
     <select 
       id={DOM_IDS.PRODUCT.SELECT} 
       className={STYLES.FORM.SELECT}
-      onChange={(e) => setSelectedProductId(e.target.value)}
+      value={selectedProductId}
+      onChange={(e) => handleSelectChange(e.target.value)}
     >
-      {productList.map((item) => (
+      {options.map(({ id, label, disabled }) => (
         <option
-          key={item.id}
-          value={item.id}
-          disabled={item.quantity === 0}
+          key={id}
+          value={id}
+          disabled={disabled}
         >
-          {formatProductOption(item)}
+          {label}
         </option>
       ))}
     </select>

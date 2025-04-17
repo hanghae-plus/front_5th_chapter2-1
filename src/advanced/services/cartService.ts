@@ -6,14 +6,14 @@ export const cartService = {
         cartItems: CartItem[],
         productList: Product[]
     ): CartCalculation {
-        console.log("calculateCart: ????");
+        // console.log("calculateCart: ????");
 
         const { totalAmount, productCount, subTotalBeforeDiscount } =
             this.calculateTotalAmount(cartItems, productList);
 
-        console.log("totalAmount: ", totalAmount);
-        console.log("productCount: ", productCount);
-        console.log("subTotalBeforeDiscount: ", subTotalBeforeDiscount);
+        // console.log("totalAmount: ", totalAmount);
+        // console.log("productCount: ", productCount);
+        // console.log("subTotalBeforeDiscount: ", subTotalBeforeDiscount);
 
         // 대량 구매 시 할인이 가능한 조건
         // 대량 구매조건은 분리
@@ -32,7 +32,7 @@ export const cartService = {
         );
 
         // 포인트 계산 (1%)
-        const points = Math.floor(totalAmount / 1000); //Math.round(totalAmount * 0.01);
+        const points = Math.floor(finalAmount / 1000); //Math.round(totalAmount * 0.01);
 
         return {
             totalAmount: finalAmount,

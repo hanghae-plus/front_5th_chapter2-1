@@ -58,6 +58,48 @@ const main = () => {
   createDiscountEvent(products);
 };
 
+const addProductToCart = (selectedProduct) => {
+  const { id } = selectedProduct;
+  const $cartItem = document.getElementById(id);
+
+  if (!$cartItem) {
+    createNewCartItem(selectedProduct);
+    return;
+  }
+
+  updateExistingCartItem($cartItem, selectedProduct);
+};
+
+const createNewCartItem = (product) => {
+  const { id, name, price } = product;
+  const $newItem = document.createElement('div');
+
+  $newItem.id = id;
+  $newItem.className = 'flex justify-between items-center mb-2';
+  $newItem.innerHTML = `
+    <span>${name} - ${price}원 x 1</span>
+    <div>
+      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="-1">-</button>
+      <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="1">+</button>
+      <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${id}">삭제</button>
+    </div>`;
+  $cartList.appendChild($newItem);
+  product.quantity--;
+};
+
+const updateExistingCartItem = ($cartItem, product) => {
+  const { name, price, quantity } = product;
+  const updatedQuantity = parseInt($cartItem.querySelector('span').textContent.split('x ')[1]) + 1;
+
+  if (updatedQuantity > quantity) {
+    alert('재고가 부족합니다.');
+    return;
+  }
+
+  $cartItem.querySelector('span').textContent = `${name} - ${price}원 x ${updatedQuantity}`;
+  product.quantity--;
+};
+
 main();
 
 $addProductToCartButton.addEventListener('click', () => {
@@ -68,39 +110,7 @@ $addProductToCartButton.addEventListener('click', () => {
     return;
   }
 
-  const { id, name, price, quantity } = selectedProduct;
-  const $cartItem = document.getElementById(id);
-
-  if (!$cartItem) {
-    const $newItem = document.createElement('div');
-
-    $newItem.id = id;
-    $newItem.className = 'flex justify-between items-center mb-2';
-    $newItem.innerHTML = `
-      <span>${name} - ${price}원 x 1</span>
-      <div>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="-1">-</button>
-        <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="1">+</button>
-        <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${id}">삭제</button>
-      </div>`;
-    $cartList.appendChild($newItem);
-    selectedProduct.quantity--;
-
-    updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
-
-    return;
-  }
-
-  const updatedQuantity = parseInt($cartItem.querySelector('span').textContent.split('x ')[1]) + 1;
-
-  if (updatedQuantity > quantity) {
-    alert('재고가 부족합니다.');
-    return;
-  }
-
-  $cartItem.querySelector('span').textContent = `${name} - ${price}원 x ${updatedQuantity}`;
-  selectedProduct.quantity--;
-
+  addProductToCart(selectedProduct);
   updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
 });
 

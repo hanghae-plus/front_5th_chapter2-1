@@ -6,7 +6,6 @@ export const CART = {
   },
 
   getLastSelectedProductId: () => CART.state.lastSelectedProductId,
-  getBonusPoint: () => CART.state.bonusPoint,
   getTotalAmount: () => CART.state.totalAmount,
   getItemCount: () => CART.state.itemCount,
 

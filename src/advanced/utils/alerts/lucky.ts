@@ -11,10 +11,12 @@ const calculateItemDiscount = () => {
   return Math.round(luckyItem.price * LUCKY_DISCONT_RATE);
 };
 
-export const lucky = () => {
+const lucky = () => {
   if (isLucky()) {
     luckyItem.price = calculateItemDiscount();
     alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
     // updateSelectOptions(); TODO:
   }
 };
+
+export default lucky;

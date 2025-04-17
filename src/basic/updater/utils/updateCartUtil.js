@@ -11,6 +11,7 @@ const DISCOUNT_RATES = {
 };
 const BIG_DISCOUNT_COUNT = 30;
 const BIG_DISCOUNT_RATE = 0.25;
+const TUESDAY_DISCOUNT_RATE = 0.1;
 
 //Section1: 할인율 계산
 
@@ -68,8 +69,8 @@ const isTuesDay = () => {
 };
 
 const getTuseDayDiscount = (totalPrice, discountRate) => {
-  totalPrice.set(totalPrice.get() * (1 - 0.1));
-  discountRate = Math.max(discountRate, 0.1);
+  totalPrice.set(totalPrice.get() * (1 - TUESDAY_DISCOUNT_RATE));
+  discountRate = Math.max(discountRate, TUESDAY_DISCOUNT_RATE);
   return discountRate;
 };
 

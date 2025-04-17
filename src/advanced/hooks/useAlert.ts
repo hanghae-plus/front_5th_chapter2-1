@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
-import { lucky } from '../utils/alerts/lucky';
 import {
   LUCKY_TIMEOUT,
   SUGGEST_TIMEOUT,
   LUCKY_INTERVAL,
   SUGGEST_INTERVAL,
 } from '../utils/alerts/alertConstants';
+import lucky from '../utils/alerts/lucky';
 import suggest from '../utils/alerts/suggest';
 
 const TIMEOUTS = [LUCKY_TIMEOUT, SUGGEST_TIMEOUT];

@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import Title from './components/Title';
 import Cart from './components/Cart';
 import CartTotal from './components/CartTotal';
@@ -16,7 +15,11 @@ const App = () => {
           <Title />
           <Cart />
           <CartTotal />
-          <ItemSelect />
+          <ItemSelect
+            items={items}
+            selectedItemId={selectedItemId}
+            onSelectItem={handleItemSelect}
+          />
           <AddCartButton />
           <Stock />
         </div>

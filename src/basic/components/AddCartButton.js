@@ -14,4 +14,3 @@ class AddCartButton extends BaseElement {
 const $addCartButton = new AddCartButton().get();
 
 export default $addCartButton;
-/* <button id='add-to-cart' className='bg-blue-500 text-white px-4 py-2 rounded'>추가</button> */

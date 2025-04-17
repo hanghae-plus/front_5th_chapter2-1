@@ -1,0 +1,1 @@
+export { createTotalAmountText } from './TotalAmountText';

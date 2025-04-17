@@ -1,0 +1,1 @@
+export { createLoyaltyPointText } from './LoyaltyPointText';

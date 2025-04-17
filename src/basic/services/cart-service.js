@@ -1,9 +1,6 @@
 import { state } from '../store/index.js';
 import { MAXIMUM_STOCKS } from '../constants/index.js';
-import {
-  calculateCartQuantity,
-  calculateCartDiscountPrice,
-} from './cart-calculate.js';
+import { calculateCartQuantity } from './cart-calculate.js';
 import { updateStockStatus } from './product-service.js';
 import { $cartItem } from '../components/index.js';
 
@@ -42,25 +39,29 @@ const handleCartAction = (event) => {
     const { success, quantity } = calculateCartQuantity(
       currentQuantity,
       1,
-      MAXIMUM_STOCKS.find((p) => p.id === product.id).stock,
+      MAXIMUM_STOCKS.find(({ id }) => id === product.id).stock,
     );
+
     if (!success) return alert('재고가 부족합니다.');
     if (cartItemElement) updateCartItem(cartItemElement, product, quantity);
     else {
       const newCartItem = $cartItem(product);
       newCartItem.dataset.quantity = 1;
       cartItemsContainer.appendChild(newCartItem);
+      state.cartList.push(newCartItem);
       product.stock--;
     }
   };
 
-  const handleQuantityChange = () => {
-    const { success, quantity, isRemove } = calculateCartQuantity(
+  const handleQuantityChange = (isUp = true) => {
+    const { success, quantity } = calculateCartQuantity(
       currentQuantity,
-      1,
+      isUp ? 1 : -1,
       product.stock + currentQuantity,
     );
-    if (success) updateCartItem(cartItemElement, product, quantity, isRemove);
+    console.log(product.price);
+    state.totalAmount += product.price;
+    if (success) updateCartItem(cartItemElement, product, quantity);
     else alert('재고가 부족합니다.');
   };
 
@@ -79,16 +80,16 @@ const handleCartAction = (event) => {
 
   if (targetElement.closest('#cart-items')) {
     if (targetElement.classList.contains('quantity-change')) {
-      handleQuantityChange();
+      handleQuantityChange(targetElement.innerText === '+');
     }
+
     if (targetElement.classList.contains('remove-item')) {
       handleRemove();
     }
   }
 
-  calculateCartDiscountPrice();
   updateStockStatus();
   state.lastSelectedProductId = selectedProductId;
 };
 
-export { updateCartItem, handleCartAction };
+export { handleCartAction };

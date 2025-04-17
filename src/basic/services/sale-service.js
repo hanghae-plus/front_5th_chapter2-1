@@ -1,5 +1,6 @@
 import { state } from '../store/index.js';
 import { SALE_CONFIG } from '../constants/index.js';
+import { updateProductOption } from './product-service.js';
 
 /**
  * 세일 이벤트 설정

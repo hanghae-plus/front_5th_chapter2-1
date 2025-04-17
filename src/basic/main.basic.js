@@ -64,10 +64,12 @@ const addProductToCart = (selectedProduct) => {
 
   if (!$cartItem) {
     createNewCartItem(selectedProduct);
+    updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
     return;
   }
 
   updateExistingCartItem($cartItem, selectedProduct);
+  updateCartTotal($cartList, products, $cartTotalPrice, $stockStatus);
 };
 
 const createNewCartItem = (product) => {
@@ -83,13 +85,15 @@ const createNewCartItem = (product) => {
       <button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${id}" data-change="1">+</button>
       <button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${id}">삭제</button>
     </div>`;
+
   $cartList.appendChild($newItem);
-  product.quantity--;
+  decreaseProductStock(product);
 };
 
 const updateExistingCartItem = ($cartItem, product) => {
   const { name, price, quantity } = product;
-  const updatedQuantity = parseInt($cartItem.querySelector('span').textContent.split('x ')[1]) + 1;
+  const currentQuantity = parseInt($cartItem.querySelector('span').textContent.split('x ')[1]);
+  const updatedQuantity = currentQuantity + 1;
 
   if (updatedQuantity > quantity) {
     alert('재고가 부족합니다.');
@@ -97,6 +101,10 @@ const updateExistingCartItem = ($cartItem, product) => {
   }
 
   $cartItem.querySelector('span').textContent = `${name} - ${price}원 x ${updatedQuantity}`;
+  decreaseProductStock(product);
+};
+
+const decreaseProductStock = (product) => {
   product.quantity--;
 };
 

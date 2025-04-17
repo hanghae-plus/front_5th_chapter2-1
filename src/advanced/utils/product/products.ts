@@ -6,7 +6,7 @@
  * @returns {Array<{ id: string, name: string, val: number, q: number }>} - 복사된 상품 배열
  */
 
-import { Product } from "../types/store-type";
+import { Product } from "../../types/store-type";
 
 export const cloneProducts = (products: Product[]) => {
   return products.map((p) => ({ ...p }));

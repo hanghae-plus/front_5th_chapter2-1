@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { products } from "../data/products";
 import { CartStore } from "../types/store-type";
-import { cloneProducts } from "../utils/products";
+import { cloneProducts } from "../utils/product/products";
 
 export const useCartStore = create<CartStore>((set) => ({
   products: cloneProducts(products),
@@ -14,6 +14,7 @@ export const useCartStore = create<CartStore>((set) => ({
 
   setLastSelected: (id) => set({ lastSelected: id }),
 
+  // 장바구니 금액 계산
   updateCartTotals: (originalTotal, finalTotal, itemCount, discountRate) =>
     set({
       originalTotal,
@@ -27,6 +28,7 @@ export const useCartStore = create<CartStore>((set) => ({
       products: state.products.map((p) => (p.id === id ? { ...p, val: newPrice } : p)),
     })),
 
+  //장바구니 추가
   addToCart: (productId: string) =>
     set((state) => {
       const product = state.products.find((product) => product.id === productId);

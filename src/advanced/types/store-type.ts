@@ -6,7 +6,7 @@ export type Product = {
   q: number;
 };
 
-type CartItem = {
+export type CartItem = {
   id: string;
   name: string;
   val: number;

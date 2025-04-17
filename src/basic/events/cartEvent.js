@@ -11,8 +11,6 @@ export function setupAddButtonHandler(
 ) {
     // 추가 버튼 클릭
     addBtn.addEventListener("click", () => {
-        console.log("추가 버튼 클릭");
-
         // 상품 선택하는 드롭다운
         const selItem = selectProductEl.value;
         const itemToAdd = productList.find((p) => p.id === selItem);
@@ -22,7 +20,6 @@ export function setupAddButtonHandler(
         }
 
         const item = document.getElementById(itemToAdd.id);
-        console.log("item: ", item);
 
         if (item) updateExistingItem(item, itemToAdd);
         else createNewCartItem(itemToAdd, cartDisplayEl);
@@ -68,11 +65,7 @@ function createNewCartItem(itemToAdd, cartDisplayEl) {
 
 export function setupCartItemEvents(cartDisplayEl, productList, calcCart) {
     cartDisplayEl.addEventListener("click", (event) => {
-        console.log("cartDisplayEl");
-
         const tgt = event.target;
-        console.log("tgt: ", tgt);
-
         // quantity-change: - + class
         // remove-item: 삭제 class
         if (

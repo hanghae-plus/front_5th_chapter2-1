@@ -6,15 +6,8 @@ export const cartService = {
         cartItems: CartItem[],
         productList: Product[]
     ): CartCalculation {
-        // console.log("calculateCart: ????");
-
         const { totalAmount, productCount, subTotalBeforeDiscount } =
             this.calculateTotalAmount(cartItems, productList);
-
-        // console.log("totalAmount: ", totalAmount);
-        // console.log("productCount: ", productCount);
-        // console.log("subTotalBeforeDiscount: ", subTotalBeforeDiscount);
-
         // 대량 구매 시 할인이 가능한 조건
         // 대량 구매조건은 분리
         const { totalAfterBulkDiscount, bulkDIscountRate } =

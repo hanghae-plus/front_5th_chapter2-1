@@ -13,8 +13,6 @@ const CartItem: React.FC<CartItemProps> = ({
     handleQuantityChange,
     handleRemoveItem,
 }) => {
-    console.log("item: ", item);
-
     return (
         <div id="item.id" className="flex justify-between items-center mb-2">
             <span className="flex-grow">

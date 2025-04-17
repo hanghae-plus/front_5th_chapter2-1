@@ -14,8 +14,6 @@ const CartDisplay: React.FC<CartDisplayProps> = ({
     handleQuantityChange,
     handleRemoveItem,
 }) => {
-    console.log("cartItem: ", cartItems);
-
     return (
         <div id="cart-items">
             {cartItems.map((item) => (

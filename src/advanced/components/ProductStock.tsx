@@ -8,14 +8,13 @@ interface ProductListProps {
 
 const ProductStock = ({ productList }: ProductListProps) => {
     const lowStockProducts = productList.filter((item) => item.q < 5);
-    console.log("lowStockProducts: ", lowStockProducts);
 
     return (
         <div id="stock-status" className="text-sm text-gray-500 mt-2">
             {lowStockProducts.length > 0 ? (
                 lowStockProducts.map((item) => (
                     <p key={item.id}>
-                        {item.name}:{" "}
+                        {item.name}:
                         {item.q > 0 ? `재고부족 (${item.q}개 남음)` : "품절"}
                     </p>
                 ))

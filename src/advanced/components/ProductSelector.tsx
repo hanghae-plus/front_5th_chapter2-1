@@ -14,8 +14,6 @@ const ProductSelector: React.FC<ProductSelectorProps> = ({
     onChange,
     onAddToCart,
 }) => {
-    console.log("productList: ", productList);
-
     return (
         <>
             <select

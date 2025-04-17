@@ -16,7 +16,7 @@ export function usePromotion(
                 );
                 const flashSaleProduct = { ...productList[randomIndex] };
 
-                if (Math.random() < 0.3 && flashSaleProduct.q > 0) {
+                if (Math.random() < 0.8 && flashSaleProduct.q > 0) {
                     const updatedProducts = productList.map((p) =>
                         p.id === flashSaleProduct.id
                             ? { ...p, val: Math.round(p.val * 0.8) }
@@ -28,10 +28,10 @@ export function usePromotion(
                     );
                     updateProducts(updatedProducts);
                 }
-            }, 300000);
+            }, 30000);
 
             return () => clearInterval(flashSaleInterval);
-        }, Math.random() * 100000);
+        }, Math.random() * 10000);
 
         // 제안세일 타이머
         const suggestionTimer = setTimeout(() => {

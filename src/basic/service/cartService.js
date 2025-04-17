@@ -82,14 +82,6 @@ function calculateTotalAmount(cartItems, productList) {
             subTotalBeforeDiscount += itemPriceTotal; // 할인 전 전체 금액
 
             totalAmount += itemPriceTotal * (1 - discount); // 할인 적용 된 후의 전체 금액
-            console.log("orderCount(현재 선택한 주문수량): ", orderCount);
-            console.log("itemPriceTotal(상품가격 * 개수): ", itemPriceTotal);
-            console.log("productCount(총 상품 갯수): ", productCount);
-            console.log(
-                "subTotalBeforeDiscount(할인 전 총 상품 가격): ",
-                subTotalBeforeDiscount
-            );
-            console.log("totalAmount(총 상품 가격): ", totalAmount);
         })();
     }
 

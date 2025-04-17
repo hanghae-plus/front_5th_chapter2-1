@@ -52,9 +52,6 @@ const App: React.FC = () => {
 
     // 수량 변경 핸들러
     const handleQuantityChange = (productId: string, change: number) => {
-        console.log("handleQuantityChange");
-        console.log("products: ", products);
-
         cartEvents.updateQuantity(
             productId,
             change,

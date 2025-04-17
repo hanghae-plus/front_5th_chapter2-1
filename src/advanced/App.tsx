@@ -51,11 +51,26 @@ const App: React.FC = () => {
         setSelectedProductId(productId);
     };
 
+    // 수량 변경 핸들러
+    const handleQuantityChange = (productId: string, change: number) => {
+        console.log("handleQuantityChange");
+        cartEvents.updateQuantity(productId, change, cartItems, setCartItems);
+    };
+
+    // 상품 제거 핸들러
+    const handleRemoveItem = (productId: string) => {
+        cartEvents.removeItem(productId, cartItems, setCartItems);
+    };
+
     return (
         <Container>
             <Wrapper>
                 <h2 className="text-2xl font-bold mb-4">장바구니</h2>
-                <CartDisplay cartItems={cartItems} />
+                <CartDisplay
+                    cartItems={cartItems}
+                    handleQuantityChange={handleQuantityChange}
+                    handleRemoveItem={handleRemoveItem}
+                />
                 <TotalAmount cartItems={cartItems} productList={PRODUCT_LIST} />
                 <ProductSelector
                     productList={PRODUCT_LIST}

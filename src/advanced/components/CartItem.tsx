@@ -4,12 +4,15 @@ import Button from "./Button";
 
 interface CartItemProps {
     item: CartItemType;
+    handleQuantityChange: (id: string, change: number) => void;
+    handleRemoveItem: (id: string) => void;
 }
 
-const CartItem: React.FC<CartItemProps> = ({ item }) => {
-    function handleRemoveButton() {}
-    function handleAddButton() {}
-    function handleDeleteButton() {}
+const CartItem: React.FC<CartItemProps> = ({
+    item,
+    handleQuantityChange,
+    handleRemoveItem,
+}) => {
     console.log("item: ", item);
 
     return (
@@ -21,7 +24,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
                 <Button
                     variant="secondary"
                     size="small"
-                    onClick={handleRemoveButton}
+                    onClick={() => handleQuantityChange(item.id, -1)}
                     children="-"
                     productId={item.id}
                     dataChange={"-1"}
@@ -29,7 +32,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
                 <Button
                     variant="secondary"
                     size="small"
-                    onClick={handleAddButton}
+                    onClick={() => handleQuantityChange(item.id, 1)}
                     children="+"
                     productId={item.id}
                     dataChange={"1"}
@@ -37,7 +40,7 @@ const CartItem: React.FC<CartItemProps> = ({ item }) => {
                 <Button
                     variant="danger"
                     size="medium"
-                    onClick={handleDeleteButton}
+                    onClick={() => handleRemoveItem(item.id)}
                     children="삭제"
                     productId={item.id}
                     dataChange={""}

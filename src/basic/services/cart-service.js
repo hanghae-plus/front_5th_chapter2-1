@@ -56,7 +56,6 @@ const handleClickAdd = () => {
 const handleClickIncrease = (event) => {
   const productId = event.target.dataset.productId;
   increaseCartItem(productId);
-  console.log(state.products);
 };
 
 /**

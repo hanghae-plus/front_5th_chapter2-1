@@ -7,7 +7,7 @@ const CartTotal = () => {
     getState().discountRate || 0,
   );
   const [points, setPoints] = useState(
-    getState().points || Math.floor(totalAmount * 0.001),
+    getState().points || Math.floor(totalAmount / 1000),
   );
 
   useEffect(() => {

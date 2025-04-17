@@ -4,7 +4,7 @@ import {
   handleClickIncrease,
   handleClickDecrease,
   handleClickRemove,
-} from '../services/cart-service';
+} from '../utils/cart-service';
 const CartItems = () => {
   const [products, setProducts] = useState(getState().products || []);
   const [cartList, setCartList] = useState(getState().cartList || []);

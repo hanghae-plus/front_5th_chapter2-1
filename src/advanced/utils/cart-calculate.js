@@ -1,4 +1,4 @@
-import { getState } from '../store/index.js';
+import { getState, setState } from '../store/index.js';
 import { PRODUCT_CONFIG } from '../constants/index.js';
 
 /**
@@ -17,19 +17,17 @@ const getDiscountRate = (productId, quantity) => {
 
 /**
  * 장바구니 총액 계산
- * @param {Array} products 상품 목록
- * @param {Array} cartList 장바구니 목록
- * @returns {Object} 계산된 총액, 할인율, 포인트
+ * @returns {void}
  */
-const calculateTotalAmount = (
-  products = getState().products,
-  cartList = getState().cartList,
-) => {
+const cartCalculate = () => {
   let totalAmount = 0;
   let cartCount = 0;
+  let points = 0;
+
+  const cartList = getState().cartList;
+  const products = getState().products;
   let totalAmountBeforeDiscount = 0;
   let discountRate = 0;
-  let points = 0;
 
   cartList.forEach((cartItem) => {
     const currentItem = products.find(({ id }) => id === cartItem.id);
@@ -45,44 +43,23 @@ const calculateTotalAmount = (
     cartCount += quantity;
     totalAmountBeforeDiscount += itemTotalAmount;
 
-    // 포인트는 할인 후 금액의 0.1%
-    points += Math.floor(discountedAmount * 0.001);
+    // 포인트 계산 (할인 후 금액의 0.1%)
+    points += Math.floor(discountedAmount / 1000);
   });
 
-  // 번들 할인 적용
-  const bundleResult = bundleDiscount(
+  ({ totalAmount, discountRate } = bundleDiscount(
     totalAmount,
     cartCount,
     totalAmountBeforeDiscount,
     discountRate,
-  );
-  totalAmount = bundleResult.totalAmount;
-  discountRate = bundleResult.discountRate;
+  ));
 
-  // 화요일 할인 적용
-  const tuesdayResult = tuesdayDiscount(totalAmount, discountRate);
-  totalAmount = tuesdayResult.totalAmount;
-  discountRate = tuesdayResult.discountRate;
+  ({ totalAmount, discountRate } = tuesdayDiscount(totalAmount, discountRate));
 
-  return { totalAmount, discountRate, points };
-};
-
-/**
- * 장바구니 수량 계산
- * @param {number} currentQuantity 현재 수량
- * @param {number} change 변경 수량
- * @param {number} maximumStock 최대 재고
- * @returns {{success: boolean, quantity: number, isRemove: boolean}} 성공 여부, 수량, 삭제 여부
- */
-const calculateCartQuantity = (currentQuantity, change, maximumStock) => {
-  const updatedQuantity = currentQuantity + change;
-  if (updatedQuantity > maximumStock) {
-    return { success: false, quantity: currentQuantity };
-  }
-  if (updatedQuantity <= 0) {
-    return { success: true, quantity: 0, isRemove: true };
-  }
-  return { success: true, quantity: updatedQuantity };
+  setState('totalAmount', totalAmount);
+  setState('discountRate', discountRate);
+  setState('cartCount', cartCount);
+  setState('points', points); // 포인트 상태 업데이트
 };
 
 /**
@@ -136,4 +113,4 @@ const tuesdayDiscount = (totalAmount, discountRate) => {
   return { totalAmount, discountRate };
 };
 
-export { calculateTotalAmount, calculateCartQuantity };
+export { cartCalculate };

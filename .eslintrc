@@ -1,0 +1,14 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": ["plugin:prettier/recommended", "prettier"],
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": "latest"
+  },
+  "rules": {
+    "prettier/prettier": "error"
+  }
+}

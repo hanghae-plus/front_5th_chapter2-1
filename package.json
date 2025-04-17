@@ -5,8 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:advanced": "vite --config vite.config.js --open index.advanced.html",
     "build": "vite build",
+    "build:basic": "vite build --config vite.config.js --emptyOutDir false",
+    "build:advanced": "vite build --config vite.config.js --emptyOutDir false",
     "preview": "vite preview",
+    "preview:basic": "vite preview --outDir dist/basic",
+    "preview:advanced": "vite preview --outDir dist/advanced",
     "start:basic": "vite serve --open ./index.basic.html",
     "start:advanced": "vite serve --open ./index.advanced.html",
     "test": "vitest",
@@ -17,9 +22,23 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
     "@vitest/ui": "^3.1.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "jsdom": "^26.0.0",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "vite": "^6.2.6",
     "vitest": "^3.1.1"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "clsx": "^2.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss": "^4.1.4"
   }
 }

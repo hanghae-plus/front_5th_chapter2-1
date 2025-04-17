@@ -7,4 +7,4 @@ export const SALE_CONFIGS = {
     interval: 60000,
     rate: 0.95,
   },
-}
+};

@@ -17,9 +17,7 @@ export function useSaleAlert() {
 
         saleItem.price = Math.round(saleItem.price * flashSale.rate);
 
-        alert(
-          `번개세일! ${saleItem.name}이(가) ${calculatePercentageFromRate(flashSale.rate)}% 할인 중입니다!`,
-        );
+        alert(`번개세일! ${saleItem.name}이(가) ${calculatePercentageFromRate(flashSale.rate)}% 할인 중입니다!`);
       }, flashSale.interval);
     }, Math.random() * 10000);
 
@@ -35,7 +33,7 @@ export function useSaleAlert() {
     const timeoutId = setTimeout(() => {
       intervalId = setInterval(() => {
         if (!state.lastSelected) return;
-        
+
         const saleRecommendItem = PRODUCT_INVENTORY.find((item) => item.id !== state.lastSelected && item.stock > 0);
         if (!saleRecommendItem) return;
 

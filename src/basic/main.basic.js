@@ -19,6 +19,5 @@ cartDisp.addEventListener("click", (event) => {
     cartStore.dispatch({ type: "CHANGE_QUANTITY", payload: tgt });
   }
 
-  if (tgt.classList.contains("remove-item"))
-    cartStore.dispatch({ type: "REMOVE_FROM_CART", payload: tgt });
+  if (tgt.classList.contains("remove-item")) cartStore.dispatch({ type: "REMOVE_FROM_CART", payload: tgt });
 });

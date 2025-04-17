@@ -27,9 +27,7 @@ export function generateCartInvoice(addedItems: CartItem[]): CartInvoice {
   let totalAmount = 0;
 
   for (const cartItem of addedItems) {
-    const product = PRODUCT_INVENTORY.find(
-      (product) => product.id === cartItem.id,
-    );
+    const product = PRODUCT_INVENTORY.find((product) => product.id === cartItem.id);
 
     if (!product) {
       return {
@@ -52,15 +50,10 @@ export function generateCartInvoice(addedItems: CartItem[]): CartInvoice {
       continue;
     }
 
-    totalAmount +=
-      totalAmountOfItem * (1 - getDiscountRateByProduct(product.id));
+    totalAmount += totalAmountOfItem * (1 - getDiscountRateByProduct(product.id));
   }
 
-  const { discountRate, discountedPrice } = applyDiscount(
-    totalQuantity,
-    totalAmount,
-    totalAmountBeforeDiscount,
-  );
+  const { discountRate, discountedPrice } = applyDiscount(totalQuantity, totalAmount, totalAmountBeforeDiscount);
 
   const bonusPoints = calculateBonusPoints(totalAmount);
 
@@ -74,10 +67,7 @@ export function generateCartInvoice(addedItems: CartItem[]): CartInvoice {
 }
 
 export function updateAddedItems(addedItems: CartItem[], itemToUpdate: CartItem) {
-  return [
-    ...addedItems.filter((item) => item.id !== itemToUpdate.id),
-    itemToUpdate,
-  ];
+  return [...addedItems.filter((item) => item.id !== itemToUpdate.id), itemToUpdate];
 }
 
 export function removeItemFromAddedItems(addedItems: CartItem[], itemIdToRemove: string) {

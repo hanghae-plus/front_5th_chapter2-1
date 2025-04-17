@@ -19,7 +19,6 @@ export function applyDiscount(itemCount: number, discountedTotal: number, origin
     : calculateBulkDiscount(discountedTotal, originalSubtotal);
 }
 
-
 export function calculateDiscountForTuesday(totalPrice: number): DiscountResult {
   const discountedPrice = totalPrice * (1 - DISCOUNT_RATES.tuesday);
 

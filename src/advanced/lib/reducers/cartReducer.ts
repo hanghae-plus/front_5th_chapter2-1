@@ -14,10 +14,10 @@ const CART_ACTIONS = {
   removeFromCart: "REMOVE_FROM_CART",
 } as const;
 
-export type CartAction = 
-| { type: typeof CART_ACTIONS.addToCart; payload: Product }
-| { type: typeof CART_ACTIONS.changeQuantity; payload: CartItem & { change: number } }
-| { type: typeof CART_ACTIONS.removeFromCart; payload: CartItem };
+export type CartAction =
+  | { type: typeof CART_ACTIONS.addToCart; payload: Product }
+  | { type: typeof CART_ACTIONS.changeQuantity; payload: CartItem & { change: number } }
+  | { type: typeof CART_ACTIONS.removeFromCart; payload: CartItem };
 
 export function cartReducer(state: CartState, action: CartAction) {
   switch (action.type) {

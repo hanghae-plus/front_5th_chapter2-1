@@ -7,7 +7,15 @@
   },
   "files": {
     "ignoreUnknown": true,
-    "ignore": ["node_modules", "dist", "build", "./src/main.original.js", "./src/basic/__tests__/basic.test.js"]
+    "ignore": [
+      "node_modules",
+      "dist",
+      "build",
+      "./src/main.original.js",
+      "./src/basic/__tests__/basic.test.js",
+      "./tsconfig.app.json",
+      "./tsconfig.node.json"
+    ]
   },
   "formatter": {
     "enabled": true,

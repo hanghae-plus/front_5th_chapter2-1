@@ -8,10 +8,9 @@ export interface CartState {
   addedItems: CartItem[];
   lastSelected: string;
   totalAmount: number;
-  totalAmountBeforeDiscount: number
+  totalAmountBeforeDiscount: number;
   totalQuantity: number;
   discountRate: number;
   bonusPoints: number;
   error?: string | null;
 }
-

@@ -1,33 +1,36 @@
-import { CartItem as CartItemType } from "../types";
-import CartItem from "./CartItem";
+import { CartItem as CartItemType } from '../types';
+import CartItem from './CartItem';
+import TotalPayment from './TotalPayment';
 
 interface CartItemsProps {
-    items: CartItemType[];
-    onQuantityChange: (productId: string, change: number) => void;
-    onRemove: (productId: string) => void;
+  items: CartItemType[];
+  onQuantityChange: (productId: string, change: number) => void;
+  onRemove: (productId: string) => void;
 }
-const CartItems = ({items, onQuantityChange, onRemove}: CartItemsProps) => {
-    if (items.length === 0) {
-        return (
-            <div className="text-center py-8 text-gray-500">
-                장바구니가 비어있습니다
-            </div>
-        )
-    }
-
+const CartItems = ({ items, onQuantityChange, onRemove }: CartItemsProps) => {
+  if (items.length === 0) {
     return (
-        <div className="space-y-2">
-            {items.map(({ product, quantity }) => (
-                <CartItem
-                    key={product.id}
-                    product={product}
-                    quantity={quantity}
-                    onQuantityChange={(change) => onQuantityChange(product.id, change)}
-                    onRemove={() => onRemove(product.id)}
-                />
-            ))}
-        </div>
+      <div className="text-center py-8 text-gray-500">
+        장바구니가 비어있습니다
+      </div>
     );
+  }
 
-}
+  return (
+    <>
+      <div className="space-y-2">
+        {items.map(({ product, quantity }) => (
+          <CartItem
+            key={product.id}
+            product={product}
+            quantity={quantity}
+            onQuantityChange={(change) => onQuantityChange(product.id, change)}
+            onRemove={() => onRemove(product.id)}
+          />
+        ))}
+      </div>
+      {items.length > 0 && <TotalPayment cartItems={items} />}
+    </>
+  );
+};
 export default CartItems;

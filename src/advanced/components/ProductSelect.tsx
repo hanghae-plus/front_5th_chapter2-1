@@ -13,19 +13,18 @@ const ProductSelect = ({
 }: ProductSelectProps) => {
     const [selectedProductId, setSelectedProductId] = useState<string>('');
 
-  const handleAddClick = () => {
+  function handleAddClick(){
     if (selectedProductId) {
         const selectedProduct = products.find(p => p.id === selectedProductId);
         if (selectedProduct) {
             onProductAdd(selectedProduct);
-            setSelectedProductId(''); // 선택 초기화
         }
     }
 };
   return (
     <>
       <select
-        className="border rounded p-2 flex-1"
+        className="border rounded p-2 mr-2"
         value={selectedProductId}
         onChange={(e) => setSelectedProductId(e.target.value)}
         disabled={disabled}

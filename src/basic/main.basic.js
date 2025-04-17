@@ -82,8 +82,6 @@ function main() {
   updateSelectOptions();
   calculateCart();
 
-  //이 function을 나누는게 효과적일까?
-  //helper로 빼자.
   setTimeout(function () {
     setInterval(function () {
       let luckyItem = products[Math.floor(Math.random() * products.length)];
@@ -122,8 +120,8 @@ function findAlternativeProduct() {
 function updateSelectOptions() {
   productSelectedElement.innerHTML = '';
   products.forEach(function (item) {
-    let opt = createProductOption(item);
-    productSelectedElement.appendChild(opt);
+    let option = createProductOption(item);
+    productSelectedElement.appendChild(option);
   });
 }
 
@@ -264,12 +262,13 @@ function handleAddToCart() {
 
 function handleIncreaseQuantity(cartItemElement, product) {
   const quantitySpan = cartItemElement.querySelector('span');
-  const currentQuantityText = quantitySpan.textContent.split('x ')[1];
-  const newQuantity = parseInt(currentQuantityText) + 1;
+  const currentQuantity = parseInt(quantitySpan.textContent.split('x ')[1], 10);
 
-  if (newQuantity <= product.quantity) {
+  // 재고가 1개 이상 남아있다면
+  if (product.quantity > 0) {
+    const newQuantity = currentQuantity + 1;
     quantitySpan.textContent = `${product.name} - ${product.price}원 x ${newQuantity}`;
-    product.quantity--;
+    product.quantity--;  // 재고 1 감소
   } else {
     alert('재고가 부족합니다.');
   }

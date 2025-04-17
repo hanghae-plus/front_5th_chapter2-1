@@ -1,8 +1,12 @@
-import { useState } from 'react';
-import { CartItem, Product } from '../types';
+import { useCallback } from 'react';
+import {  Product } from '../types';
 import Header from './Header';
 import ProductSelect from './ProductSelect';
 import CartItems from './CartItems';
+import { useFlashSale } from '../hooks';
+import { useSuggestionAlert } from '../hooks';
+import { useCartHook } from '../hooks';
+import StockInfo from './StockInfo.tsx';
 
 // 초기 상품 데이터
 const initialProducts: Product[] = [
@@ -13,109 +17,25 @@ const initialProducts: Product[] = [
   { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
 ];
 
-interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
 const CartWrapper = () => {
-  // 상품 목록 상태 관리
-  const [products, setProducts] = useState<Product[]>(initialProducts);
-  // 장바구니 아이템 상태 관리
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const {
+    products,
+    setProducts,
+    cartItems,
+    lastSelectedProduct,
+    handleProductAdd,
+    handleQuantityChange,
+    handleRemove,
+  } = useCartHook(initialProducts);
 
-  // 상품 재고 감소
-  const decreaseProductStock = (productId: string) => {
-    setProducts((prevProducts) =>
-      prevProducts.map((product) =>
-        product.id === productId
-          ? { ...product, quantity: product.quantity - 1 }
-          : product
-      )
+
+  useFlashSale(products, useCallback((updated) => {
+    setProducts((prev) =>
+      prev.map((product) => (product.id === updated.id ? updated : product))
     );
-  };
+  }, []));
 
-  // 장바구니에 상품 추가 또는 수량 증가
-  const updateCartItems = (selectedProduct: Product) => {
-    const existingCartItem = cartItems.find(
-      (item) => item.product.id === selectedProduct.id
-    );
-
-    if (existingCartItem) {
-      setCartItems((prevItems) =>
-        prevItems.map((item) =>
-          item.product.id === selectedProduct.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        )
-      );
-    } else {
-      setCartItems((prevItems) => [
-        ...prevItems,
-        { product: selectedProduct, quantity: 1 },
-      ]);
-    }
-  };
-
-  const handleProductAdd = (selectedProduct: Product) => {
-    if (!selectedProduct || selectedProduct.quantity <= 0) {
-      alert('선택할 수 없는 상품입니다.');
-      return;
-    }
-
-    updateCartItems(selectedProduct);
-    decreaseProductStock(selectedProduct.id);
-  };
-
-  const handleQuantityChange = (productId: string, change: number) => {
-    const product = products.find((p) => p.id === productId);
-    if (!product) return;
-
-    // 수량 증가시 재고 체크
-    if (change > 0 && product.quantity <= 0) {
-      alert('재고가 부족합니다.');
-      return;
-    }
-
-    setCartItems(
-      (prevItems) =>
-        prevItems
-          .map((item) =>
-            item.product.id === productId
-              ? { ...item, quantity: item.quantity + change }
-              : item
-          )
-          .filter((item) => item.quantity > 0) // 수량이 0이 되면 자동 제거
-    );
-
-    // 재고 수정
-    setProducts((prevProducts) =>
-      prevProducts.map((p) =>
-        p.id === productId ? { ...p, quantity: p.quantity - change } : p
-      )
-    );
-  };
-
-  const handleRemove = (productId: string) => {
-    const itemToRemove = cartItems.find(
-      (item) => item.product.id === productId
-    );
-    if (!itemToRemove) return;
-
-    // 재고 반환
-    setProducts((prevProducts) =>
-      prevProducts.map((p) =>
-        p.id === productId
-          ? { ...p, quantity: p.quantity + itemToRemove.quantity }
-          : p
-      )
-    );
-
-    // 장바구니에서 제거
-    setCartItems((prevItems) =>
-      prevItems.filter((item) => item.product.id !== productId)
-    );
-  };
+  useSuggestionAlert(products, lastSelectedProduct);
 
   return (
     <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
@@ -130,6 +50,7 @@ const CartWrapper = () => {
         onProductAdd={handleProductAdd}
         disabled={products.every((p) => p.quantity === 0)}
       />
+      <StockInfo products={products}  />
       
     </div>
   );

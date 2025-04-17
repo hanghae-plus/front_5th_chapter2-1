@@ -1,5 +1,5 @@
 export const useRenderBonusPoints = (totalAmount, totalPrice) => {
-  bonusPoints = Math.floor(totalAmount / 1000);
+  let bonusPoints = Math.floor(totalAmount / 1000);
   let pointsTag = document.getElementById("loyalty-points");
   if (!pointsTag) {
     pointsTag = document.createElement("span");

@@ -1,5 +1,4 @@
-import PRODUCT_LIST from "./constants/constant.js";
-//let cartList, addProductBtn, cartContainer, totalPrice, stockInfo; // DOM Elements임
+import { PRODUCT_LIST } from "../lib/constants/constant.js";
 
 export const shoppingState = {
   productList: PRODUCT_LIST,
@@ -7,4 +6,4 @@ export const shoppingState = {
   bonusPoints: 0,
   totalAmount: 0,
   itemCount: 0,
-}
+};

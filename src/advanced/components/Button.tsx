@@ -6,6 +6,8 @@ interface ButtonProps {
     variant?: "primary" | "secondary" | "danger";
     size?: "small" | "medium" | "large";
     disabled?: boolean;
+    productId: string;
+    dataChange: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -14,6 +16,8 @@ const Button: React.FC<ButtonProps> = ({
     variant = "primary",
     size = "medium",
     disabled = false,
+    productId,
+    dataChange,
 }) => {
     // variant와 size에 따른 스타일 정의
     const getButtonClasses = () => {
@@ -39,6 +43,8 @@ const Button: React.FC<ButtonProps> = ({
             onClick={onClick}
             className={getButtonClasses()}
             disabled={disabled}
+            data-product-id={productId}
+            data-change={dataChange}
         >
             {children}
         </button>

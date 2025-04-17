@@ -11,17 +11,23 @@ import itemReducer, { ACTION_TYPE } from './itemReducer.js';
 
 const initialState = {
   itemList: initialItemList,
-  lastSelectedItem: null,
+  cartItemList: [] as ItemListType,
+  lastSelectedItem: initialItemList[0].id,
 } as const;
 
 interface ItemContextType {
   state: {
     itemList: ItemListType;
     lastSelectedItem: string | null;
+    cartItemList: ItemListType;
   };
   findItem: (itemId: string) => ItemType | undefined;
   updateQuantity: (itemId: string, quantityDiff: number) => void;
   setLastSelectedItem: (itemId: string) => void;
+  // 장바구니
+  increaseCartItem: (itemId: string) => void;
+  decreaseCartItem: (itemId: string) => void;
+  removeCartItem: (itemId: string) => void;
 }
 const ItemContext = createContext<ItemContextType | null>(null);
 
@@ -48,11 +54,39 @@ export function ItemProvider({ children }: PropsWithChildren) {
     dispatch({ type: ACTION_TYPE.SET_LAST_ITEM, payload: { itemId } });
   }, []);
 
+  // 장바구니 상품 수량 추가
+  const increaseCartItem = useCallback((itemId: string) => {
+    dispatch({
+      type: ACTION_TYPE.INCREASE_CART_ITEM,
+      payload: { itemId },
+    });
+  }, []);
+
+  // 장바구니 상품 수량 감소
+  const decreaseCartItem = useCallback((itemId: string) => {
+    dispatch({
+      type: ACTION_TYPE.DECREASE_CART_ITEM,
+      payload: { itemId },
+    });
+  }, []);
+
+  // 장바구니 상품 제거
+  const removeCartItem = useCallback((itemId: string) => {
+    dispatch({
+      type: ACTION_TYPE.REMOVE_CART_ITEM,
+      payload: { itemId },
+    });
+  }, []);
+
   const value: ItemContextType = {
     state,
     findItem,
     updateQuantity,
     setLastSelectedItem,
+    // TO-DO: 장바구니에 담긴 상품 context 분리하기
+    increaseCartItem,
+    decreaseCartItem,
+    removeCartItem,
   };
 
   return <ItemContext.Provider value={value}>{children}</ItemContext.Provider>;

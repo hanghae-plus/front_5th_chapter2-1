@@ -6,17 +6,20 @@ import ContentWrapper from './components/ContentWrapper.js';
 import Header from './components/Header.js';
 import ItemSelect from './components/itemSelect/ItemSelect.js';
 import StockStatus from './components/stockStatus/StockStatus.js';
+import { ItemProvider } from './context/ItemContext.js';
 
 export default function App() {
   return (
     <Container>
       <ContentWrapper>
         <Header title="장바구니" />
-        <Cart />
-        <CartTotal />
-        <ItemSelect />
-        <CartAddButton />
-        <StockStatus />
+        <ItemProvider>
+          <Cart />
+          <CartTotal />
+          <ItemSelect />
+          <CartAddButton />
+          <StockStatus />
+        </ItemProvider>
       </ContentWrapper>
     </Container>
   );

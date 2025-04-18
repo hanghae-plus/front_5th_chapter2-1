@@ -18,13 +18,19 @@ import {
   updateCart,
 } from '../../../../../shared/store/cart';
 import { updateCartItemQuantity } from '../CartDisplay/logic.ts';
+import { getCartItemText } from '../../../../../shared/app/Cart/calculation.ts';
 
 function createNewCartItem(itemToAdd: Product, quantity?: number) {
   const $newItem = document.createElement('div');
   $newItem.id = itemToAdd.id;
   $newItem.className = 'flex justify-between items-center mb-2';
+  const itemText = getCartItemText({
+    name: itemToAdd.name,
+    value: itemToAdd.val,
+    quantity: quantity ?? 1,
+  });
   $newItem.innerHTML =
-    `<span>${itemToAdd.name} - ${itemToAdd.val}원 x ${quantity ?? 1}</span>` +
+    `<span>${itemText}</span>` +
     `<div><button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="-1">-</button>` +
     `<button class="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1" data-product-id="${itemToAdd.id}" data-change="1">+</button>` +
     `<button class="remove-item bg-red-500 text-white px-2 py-1 rounded" data-product-id="${itemToAdd.id}">삭제</button></div>`;

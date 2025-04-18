@@ -1,7 +1,11 @@
 import React from 'react';
 import { Cart } from '../../../../../shared/store/cart';
-import { findProduct, getProductList } from '../../../../../shared/store/productList';
+import {
+  findProduct,
+  getProductList,
+} from '../../../../../shared/store/productList';
 import { ElementIds } from '../../../../../shared/app/constants';
+import { getCartItemText } from '../../../../../shared/app/Cart/calculation.ts';
 
 interface CartDisplayProps {
   cart: Cart;
@@ -26,26 +30,30 @@ export const CartDisplay: React.FC<CartDisplayProps> = ({
           <div
             key={item.productId}
             id={item.productId}
-            className="flex justify-between items-center mb-2"
+            className='flex justify-between items-center mb-2'
           >
             <span>
-              {product.name} - {product.val}원 x {item.quantity}
+              {getCartItemText({
+                name: product.name,
+                value: product.val,
+                quantity: item.quantity,
+              })}
             </span>
             <div>
               <button
-                className="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+                className='quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1'
                 onClick={() => onQuantityChange(item.productId, -1)}
               >
                 -
               </button>
               <button
-                className="quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1"
+                className='quantity-change bg-blue-500 text-white px-2 py-1 rounded mr-1'
                 onClick={() => onQuantityChange(item.productId, 1)}
               >
                 +
               </button>
               <button
-                className="remove-item bg-red-500 text-white px-2 py-1 rounded"
+                className='remove-item bg-red-500 text-white px-2 py-1 rounded'
                 onClick={() => onRemoveItem(item.productId)}
               >
                 삭제
@@ -56,4 +64,4 @@ export const CartDisplay: React.FC<CartDisplayProps> = ({
       })}
     </div>
   );
-}; 
+};

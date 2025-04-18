@@ -13,6 +13,7 @@ import {
   getCart,
   updateCart,
 } from '../../../../../shared/store/cart.ts';
+import { getCartItemText } from '../../../../../shared/app/Cart/calculation.ts';
 
 const handleRemoveItem = (
   cart: Cart,
@@ -45,7 +46,11 @@ export function updateCartItemQuantity(productId: string, quantity: number) {
 
   const span = item.querySelector('span');
   if (span) {
-    span.textContent = `${product.name} - ${product.val}원 x ${quantity}`;
+    span.textContent = getCartItemText({
+      name: product.name,
+      value: product.val,
+      quantity,
+    });
   }
 }
 

@@ -76,3 +76,15 @@ export function getProductQuantityMessage(prodList: Product[]): string {
 
   return infoMsg;
 }
+
+export function getCartItemText({
+  name,
+  value,
+  quantity,
+}: {
+  name: string;
+  value: number;
+  quantity: number;
+}) {
+  return `${name} - ${value}원 x ${quantity}`;
+}

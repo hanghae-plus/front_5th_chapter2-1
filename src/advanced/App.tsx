@@ -118,6 +118,16 @@ function App() {
     }
   };
 
+  const getTotalAmount = () => {
+    return prodList.reduce((acc, prod) => {
+      return acc + prod.cart * prod.price
+    }, 0)
+  }
+
+  const getLoyaltyPoints = (totalAmount: number) => {
+    return Math.floor(totalAmount / 1000);
+  }
+
   return (
     <div className="bg-gray-100 p-8">
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
@@ -128,7 +138,10 @@ function App() {
             return CartItem(prod, handleClickQtyChangeBtn);
           })}
         </div>
-        <div id="cart-total" className="text-xl font-bold my-4"></div>
+        <div id="cart-total" className="text-xl font-bold my-4">
+          {`총액: ${Math.round(getTotalAmount())}원`}
+          <span id="loyalty-points" className="text-blue-500 ml-2">{`(포인트: ${getLoyaltyPoints(getTotalAmount())})`}</span>
+        </div>
         <select
           id="product-select"
           className="border rounded p-2 mr-2"
@@ -153,7 +166,15 @@ function App() {
         >
           추가
         </button>
-        <div id="stock-status" className="text-sm text-gray-500 mt-2"></div>
+        <div id="stock-status" className="text-sm text-gray-500 mt-2">
+          {prodList.filter(prod => prod.quantity < 5).map((prod) => {
+            if(prod.quantity > 0) {
+              return `${prod.name}: 재고 부족 (${prod.quantity}개 남음)`
+            } else {
+              return `${prod.name}: 품절`;
+            }
+          }).join("\n")}
+        </div>
       </div>
     </div>
   );

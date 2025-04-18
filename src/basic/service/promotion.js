@@ -4,7 +4,6 @@ export function startFlashSaleTimer(productList, updateCallback) {
         setInterval(function () {
             const flashSaleProduct =
                 productList[Math.floor(Math.random() * productList.length)];
-            // console.log("flashSaleProduct: ", flashSaleProduct);
             if (Math.random() < 0.3 && flashSaleProduct.q > 0) {
                 flashSaleProduct.val = Math.round(flashSaleProduct.val * 0.8);
                 alert(
@@ -26,8 +25,6 @@ export function startProductSuggestionTimer(
 ) {
     setTimeout(function () {
         setInterval(function () {
-            // console.log("lastSelected: ", lastSelected);
-
             if (lastSelected) {
                 const suggest = productList.find(function (item) {
                     return item.id !== lastSelected && item.q > 0;

@@ -42,7 +42,6 @@ export const cartEvents = {
             };
             setCartItems([...cartItems, newItem]);
         }
-
         // 재고 업데이트 - 공통 함수 사용 (음수 전달하여 재고 증가)
         this.updateStock(product.id, 1, products, setProducts);
     },
@@ -97,7 +96,7 @@ export const cartEvents = {
                 if (product.id === productId) {
                     return {
                         ...product,
-                        q: product.q - change, // change가 양수면 재고 감소, 음수면 재고 증가
+                        q: product.q - change === -1 ? 0 : product.q - change, // change가 양수면 재고 감소, 음수면 재고 증가
                     };
                 }
                 return product;
@@ -109,9 +108,21 @@ export const cartEvents = {
     removeItem(
         productId: string,
         cartItems: CartItem[],
-        setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>
+        setCartItems: React.Dispatch<React.SetStateAction<CartItem[]>>,
+        setProducts: React.Dispatch<React.SetStateAction<Product[]>>
     ): void {
+        const targetItem = cartItems.find((item) => item.id === productId);
         const updatedItems = cartItems.filter((item) => item.id !== productId);
+
+        setProducts((prev) =>
+            prev.map((product) => {
+                if (product.id !== productId) {
+                    return product;
+                }
+                return targetItem!.product;
+            })
+        );
+
         setCartItems(updatedItems);
     },
 };

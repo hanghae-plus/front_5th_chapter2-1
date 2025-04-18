@@ -19,6 +19,7 @@ import { usePromotion } from "./services/promotion";
 const App: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [products, setProducts] = useState<Product[]>(PRODUCT_LIST);
+    console.log("App.tsx - products: ", products);
 
     // 첫 번째 상품 ID로 초기화
     const [selectedProductId, setSelectedProductId] = useState<string>(
@@ -64,7 +65,7 @@ const App: React.FC = () => {
 
     // 상품 제거 핸들러
     const handleRemoveItem = (productId: string) => {
-        cartEvents.removeItem(productId, cartItems, setCartItems);
+        cartEvents.removeItem(productId, cartItems, setCartItems, setProducts);
     };
 
     return (

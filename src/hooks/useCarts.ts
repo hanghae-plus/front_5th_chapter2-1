@@ -15,21 +15,24 @@ export default function useCarts() {
   const increase = (productId: string) => {
     const productInfo = products.find((p) => p.id === productId);
     if (!productInfo) return;
+
     setCarts((prev: Product[]) =>
-      prev.map((item) =>
-        item.id === productId
-          ? {
-              ...item,
-              currentQuantity:
-                (item.currentQuantity ?? 0) + 1 > productInfo.quantity
-                  ? item.currentQuantity
-                  : (item.currentQuantity ?? 0) + 1,
-            }
-          : item,
-      ),
+      prev.map((item) => {
+        if (item.id !== productId) return item;
+
+        const nextQuantity = (item.currentQuantity ?? 0) + 1;
+        if (nextQuantity > productInfo.quantity) {
+          alert('재고가 부족합니다.');
+          return item;
+        }
+
+        return {
+          ...item,
+          currentQuantity: nextQuantity,
+        };
+      }),
     );
   };
-
   const decrease = (productId: string) => {
     setCarts((prev: Product[]) =>
       prev

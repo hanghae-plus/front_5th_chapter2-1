@@ -20,7 +20,7 @@ export const cartEvents = {
         const existingItem = cartItems.find((item) => item.id === product.id);
         if (existingItem) {
             // 수량 증가 시 재고 확인 추가
-            if (existingItem.quantity + 1 > product.q) {
+            if (product.q === 0) {
                 alert("재고가 부족합니다.");
                 return;
             }

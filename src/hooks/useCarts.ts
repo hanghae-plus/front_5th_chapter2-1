@@ -7,13 +7,26 @@ export default function useCarts() {
   const { carts, setCarts, selectedProductId } = useCartContext();
 
   const addToCart = () => {
-    const itemToAdd = products.find((p) => p.id === selectedProductId);
-    if (!itemToAdd || carts.find((c) => c.id === itemToAdd.id)) return;
-    setCarts([...carts, { ...itemToAdd, currentQuantity: 1 }]);
+    const itemToAdd = products.find(
+      (product) => product.id === selectedProductId,
+    );
+    if (!itemToAdd || carts.find((cart) => cart.id === itemToAdd.id)) return;
+
+    if (carts.find((cart) => cart.id === itemToAdd.id)) {
+      setCarts((prev) =>
+        prev.map((cart) =>
+          cart.id === itemToAdd.id
+            ? { ...cart, currentQuantity: (cart.currentQuantity ?? 0) + 1 }
+            : cart,
+        ),
+      );
+    } else {
+      setCarts([...carts, { ...itemToAdd, currentQuantity: 1 }]);
+    }
   };
 
   const increase = (productId: string) => {
-    const productInfo = products.find((p) => p.id === productId);
+    const productInfo = products.find((product) => product.id === productId);
     if (!productInfo) return;
 
     setCarts((prev: Product[]) =>

@@ -150,27 +150,11 @@ describe('advanced test', () => {
     );
   });
 
-  it('번개세일 기능이 정상적으로 동작하는지 확인', () => {
-    // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
-  });
+  it('번개세일 기능이 정상적으로 동작하는지 확인', () => {});
 
-  it('추천 상품 알림이 표시되는지 확인', () => {
-    // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
-  });
+  it('추천 상품 알림이 표시되는지 확인', () => {});
 
-  it('화요일 할인이 적용되는지 확인', async () => {
-    render(<App />);
-    const user = userEvent.setup();
-    //   const mockDate = new Date('2024-10-15'); // 화요일
-    //   vi.useRealTimers();
-    //   vi.setSystemTime(mockDate);
-    //   await user.selectOptions(screen.getByTestId('product-select'), 'p1');
-    //   fireEvent.click(screen.getByTestId('add-to-cart'));
-
-    //   expect(document.getElementById('cart-total')?.textContent).toContain(
-    //     '(10.0% 할인 적용)',
-    //   );
-  });
+  it('화요일 할인이 적용되는지 확인', async () => {});
 
   it('재고가 부족한 경우 추가되지 않는지 확인', async () => {
     render(<App />);

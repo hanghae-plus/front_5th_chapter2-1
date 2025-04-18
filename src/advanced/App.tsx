@@ -1,9 +1,11 @@
 import { ChangeEvent, MouseEvent, useState } from "react";
 import CartItem from "./component/CartItem";
 import { Product } from "./types";
+import { useProducts } from "./hooks/useProducts";
 
 function App() {
   const [lastSelectProd, setLastSelectProd] = useState("p1");
+  const {products, updateQuantity, resetQuantity} = useProducts()
   const [prodList, setProdList] = useState<Product[]>([
     {
       id: "p1",
@@ -53,25 +55,7 @@ function App() {
   };
 
   const handleClickAdd = () => {
-    const itemToAdd: Product = prodList.find(
-      (prod) => prod.id === lastSelectProd
-    ) as Product;
-    if (itemToAdd.quantity <= 0) {
-      alert("재고가 부족합니다.");
-      return;
-    }
-    const newItemTodAdd = {
-      ...itemToAdd,
-      quantity: itemToAdd?.quantity - 1,
-      cart: itemToAdd.cart + 1,
-    };
-    const newProductList = prodList.map((prod) => {
-      if (newItemTodAdd.id === prod.id) {
-        return newItemTodAdd;
-      }
-      return prod;
-    });
-    setProdList(newProductList);
+    updateQuantity(lastSelectProd, 1)
   };
 
   const handleClickQtyChangeBtn = (event: MouseEvent<HTMLButtonElement>) => {
@@ -80,40 +64,11 @@ function App() {
       const classList = target.classList;
       if (classList.contains("quantity-change")) {
         const changeQty = parseInt(target.dataset.change || "0"); // 1 | -1
-        const prodId = target.dataset.productId;
-        const quantityChangeItem = prodList.find(
-          (prod) => prod.id === prodId
-        ) as Product;
-        if (changeQty > 0 ) {
-          if(quantityChangeItem.quantity <= 0) {
-            alert("재고가 부족합니다.");
-            return;
-          }
-        }
-        const newProductList = prodList.map((prod) => {
-          if (prodId === prod.id) {
-            return {
-              ...quantityChangeItem,
-              quantity: prod.quantity - changeQty,
-              cart: prod.cart + changeQty,
-            };
-          }
-          return prod;
-        });
-        setProdList(newProductList);
+        const prodId = target.dataset.productId as string;
+        updateQuantity(prodId, changeQty)
       } else if (classList.contains("remove-item")) {
-        const prodId = target.dataset.productId;
-        const newProductList = prodList.map((prod) => {
-          if (prodId === prod.id) {
-            return {
-              ...prod,
-              quantity: prod.originalQuantity,
-              cart: 0,
-            };
-          }
-          return prod;
-        });
-        setProdList(newProductList);
+        const prodId = target.dataset.productId as string;
+        resetQuantity(prodId)
       }
     }
   };
@@ -133,7 +88,7 @@ function App() {
       <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
         <h1 className="text-2xl font-bold mb-4">장바구니</h1>
         <div id="cart-items">
-          {prodList.map((prod) => {
+          {products.map((prod) => {
             if (prod.cart <= 0) return;
             return CartItem(prod, handleClickQtyChangeBtn);
           })}
@@ -147,7 +102,7 @@ function App() {
           className="border rounded p-2 mr-2"
           onChange={handleSelectChange}
         >
-          {prodList.map((prod) => {
+          {products.map((prod) => {
             return (
               <option
                 key={prod.name}
@@ -167,7 +122,7 @@ function App() {
           추가
         </button>
         <div id="stock-status" className="text-sm text-gray-500 mt-2">
-          {prodList.filter(prod => prod.quantity < 5).map((prod) => {
+          {products.filter(prod => prod.quantity < 5).map((prod) => {
             if(prod.quantity > 0) {
               return `${prod.name}: 재고 부족 (${prod.quantity}개 남음)`
             } else {

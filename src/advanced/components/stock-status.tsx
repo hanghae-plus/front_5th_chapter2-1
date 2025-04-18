@@ -1,7 +1,9 @@
 import { useStock } from '../context/stock';
 import { getProductStockStatusString } from '../utils/product';
 
-export const StockStatus = () => {
+interface StockStatusProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const StockStatus: React.FC<StockStatusProps> = (props) => {
   const { stockList } = useStock();
 
   // 재고가 5개 미만인 상품의 상태를 문자열로 변환
@@ -18,6 +20,7 @@ export const StockStatus = () => {
       id="stock-status"
       data-testid="stock-status"
       className="text-sm text-gray-500 mt-2 whitespace-pre-wrap"
+      {...props}
     >
       {infoMsg}
     </div>

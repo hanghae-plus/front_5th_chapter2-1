@@ -1,6 +1,8 @@
 import { useStock } from '../context/stock';
 
-export const TotalAmount = () => {
+interface TotalAmountProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export const TotalAmount: React.FC<TotalAmountProps> = (props) => {
   const { summary } = useStock();
   const { totalAmount, discountRate } = summary;
 
@@ -11,6 +13,7 @@ export const TotalAmount = () => {
       id="cart-total"
       data-testid="cart-total"
       className="text-lg font-bold my-4"
+      {...props}
     >
       총액: {totalAmount}원
       {discountRate > 0 && (

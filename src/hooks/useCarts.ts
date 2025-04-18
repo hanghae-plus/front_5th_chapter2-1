@@ -10,7 +10,7 @@ export default function useCarts() {
     const itemToAdd = products.find(
       (product) => product.id === selectedProductId,
     );
-    if (!itemToAdd || carts.find((cart) => cart.id === itemToAdd.id)) return;
+    if (!itemToAdd) return;
 
     if (carts.find((cart) => cart.id === itemToAdd.id)) {
       setCarts((prev) =>

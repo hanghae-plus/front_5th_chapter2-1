@@ -28,5 +28,5 @@ export const useLastSaleTimer = (getLastSale: () => string | null) => {
     }, SALE_CONFIG.LAST_SALE_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [products, lastSelected, getLastSale, updateProductPrice]);
+  }, [products, lastSelected]);
 };

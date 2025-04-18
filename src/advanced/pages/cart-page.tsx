@@ -4,17 +4,15 @@ import CartItem from "../components/cart-item";
 import PriceInfo from "../components/price-info";
 import ProductSelect from "../components/product-select";
 import StockStatus from "../components/stock-info";
-import { useCalculationCart } from "../hooks/useCalculationCart";
 import { useLastSaleTimer } from "../hooks/useLastSaleTimer";
 import { useLuckySaleTimer } from "../hooks/useLuckySaleTimer";
 import { useCartStore } from "../store/useCartStore";
 
 export function CartPage() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
   const {
     products,
     cart,
-    addToCart,
+    addToCartWithCalc,
     changeCartItemQuantity,
     removeCartItem,
     finalTotal,
@@ -22,8 +20,7 @@ export function CartPage() {
     lastSelected,
   } = useCartStore();
 
-  //계산 hook
-  useCalculationCart();
+  const [selectedId, setSelectedId] = useState<string | null>(products[0].id);
 
   /** 타이머 훅 */
   useLuckySaleTimer();
@@ -48,7 +45,6 @@ export function CartPage() {
         </div>
         <div id="cart-total" className="text-xl font-bold my-4">
           <PriceInfo finalTotal={finalTotal} discountRate={discountRate} />
-
           <BonusPoint finalTotal={finalTotal} />
         </div>
         <ProductSelect selectedId={selectedId} onChange={(id) => setSelectedId(id)} />
@@ -56,7 +52,7 @@ export function CartPage() {
           id="add-to-cart"
           className="bg-blue-500 text-white px-4 py-2 rounded"
           onClick={() => {
-            addToCart(selectedId!);
+            addToCartWithCalc(selectedId!);
           }}
         >
           추가

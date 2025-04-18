@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { products } from "../data/products";
 import { CartStore } from "../types/store-type";
+import { calculateCartTotals } from "../utils/calc/calculate-cart-totals";
+import { calculateDiscount } from "../utils/calc/calculate-discount";
 import { cloneProducts } from "../utils/product/products";
 
 export const useCartStore = create<CartStore>((set, get) => ({
@@ -53,6 +55,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
       };
     }),
 
+  //장바구니 추가, 계산포함
+  addToCartWithCalc: (productId: string) => {
+    const { addToCart, calculateCart } = get();
+    addToCart(productId);
+    calculateCart();
+  },
+
   //장바구니 초기화
   resetCart: () =>
     set({
@@ -66,7 +75,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   // 장바구니 담긴 제품 수량 변경
   changeCartItemQuantity: (productId, delta) => {
-    const { cart, products } = get();
+    const { cart, products, calculateCart } = get();
     const item = cart.find((c) => c.id === productId);
     const product = products.find((p) => p.id === productId);
     if (!item || !product) return;
@@ -86,11 +95,13 @@ export const useCartStore = create<CartStore>((set, get) => ({
     } else {
       alert("재고가 부족합니다.");
     }
+    // 상태 반영 후 계산 실행
+    calculateCart();
   },
 
   // 장바구니 담긴 제품 제거
   removeCartItem: (productId) => {
-    const { cart, products } = get();
+    const { cart, products, calculateCart } = get();
     const item = cart.find((c) => c.id === productId);
     if (!item) return;
 
@@ -98,5 +109,16 @@ export const useCartStore = create<CartStore>((set, get) => ({
       cart: cart.filter((c) => c.id !== productId),
       products: products.map((p) => (p.id === productId ? { ...p, q: p.q + item.quantity } : p)),
     });
+    calculateCart();
+  },
+
+  // 장바구니 계산
+  calculateCart: () => {
+    const { cart, products, originalTotal, itemCount, finalTotal: currentFinalTotal } = get();
+    //1.장바구니 전체 금액 계산
+    calculateCartTotals(cart, products);
+
+    // 2.할인 계산
+    calculateDiscount(originalTotal, itemCount, currentFinalTotal);
   },
 }));

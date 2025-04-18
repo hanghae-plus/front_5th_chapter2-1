@@ -1,3 +1,4 @@
+import { useCartStore } from "../../store/useCartStore";
 import { CartItem, Product } from "../../types/store-type";
 
 const MIN_DISCOUNT_QUANTITY = 10;
@@ -57,5 +58,9 @@ export const calculateCartTotals = (cartItems: CartItem[], products: Product[]) 
     finalTotal += itemTotal * (1 - discountRate);
   }
 
-  return { originalTotal, finalTotal, itemCount };
+  useCartStore.setState({
+    originalTotal,
+    itemCount,
+    finalTotal,
+  });
 };

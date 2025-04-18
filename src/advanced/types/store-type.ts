@@ -33,7 +33,9 @@ export type CartStore = {
 
   updateProductPrice: (id: string, newPrice: number) => void;
   addToCart: (productId: string) => void;
+  addToCartWithCalc: (productId: string) => void;
   resetCart: () => void;
+  calculateCart: () => void;
   changeCartItemQuantity: (productId: string, delta: number) => void;
   removeCartItem: (productId: string) => void;
 };

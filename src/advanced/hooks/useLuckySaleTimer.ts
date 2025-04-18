@@ -24,5 +24,5 @@ export const useLuckySaleTimer = () => {
     }, SALE_CONFIG.LUCKY_SALE_DELAY);
 
     return () => clearTimeout(timeout);
-  }, [products, updateProductPrice]);
+  }, [products]);
 };

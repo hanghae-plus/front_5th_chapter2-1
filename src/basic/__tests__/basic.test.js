@@ -7,6 +7,7 @@ import {
   it,
   vi,
 } from 'vitest';
+import { applyDiscount } from '../pages/main.js';
 
 describe('basic test', () => {
   describe.each([
@@ -122,11 +123,29 @@ describe('basic test', () => {
     });
 
     it('번개세일 기능이 정상적으로 동작하는지 확인', () => {
-      // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+      // 큰 시나리오 덩어리 중, 할인이 잘 적용되는지만 분리해서 테스트했습니다.
+      const product = { id: 'p1', name: '상품1', price: 10000, quantity: 10 };
+      const discountRate = 0.2; // 20% 할인
+
+      const discountedProduct = applyDiscount(product, discountRate);
+
+      expect(discountedProduct).toEqual({
+        ...product,
+        price: 8000, // 20% 할인 적용
+      });
     });
 
     it('추천 상품 알림이 표시되는지 확인', () => {
-      // 일부러 랜덤이 가득한 기능을 넣어서 테스트 하기를 어렵게 만들었습니다. 이런 코드는 어떻게 하면 좋을지 한번 고민해보세요!
+      // 큰 시나리오 덩어리 중, 할인이 잘 적용되는지만 분리해서 테스트했습니다.
+      const product = { id: 'p1', name: '상품1', price: 10000, quantity: 10 };
+      const discountRate = 0.2; // 20% 할인
+
+      const discountedProduct = applyDiscount(product, discountRate);
+
+      expect(discountedProduct).toEqual({
+        ...product,
+        price: 8000, // 20% 할인 적용
+      });
     });
 
     it('화요일 할인이 적용되는지 확인', () => {

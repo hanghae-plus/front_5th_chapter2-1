@@ -53,9 +53,10 @@ const startLuckyDraw = () => {
   if (isLucky && hasStock) {
     alert(`번개세일! ${luckyItem.name}이(가) 20% 할인 중입니다!`);
     // 해당 상품의 가격 할인, DB에 적용
-    luckyItem.price = Math.round(luckyItem.price * (1 - DISCOUNT_RATE.lucky));
-    // select, option 업데이트
+    const newProduct = applyDiscount(luckyItem, DISCOUNT_RATE.lucky);
+    prodList[randomIndex] = newProduct;
 
+    // select, option 업데이트
     updateSelectOptions();
   }
 };
@@ -71,9 +72,16 @@ const startSuggestion = () => {
       `${suggestion.name}은(는) 어떠세요? 지금 구매하시면 ${DISCOUNT_RATE.suggestion * 100}% 추가 할인!`,
     );
 
-    suggestion.price = Math.round(
-      suggestion.price * (1 - DISCOUNT_RATE.suggestion),
-    );
+    const newProduct = applyDiscount(suggestion, DISCOUNT_RATE.suggestion);
+    prodList[prodList.indexOf(suggestion)] = newProduct;
+
     updateSelectOptions();
   }
+};
+
+export const applyDiscount = (product, discountRate) => {
+  return {
+    ...product,
+    price: Math.round(product.price * (1 - discountRate)),
+  };
 };

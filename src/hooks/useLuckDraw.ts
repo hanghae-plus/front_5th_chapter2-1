@@ -3,7 +3,7 @@ import {
   LUCKY_ITEM_DISCOUNT_RATE,
   LUCKY_ITEM_INTERVAL_TIME,
 } from '@/constants/constants';
-import { scheduleRepeatingAlert } from '@/utils/tiem';
+import { scheduleRepeatingAlert } from '@/utils/timer';
 
 import products from '../data/products.json';
 

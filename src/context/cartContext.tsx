@@ -1,5 +1,11 @@
 import { Product } from '@/types';
-import React, { ReactNode, createContext, useContext, useState } from 'react';
+import React, {
+  ReactNode,
+  createContext,
+  useContext,
+  useMemo,
+  useState,
+} from 'react';
 
 type CartContextType = {
   carts: Product[];
@@ -16,12 +22,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <CartContext.Provider
-      value={{
-        carts,
-        setCarts,
-        selectedProductId,
-        setSelectedProductId,
-      }}
+      value={useMemo(
+        () => ({
+          carts,
+          setCarts,
+          selectedProductId,
+          setSelectedProductId,
+        }),
+        [carts, selectedProductId],
+      )}
     >
       {children}
     </CartContext.Provider>
@@ -29,7 +38,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useCartContext = () => {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error('useCart must be used within a CartProvider');
-  return ctx;
+  const context = useContext(CartContext);
+  if (!context) throw new Error('useCart must be used within a CartProvider');
+  return context;
 };

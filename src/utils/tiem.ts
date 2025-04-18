@@ -1,3 +1,5 @@
+let isAlertVisible = false;
+
 export const scheduleRepeatingAlert = ({
   delayRange,
   interval,
@@ -10,8 +12,12 @@ export const scheduleRepeatingAlert = ({
   onTrigger: () => void;
 }) => {
   setTimeout(function loop() {
-    if (condition()) {
+    if (!isAlertVisible && condition()) {
+      isAlertVisible = true;
       onTrigger();
+      setTimeout(() => {
+        isAlertVisible = false;
+      }, 1000);
     }
     setTimeout(loop, interval);
   }, delayRange || 0);

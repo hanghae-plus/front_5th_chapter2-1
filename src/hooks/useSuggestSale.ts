@@ -3,7 +3,7 @@ import {
   SUGGEST_ITEM_DISCOUNT_RATE,
   SUGGEST_ITEM_INTERVAL_TIME,
 } from '@/constants/constants';
-import { scheduleRepeatingAlert } from '@/utils/utils';
+import { scheduleRepeatingAlert } from '@/utils/tiem';
 
 import products from '../data/products.json';
 

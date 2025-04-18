@@ -7,6 +7,7 @@ import { useCartContext } from '@/context/cartContext';
 
 export default function useCalcPrice() {
   const { carts } = useCartContext();
+
   const calcTotalPrice = () => {
     return carts.reduce(
       (acc, item) => acc + item.price * (item.currentQuantity ?? 0),

@@ -11,7 +11,7 @@ import {
   TUESDAY_DISCOUNT_RATE,
 } from '../constants/constants';
 import productsInit from '../data/products.json';
-import { scheduleRepeatingAlert } from '../utils/utils';
+import { scheduleRepeatingAlert } from '../utils/tiem';
 
 function main() {
   let lastSelectedItemId;

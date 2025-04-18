@@ -16,15 +16,6 @@ export const useCartStore = create<CartStore>((set, get) => ({
 
   setLastSelected: (id) => set({ lastSelected: id }),
 
-  // 장바구니 금액 계산
-  updateCartTotals: (originalTotal, finalTotal, itemCount, discountRate) =>
-    set({
-      originalTotal,
-      finalTotal,
-      itemCount,
-      discountRate,
-    }),
-
   updateProductPrice: (id: string, newPrice: number) =>
     set((state) => ({
       products: state.products.map((p) => (p.id === id ? { ...p, val: newPrice } : p)),

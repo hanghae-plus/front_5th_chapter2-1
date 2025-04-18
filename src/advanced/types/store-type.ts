@@ -24,13 +24,6 @@ export type CartStore = {
 
   // 상태 조작 함수
   setLastSelected: (id: string) => void;
-  updateCartTotals: (
-    originalTotal: number,
-    finalTotal: number,
-    itemCount: number,
-    discountRate: number,
-  ) => void;
-
   updateProductPrice: (id: string, newPrice: number) => void;
   addToCart: (productId: string) => void;
   addToCartWithCalc: (productId: string) => void;

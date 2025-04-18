@@ -28,6 +28,7 @@ export const AddProductButton: React.FC<AddProductButtonProps> = (props) => {
           alert('재고가 부족합니다.');
         }
       }}
+      {...props}
     >
       추가
     </button>

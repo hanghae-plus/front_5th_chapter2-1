@@ -34,7 +34,7 @@ import {
   updateCarts,
   deleteCart,
   PRODUCTS,
-} from './service';
+} from './services/cartsService';
 
 let lastAddedItem = null;
 

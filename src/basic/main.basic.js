@@ -1,15 +1,22 @@
+import { PRODUCTS } from './services/cartsService';
+
 var sel, addBtn, cartDisp, sum, stockInfo;
 var lastSel,
   bonusPts = 0,
   totalAmt = 0,
   itemCnt = 0;
-const PRODUCTS = [
-  { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
-  { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
-  { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
-  { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
-  { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
-];
+
+const states = {
+  sel: null,
+  addBtn: null,
+  cartDisp: null,
+  sum: null,
+  stockInfo: null,
+  lastSel: null,
+  bonusPts: 0,
+  totalAmt: 0,
+  itemCnt: 0,
+};
 
 function main() {
   var root = document.getElementById('app');
@@ -84,6 +91,7 @@ function main() {
     }, 60000);
   }, Math.random() * 20000);
 }
+
 function updateSelOpts() {
   sel.innerHTML = '';
   PRODUCTS.forEach((item) => {
@@ -168,6 +176,7 @@ const renderBonusPts = () => {
   }
   ptsTag.textContent = '(포인트: ' + bonusPts + ')';
 };
+
 function updateStockInfo() {
   var infoMsg = '';
   PRODUCTS.forEach((item) => {

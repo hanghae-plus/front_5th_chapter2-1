@@ -1,0 +1,16 @@
+export const LUCKY_ITEM_DISCOUNT_RATE = 0.2;
+export const SUGGEST_ITEM_DISCOUNT_RATE = 0.05;
+export const BULK_PURCHASE_DISCOUNT_RATE = 0.25;
+export const TUESDAY_DISCOUNT_RATE = 0.1;
+export const LOYALTY_POINT_RATE = 0.001;
+export const SUGGEST_ITEM_DELAY_TIME = 20000;
+export const SUGGEST_ITEM_INTERVAL_TIME = 60000;
+export const LUCKY_ITEM_DELAY_TIME = 10000;
+export const LUCKY_ITEM_INTERVAL_TIME = 30000;
+export const PRODUCT_DISCOUNT_RATE = {
+  p1: 0.1,
+  p2: 0.15,
+  p3: 0.2,
+  p4: 0.05,
+  p5: 0.25,
+};

@@ -1,5 +1,5 @@
 import { ElementIds } from '../../../shared/app/constants.js';
-import { findProduct, getProductList } from '../../store/prodList.js';
+
 import {
   getBonusPts,
   getDisc,
@@ -7,6 +7,10 @@ import {
   getProductQuantityMessage,
 } from '../../../shared/app/Cart/calculation.js';
 import { createPointTag } from './index.js';
+import {
+  findProduct,
+  getProductList,
+} from '../../../shared/store/productList.js';
 
 function updateBonusPointDom(totalAmt) {
   const sum = document.getElementById(ElementIds.SUM);
@@ -57,7 +61,8 @@ function getFinalAmount() {
   const cartItems = cartDisp?.children;
 
   for (let i = 0; i < cartItems.length; i++) {
-    let curItem = findProduct(cartItems[i].id);
+    const productList = getProductList();
+    let curItem = findProduct(productList, cartItems[i].id);
 
     const quantity = getValueFromCardItem(cartItems[i]);
     const itemTot = curItem.val * quantity;

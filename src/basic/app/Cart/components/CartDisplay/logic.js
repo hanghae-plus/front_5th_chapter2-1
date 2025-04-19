@@ -1,5 +1,8 @@
-import { findProduct } from '../../../../store/prodList.js';
 import { logic, getCartItemText, getValueFromCardItem } from '../../logic.js';
+import {
+  findProduct,
+  getProductList,
+} from '../../../../../shared/store/productList.js';
 
 function changeCardItemQuantity(tgt, itemElem, prod) {
   var qtyChange = parseInt(tgt.dataset.change);
@@ -43,7 +46,8 @@ export function handleClickCartDisp(event) {
   }
 
   const productId = tgt.dataset.productId;
-  const prod = findProduct(productId);
+  const productList = getProductList();
+  const prod = findProduct(productList, productId);
   const itemElem = document.getElementById(productId);
 
   if (tgt.classList.contains('quantity-change')) {

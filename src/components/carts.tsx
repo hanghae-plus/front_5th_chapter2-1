@@ -1,7 +1,7 @@
 import { Product } from '@/types';
 import React from 'react';
 
-import useCarts from '../hooks/useCarts';
+import useCarts from '../hooks/use-carts';
 
 export default function Carts({ carts }: { carts: Product[] }) {
   const { increase, decrease, remove } = useCarts();

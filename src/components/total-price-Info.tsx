@@ -1,5 +1,5 @@
 import { LOYALTY_POINT_RATE } from '@/constants/constants';
-import useCalcPrice from '@/hooks/useCalcPrice';
+import useCalcPrice from '@/hooks/use-calc-price';
 import React from 'react';
 
 export default function TotalPriceInfo() {

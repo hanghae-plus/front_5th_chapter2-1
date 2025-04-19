@@ -3,7 +3,7 @@ import {
   PRODUCT_DISCOUNT_RATE,
   TUESDAY_DISCOUNT_RATE,
 } from '@/constants/constants';
-import { useCartContext } from '@/context/cartContext';
+import { useCartContext } from '@/context/cart-context';
 
 export default function useCalcPrice() {
   const { carts } = useCartContext();
@@ -13,6 +13,20 @@ export default function useCalcPrice() {
       (acc, item) => acc + item.price * (item.currentQuantity ?? 0),
       0,
     );
+  };
+
+  const basicDiscountRate = (quantity: number, productId: string) => {
+    return quantity >= 10
+      ? PRODUCT_DISCOUNT_RATE[productId as keyof typeof PRODUCT_DISCOUNT_RATE]
+      : 0;
+  };
+
+  const tuesdayDiscountRate = (day: number) => {
+    return day === 2 ? TUESDAY_DISCOUNT_RATE : 0;
+  };
+
+  const bulkPurchaseDiscountRate = (itemCount: number) => {
+    return itemCount >= 30 ? BULK_PURCHASE_DISCOUNT_RATE : 0;
   };
 
   const calcTotalDiscount = () => {
@@ -38,18 +52,9 @@ export default function useCalcPrice() {
     itemCount: number,
   ) => {
     let rate = 0;
-    if (quantity >= 10) {
-      rate =
-        PRODUCT_DISCOUNT_RATE[productId as keyof typeof PRODUCT_DISCOUNT_RATE];
-    }
-
-    if (day === 2) {
-      rate = Math.max(rate, TUESDAY_DISCOUNT_RATE);
-    }
-
-    if (itemCount >= 30) {
-      rate = Math.max(rate, BULK_PURCHASE_DISCOUNT_RATE);
-    }
+    rate = basicDiscountRate(quantity, productId);
+    rate = tuesdayDiscountRate(day);
+    rate = bulkPurchaseDiscountRate(itemCount);
 
     return rate;
   };

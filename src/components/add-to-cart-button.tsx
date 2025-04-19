@@ -1,4 +1,4 @@
-import useCarts from '@/hooks/useCarts';
+import useCarts from '@/hooks/use-carts';
 import React from 'react';
 
 export default function AddToCartButton() {

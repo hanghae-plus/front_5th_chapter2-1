@@ -3,9 +3,9 @@ import Carts from '@/components/carts';
 import ProductSelect from '@/components/product-select';
 import StockStatus from '@/components/stock-status';
 import TotalPriceInfo from '@/components/total-price-Info';
-import { useCartContext } from '@/context/cartContext';
-import useLuckDraw from '@/hooks/useLuckDraw';
-import useSuggestSale from '@/hooks/useSuggestSale';
+import { useCartContext } from '@/context/cart-context';
+import useLuckDraw from '@/hooks/use-luck-draw';
+import useSuggestSale from '@/hooks/use-suggest-sale';
 import { useEffect } from 'react';
 
 export default function Main() {

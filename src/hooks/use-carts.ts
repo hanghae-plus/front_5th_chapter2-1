@@ -1,4 +1,4 @@
-import { useCartContext } from '@/context/cartContext';
+import { useCartContext } from '@/context/cart-context';
 import { Product } from '@/types';
 
 import products from '../data/products.json';

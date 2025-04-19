@@ -1,4 +1,4 @@
-import { CartProvider } from '@/context/cartContext';
+import { CartProvider } from '@/context/cart-context';
 import Main from '@/pages/advanced';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

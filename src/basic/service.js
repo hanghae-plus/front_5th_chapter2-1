@@ -1,4 +1,3 @@
-/** 여기에 discount 값을 넣는게 좋을찌? */
 export const PRODUCTS = [
   { id: 'p1', name: '상품1', price: 10000, stock: 10, discount: 0.1 },
   { id: 'p2', name: '상품2', price: 20000, stock: 30, discount: 0.15 },
@@ -6,6 +5,14 @@ export const PRODUCTS = [
   { id: 'p4', name: '상품4', price: 15000, stock: 0, discount: 0.05 },
   { id: 'p5', name: '상품5', price: 25000, stock: 10, discount: 0.25 },
 ];
+
+export const PROCUCTS_DISCOUT = {
+  p1: 0.1,
+  p2: 0.15,
+  p3: 0.2,
+  p4: 0.05,
+  p5: 0.25,
+};
 
 /** 장바구니 목록 ui 배열 가져오기 */
 export const getCarts = () => {

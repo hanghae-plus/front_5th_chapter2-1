@@ -1,21 +1,14 @@
 import {
-  container,
-  wrapper,
+  addButton,
   cartList,
   cartTitle,
   cartTotal,
+  container,
   select,
-  addButton,
   stockStatus,
+  wrapper,
 } from './src/components';
-
-const products = [
-  { id: 'p1', name: '상품1', price: 10000, quantity: 50 },
-  { id: 'p2', name: '상품2', price: 20000, quantity: 30 },
-  { id: 'p3', name: '상품3', price: 30000, quantity: 20 },
-  { id: 'p4', name: '상품4', price: 15000, quantity: 0 },
-  { id: 'p5', name: '상품5', price: 25000, quantity: 10 },
-];
+import { DISCOUNT_RATE, PRODUCTS } from './src/constants';
 
 let lastSelectedProduct,
   LoyaltyPoints = 0,
@@ -42,7 +35,7 @@ function main() {
 
   setTimeout(function () {
     setInterval(function () {
-      const luckyItem = products[Math.floor(Math.random() * products.length)];
+      const luckyItem = PRODUCTS[Math.floor(Math.random() * PRODUCTS.length)];
       if (Math.random() < 0.3 && luckyItem.quantity > 0) {
         luckyItem.price = Math.round(luckyItem.price * 0.8);
         alert('번개세일! ' + luckyItem.name + '이(가) 20% 할인 중입니다!');
@@ -54,7 +47,7 @@ function main() {
   setTimeout(function () {
     setInterval(function () {
       if (lastSelectedProduct) {
-        const suggest = products.find(function (item) {
+        const suggest = PRODUCTS.find(function (item) {
           return item.id !== lastSelectedProduct && item.quantity > 0;
         });
         if (suggest) {
@@ -71,7 +64,7 @@ function main() {
 
 function addSelectOptions() {
   select.innerHTML = '';
-  products.forEach(function (item) {
+  PRODUCTS.forEach(function (item) {
     const option = document.createElement('option');
     option.value = item.id;
     option.textContent = `${item.name} - ${item.price}원`;
@@ -88,7 +81,7 @@ function calculateCart() {
   const cartItems = getCartItems();
 
   cartItems.map(({ id, quantity }) => {
-    const product = products.find((p) => p.id === id);
+    const product = PRODUCTS.find((p) => p.id === id);
     const itemTotalPrice = product.price * quantity;
     const discountRate = getItemDiscountRate(id, quantity);
     totalItemsInCart += quantity;
@@ -132,7 +125,7 @@ function renderLoyaltyPoints() {
 
 function updateStockStatus() {
   let statusMessage = '';
-  products.forEach(function (item) {
+  PRODUCTS.forEach(function (item) {
     if (item.quantity < 5) {
       statusMessage +=
         item.quantity > 0
@@ -144,14 +137,7 @@ function updateStockStatus() {
 }
 
 function getItemDiscountRate(id, quantity) {
-  const discountRate = {
-    p1: 0.1,
-    p2: 0.15,
-    p3: 0.2,
-    p4: 0.05,
-    p5: 0.25,
-  };
-  return quantity >= 10 ? discountRate[id] : 0;
+  return quantity >= 10 ? DISCOUNT_RATE[id] : 0;
 }
 
 function getFinalPriceDiscountRate(
@@ -200,7 +186,7 @@ function isTuesday() {
 function getSelectedProduct() {
   const selected = select.value;
 
-  return products.find((p) => p.id === selected);
+  return PRODUCTS.find((p) => p.id === selected);
 }
 
 function setupEventListeners() {
@@ -247,7 +233,7 @@ function setupEventListeners() {
 
     const { productId } = target.dataset;
     const productElement = document.getElementById(productId);
-    const product = products.find(function (product) {
+    const product = PRODUCTS.find(function (product) {
       return product.id === productId;
     });
     const currentQuantity = parseInt(

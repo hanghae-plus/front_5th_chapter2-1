@@ -23,20 +23,21 @@ let lastSelected,
   totalAmount = 0,
   itemCount = 0;
 
-const states = {
-  sel: null,
-  addBtn: null,
-  cartDisp: null,
-  sum: null,
-  stockInfo: null,
-  lastSel: null,
-  bonusPts: 0,
-  totalAmt: 0,
-  itemCnt: 0,
-};
-
 function main() {
-  const root: HTMLElement | null = document.getElementById('app');
+  const template = /* html */ `
+   <div class="bg-gray-100 p-8">
+       <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-8">
+         <h1 id="title" class="text-2xl font-bold mb-4">장바구니</h1>
+         <div id="cart-items"></div>
+         <div id="cart-total" class="text-xl font-bold my-4"></div>
+         <select id="product-select" class="border rounded p-2 mr-2"></select>
+         <button id="add-to-cart" class="bg-blue-500 text-white px-4 py-2 rounded">추가</button>
+         <div id="stock-status" class="text-sm text-gray-500 mt-2"></div>
+       </div>
+   </div>
+  `;
+
+  const root = document.getElementById('app');
 
   const cont = document.createElement('div');
   cont.className = 'bg-gray-100 p-8';

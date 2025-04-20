@@ -1,5 +1,17 @@
 import { PRODUCTS, PROCUCTS_DISCOUT } from './services/cartsService';
 
+export interface Cart {
+  id: string;
+  quantity: number;
+}
+
+export interface Product {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+}
+
 const discountRate = (precent: number) => 1 - precent / 100;
 const DISCOUNT_RATIO_FLASH_SALE = discountRate(20);
 const DISCOUNT_RATIO_CTA_SALE = discountRate(5);
@@ -108,38 +120,28 @@ function renderOptions({ selectBox }) {
 function calcCart() {
   totalAmount = 0;
   itemCount = 0;
-  const cartItems = $cartsWrapper.children;
+  const carts = $cartsWrapper.children;
   let subTotal = 0;
 
-  for (let i = 0; i < cartItems.length; i++) {
-    (() => {
-      let currentItem;
+  Array.from(carts).forEach((cart: any) => {
+    const currentItem: Product | undefined = PRODUCTS.find((product) => product.id === cart.id);
+    const quantity = parseInt(cart.querySelector('span').textContent.split('x ')[1]);
+    if (!currentItem) return;
+    const itemTotal = currentItem.price * quantity;
 
-      for (let j = 0; j < PRODUCTS.length; j++) {
-        if (PRODUCTS[j].id === cartItems[i].id) {
-          currentItem = PRODUCTS[j];
-          break;
-        }
-      }
-      const quantity = parseInt(cartItems[i].querySelector('span').textContent.split('x ')[1]);
+    itemCount += quantity;
+    subTotal += itemTotal;
 
-      let itemTotal = currentItem.price * quantity;
-      itemCount += quantity;
-      subTotal += itemTotal;
-
-      let disc = 0;
-
-      if (quantity >= 10) disc = PROCUCTS_DISCOUT[currentItem.id];
-
-      totalAmount += itemTotal * (1 - disc);
-    })();
-  }
+    let disc = 0;
+    if (quantity >= 10) disc = PROCUCTS_DISCOUT[currentItem.id];
+    totalAmount += itemTotal * (1 - disc);
+  });
 
   let discRate = 0;
 
   if (itemCount >= 30) {
-    let bulkDisc = totalAmount * 0.25;
-    let itemDisc = subTotal - totalAmount;
+    const bulkDisc = totalAmount * 0.25;
+    const itemDisc = subTotal - totalAmount;
 
     if (bulkDisc > itemDisc) {
       totalAmount = subTotal * (1 - 0.25);
@@ -159,16 +161,16 @@ function calcCart() {
   $totalPrice.textContent = `총액: ${Math.round(totalAmount)}원`;
 
   if (discRate > 0) {
-    let span = document.createElement('span');
+    const span = document.createElement('span');
     span.className = 'text-green-500 ml-2';
     span.textContent = `(${(discRate * 100).toFixed(1)}% 할인 적용)`;
     $totalPrice.appendChild(span);
   }
-  updateStockInfo();
-  renderBonusPts();
+  renderStockStates();
+  renderAwardPoints();
 }
 
-const renderBonusPts = () => {
+const renderAwardPoints = () => {
   rewardPoints = Math.floor(totalAmount / 1000);
   let ptsTag = document.getElementById('loyalty-points');
 
@@ -177,43 +179,40 @@ const renderBonusPts = () => {
     ptsTag.id = 'loyalty-points';
     ptsTag.className = 'text-blue-500 ml-2';
     $totalPrice.appendChild(ptsTag);
+
+    // $totalPrice.innerHTML = `<span id="loyalty-points" class="text-blue-500 ml-2"></span>`;
   }
   ptsTag.textContent = `(포인트: ${rewardPoints})`;
 };
 
 /** 재고 정보 업데이트 */
-function updateStockInfo() {
-  let infoMsg = '';
-  PRODUCTS.forEach((item) => {
-    if (item.quantity < 5) {
-      infoMsg +=
-        item.name +
-        ': ' +
-        (item.quantity > 0 ? `재고 부족 (${item.quantity}'개 남음)` : '품절') +
-        '\n';
+function renderStockStates() {
+  const stockStates = PRODUCTS.map(({ name, quantity }) => {
+    if (quantity < 5) {
+      return `${name}: ${quantity === 0 ? '품절' : `재고 부족 (${quantity}'개 남음)}`}`;
     }
-  });
-  $stockStates.textContent = infoMsg;
+  }).join('');
+  $stockStates.textContent = stockStates;
 }
 
 main();
 
-const handleAddCartsItem = (e: MouseEvent) => {
+const handleAddCartsItem = (e) => {
   e.preventDefault();
 
-  let selectedTarget = $selectBox.value;
-  let itemToAdd = PRODUCTS.find((p) => {
+  const selectedTarget = $selectBox.value;
+  const itemToAdd = PRODUCTS.find((p) => {
     return p.id === selectedTarget;
   });
 
   if (itemToAdd && itemToAdd.quantity > 0) {
-    let item = document.getElementById(itemToAdd.id);
+    const item = document.getElementById(itemToAdd.id);
 
     if (item) {
       const $item = item.querySelector('span');
       if (!$item) return;
       if (!$item.textContent) return;
-      let newQty = parseInt($item.textContent.split('x ')[1]) + 1;
+      const newQty = parseInt($item.textContent.split('x ')[1]) + 1;
 
       if (newQty <= itemToAdd.quantity) {
         $item.textContent = `${itemToAdd.name} - ${itemToAdd.price}원 x ${newQty}`;
